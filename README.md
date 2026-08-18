@@ -36,7 +36,7 @@
 pip install -r requirements.txt
 
 # 3. 裁判单元测试（无需 API）
-python test_verifier.py        # 34/34
+python test_verifier.py        # 42/42
 
 # 4. 跑一道题
 python main.py -p "求函数 f(x)=x^2-4x+7 在区间 [1,4] 上的最小值"

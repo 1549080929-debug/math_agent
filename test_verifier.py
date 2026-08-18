@@ -63,6 +63,15 @@ CASES = [
                              "interval": ["0", "3"],
                              "conditions": [{"which": "diff", "op": "==", "value": "4"}]},
      "a=-5/6 或 a=3 或 a=13/6", "FAIL"),
+    # 解集等价（L3 完备性锚：抓代回验证抓不到的"漏解"与"压缩篡改"）
+    ("solution_set", {"expr": "x**2 - 5*x + 6", "var_name": "x"}, "2 或 3", "PASS"),
+    ("solution_set", {"expr": "x**2 - 5*x + 6", "var_name": "x"}, "2", "FAIL"),          # 漏解 3
+    ("solution_set", {"expr": "x**2 - 3", "var_name": "x"}, "sqrt(3)", "FAIL"),          # 漏 -sqrt(3)
+    ("solution_set", {"expr": "x**2 - 3", "var_name": "x"}, "sqrt(3) 或 -sqrt(3)", "PASS"),
+    ("solution_set", {"expr": "a**2 - 2*a <= 0", "var_name": "a"}, "0 <= a <= 2", "PASS"),
+    ("solution_set", {"expr": "a**2 - 2*a <= 0", "var_name": "a"}, "a = 0 或 a = 2", "FAIL"),  # 压缩篡改（P5）
+    ("solution_set", {"expr": "x**2 - 5*x + 6 = 0", "var_name": "x"}, "2 或 3", "PASS"),  # 方程带 =
+    ("solution_set", {"expr": "(k+2)**2 - 4 < 0", "var_name": "k"}, "(-4, 0)", "PASS"),   # 与 inequality 同能力
 ]
 
 passed = 0
@@ -83,6 +92,8 @@ for vtype, params, answer, expect in CASES:
     elif vtype == "satisfies":
         p["value"] = answer
     elif vtype == "inequality":
+        p["claimed"] = answer
+    elif vtype == "solution_set":
         p["claimed"] = answer
     elif vtype == "answer_type":
         p["answer"] = answer

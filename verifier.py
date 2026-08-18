@@ -21,6 +21,7 @@ SymPy 无法直接解析。_sympify 会先尝试原样解析，失败则自动�
     equality         表达式等价验证（simplify 差值）
     satisfies        条件满足验证（支持链式不等式）
     inequality       不等式解集验证（solveset 对解集）
+    solution_set     解集等价验证（L3 完备性锚：solveset 求完备真解集，抓漏解/压缩篡改）
 """
 
 import random
@@ -266,6 +267,42 @@ def verify_inequality(condition, claimed, var_name="x"):
         return VerifyResult("UNSURE", f"验证器无法处理：{e}")
 
 
+def verify_solution_set(expr, claimed, var_name="x"):
+    """L3 锚：解集等价验证（完备性，不只是正确性）。
+
+    用 solveset 求 expr 在 Reals 上的完备真解集，与 LLM 声称的完整解集做
+    集合相等比较。这是"求所有解"类问题的完备锚：solveset 是符号完备解器，
+    能发现代回验证（verify_root）永远发现不了的"漏掉的候选"，也能抓"区间
+    答成点集"这类压缩篡改（P5 模式）。
+
+    expr:    方程或条件，三种形态：
+             - 方程   "x**2 - 5*x + 6 = 0"、"x**2 - 5*x + 6"（=0 可省略）
+             - 不等式 "a**2 - 2*a <= 0"、"(k+2)**2 - 4 < 0"
+    claimed: 声称的完整解集："2 或 3"、"2"、"0 <= a <= 2"、"(-4, 0)"、"sqrt(3)"
+    """
+    try:
+        var = sp.symbols(var_name)
+        s = expr.strip() if isinstance(expr, str) else str(expr)
+        if "=" in s and not any(op in s for op in ("<", ">")):
+            lhs_s, rhs_s = s.split("=", 1)
+            target = sp.Eq(_sympify(lhs_s), _sympify(rhs_s))
+        else:
+            target = _sympify(s)
+            if not isinstance(target, Relational):
+                target = sp.Eq(target, sp.Integer(0))
+
+        true_set = sp.solveset(target, var, domain=sp.S.Reals)
+        claimed_set = _parse_solution_set(claimed, var)
+        if claimed_set is None:
+            return VerifyResult("UNSURE", f"无法解析声称的答案：{claimed}")
+
+        if true_set == claimed_set:
+            return VerifyResult("PASS", f"解集 {claimed} 与真解集 {true_set} 一致（完备）")
+        return VerifyResult("FAIL", f"真解集是 {true_set}，声称的 {claimed} 与之不符（漏解或多余候选）")
+    except Exception as e:
+        return VerifyResult("UNSURE", f"验证器无法处理：{e}")
+
+
 def _parse_solution_set(s, var):
     """把 LLM 答案解析成 sympy 集合，用于与真解集比较。"""
     s = s.strip()
@@ -323,6 +360,14 @@ def _parse_solution_set(s, var):
         rel = _sympify(s)
         if isinstance(rel, Relational):
             return sp.solveset(rel, var, domain=sp.S.Reals)
+    except Exception:
+        pass
+
+    # 4) 裸单值："2"、"sqrt(3)"、"-1/2"（不带变量名的单点答案）
+    try:
+        val = _sympify(s)
+        if not isinstance(val, Relational) and not val.free_symbols:
+            return sp.FiniteSet(val)
     except Exception:
         pass
 
@@ -494,6 +539,7 @@ VERIFIERS = {
     "equality": verify_expression_equality,
     "satisfies": verify_satisfies,
     "inequality": verify_inequality,
+    "solution_set": verify_solution_set,
     "answer_type": verify_answer_type,
     "final_parameter_set": verify_final_parameter_set,
 }

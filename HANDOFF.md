@@ -50,15 +50,17 @@
 | 7 | 预测编造（失败模式预测是幻觉归因） | ✅ 方法论修正 |
 | 8 | 验证器极限（开放问题无裁判） | ⚠️ 架构边界 |
 
+**元结论（跨三章）**：裁判的价值 = 规格锚定在哪一层（L0 LLM 声明 < L1 题面派生 < L2 客观真值 < L3 定义性/证明性）。完备性不是"无解"，是把问题重编码进可判定领域（解集等价、类型检查、已验证决策规则）。详见 `docs/05-锚定层级.md`。
+
 ---
 
 ## 3. 第一章：数学验证（已封存）
 
-**架构**（math_agent/，34/34 裁判测试）：入口分类→拆解→自查→子任务(求解→SymPy验证→反馈纠错→回溯)→组合(结构化输出)→终局验证(规格规则派生)→诚实失败出口。
-验证类型：root/extreme/interval_extreme/equality/satisfies/inequality/answer_type/final_parameter_set（三态：PASS/FAIL/UNSURE）。
+**架构**（math_agent/，42/42 裁判测试）：入口分类→拆解→自查→子任务(求解→SymPy验证→反馈纠错→回溯)→组合(结构化输出)→终局验证(规格规则派生)→诚实失败出口。
+验证类型：root/extreme/interval_extreme/equality/satisfies/inequality/solution_set/answer_type/final_parameter_set（三态：PASS/FAIL/UNSURE）。
 
 **关键结果**：
-- 裁判单元测试 **34/34**（`test_verifier.py`）
+- 裁判单元测试 **42/42**（`test_verifier.py`）；新增 `solution_set`（L3 完备性锚：solveset 解集等价，抓漏解/压缩篡改）
 - 20 题三级测试集跑 3 轮：系统 16/15/13 vs **baseline 恒 20/20**——**准确率是随机变量，架构不优于 baseline**
 - 压轴 2 题（竞赛/新题）：baseline 2/2，系统 0/2（拆解污染+组合篡改）→ 类型系统+终局验证后 B 题 [-1,1] 当场抓获并修正为 [0,1]
 - 对抗预测实验：LLM 生成的标准答案 **3/5 是错的**（SymPy 审计证实）
@@ -136,10 +138,10 @@
 | 文件 | 内容 |
 |---|---|
 | `main.py` / `verifier.py` / `decomposer.py` / `solver.py` / `combiner.py` / `final_check_deriver.py` | 第一章架构 |
-| `test_verifier.py` | 裁判 34 用例 |
+| `test_verifier.py` | 裁判 42 用例 |
 | `behavior/` | 第二章（REPORT.md 为完整报告，probes*.json 探针，data_raw*.json 数据，analyze*.py 分析） |
 | `medical/` | 第三章（cases*.json 病例，data_baseline*.json 基线，verify_diag.py 裁判，REPORT.md） |
-| `docs/01~04` | 第一章四份核心文档 |
+| `docs/01~05` | 第一章四份核心文档（05=锚定层级，可迁移结论） |
 | `RESULTS.md` / `EVALUATION.md` | 结果总账 |
 | `HANDOFF.md` | 本文档 |
 
