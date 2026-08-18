@@ -545,6 +545,30 @@ VERIFIERS = {
 }
 
 
+# ---------------------------------------------------------------------------
+# 锚定层级（Verification Autonomy Levels，见 docs/05-锚定层级.md）
+#   核心变量不是"能力"，而是"信任责任归谁"：
+#   L0 LLM 声明（信任递归） / L1 题面派生 / L2 客观真值（正确性）
+#   L3 定义性/证明性（单性质完备，ODD 内） / L4 领域级证明系统 / L5 不可判定
+# ---------------------------------------------------------------------------
+ANCHOR_LEVELS = {
+    "root":                ("L2", "代回单根：正确性；完备性盲区"),
+    "extreme":             ("L2", "驻点代回：正确性"),
+    "interval_extreme":    ("L3", "端点+驻点穷举：二次函数域内单性质完备"),
+    "equality":            ("L2", "simplify 等价；数值抽样兜底非完备"),
+    "satisfies":           ("L2", "单点满足：正确性"),
+    "inequality":          ("L3", "solveset 解集等价：完备"),
+    "solution_set":        ("L3", "solveset 解集等价：完备（抓漏解/压缩篡改）"),
+    "answer_type":         ("L3", "类型系统：对'类型符合'性质完备"),
+    "final_parameter_set": ("L2", "采样验证：正确性；完备性=采样天花板"),
+}
+
+
+def anchor_level(verify_type):
+    """返回某验证类型的 VAL 等级与说明（如 ("L3", "solveset 解集等价：完备")）。"""
+    return ANCHOR_LEVELS.get(verify_type, ("L0", "未知验证类型"))
+
+
 def run_verify(verify_type, **kwargs):
     fn = VERIFIERS.get(verify_type)
     if fn is None:
