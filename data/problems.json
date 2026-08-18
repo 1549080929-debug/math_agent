@@ -1,0 +1,22 @@
+[
+  {
+    "question": "求函数 f(x)=x^2-4x+7 在区间 [1,4] 上的最小值，并求出取得最小值时的 x 值。",
+    "standard_answer": "最小值 3，x=2"
+  },
+  {
+    "question": "已知函数 f(x)=x^2-2ax+1 在区间 [0,2] 上的最小值为 -1，求实数 a 的值。",
+    "standard_answer": "a=√2"
+  },
+  {
+    "question": "求函数 f(x)=x^2-2x+3 在区间 [0,3] 上的最大值和最小值。",
+    "standard_answer": "最小值 2（x=1），最大值 6（x=3）"
+  },
+  {
+    "question": "解方程 x^2-5x+6=0，求出较大的根。",
+    "standard_answer": "x=3"
+  },
+  {
+    "question": "若二次函数 f(x)=x^2-kx+1 与直线 y=2x 无交点，求 k 的取值范围。",
+    "standard_answer": "-4<k<0"
+  }
+]
