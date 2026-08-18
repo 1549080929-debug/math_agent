@@ -1,8 +1,9 @@
-"""第三章基线：直接让 LLM 诊断 10 个合成病例（结构化输出，审计先行）。
+﻿"""第三章基线：直接让 LLM 诊断 10 个合成病例（结构化输出，审计先行）。
 
 输出字段：鉴别诊断列表 / 最可能诊断 / 置信度 / 是否需紧急处理 / 红旗征 / 建议检查。
 """
 
+import argparse
 import json
 import os
 import sys
@@ -33,11 +34,17 @@ def build_vignette(c):
 
 
 def main():
-    with open(os.path.join(HERE, "cases.json"), encoding="utf-8") as f:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--cases", default="cases.json", help="病例文件（默认 cases.json）")
+    ap.add_argument("--out", default=None, help="输出文件（默认 data_baseline.json）")
+    args = ap.parse_args()
+    cases_file = os.path.join(HERE, args.cases)
+    data_file = os.path.join(HERE, args.out or "data_baseline.json")
+    with open(cases_file, encoding="utf-8") as f:
         cases = json.load(f)["cases"]
 
     try:
-        with open(DATA_FILE, encoding="utf-8") as f:
+        with open(data_file, encoding="utf-8") as f:
             done = json.load(f)
         done_ids = {d["id"] for d in done}
     except Exception:
@@ -55,11 +62,12 @@ def main():
         except Exception as e:
             out = {"error": str(e)}
         done.append({"id": c["id"], "case": c, "llm_output": out})
-        with open(DATA_FILE, "w", encoding="utf-8") as f:
+        with open(data_file, "w", encoding="utf-8") as f:
             json.dump(done, f, ensure_ascii=False, indent=1)
 
-    print(f"\n完成 {len(done)}/10，已保存 {DATA_FILE}")
+    print(f"\\n完成 {len(done)}/{len(cases)}，已保存 {data_file}")
 
 
 if __name__ == "__main__":
     main()
+
