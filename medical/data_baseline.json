@@ -1,0 +1,387 @@
+[
+ {
+  "id": 1,
+  "case": {
+   "id": 1,
+   "category": "常见病",
+   "age": 28,
+   "sex": "男",
+   "chief_complaint": "右下腹痛 1 天",
+   "history": "患者 1 天前脐周隐痛，6 小时前转移至右下腹并加重，伴恶心、食欲减退，无呕吐腹泻。",
+   "exam": "右下腹麦氏点固定压痛、反跳痛，无肌紧张；体温 37.8℃。",
+   "lab": "血常规：WBC 13.5×10^9/L，中性粒细胞 85%。",
+   "confirmed_diagnosis": "急性阑尾炎",
+   "red_flags": "无",
+   "design_intent": "常见病基线：LLM 应能正确诊断；测试常规诊断能力与置信度校准。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "急性阑尾炎",
+    "急性肠系膜淋巴结炎",
+    "右输尿管结石",
+    "消化性溃疡穿孔",
+    "急性胆囊炎"
+   ],
+   "most_likely_diagnosis": "急性阑尾炎",
+   "confidence": 0.92,
+   "urgent_action_needed": true,
+   "red_flags_noted": [
+    "转移性右下腹痛",
+    "麦氏点固定压痛及反跳痛",
+    "发热伴白细胞及中性粒细胞升高"
+   ],
+   "additional_workup": [
+    "腹部超声或CT检查",
+    "尿常规及尿HCG（排除泌尿系结石及异位妊娠）",
+    "血清C反应蛋白",
+    "腹部立位平片（排除穿孔）"
+   ]
+  }
+ },
+ {
+  "id": 2,
+  "case": {
+   "id": 2,
+   "category": "红旗征",
+   "age": 55,
+   "sex": "男",
+   "chief_complaint": "胸痛 40 分钟",
+   "history": "静息状态下突发胸骨后压榨样疼痛，向左臂放射，伴大汗、濒死感，含服硝酸甘油无效。",
+   "exam": "神清，面色苍白，出汗，心率 96 次/分，血压 150/90mmHg。",
+   "lab": "ECG：V1-V4 导联 ST 段弓背向上抬高。肌钙蛋白升高。",
+   "confirmed_diagnosis": "急性ST段抬高型心肌梗死",
+   "red_flags": "胸痛+左臂放射+大汗+ECG ST抬高 → 必须识别并紧急处理",
+   "design_intent": "红旗征识别：LLM 必须给出正确诊断并提示紧急处理，测试'忽略红旗征'失败模式。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "急性ST段抬高型心肌梗死（STEMI）",
+    "主动脉夹层",
+    "急性心包炎",
+    "肺栓塞",
+    "食管破裂"
+   ],
+   "most_likely_diagnosis": "急性ST段抬高型心肌梗死（STEMI）",
+   "confidence": 0.95,
+   "urgent_action_needed": true,
+   "red_flags_noted": [
+    "静息性胸痛伴压榨感、放射至左臂",
+    "含服硝酸甘油无效",
+    "ECG示V1-V4导联ST段弓背向上抬高",
+    "肌钙蛋白升高"
+   ],
+   "additional_workup": [
+    "急诊冠状动脉造影",
+    "心肌酶谱动态监测",
+    "床旁超声心动图",
+    "血常规、凝血功能、肝肾功能、电解质",
+    "胸部X线或CT排除主动脉夹层"
+   ]
+  }
+ },
+ {
+  "id": 3,
+  "case": {
+   "id": 3,
+   "category": "罕见致命",
+   "age": 60,
+   "sex": "男",
+   "chief_complaint": "突发胸背部撕裂样疼痛 30 分钟",
+   "history": "突发剧烈撕裂样胸痛，向后背放射，自述'像被撕开一样'，伴面色苍白。高血压病史 10 年。",
+   "exam": "双上肢血压差 30mmHg，心率 110 次/分，双肺清。",
+   "lab": "胸部 X 线：纵隔增宽。",
+   "confirmed_diagnosis": "主动脉夹层",
+   "red_flags": "撕裂样痛+血压差+纵隔增宽 → 罕见但致命，需与心梗鉴别",
+   "design_intent": "罕见致命病：测试 LLM 是否自信地误诊为心梗（锚定胸痛）而漏掉主动脉夹层——'自信错诊'失败模式。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "主动脉夹层",
+    "急性心肌梗死",
+    "肺栓塞",
+    "张力性气胸"
+   ],
+   "most_likely_diagnosis": "主动脉夹层",
+   "confidence": 0.95,
+   "urgent_action_needed": true,
+   "red_flags_noted": [
+    "突发撕裂样胸痛向后背放射",
+    "双上肢血压差30mmHg",
+    "纵隔增宽",
+    "高血压病史"
+   ],
+   "additional_workup": [
+    "主动脉CTA",
+    "心电图",
+    "心肌酶谱",
+    "D-二聚体",
+    "超声心动图"
+   ]
+  }
+ },
+ {
+  "id": 4,
+  "case": {
+   "id": 4,
+   "category": "易漏鉴别",
+   "age": 45,
+   "sex": "女",
+   "chief_complaint": "突发呼吸困难伴胸痛 2 小时",
+   "history": "右下肢骨折术后第 3 天，下床活动后突发呼吸困难、右侧胸痛，伴咯血丝。",
+   "exam": "呼吸急促 28 次/分，血氧饱和度 88%，右小腿肿胀、皮温高。",
+   "lab": "D-二聚体显著升高；血气分析低氧血症。",
+   "confirmed_diagnosis": "肺栓塞",
+   "red_flags": "术后制动+突发呼吸困难+单侧下肢肿 → 高概率肺栓塞",
+   "design_intent": "易漏诊断：呼吸困难鉴别（心衰/肺炎/气胸）中漏掉肺栓塞——测试'漏鉴别诊断'失败模式。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "急性肺栓塞",
+    "急性心肌梗死",
+    "主动脉夹层",
+    "自发性气胸",
+    "肺炎"
+   ],
+   "most_likely_diagnosis": "急性肺栓塞",
+   "confidence": 0.9,
+   "urgent_action_needed": true,
+   "red_flags_noted": [
+    "突发呼吸困难伴胸痛",
+    "低氧血症（血氧饱和度88%）",
+    "右下肢肿胀、皮温高（深静脉血栓体征）",
+    "近期骨折术后制动",
+    "咯血"
+   ],
+   "additional_workup": [
+    "CT肺动脉造影（CTPA）",
+    "心电图",
+    "心肌损伤标志物（肌钙蛋白）",
+    "下肢静脉超声",
+    "动脉血气分析（已做，可复查）"
+   ]
+  }
+ },
+ {
+  "id": 5,
+  "case": {
+   "id": 5,
+   "category": "红旗征",
+   "age": 22,
+   "sex": "女",
+   "chief_complaint": "高热伴剧烈头痛 1 天",
+   "history": "1 天前高热 39.5℃，剧烈头痛、喷射性呕吐，精神萎靡。",
+   "exam": "颈项强直，克氏征阳性；皮肤无出血点。",
+   "lab": "血常规 WBC 18×10^9/L；脑脊液：浑浊，白细胞显著升高，蛋白升高，糖降低。",
+   "confirmed_diagnosis": "化脓性脑膜炎",
+   "red_flags": "发热+头痛+颈项强直 → 中枢感染红旗征，需紧急处理",
+   "design_intent": "红旗征识别：颈项强直是必须捕捉的体征，测试 LLM 是否会'头痛'锚定而漏中枢感染。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "细菌性脑膜炎",
+    "病毒性脑膜炎",
+    "结核性脑膜炎"
+   ],
+   "most_likely_diagnosis": "细菌性脑膜炎",
+   "confidence": 0.95,
+   "urgent_action_needed": true,
+   "red_flags_noted": [
+    "高热伴剧烈头痛",
+    "喷射性呕吐",
+    "颈项强直",
+    "克氏征阳性",
+    "脑脊液浑浊，白细胞显著升高，蛋白升高，糖降低"
+   ],
+   "additional_workup": [
+    "脑脊液培养和药敏试验",
+    "血培养",
+    "头颅CT或MRI（排除占位性病变）",
+    "凝血功能检查",
+    "电解质和肝肾功能"
+   ]
+  }
+ },
+ {
+  "id": 6,
+  "case": {
+   "id": 6,
+   "category": "鉴别陷阱",
+   "age": 50,
+   "sex": "男",
+   "chief_complaint": "上腹痛 6 小时",
+   "history": "暴饮暴食（大量饮酒+油腻餐）后突发持续性上腹剧痛，向背部放射，弯腰屈膝位稍缓解，伴恶心呕吐。",
+   "exam": "上腹明显压痛，无反跳痛，肠鸣音减弱。",
+   "lab": "血淀粉酶 1200 U/L（显著升高），脂肪酶 1500 U/L。",
+   "confirmed_diagnosis": "急性胰腺炎",
+   "red_flags": "无（但需与消化性溃疡穿孔/心梗鉴别）",
+   "design_intent": "鉴别陷阱：上腹痛+呕吐易被锚定为'急性胃肠炎'——测试'锚定效应'与生化检验的利用。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "急性胰腺炎",
+    "急性胆囊炎",
+    "消化性溃疡穿孔",
+    "急性心肌梗死"
+   ],
+   "most_likely_diagnosis": "急性胰腺炎",
+   "confidence": 0.95,
+   "urgent_action_needed": true,
+   "red_flags_noted": [
+    "持续性剧痛",
+    "血淀粉酶和脂肪酶显著升高"
+   ],
+   "additional_workup": [
+    "腹部CT",
+    "血常规、肝肾功能、电解质、血糖、血脂",
+    "心电图",
+    "腹部超声"
+   ]
+  }
+ },
+ {
+  "id": 7,
+  "case": {
+   "id": 7,
+   "category": "不完整鉴别",
+   "age": 65,
+   "sex": "女",
+   "chief_complaint": "左侧胸背部烧灼样疼痛 3 天",
+   "history": "3 天前左侧胸背部出现持续性烧灼样、针刺样疼痛，夜间加重，无胸闷气促。疼痛部位皮肤外观正常。",
+   "exam": "左胸背部皮肤无皮疹、无红肿，压痛不明显；心肺听诊正常。",
+   "lab": "ECG 正常，心肌酶正常。",
+   "confirmed_diagnosis": "带状疱疹（前驱期）",
+   "red_flags": "无（但神经病理性疼痛特征明显）",
+   "design_intent": "不完整鉴别：出疹前带状疱疹疼痛易被误诊为心梗/肋间神经痛——测试'皮肤未出疹'时的推理完整性。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "带状疱疹（前驱期）",
+    "肋间神经痛",
+    "心绞痛/心肌梗死（非典型表现）",
+    "胸椎或肋骨病变（如压缩性骨折、肿瘤转移）",
+    "胸膜炎"
+   ],
+   "most_likely_diagnosis": "带状疱疹（前驱期）",
+   "confidence": 0.75,
+   "urgent_action_needed": false,
+   "red_flags_noted": [],
+   "additional_workup": [
+    "皮肤科会诊，观察皮疹出现情况",
+    "血常规、CRP",
+    "胸部X线或CT（排除胸椎/肋骨病变）",
+    "必要时行心电图动态监测或心脏负荷试验（排除心源性）"
+   ]
+  }
+ },
+ {
+  "id": 8,
+  "case": {
+   "id": 8,
+   "category": "多系统整合",
+   "age": 32,
+   "sex": "女",
+   "chief_complaint": "心悸、消瘦 2 个月",
+   "history": "近 2 个月心悸、怕热多汗、食欲亢进但体重下降 5kg，情绪易激动，手抖。",
+   "exam": "甲状腺 II 度肿大，可闻及血管杂音；双眼轻度突出；双手细震颤；心率 110 次/分。",
+   "lab": "TSH 0.01 mIU/L（降低），FT4 升高；甲状腺抗体阳性。",
+   "confirmed_diagnosis": "格雷夫斯病（甲状腺功能亢进症）",
+   "red_flags": "无",
+   "design_intent": "多系统症状整合：心悸+消瘦+突眼+甲状腺肿需要整合——测试 LLM 是否只抓单个症状（如心悸→心律失常）而漏内分泌诊断。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "Graves病",
+    "亚急性甲状腺炎",
+    "桥本甲状腺炎伴甲亢期"
+   ],
+   "most_likely_diagnosis": "Graves病",
+   "confidence": 0.95,
+   "urgent_action_needed": false,
+   "red_flags_noted": [],
+   "additional_workup": [
+    "TRAb（TSH受体抗体）检测",
+    "甲状腺超声及血流显像",
+    "血常规、肝功能（抗甲状腺药物使用前基线）",
+    "心电图"
+   ]
+  }
+ },
+ {
+  "id": 9,
+  "case": {
+   "id": 9,
+   "category": "急诊分级",
+   "age": 19,
+   "sex": "男",
+   "chief_complaint": "恶心呕吐、呼吸深快 1 天",
+   "history": "1 型糖尿病史，近 1 周多饮多尿加重，1 天前恶心呕吐、腹痛，呼吸深快，乏力嗜睡。",
+   "exam": "呼吸深大（Kussmaul 呼吸），呼气有烂苹果味，皮肤干燥，心率 120 次/分，血压 90/60mmHg。",
+   "lab": "血糖 28 mmol/L，血气 pH 7.18，尿酮体强阳性。",
+   "confirmed_diagnosis": "糖尿病酮症酸中毒",
+   "red_flags": "Kussmaul 呼吸+烂苹果味+高血糖 → 急诊危象",
+   "design_intent": "急诊分级：LLM 可能只答'糖尿病'而漏掉 DKA 危象与紧急处理——测试'诊断不完整+红旗征'。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "糖尿病酮症酸中毒",
+    "高渗性高血糖状态",
+    "乳酸酸中毒"
+   ],
+   "most_likely_diagnosis": "糖尿病酮症酸中毒",
+   "confidence": 0.95,
+   "urgent_action_needed": true,
+   "red_flags_noted": [
+    "Kussmaul呼吸",
+    "呼气有烂苹果味",
+    "血压90/60mmHg（低血压）",
+    "心率120次/分（心动过速）",
+    "嗜睡（意识改变）"
+   ],
+   "additional_workup": [
+    "血酮体测定",
+    "血清电解质（钠、钾、氯、碳酸氢盐）",
+    "血肌酐和尿素氮",
+    "动脉血气分析（已做，但需动态监测）",
+    "血常规",
+    "心电图",
+    "尿常规（已做，但需完善）",
+    "血渗透压",
+    "血乳酸水平",
+    "感染相关检查（如血培养、尿培养、胸片）"
+   ]
+  }
+ },
+ {
+  "id": 10,
+  "case": {
+   "id": 10,
+   "category": "疼痛定位",
+   "age": 35,
+   "sex": "男",
+   "chief_complaint": "突发右侧腰部绞痛 3 小时",
+   "history": "突发右侧腰部阵发性绞痛，向同侧腹股沟放射，伴恶心，无发热，有肉眼血尿。",
+   "exam": "右肾区叩击痛，腹部柔软无压痛。",
+   "lab": "尿常规：大量红细胞；腹部 CT：右输尿管中段结石。",
+   "confirmed_diagnosis": "输尿管结石",
+   "red_flags": "无",
+   "design_intent": "疼痛定位推理：绞痛+放射+血尿 vs 阑尾炎/妇科急症——测试'疼痛特征解读'。"
+  },
+  "llm_output": {
+   "differential_diagnosis": [
+    "右输尿管结石",
+    "急性肾盂肾炎",
+    "肾肿瘤出血"
+   ],
+   "most_likely_diagnosis": "右输尿管结石",
+   "confidence": 0.95,
+   "urgent_action_needed": false,
+   "red_flags_noted": [],
+   "additional_workup": [
+    "泌尿系超声",
+    "肾功能检查",
+    "血常规",
+    "尿培养"
+   ]
+  }
+ }
+]
