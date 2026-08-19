@@ -126,7 +126,7 @@ Closest in the security-assurance tradition are the Common Criteria Evaluation A
 | **L2** | objective ground truth / gold labels / *independent* oracle (not a sibling generator) | correctness | no | partial automation (human must take over) |
 | **L3** | definitional/provable (property encoded in a decidable system) | single-property **completeness** | yes (within ODD) | conditional automation (system owns liability in ODD) |
 | **L4** | domain-level proof systems | domain-wide completeness | yes (within domain) | high automation (no takeover in ODD) |
-| **L5** | universal completeness | any property | **undecidable** (Rice) | full automation—does not exist |
+| **L5** | universal completeness | any property | **impossible** (unrestricted) | full automation—does not exist |
 
 Each level is defined by two properties: the **anchor source** (who or what supplies the ground truth the verdict rests on) and the **guarantee** (what a PASS commits to). Three consequences follow.
 
@@ -141,7 +141,7 @@ Third, *every level has a characteristic abstention behavior, and it is diagnost
 ```mermaid
 pyramid
   title Verification Autonomy Levels (VAL)
-  "L5 · universal completeness — undecidable (Rice)" : 1
+  "L5 · universal completeness — impossible (unrestricted)" : 1
   "L4 · domain-level proof systems (type systems, proof kernels)" : 2
   "L3 · decidable system, single-property complete (solveset, decision rules)" : 3
   "L2 · objective ground truth / oracle — correctness only (substitution, sampling)" : 4
@@ -154,7 +154,7 @@ pyramid
 ```
         ▲  VAL axis (anchor source & guarantee) — THIS PAPER
         │
-   L5 ──┼── universal completeness ── undecidable (Rice's theorem)
+   L5 ──┼── universal completeness ── impossible (unrestricted)
    L4 ──┼── domain proof systems (type systems, proof kernels)
    L3 ──┼── decidable system, single-property COMPLETE (solveset, decision rules)
    L2 ──┼── objective truth / oracle ── correctness ONLY (substitution, sampling)
@@ -188,7 +188,7 @@ Any verification scheme is classified by answering three questions in order:
 The classification is deterministic: given the answers to Q1–Q3, the level is the first rule that fires.
 
 ```
-1. completeness + universal scope        → L5   (rejected: undecidable, Rice)
+1. completeness + universal scope        → L5   (rejected: impossible, unrestricted)
 2. completeness + domain scope           → L4
 3. completeness + single-property scope  → L3
 4. correctness + decidable or objective anchor → L2
@@ -290,11 +290,11 @@ A deterministic post-hoc judge—an information-completeness rule (L2, anchored 
 
 ### 5.4 Cross-domain synthesis
 
-Across the four studies the pattern is identical. LLMs are too strong for accuracy windows to be non-empty on problems near their training distribution (math: baseline 20/20; medical: textbook 10/10; code: HumanEval 164/164 and six hand-written hard problems all solved in the bare condition); the non-empty windows are all *verification* windows: error reportability (math), ODD-bounded detection (behavior), over-confidence catching (medical), and L3-anchor repair (code). The framework predicts this: an L2 judge adds reportability, not accuracy; an L3 judge adds completeness within its ODD; nothing adds completeness outside it.
+Across the four studies the pattern is identical. LLMs are too strong for accuracy windows to be non-empty on problems near their training distribution (math: baseline 20/20; medical: textbook 10/10; code: HumanEval 164/164 and six hand-written hard problems all solved in the bare condition); the non-empty windows are all *verification* windows: error reportability (math), ODD-bounded detection (behavior), over-confidence catching (medical), and L3-anchor repair (code). The framework states this: an L2 judge adds reportability, not accuracy; an L3 judge adds completeness within its ODD; nothing adds completeness outside it.
 
 ### 5.5 Code generation (Chapter 4): reverse validation
 
-The fourth study reverses the direction of evidence. Chapters 1–3 induced the framework from data; Chapter 4 states predictions *before* gathering evidence (the protocol, with dates, is in the supplementary material), then tests them against external literature and one controlled experiment. Four of five predictions were supported:
+The fourth study reverses the direction of evidence. Chapters 1–3 induced the framework from data; Chapter 4 states predictions *before* gathering evidence (the protocol, with dates, is in the supplementary material), then tests them against external literature and one controlled experiment. Four of five expectations were supported:
 
 - **P1 (test-oracle ceiling).** Test-based selection improves ranking (AlphaCode; CodeT; LEVER) but is bounded by test quality—LEVER's authors note that obtaining test cases is itself the hard step.
 - **P2 (self-review: utility without guarantee).** Self-repair helps but is not a silver bullet (Olausson et al.); without external feedback, self-correction frequently fails (Huang et al.); Self-Refine's gains are task-dependent.
@@ -405,7 +405,7 @@ LLM 自证'我检查过了'          → L0 | LLM self-declaration / no determin
 代回验证 verify_root          → L2 | correctness + objective truth (completeness blind)
 solveset 解集等价             → L3 | single-property completeness (decidable)
 Rust borrow checker          → L4 | domain-level proof system
-通用完备验证器                → L5 | undecidable (Rice), rejected
+通用完备验证器                → L5 | impossible (unrestricted), rejected
 ```
 
 Full standard with usage criteria and stop conditions: `docs/06-判级标准.md`.

@@ -20,7 +20,7 @@ Yajie Yin
 ## 3. Abstract（摘要，纯文本版）
 
 ```
-Large language models (LLMs) are increasingly paired with "verifiers"—step checkers, self-consistency filters, tool-based fact checkers, and formal proof assistants—that claim to detect the model's errors. Yet the verification literature uses the word "level" to mean at least five different things: verification granularity, concept abstraction, risk tier, system-stack layer, and the epistemic source of the ground truth. We propose Verification Autonomy Levels (VAL), a meta-standard that classifies any verification scheme along a single axis: where does the verification spec come from, and what does the verdict guarantee? VAL ranges from L0 (LLM self-declaration; no deterministic anchor) through L2 (objective ground truth; correctness only) to L3/L4 (decidable systems with single-property or domain-level completeness), with L5 shown to be undecidable via Rice's theorem. Central to VAL is the completeness blind spot: substitution- and sampling-based verifiers can confirm that proposed candidates hold, but cannot prove that no candidate was missed. We document this gap empirically across three domains—symbolic mathematics, behavior monitoring, and medical diagnosis—and in the strongest existing formal-verification baseline, whose own authors note the verifier "focuses on the correctness of each step." We further show that the levels of granularity, concept hierarchy, risk, and system stack are orthogonal to VAL, resolving a systematic conflation across 17 surveyed papers. We release a runnable classifier (val_standard.py) and the full literature assessment as supplementary material.
+Large language models (LLMs) are increasingly paired with "verifiers"—step checkers, self-consistency filters, tool-based fact checkers, and formal proof assistants—that claim to detect the model's errors. Yet the verification literature uses the word "level" to mean at least five different things: verification granularity, concept abstraction, risk tier, system-stack layer, and the epistemic source of the ground truth. We propose Verification Autonomy Levels (VAL), a meta-standard that classifies any verification scheme along a single axis: where does the verification spec come from, and what does the verdict guarantee? VAL ranges from L0 (LLM self-declaration; no deterministic anchor) through L2 (objective ground truth; correctness only) to L3/L4 (decidable systems with single-property or domain-level completeness), with L5 shown to be impossible in the unrestricted case. Central to VAL is the completeness blind spot: substitution- and sampling-based verifiers can confirm that proposed candidates hold, but cannot prove that no candidate was missed. We further identify a dichotomy the literature has not stated: completeness is reachable only for formally specifiable properties, whereas empirical open-world verification (fact-checking, diagnosis) caps at anchored correctness (L2). We document this gap empirically across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation (the fourth a reverse validation: framework predictions stated before evidence)—and in the strongest existing formal-verification baseline, whose own authors note the verifier "focuses on the correctness of each step." We further show that the levels of granularity, concept hierarchy, risk, and system stack are orthogonal to VAL, resolving a systematic conflation across 17 surveyed papers. We release a runnable classifier (val_standard.py) and the full literature assessment as supplementary material.
 ```
 
 ## 4. Comments（备注，arXiv 表单字段）
@@ -33,8 +33,8 @@ Keywords: LLM verification; verification autonomy; completeness; ground truth; t
 ## 5. Subject Categories（学科分类）
 
 ```
-Primary:  cs.AI
-Secondary: cs.CL
+Primary:  cs.CL   （背书人 VerifiAgent 主类目即 cs.CL，对齐后背书可生效）
+Secondary: cs.AI
 Optional:  cs.LG
 ```
 
@@ -65,4 +65,5 @@ CC-BY 4.0（arXiv 推荐）
 - [x] 诚实负结果保留（16/15/13 vs 20/20）
 - [x] 伦理边界声明（医疗章：合成病例、非诊断工具）
 - [ ] Figure 1 矢量版（mermaid/ASCII 可先用，不影响提交）
-- [ ] 实际提交操作（需要 arXiv 账号 + endorsement，须用户本人执行）
+- [x] 背书已拿到（Jiuzhou Han，EMNLP 2025，已同意；提交时填 jiuzhou.han@monash.edu）
+- [ ] 实际提交操作（须用户本人执行 + 提交后通知背书人点确认）

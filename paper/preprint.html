@@ -166,7 +166,7 @@ Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0</p>
 <td><strong>L5</strong></td>
 <td>universal completeness</td>
 <td>any property</td>
-<td><strong>undecidable</strong> (Rice)</td>
+<td><strong>impossible</strong> (unrestricted)</td>
 <td>full automation—does not exist</td>
 </tr>
 </tbody>
@@ -177,7 +177,7 @@ Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0</p>
 <p>Third, <em>every level has a characteristic abstention behavior, and it is diagnostic.</em> L0 systems deny error—they "confidently err." L1/L2 systems are silent about what they did not check. L3/L4 systems return a decidable abstention when a property falls outside their ODD (Safe's "failed formalization" state is exactly this [4]). L5 does not exist. In our experience, a verifier's abstention behavior is a faster diagnostic of its level than any benchmark score.</p>
 <pre><code>        ▲  VAL axis (anchor source &amp; guarantee) — THIS PAPER
         │
-   L5 ──┼── universal completeness ── undecidable (Rice's theorem)
+   L5 ──┼── universal completeness ── impossible (unrestricted)
    L4 ──┼── domain proof systems (type systems, proof kernels)
    L3 ──┼── decidable system, single-property COMPLETE (solveset, decision rules)
    L2 ──┼── objective truth / oracle ── correctness ONLY (substitution, sampling)
@@ -203,7 +203,7 @@ response / which layer</em>; VAL answers <em>on what ground truth, with what gua
 - <strong>Q3 (scope).</strong> If the guarantee is completeness, over what domain does it hold: a single property (this equation's solution set), a whole class (all programs' memory safety), or claimed universality?</p>
 <h3>3.3 Decision procedure</h3>
 <p>The classification is deterministic: given the answers to Q1–Q3, the level is the first rule that fires.</p>
-<pre><code>1. completeness + universal scope        → L5   (rejected: undecidable, Rice)
+<pre><code>1. completeness + universal scope        → L5   (rejected: impossible, unrestricted)
 2. completeness + domain scope           → L4
 3. completeness + single-property scope  → L3
 4. correctness + decidable or objective anchor → L2
@@ -267,9 +267,9 @@ response / which layer</em>; VAL answers <em>on what ground truth, with what gua
 <p>A deterministic post-hoc judge—an information-completeness rule (L2, anchored in the case's objective lab fields)—flagged <strong>3/3 true over-confidence failures at zero false positives</strong> after calibration, <em>including one (#105) that human review had missed</em>. The judge's value here is discovery, not re-checking: it found a failure the human annotator had labeled correct. This is the empirical analogue of Sec. 4.4: the judge is only as good as its anchor, and a cheap rule anchored in objective fields outperformed human review at one narrow but critical task—catching "conclusion beyond evidence."</p>
 <p><strong>A documented L2→L3 upgrade.</strong> To exercise the ladder's prescription (Sec. 6.3), we replaced the hand-written information-completeness heuristic with an imported, validated clinical decision rule—the Alvarado score (MANTRELS) for suspected appendicitis—as the judge's anchor. The rule's eight objective inputs are parsed by deterministic keyword/regex extraction from the case text (not by an LLM); when inputs are missing, the rule returns a reachable score <em>range</em> rather than a fabricated point value. This semantics does real work: for the over-confident case #103 the rule returns range 3–8 (indeterminate) and refuses to support a definitive diagnosis, re-flagging the failure through its own decision boundary; for case #109 the range is 7–9 (high risk) <em>despite</em> a missing neutrophil count, because the lower bound already clears the threshold—so the rule does not over-flag a case with genuinely high risk. The flagged set is unchanged (3/3); what changed is the anchor: a hand-written threshold (L1/L2) replaced by a validated rule with a decidable boundary and an honest missing-data policy (L3, within the appendicitis ODD).</p>
 <h3>5.4 Cross-domain synthesis</h3>
-<p>Across the four studies the pattern is identical. LLMs are too strong for accuracy windows to be non-empty on problems near their training distribution (math: baseline 20/20; medical: textbook 10/10; code: HumanEval 164/164 and six hand-written hard problems all solved in the bare condition); the non-empty windows are all <em>verification</em> windows: error reportability (math), ODD-bounded detection (behavior), over-confidence catching (medical), and L3-anchor repair (code). The framework predicts this: an L2 judge adds reportability, not accuracy; an L3 judge adds completeness within its ODD; nothing adds completeness outside it.</p>
+<p>Across the four studies the pattern is identical. LLMs are too strong for accuracy windows to be non-empty on problems near their training distribution (math: baseline 20/20; medical: textbook 10/10; code: HumanEval 164/164 and six hand-written hard problems all solved in the bare condition); the non-empty windows are all <em>verification</em> windows: error reportability (math), ODD-bounded detection (behavior), over-confidence catching (medical), and L3-anchor repair (code). The framework states this: an L2 judge adds reportability, not accuracy; an L3 judge adds completeness within its ODD; nothing adds completeness outside it.</p>
 <h3>5.5 Code generation (Chapter 4): reverse validation</h3>
-<p>The fourth study reverses the direction of evidence. Chapters 1–3 induced the framework from data; Chapter 4 states predictions <em>before</em> gathering evidence (the protocol, with dates, is in the supplementary material), then tests them against external literature and one controlled experiment. Four of five predictions were supported:</p>
+<p>The fourth study reverses the direction of evidence. Chapters 1–3 induced the framework from data; Chapter 4 states predictions <em>before</em> gathering evidence (the protocol, with dates, is in the supplementary material), then tests them against external literature and one controlled experiment. Four of five expectations were supported:</p>
 <ul>
 <li><strong>P1 (test-oracle ceiling).</strong> Test-based selection improves ranking (AlphaCode; CodeT; LEVER) but is bounded by test quality—LEVER's authors note that obtaining test cases is itself the hard step.</li>
 <li><strong>P2 (self-review: utility without guarantee).</strong> Self-repair helps but is not a silver bullet (Olausson et al.); without external feedback, self-correction frequently fails (Huang et al.); Self-Refine's gains are task-dependent.</li>
@@ -370,7 +370,7 @@ response / which layer</em>; VAL answers <em>on what ground truth, with what gua
 代回验证 verify_root          → L2 | correctness + objective truth (completeness blind)
 solveset 解集等价             → L3 | single-property completeness (decidable)
 Rust borrow checker          → L4 | domain-level proof system
-通用完备验证器                → L5 | undecidable (Rice), rejected
+通用完备验证器                → L5 | impossible (unrestricted), rejected
 </code></pre>
 <p>Full standard with usage criteria and stop conditions: <code>docs/06-判级标准.md</code>.</p>
 <h2>Appendix B: The 17-paper classification</h2>
