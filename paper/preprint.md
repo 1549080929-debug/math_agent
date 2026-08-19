@@ -86,7 +86,7 @@ Standard Benchmarks Fail [13] proposes stress-testing financial LLM agents at mo
 Classified by the procedure of Sec. 3.3:
 
 - **L0** — SelfCheck [5]: four-stage regenerate-and-compare, explicitly "without resorting to external resources"; the checker itself scores 66.7% verification accuracy and the authors concede "the checks are themselves imperfect." LM² [6]: a verifier language model, fine-tuned on GPT-4 annotations and coordinated with the decomposer and solver via policy learning.
-- **L0/L1 + tools** — VerifiAgent [1]: meta-verification of completeness and consistency performed by the agent itself; tool-based adaptive verification delegates factual and computational checks to a Python interpreter, a search engine, and symbolic computation.
+- **L0/L1 + tools** — VerifiAgent [1]: meta-verification of completeness and consistency is LLM-based with some deterministic rules (L0/L1); tool-based adaptive verification delegates factual and computational checks to a Python interpreter, a search engine, and symbolic computation—deterministic execution with no gold-label anchor (L1), as the authors confirm (personal communication).
 - **L1/L2** — Factcheck-GPT [7]: verdicts from a GPT-4-based annotation scheme, with gold labels in its benchmark. FACTOOL [17]: tools (Google Search, Google Scholar, code interpreters) gather evidence, but the final factuality verdict is LLM reasoning over that evidence. LLM Output Drift [12]: consistency measurement plus invariant checking with SEC-citation validation.
 - **L2** — DiVERSE [3]: a DeBERTa-v3 step verifier trained on step labels derived by matching against ground-truth answers. M³-SafetyBench [11]: a gold-labeled evaluation benchmark. Dr. V [9]: hallucination diagnosis grounded in gold spatial-temporal annotations.
 - **L3/L4** — Hierarchical Attention [8]: proofs checked by a formal kernel. Safe [4]: Lean 4 step verification—the kernel is L4, but the theorem statements are LLM-generated, i.e., L0 at the statement layer.
@@ -179,7 +179,7 @@ Any verification scheme is classified by answering three questions in order:
 
 - **Q1 (spec source).** Who declares the verification condition—the thing the verdict is about? The answer is one of: (a) the LLM under test itself ("I checked it," "this is verified"); (b) a deterministic rule derived from the problem or code text (regex, parser, schema); (c) an objective source independent of both the problem and the generative mechanism under test (gold answer, measured value, execution result); (d) a property encoded in a decidable system (a symbolic solver, a type system, a decision rule with validated thresholds).
 
-**Anchor independence.** "Objective" in L2 does not mean merely "external to the model under test." An anchor qualifies only if it is *independent of the generative mechanism being verified*—its error mechanism must not be correlated with the verified system's. An answer produced by another LLM is external but not independent: it shares the error-generating mechanism, and is L0 masked as L2. Execution results, symbolic simplification, and physical measurements qualify because their "error mechanism" is the artifact itself, not a correlated generator. This is the operational form of trust-recursion termination (Sec. 6.1): the anchor chain stops at definitional or conventional anchors, never at a sibling generator.
+**Anchor independence.** "Objective" in L2 does not mean merely "external to the model under test." An anchor qualifies only if it is *independent of the generative mechanism being verified*—its error mechanism must not be correlated with the verified system's. An answer produced by another LLM is external but not independent: it shares the error-generating mechanism, and is L0 masked as L2. Execution results, symbolic simplification, and physical measurements qualify because their "error mechanism" is the artifact itself, not a correlated generator. This is the operational form of trust-recursion termination (Sec. 6.1): the anchor chain stops at definitional or conventional anchors, never at a sibling generator. Within L2 we further distinguish an *execution anchor*—deterministic re-computation, objective about the computation but not about whether its output is the correct answer—from a *gold-label anchor*—a known-correct reference, objective about the answer itself. VerifiAgent's tool component is the former, which is why its author places it at L1 rather than L2 (Sec. 2.5).
 - **Q2 (guarantee).** What does a PASS commit to? *Correctness*—"every proposed candidate satisfies the condition"—or *completeness*—"no candidate was missed." The distinction is the entire substance of Sec. 4; most deployed verifiers offer the former while being read as the latter.
 - **Q3 (scope).** If the guarantee is completeness, over what domain does it hold: a single property (this equation's solution set), a whole class (all programs' memory safety), or claimed universality?
 
@@ -413,7 +413,7 @@ Full versioned assessment with per-paper evidence: `docs/07-文献评述.md`. Co
 | Level | Papers |
 |---|---|
 | L0 | SelfCheck, LM² |
-| L0/L1 + tools | VerifiAgent |
+| L0/L1 (meta) + L1 (tool, no gold labels) | VerifiAgent |
 | L1/L2 | Factcheck-GPT, FACTOOL, LLM Output Drift |
 | L2 | DiVERSE, M³-SafetyBench, Dr. V |
 | L3/L4 | Hierarchical Attention, Safe (L4 kernel + L0 statement layer) |
