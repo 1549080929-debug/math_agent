@@ -33,7 +33,8 @@
 | **L5** | 通用完备验证 | 任意性质 | **不可判定**（Rice 定理） |
 
 - 判级工具：`val_standard.py`（10 用例自测，判级三问的可运行版）
-- 判级标准：`docs/06-判级标准.md` · 等级体系：`docs/05-锚定层级.md` · 文献对照：`docs/07-文献评述.md`
+- **抬级工具：`val_raise.py`（10 用例自测，L2→L3 重编码处方——框架从诊断走向生成）**
+- 判级标准：`docs/06-判级标准.md` · 等级体系：`docs/05-锚定层级.md` · 文献对照：`docs/07-文献评述.md` · 抬级可行性：`docs/09-抬级器可行性.md`
 
 ## 三章总览
 
@@ -54,6 +55,9 @@ python test_verifier.py        # 42/42
 
 # 3. VAL 判级工具自测
 python val_standard.py         # 10/10
+
+# 3b. VAL 抬级器自测
+python val_raise.py            # 10/10
 
 # 4. 跑一道数学题
 python main.py -p "求函数 f(x)=x^2-4x+7 在区间 [1,4] 上的最小值"
