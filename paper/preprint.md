@@ -10,7 +10,7 @@ Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0
 
 ## Abstract
 
-Large language models (LLMs) are increasingly paired with "verifiers"—step checkers, self-consistency filters, tool-based fact checkers, and formal proof assistants—that claim to detect the model's errors. Yet the verification literature uses the word *level* to mean at least five different things: verification granularity, concept abstraction, risk tier, system-stack layer, and the epistemic source of the ground truth. We propose **Verification Autonomy Levels (VAL)**, a meta-standard that classifies any verification scheme along a single axis: *where does the verification spec come from, and what does the verdict guarantee?* VAL ranges from L0 (LLM self-declaration; no deterministic anchor) through L2 (objective ground truth; correctness only) to L3/L4 (decidable systems with single-property or domain-level completeness), with L5 shown to be undecidable via Rice's theorem. Central to VAL is the **completeness blind spot**: substitution- and sampling-based verifiers can confirm that proposed candidates hold, but cannot prove that no candidate was missed. We document this gap empirically across three domains—symbolic mathematics, behavior monitoring, and medical diagnosis—and in the strongest existing formal-verification baseline, whose own authors note the verifier "focuses on the correctness of each step." We further show that the levels of granularity, concept hierarchy, risk, and system stack are orthogonal to VAL, resolving a systematic conflation across 17 surveyed papers. We release a runnable classifier (`val_standard.py`) and the full literature assessment as supplementary material.
+Large language models (LLMs) are increasingly paired with "verifiers"—step checkers, self-consistency filters, tool-based fact checkers, and formal proof assistants—that claim to detect the model's errors. Yet the verification literature uses the word *level* to mean at least five different things: verification granularity, concept abstraction, risk tier, system-stack layer, and the epistemic source of the ground truth. We propose **Verification Autonomy Levels (VAL)**, a meta-standard that classifies any verification scheme along a single axis: *where does the verification spec come from, and what does the verdict guarantee?* VAL ranges from L0 (LLM self-declaration; no deterministic anchor) through L2 (objective ground truth; correctness only) to L3/L4 (decidable systems with single-property or domain-level completeness), with L5 shown to be undecidable via Rice's theorem. Central to VAL is the **completeness blind spot**: substitution- and sampling-based verifiers can confirm that proposed candidates hold, but cannot prove that no candidate was missed. We document this gap empirically across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation (the fourth a *reverse validation*: framework predictions stated before evidence)—and in the strongest existing formal-verification baseline, whose own authors note the verifier "focuses on the correctness of each step." We further show that the levels of granularity, concept hierarchy, risk, and system stack are orthogonal to VAL, resolving a systematic conflation across 17 surveyed papers. We release a runnable classifier (`val_standard.py`) and the full literature assessment as supplementary material.
 
 **Keywords**: LLM verification, verification autonomy, completeness, ground truth, trustworthy AI
 
@@ -38,7 +38,7 @@ Axes 1–4 answer *what* to check, *how finely*, *at which layer*, and *what to 
 
 We argue that the fifth axis is the one that matters for trust, that it has a natural six-level structure, and that the literature's conflation of the five axes has obscured it. Three observations motivate the framework.
 
-*First, the anchor is what fails.* In our three-domain study (Sec. 5), every verification failure we catalogued was traceable to the anchor, not to the judge: a well-calibrated verifier (42/42 unit cases) was fed wrong subproblems by the LLM it was checking (decomposition contamination), never saw the final answer it should have checked (combination tampering), or was asked to verify a condition declared by the very model under test (trust recursion). A perfectly calibrated instrument pointed at the wrong object is not a bug; it is a specification problem.
+*First, the anchor is what fails.* In our four-domain study (Sec. 5), every verification failure we catalogued was traceable to the anchor, not to the judge: a well-calibrated verifier (42/42 unit cases) was fed wrong subproblems by the LLM it was checking (decomposition contamination), never saw the final answer it should have checked (combination tampering), or was asked to verify a condition declared by the very model under test (trust recursion). A perfectly calibrated instrument pointed at the wrong object is not a bug; it is a specification problem.
 
 *Second, correctness is not completeness.* The most common verifiers—substitution, sampling, statistical thresholds—can confirm that *proposed* candidates hold, but cannot prove that *no* candidate was missed. We call this the **completeness blind spot** and document it empirically in symbolic mathematics (a missed root that substitution cannot see), in behavior monitoring (a covert-execution attack that leaves no trace in the output layer), and in medical diagnosis (confident conclusions from insufficient evidence). The blind spot is not a tuning failure; it is a property of the verification paradigm (Sec. 4).
 
@@ -49,11 +49,11 @@ We argue that the fifth axis is the one that matters for trust, that it has a na
 1. **Verification Autonomy Levels (VAL)**, a six-level epistemic taxonomy (L0–L5) classifying any verification scheme by its anchor source and guarantee, together with a deterministic decision procedure (Sec. 3) and a runnable classifier (`val_standard.py`).
 2. **A disambiguation of five confounded "level" axes**, showing that granularity, concept abstraction, risk, and system-stack are orthogonal to the VAL axis, and locating 17 representative papers in the resulting space (Sec. 2).
 3. **A formal and empirical treatment of the completeness blind spot**, including a statement of why universal completeness is undecidable (Rice's theorem) and why completeness is always relative to an operational design domain (Sec. 4).
-4. **Three cross-domain case studies**—symbolic mathematics, behavior monitoring, medical diagnosis—that exercise the framework end-to-end and report honest negative results (Sec. 5).
+4. **Four cross-domain case studies**—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation, the last a *reverse validation* with predictions stated before evidence (Sec. 5)—that exercise the framework end-to-end and report honest negative results.
 
 **Why this matters.** For a deployer, VAL is a pre-purchase checklist: ask *where the spec comes from* before trusting any verification claim, and know that an L2 verdict is a correctness probe, not a completeness guarantee. For a researcher, VAL separates the five questions hidden inside "hierarchical verification," preventing category errors such as claiming that finer granularity implies stronger grounding. For a reviewer, VAL supplies a vocabulary for interrogating any claim of the form "our system verifies X": *at what level, within what ODD, with what abstention behavior?*
 
-**Positioning.** We present VAL as a conceptual contribution. The three case studies of Sec. 5 are exercises of the framework, not claims of empirical superiority over baselines—indeed, one reports a clean negative result (the verification architecture does not improve accuracy). The empirical content is intentionally modest; the claim we defend is structural: that one axis—the source of the verification spec—is measurable, ordinal, and currently untheorized in the LLM-verification literature.
+**Positioning.** We present VAL as a conceptual contribution. The four case studies of Sec. 5 are exercises of the framework, not claims of empirical superiority over baselines—indeed, two report clean negative results (the verification architecture does not improve accuracy in mathematics or code generation). The empirical content is intentionally modest; the claim we defend is structural: that one axis—the source of the verification spec—is measurable, ordinal, and currently untheorized in the LLM-verification literature.
 
 ---
 
@@ -249,7 +249,7 @@ The blind spot has three stable properties: (i) it is invisible to the verifier 
 
 ## 5. Empirical Case Studies
 
-We exercised the framework across three domains—symbolic mathematics, behavior monitoring, and medical diagnosis. Full archives: `RESULTS.md` (math), `behavior/REPORT.md`, `medical/REPORT.md`. Each study followed the same protocol: audit first (build a labeled test bed), measure the value window (baseline comparison), classify failure modes, then test the judge itself. We report honest negative results where they occurred.
+We exercised the framework across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation. Full archives: `RESULTS.md` (math), `behavior/REPORT.md`, `medical/REPORT.md`, `docs/08-第四章-代码生成验证.md` (code). Each study followed the same protocol: audit first (build a labeled test bed), measure the value window (baseline comparison), classify failure modes, then test the judge itself. We report honest negative results where they occurred.
 
 ### 5.1 Symbolic mathematics
 
@@ -277,7 +277,20 @@ A deterministic post-hoc judge—an information-completeness rule (L2, anchored 
 
 ### 5.4 Cross-domain synthesis
 
-Across the three studies the pattern is identical. LLMs are too strong for accuracy windows to be non-empty on in-distribution tasks (math: baseline 20/20; medical: textbook 10/10); the non-empty windows are all *verification* windows: error reportability (math), ODD-bounded detection (behavior), and over-confidence catching (medical). The framework predicts this: an L2 judge adds reportability, not accuracy; an L3 judge adds completeness within its ODD; nothing adds completeness outside it.
+Across the four studies the pattern is identical. LLMs are too strong for accuracy windows to be non-empty on problems near their training distribution (math: baseline 20/20; medical: textbook 10/10; code: HumanEval 164/164 and six hand-written hard problems all solved in the bare condition); the non-empty windows are all *verification* windows: error reportability (math), ODD-bounded detection (behavior), over-confidence catching (medical), and L3-anchor repair (code). The framework predicts this: an L2 judge adds reportability, not accuracy; an L3 judge adds completeness within its ODD; nothing adds completeness outside it.
+
+### 5.5 Code generation (Chapter 4): reverse validation
+
+The fourth study reverses the direction of evidence. Chapters 1–3 induced the framework from data; Chapter 4 states predictions *before* gathering evidence (the protocol, with dates, is in the supplementary material), then tests them against external literature and one controlled experiment. Four of five predictions were supported:
+
+- **P1 (test-oracle ceiling).** Test-based selection improves ranking (AlphaCode; CodeT; LEVER) but is bounded by test quality—LEVER's authors note that obtaining test cases is itself the hard step.
+- **P2 (self-review: utility without guarantee).** Self-repair helps but is not a silver bullet (Olausson et al.); without external feedback, self-correction frequently fails (Huang et al.); Self-Refine's gains are task-dependent.
+- **P4 (trust recursion at the spec layer).** LLM-generated tests are themselves suspect: Meta's production tool TestGen-LLM runs its generated tests through verification filters before acceptance.
+- **P5 (execution feedback dominates self-review).** Execution-feedback agents (Reflexion, CodeAct, Self-Debugging) consistently outperform feedback-free generation, consistent with L2/L3 anchors beating L0 self-declaration.
+
+The open prediction, **P3 (type information as the highest-ROI L3 anchor)**, was tested experimentally. We stripped type hints from HumanEval prompts and generated solutions under three conditions: bare (no types), typed, and typed-plus-type-checker-feedback (one mypy round). The result is a clean empty window: **164/164 HumanEval problems and all six hand-written, trap-laden novel problems were solved by the bare condition**—the model leaves no accuracy headroom for type information to improve. The single failure in the typed condition (a novel string-escaping problem) carried a mypy error that the test suite did not catch; the type-checker-feedback condition repaired it in one round.
+
+The significance of Chapter 4 is twofold. First, the framework's central empirical generalization—*LLMs are too strong for accuracy windows to be non-empty on problems near their training distribution*—is now confirmed in a fourth domain, including problems we designed specifically to defeat it. Second, the framework survived a reverse test: predictions stated in advance were supported by independent evidence four out of five, and the fifth is untestable with this model rather than contradicted. Both outcomes are what a falsifiable framework should produce.
 
 ---
 
@@ -314,7 +327,7 @@ An L0 self-check may be acceptable for a low-stakes summarizer; it is not for a 
 
 ### 6.4 What the honest negative result teaches
 
-Our accuracy result—the architecture is no better than the raw baseline—is frequently read as a failure of verification. It is not; it is a precise measurement of the value window. Accuracy is the LLM's axis; reportability and completeness are the verifier's. A deployer who needs accuracy should not buy this architecture; a deployer who needs to know *when the answer is not trustworthy* should. Papers that conflate the two axes (Sec. 2) inherit exactly this confusion; our three chapters are, in effect, a controlled experiment showing the two axes come apart.
+Our accuracy result—the architecture is no better than the raw baseline—is frequently read as a failure of verification. It is not; it is a precise measurement of the value window. Accuracy is the LLM's axis; reportability and completeness are the verifier's. A deployer who needs accuracy should not buy this architecture; a deployer who needs to know *when the answer is not trustworthy* should. Papers that conflate the two axes (Sec. 2) inherit exactly this confusion; our four chapters are, in effect, a controlled experiment showing the two axes come apart.
 
 ---
 
@@ -393,4 +406,5 @@ Full versioned assessment with per-paper evidence: `docs/07-文献评述.md`. Co
 
 - Chapter 1 (math): `RESULTS.md`, `EVALUATION.md`, `data/testset_results.json`, `test_verifier.py` (42/42), `verifier.py` (`ANCHOR_LEVELS`)
 - Chapter 2 (behavior): `behavior/REPORT.md`, `behavior/analyze*.py`, `behavior/data_raw*.json`
-- Chapter 3 (medical): `medical/REPORT.md`, `medical/verify_diag.py`, `medical/cases*.json`
+- Chapter 3 (medical): `medical/REPORT.md`, `medical/verify_diag.py`, `medical/alvarado.py`, `medical/cases*.json`
+- Chapter 4 (code): `docs/08-第四章-代码生成验证.md` (predictions & protocol), `chapter4/p3_experiment.py`, `chapter4/hard_problems.py`, `chapter4/p3_*.json` (results)
