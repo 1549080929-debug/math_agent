@@ -9,7 +9,7 @@
 |---|---|---|
 | 1 | 6 篇锚定轴论文全文精读（docs/07 V1.3） | ✅ 完成 |
 | 2 | **起草预印本骨架（paper/preprint.md）** | ✅ 完成（2026-08-18） |
-| 3 | 画"金字塔 + 正交轴"图（Figure 1） | ⬜ 待做（可用 mermaid/figma） |
+| 3 | 画"金字塔 + 正交轴"图（Figure 1） | ✅ 完成（mermaid + ASCII 版，正式版需矢量重绘） |
 | 4 | docs/06 判级程序作附录（Appendix A） | ⬜ 待做（直接引用 val_standard.py） |
 | 5 | val_standard.py 作可复现工具引用 | ✅ 已有（仓库根目录，10/10 自测） |
 | 6 | 标题定稿 + 作者信息 + 许可（arXiv 需 CC-BY 4.0） | ⬜ 待做 |

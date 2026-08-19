@@ -70,7 +70,42 @@ The anchor axis is the only one that determines the *epistemic* strength of a ve
 | **L4** | domain-level proof systems | domain-wide completeness | yes (within domain) | high automation (no takeover in ODD) |
 | **L5** | universal completeness | any property | **undecidable** (Rice) | full automation—does not exist |
 
-<!-- [TODO] Figure 1: 金字塔 + 正交轴（granularity/concept/risk/stack 横轴，anchor 纵轴） -->
+<!-- Figure 1 (mermaid 版) -->
+
+```mermaid
+pyramid
+  title Verification Autonomy Levels (VAL)
+  "L5 · universal completeness — undecidable (Rice)" : 1
+  "L4 · domain-level proof systems (type systems, proof kernels)" : 2
+  "L3 · decidable system, single-property complete (solveset, decision rules)" : 3
+  "L2 · objective ground truth / oracle — correctness only (substitution, sampling)" : 4
+  "L1 · deterministic rules derived from problem text/code" : 5
+  "L0 · LLM self-declaration ("I checked it")" : 6
+```
+
+<!-- Figure 1 (ASCII 版，供任意渲染环境) -->
+
+```
+        ▲  VAL axis (anchor source & guarantee) — THIS PAPER
+        │
+   L5 ──┼── universal completeness ── undecidable (Rice's theorem)
+   L4 ──┼── domain proof systems (type systems, proof kernels)
+   L3 ──┼── decidable system, single-property COMPLETE (solveset, decision rules)
+   L2 ──┼── objective truth / oracle ── correctness ONLY (substitution, sampling)
+   L1 ──┼── deterministic rules from problem text/code
+   L0 ──┼── LLM self-declaration ("I checked it")
+        │
+        └──────┬──────────────┬──────────────┬──────────────────┬──────────────▶
+               │              │              │                  │
+         granularity     concept       risk/disposition    system stack
+         (how fine:      (abstraction  (what response:     (which layer:
+          claim→doc)      level)        safe→focused)       model→system)
+```
+
+**Figure 1.** The VAL ladder (vertical) and four orthogonal axes (horizontal) that the literature
+conflates with it. Granularity, concept, risk, and system-stack answer *what / how fine / what
+response / which layer*; VAL answers *on what ground truth, with what guarantee*.
+<!-- [TODO] 正式版：用矢量图工具重绘，arXiv 需 PDF/EPS/PNG -->
 
 ### 3.2 The three decisive questions
 
