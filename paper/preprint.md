@@ -375,7 +375,7 @@ We thank Jiuzhou Han for a clarifying discussion of VerifiAgent's verification m
 
 ## References
 
-1. Han, J., Buntine, W., Shareghi, E. *VerifiAgent: A Unified Verification Agent in Language Model Reasoning.* arXiv:2504.00406, 2025.
+1. Han, J., Buntine, W., Shareghi, E. *VerifiAgent: A Unified Verification Agent in Language Model Reasoning.* EMNLP 2025. arXiv:2504.00406.
 2. Fang, J., Zhang, B., Wang, C., et al. *Graph of Verification (GoV): Structured Verification of LLM Reasoning with Directed Acyclic Graphs.* arXiv:2506.12509, 2025.
 3. Li, Y., Lin, Z., Zhang, S., et al. *Making Large Language Models Better Reasoners with Step-Aware Verifier (DiVERSE).* ACL 2023. arXiv:2206.02336.
 4. Liu, C., Yuan, Y., Yin, Y., et al. *Safe: Enhancing Mathematical Reasoning in LLMs via Retrospective Step-aware Formal Verification.* ACL 2025. arXiv:2506.04592.
