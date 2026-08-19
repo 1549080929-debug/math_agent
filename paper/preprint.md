@@ -4,7 +4,7 @@
 
 Email: 1549080929@qq.com · ORCID: 0009-0001-6168-2530  
 Code & data: https://github.com/1549080929-debug/math_agent  
-Preprint: arXiv: [TODO — fill in after submission] · License: CC-BY 4.0
+License: CC-BY 4.0
 
 <!-- 全文 v1.0 (2026-08-18)：§1-§8 + 附录 A/B/C 草稿完成，润色完成。待办：① 矢量 Figure 1；② 提交前终审（分类/备注/摘要关键词）；③ arXiv 提交。作者：Yajie Yin（无机构，arXiv 允许）；邮箱/ORCID 已填。 -->
 
