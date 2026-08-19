@@ -26,6 +26,8 @@ C. Beyond Self-Checking: Verification Autonomy Levels and the Completeness Blind
 
 Large language models (LLMs) produce fluent, confident, and frequently wrong reasoning. The dominant mitigation is *verification*: attach a second mechanism that checks the model's claims. The 2023–2025 literature has produced a large and rapidly growing body of verification proposals—trained step verifiers [3], self-checking schemas [5], tool-augmented fact checkers [17], graph-structured verification [2], and formal proof assistants [4]—each claiming to catch the errors the model cannot self-report. This proliferation raises a question the literature has not explicitly asked: **what can a given verification scheme actually guarantee, and where does that guarantee come from?**
 
+Classical verification theory explains how to verify a program against a *given* specification—the specification is assumed exogenous and trusted. LLM-based systems introduce a prior problem that this assumption excludes: **whether the specification, the evaluator, and the verification authority are themselves appropriately anchored.** We argue that this prior problem has a natural graded structure (VAL, Sec. 3), and that the LLM-verification literature has been answering it implicitly, without naming it or giving it an operational decision procedure.
+
 Answering this question is harder than it appears, because the field uses the word *level* to mean at least five different things:
 
 1. **Granularity**—how finely the output is decomposed for checking: claim → sentence → document [7]; atomic step → paragraph [2].

@@ -153,23 +153,49 @@ def prescribe(encodable, method, anchor):
 
 # ---------------------------------------------------------------------------
 # P4: 评测审计报告（嵌入 Agent 评测流程的产物）
+#   两维显示：验证强度 × 规格置信（回应"高等级但对象可能错"的误读，docs/10 补刀 C）
 # ---------------------------------------------------------------------------
 RISK = {"L0": "高（无保证）", "L1": "高（规则匹配）", "L2": "中（正确性探针）",
         "L3": "低（ODD 内完备）", "L4": "低（域内完备）", "L5": "否决（不可判定）"}
 
+SPEC_CONF = {"anchored": "有独立锚", "claimed": "仅声称(L0)", "unknown": "未标注"}
+
 
 def audit_report(entries):
-    """entries: [(name, level)] → Markdown 审计报告（验证栈的等级体检表）。"""
-    lines = ["# 验证栈审计报告", "",
-             "| 验证器/指标 | 等级 | 保证 | 风险 | 抬级建议 |",
+    """entries: [(name, level)] 或 [(name, level, spec_conf)] → 两维审计报告。
+
+    spec_conf: "anchored"(规格有独立锚) / "claimed"(规格仅声称) / "unknown"(未标注)。
+    """
+    lines = ["# 验证栈审计报告（验证强度 × 规格置信）", "",
+             "| 验证器/指标 | 强度 | 规格置信 | 风险 | 抬级建议 |",
              "|---|---|---|---|---|"]
-    for name, lvl in entries:
+    for e in entries:
+        name, lvl = e[0], e[1]
+        conf = e[2] if len(e) > 2 else "unknown"
+        conf_txt = SPEC_CONF.get(conf, conf)
         pat, sug = ("-", "无") if lvl in ("L3", "L4") else ("E", "接入抬级器（val_raise）")
-        lines.append(f"| {name} | {lvl} | {RISK.get(lvl, '?')} | {sug} |")
+        lines.append(f"| {name} | {lvl} | {conf_txt} | {RISK.get(lvl, '?')} | {sug} |")
     lines.append("")
-    lines.append("> 生成：val_raise.audit_report() —— 评测指标的'等级体检'，自动标注哪些指标"
-                 "只是 L2 正确性探针、哪些达到完备保证。")
+    lines.append("> 生成：val_raise.audit_report() —— 两维：强度=验证机制承诺什么，"
+                 "规格置信=被验证的性质本身有没有独立锚（docs/10 补刀 C）。")
     return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# 补刀 B：ODD 自身分级（auxiliary dimension，docs/10）
+#   ODD 从"能力约束"进一步：ODD 的锚也有等级
+# ---------------------------------------------------------------------------
+ODD_LEVELS = {
+    "self_declared": ("L0", "使用者声称（'我的 ODD 是简单方程'）——无独立锚，免责条款风险"),
+    "documented":    ("L1", "工具文档声称（'SymPy 支持 X'）——锚在文档，文档本身是声明"),
+    "empirically_tested": ("L2", "在覆盖该域的基准上实测——锚在金标"),
+    "formally_characterized": ("L3", "形式化刻画（类型可靠性证明/代数域）——锚在定义性"),
+}
+
+
+def odd_level(odd_type):
+    """返回 ODD 声明的锚定等级（self_declared/documented/empirically_tested/formally_characterized）。"""
+    return ODD_LEVELS.get(odd_type, ("?", "未知 ODD 类型"))
 
 
 def main(argv=None):
@@ -199,6 +225,10 @@ def main(argv=None):
         ("prescribe 有确认清单", len(prescribe(True, "hand_rule", "decision_rule")[4]) >= 3),
         ("audit_report 产出表格", "| 验证器" in audit_report([("root", "L2"), ("solution_set", "L3")])),
         ("audit_report 风险标注", "高（无保证）" in audit_report([("self_check", "L0")])),
+        ("audit_report 两维(规格置信列)", "规格置信" in audit_report([("x", "L3", "anchored")])),
+        ("audit_report 兼容二元组", audit_report([("x", "L2")]).count("|") > 0),
+        ("odd_level self_declared=L0", odd_level("self_declared")[0] == "L0"),
+        ("odd_level formally=L3", odd_level("formally_characterized")[0] == "L3"),
     ]
     for name, ok in more:
         passed += ok
