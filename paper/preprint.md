@@ -8,8 +8,8 @@ Large language models (LLMs) are increasingly paired with "verifiers"—step che
 
 **Keywords**: LLM verification, verification autonomy, completeness, ground truth, trustworthy AI
 
-<!-- [TODO] 标题定稿：备选
-A. Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning
+<!-- ✅ 标题已定稿（2026-08-18）：A. Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning
+备选（未选）：
 B. The Judge of Judges: A Verification Autonomy Framework for LLM Reasoning
 C. Beyond Self-Checking: Verification Autonomy Levels and the Completeness Blind Spot
 -->
