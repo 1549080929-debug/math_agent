@@ -569,8 +569,45 @@ def anchor_level(verify_type):
     return ANCHOR_LEVELS.get(verify_type, ("L0", "未知验证类型"))
 
 
+# ---------------------------------------------------------------------------
+# 抬级建议（Level-Raiser，见 docs/09-抬级器可行性.md）
+#   模式：A 解集等价 / B 穷举闭式 / C 导入已验证锚 / D 确定性检查 / E 用法抬级 / F 特征替代
+#   "L3已达成" = 已是 L3，无需抬级（只在 ODD 内承诺完备）
+# ---------------------------------------------------------------------------
+RAISE_SUGGESTIONS = {
+    "root":                ("E", "改用 solution_set（解集等价）——已实现，直接抬级，抓漏解"),
+    "extreme":             ("A", "对一阶导数方程做解集等价（solve(deriv) 与声称驻点集合比较）"),
+    "interval_extreme":    ("L3已达成", "已是 L3（端点+驻点穷举，二次函数 ODD 内完备）；ODD 外不承诺"),
+    "equality":            ("E", "消除数值抽样兜底，只用符号 simplify 规范形比较（多项式用 expand/cancel）"),
+    "satisfies":           ("A", "若意图是'所有满足条件的值'→ 改 solution_set；若只是单点成员检查，保持 L2 并标注"),
+    "inequality":          ("L3已达成", "已是 L3（solveset 解集等价，完备）"),
+    "solution_set":        ("L3已达成", "已是 L3（解集等价，完备）"),
+    "answer_type":         ("L3已达成", "已是 L3（类型系统，对'类型符合'性质完备）"),
+    "final_parameter_set": ("B", "采样天花板——参数集合可闭式求解时改 solution_set；否则保持 L2 并诚实标注"),
+}
+
+
+def raise_suggestion(verify_type):
+    """返回某验证类型的抬级建议（(模式, 处方)）。"""
+    return RAISE_SUGGESTIONS.get(verify_type, ("?", "未知验证类型"))
+
+
+def audit_verifiers():
+    """判级器 × 抬级器合体：打印全部验证类型的等级与抬级建议总表。"""
+    print(f"{'验证类型':<22}{'等级':<6}{'抬级模式':<10}建议")
+    print("-" * 80)
+    for vt in sorted(VERIFIERS):
+        lvl, _ = anchor_level(vt)
+        pat, sug = raise_suggestion(vt)
+        print(f"{vt:<22}{lvl:<6}{pat:<10}{sug}")
+
+
 def run_verify(verify_type, **kwargs):
     fn = VERIFIERS.get(verify_type)
     if fn is None:
         return VerifyResult("UNSURE", f"未知验证类型：{verify_type}")
     return fn(**kwargs)
+
+
+if __name__ == "__main__":
+    audit_verifiers()
