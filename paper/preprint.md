@@ -332,7 +332,7 @@ Three directions follow. First, validating the standard itself: measuring inter-
 14. Liu, X., Wang, J., et al. *Prompting Frameworks for Large Language Models: A Survey.* ACM Computing Surveys. arXiv:2311.12785.
 15. Liu, Y., Yao, Y., et al. *Trustworthy LLMs: A Survey and Guideline for Evaluating Large Language Models' Alignment.* arXiv:2308.05374, 2023.
 16. González, J., Nori, A.V. *Beyond Words: A Mathematical Framework for Interpreting Large Language Models (HEX).* arXiv:2311.03033, 2023.
-17. FacTool: *Factuality Detection in Generative AI—A Tool Augmented Framework for Multi-Task and Multi-Domain Scenarios.* ICLR 2024. arXiv:2307.13528.
+17. Chern, I.-C., Chern, S., Chen, S., Yuan, W., Feng, K., Zhou, C., He, J., Neubig, G., Liu, P. *FacTool: Factuality Detection in Generative AI—A Tool Augmented Framework for Multi-Task and Multi-Domain Scenarios.* ICLR 2024. arXiv:2307.13528.
 
 ---
 
