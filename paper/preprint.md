@@ -53,6 +53,8 @@ We argue that the fifth axis is the one that matters for trust, that it has a na
 
 **Why this matters.** For a deployer, VAL is a pre-purchase checklist: ask *where the spec comes from* before trusting any verification claim, and know that an L2 verdict is a correctness probe, not a completeness guarantee. For a researcher, VAL separates the five questions hidden inside "hierarchical verification," preventing category errors such as claiming that finer granularity implies stronger grounding. For a reviewer, VAL supplies a vocabulary for interrogating any claim of the form "our system verifies X": *at what level, within what ODD, with what abstention behavior?*
 
+**Positioning.** We present VAL as a conceptual contribution. The three case studies of Sec. 5 are exercises of the framework, not claims of empirical superiority over baselines—indeed, one reports a clean negative result (the verification architecture does not improve accuracy). The empirical content is intentionally modest; the claim we defend is structural: that one axis—the source of the verification spec—is measurable, ordinal, and currently untheorized in the LLM-verification literature.
+
 ---
 
 ## 2. Related Work: Five Axes, One Word
@@ -94,6 +96,16 @@ Classified by the procedure of Sec. 3.3:
 | System stack | Which component of the system is audited? | BenchmarksFail, PromptingSurvey |
 
 **Observation.** Across all 17 papers, none formalizes the anchor as a ladder, none treats the completeness of a verification scheme itself as an object of study, and the single most explicit acknowledgment of the gap comes from the strongest formal baseline [4]. The conflation is not harmless: it lets "layered verification" papers inherit each other's credibility across axes that do not entail one another. The rest of this paper develops the anchor axis.
+
+### 2.6 Adjacent fields: formal methods, risk frameworks, epistemology
+
+Readers from program analysis and formal methods will recognize the correctness/completeness distinction as decades old: Hoare logic distinguishes partial from total correctness; abstract interpretation formalizes the soundness and completeness of abstractions; type theory defines completeness via logical relations. We agree, and state precisely what VAL adds.
+
+In traditional program verification the division of labor is fixed: a human writes the specification, and the verifier proves the program against it. The specification is ground truth *by construction*—it does not depend on the program under analysis. In LLM verification this division collapses: the "program" (the model's reasoning) and the "specification" (what should be checked) are both produced by LLMs. The anchor-source axis—whether the spec is LLM-declared (L0), derived from the problem text (L1), grounded in objective truth (L2), or encoded in a decidable system (L3/L4)—is the new object of study. Hoare logic tells us how to verify a program against a given specification; VAL asks *who gave the specification and whether it can be trusted*. The former is soundness theory; the latter is an accountability taxonomy for a class of artifacts in which the spec is no longer exogenous.
+
+The distinction from risk-management and maturity frameworks (NIST AI RMF, CMMI) is different: those are disposition ladders—they classify what to do about risk (Sec. 2.3's risk axis), not the epistemic status of a verdict. A system can be process-mature and still run L0 verification; maturity and anchor strength are orthogonal. Epistemic philosophy (reliabilism, justification theory) asks whether a belief is *justified*; VAL does not adjudicate truth—it classifies the structural source of a claim's checkability. We do not claim to resolve epistemology; we claim that one axis—spec source—is ordinal, operationally decidable (Sec. 3.3), and currently absent from the LLM-verification literature.
+
+**Auditability of this assessment.** The literature assessment in this paper is itself versioned and auditable (supplementary material, docs/07): initial judgments (V1.0), abstract-level verification (V1.2), and full-text verification of the six anchor-axis papers (V1.3) are recorded as a change log. One judgment was corrected after full-text review (a paper initially classified L1/L2 was found to delegate its verdict to a GPT-4-based judge, L0/L1). We report this not as an embarrassment but as the framework applied to itself: assessments are claims, claims require anchors, and the correction trail is the anchor.
 
 ---
 
@@ -287,6 +299,16 @@ Raising a verifier's level is governed by two factors: the cost of silent errors
 | **High error cost** | **L3/L4 is mandatory** | L2 ceiling + human review; label the risk |
 
 The framework is a deployment checklist, not a competition ladder: an L0 self-check is the right answer for a low-stakes draft summarizer and an indictment for a discharge summary generator. The same verdict text ("verified") carries radically different weight at different levels; the framework's entire point is to make that difference visible.
+
+A compact five-item deployment checklist follows:
+
+1. **State the property and its ODD.** What exactly is verified, and by what decidable tool (or is it not encodable at all)?
+2. **Identify the spec source (Q1).** LLM-declared → escalate immediately; rule/truth/decidable → proceed.
+3. **Declare the guarantee (Q2).** Correctness probe or completeness claim? State it in the system's own documentation.
+4. **Set the abstention contract.** What happens when the input falls outside the ODD—UNSURE, escalation, or silence? Silence is a decision.
+5. **Terminate the trust recursion.** What audits the judge, and what is the audit's own anchor?
+
+An L0 self-check may be acceptable for a low-stakes summarizer; it is not for a clinical decision aid.
 
 ### 6.4 What the honest negative result teaches
 

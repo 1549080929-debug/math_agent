@@ -14,8 +14,9 @@
 | 4 | docs/06 判级程序作附录（Appendix A） | ✅ 完成（引用 val_standard.py 输出） |
 | 5 | val_standard.py 作可复现工具引用 | ✅ 已有（仓库根目录，10/10 自测） |
 | 6 | 标题定稿 + 作者块（Yajie Yin，无机构）+ CC-BY 4.0 | ✅ 完成（邮箱/ORCID 已填） |
-| 7 | 全文 v1 草稿（§1–§8 + 附录 A/B/C 已成段） | ✅ 完成（v0.9，待润色） |
+| 7 | 全文 v1 草稿（§1–§8 + 附录 A/B/C 已成段） | ✅ 完成（v1.1：评审补丁 §2.6 formal methods / 定位声明 / 审计段 / 部署清单 / FacTool 作者修复） |
 | 8 | arXiv 提交 | ⬜ 提交包已备好（paper/submission.md，表单字段 copy-paste 即用）；实际提交需用户账号操作 |
+| 9 | inter-rater 可靠性实验 | ⬜ 协议已备好（paper/interrater-protocol.md，10 篇材料+判级表+κ 算法）；待 3–5 位评判者执行 |
 
 ## 关键写作决策（起草时已定）
 
