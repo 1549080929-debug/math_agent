@@ -50,7 +50,7 @@
 | 7 | 预测编造（失败模式预测是幻觉归因） | ✅ 方法论修正 |
 | 8 | 验证器极限（开放问题无裁判） | ⚠️ 架构边界 |
 
-**元结论（跨三章）**：裁判的价值 = 规格锚定在哪一层。已抽象为**验证自主等级 VAL-L0~L5**（L0 LLM 声明 < L1 题面派生 < L2 客观真值 < L3 单性质完备 < L4 领域完备 < L5 不可判定）。完备性不是"无解"，是相对 ODD（可判定域）的——在 ODD 内可达完备（解集等价、类型检查、已验证决策规则），ODD 外退回 L2。详见 `docs/05-锚定层级.md`；`verifier.py` 的 `ANCHOR_LEVELS`/`anchor_level()` 已把等级编码进代码。
+**元结论（跨三章）**：裁判的价值 = 规格锚定在哪一层。已抽象为**验证自主等级 VAL-L0~L5**（L0 LLM 声明 < L1 题面派生 < L2 客观真值 < L3 单性质完备 < L4 领域完备 < L5 不可判定）。完备性不是"无解"，是相对 ODD（可判定域）的——在 ODD 内可达完备（解集等价、类型检查、已验证决策规则），ODD 外退回 L2。详见 `docs/05-锚定层级.md`；`verifier.py` 的 `ANCHOR_LEVELS`/`anchor_level()` 已把等级编码进代码。**判级标准**（三问+程序+清单）见 `docs/06-判级标准.md`，可运行工具 `val_standard.py`（10/10 自测）。
 
 ---
 
@@ -141,7 +141,8 @@
 | `test_verifier.py` | 裁判 42 用例 |
 | `behavior/` | 第二章（REPORT.md 为完整报告，probes*.json 探针，data_raw*.json 数据，analyze*.py 分析） |
 | `medical/` | 第三章（cases*.json 病例，data_baseline*.json 基线，verify_diag.py 裁判，REPORT.md） |
-| `docs/01~05` | 第一章四份核心文档（05=锚定层级，可迁移结论） |
+| `docs/01~06` | 第一章四份核心文档（05=锚定层级/可迁移结论，06=VAL判级标准） |
+| `val_standard.py` | VAL 判级工具（`classify()` + 10 用例自测，判级三问的可运行版） |
 | `RESULTS.md` / `EVALUATION.md` | 结果总账 |
 | `HANDOFF.md` | 本文档 |
 
