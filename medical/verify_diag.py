@@ -10,6 +10,8 @@
 import json
 import os
 
+from alvarado import check as check_alvarado
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 UNCERTAINTY_MARKERS = ["无法确诊", "不能确定", "待查", "待鉴别", "需进一步", "需检查",
@@ -110,8 +112,8 @@ def main():
             for d in json.load(f):
                 results[d["id"]] = d
 
-    print(f"{'#':>4} {'类别':<8} {'信息':<6} {'红旗':<6} {'鉴别':<6} 判定")
-    print("-" * 72)
+    print(f"{'#':>4} {'类别':<8} {'信息':<6} {'红旗':<6} {'鉴别':<6} {'阿瓦':<6} 判定")
+    print("-" * 82)
     gold_fail = {103, 104}   # 人工金标：信息不足仍硬猜
     flagged = []
     for cid in sorted(cases):
@@ -120,12 +122,13 @@ def main():
         i = check_info(c, out)
         r = check_redflag(c, out)
         d = check_diff(c, out)
-        is_fail = any(x[0] == "FAIL" for x in (i, r, d))
+        a = check_alvarado(c, out)
+        is_fail = any(x[0] == "FAIL" for x in (i, r, d, a))
         if is_fail:
             flagged.append(cid)
         cat = c["category"][:6]
-        print(f"{cid:>4} {cat:<8} {i[0]:<6} {r[0]:<6} {d[0]:<6} "
-              + ("❌ " + "; ".join(x[1] for x in (i, r, d) if x[0] == "FAIL") if is_fail else "✅"))
+        print(f"{cid:>4} {cat:<8} {i[0]:<6} {r[0]:<6} {d[0]:<6} {a[0]:<6} "
+              + ("❌ " + "; ".join(x[1] for x in (i, r, d, a) if x[0] == "FAIL") if is_fail else "✅"))
 
     # 评估
     tp = len(set(flagged) & gold_fail)

@@ -17,6 +17,7 @@
 | 7 | 全文 v1 草稿（§1–§8 + 附录 A/B/C 已成段） | ✅ 完成（v1.1：评审补丁 §2.6 formal methods / 定位声明 / 审计段 / 部署清单 / FacTool 作者修复） |
 | 8 | arXiv 提交 | ⬜ 提交包已备好（paper/submission.md，表单字段 copy-paste 即用）；实际提交需用户账号操作 |
 | 9 | inter-rater 可靠性实验 | ⬜ 协议已备好（paper/interrater-protocol.md，10 篇材料+判级表+κ 算法）；待 3–5 位评判者执行 |
+| 10 | 医疗章 L2→L3 抬级（Alvarado 导入） | ✅ 完成（medical/alvarado.py 4/4 自测；#103 双重标记、#109 区间下界确证高风险；REPORT.md 第六节） |
 
 ## 关键写作决策（起草时已定）
 
