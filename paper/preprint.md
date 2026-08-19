@@ -193,7 +193,7 @@ The classification is deterministic: given the answers to Q1–Q3, the level is 
 6. otherwise (LLM-declared / no anchor)  → L0
 ```
 
-The procedure is implemented in `val_standard.py` (10 self-tests) and documented in `docs/06-判级标准.md`. Its determinism is deliberate: it is a *standard*, so two raters applying it to the same scheme must obtain the same level; the only legitimate disagreements concern the Q1/Q2 answers, not the mapping.
+The procedure is implemented in `val_standard.py` (10 self-tests) and documented in `docs/06-判级标准.md`. Its determinism is deliberate: it is a *standard*, so two raters applying it to the same scheme must obtain the same level; the only legitimate disagreements concern the Q1/Q2 answers, not the mapping. The unit of classification is the verification *mechanism* (component), not the monolithic system: a mixed architecture is classified per-component, so a label such as "L0/L1" in our survey denotes two components at different levels, not an indeterminate scalar.
 
 ### 3.4 Operational Design Domain (ODD)
 
@@ -201,7 +201,7 @@ Borrowing from autonomous-driving regulation, an L3/L4 guarantee holds only with
 
 Two corollaries. First, **completeness is never absolute; it is relative to an ODD.** A verifier that is complete inside its ODD is, by construction, silent about anything outside it—the completeness claim is only as strong as the ODD is honestly specified. Second, **raising a level means enlarging the ODD, not intensifying sampling.** The L2→L3 move for "find all solutions" is achieved by re-encoding the task as solution-set equality, making the property decidable; no sampling density achieves this. The L3→L4 move is achieved by covering a whole class of properties under one decidable system.
 
-**ODD auditability.** ODD honesty is an *audit target*, not an assumption VAL silently guarantees. An ODD claim has its own anchoring ladder—self-declared (L0), tool-documented (L1), empirically tested (L2), formally characterized (L3)—and a completeness claim is only as strong as its ODD's own anchor. The engineering test of ODD honesty is a boundary probe: adversarial instances just outside the claimed ODD must break the completeness claim, confirming the boundary is a capability constraint and not a convenience.
+**ODD auditability.** ODD honesty is an *audit target*, not an assumption VAL silently guarantees. An ODD claim has its own anchoring ladder—self-declared (L0), tool-documented (L1), empirically tested (L2), formally characterized (L3)—and a completeness claim is only as strong as its ODD's own anchor. An ODD is meaningful only if it is a *pre-declared decidable predicate* over inputs (syntax, grammar, input shape): "polynomial equations of degree ≤ d over the reals" is checkable before invoking the solver, whereas "whatever the solver happens to solve" is vacuous—completeness then holds for "the cases we completely verified," which is circular. The engineering test of ODD honesty is a boundary probe: adversarial instances just outside the claimed ODD must break the completeness claim.
 
 ### 3.5 What VAL is not
 
@@ -218,6 +218,8 @@ Three non-claims, to preempt misreading:
 The central theoretical claim of this paper:
 
 > **Substitution- and sampling-based verification (L2) can prove that proposed candidates hold; it cannot prove that no candidate was missed. Completeness is achievable only by re-encoding the property into a decidable system (L3/L4)—or not at all.**
+
+We state the above as a *definitional* fact—it follows from what substitution and sampling are. Its significance is not the fact itself but the systematic violation of it: L2 verification is routinely deployed and read as L3. The open empirical questions (when does this incompleteness produce actual errors, and what is the marginal L2→L3 gain) are left to future work rather than answered here.
 
 ### 4.1 Correctness is not completeness
 
@@ -241,11 +243,11 @@ Sampling-based verification evaluates *P* at a finite set of points. It can fals
 
 ### 4.4 The statement layer: where the blind spot hides
 
-Every verification scheme draws a line between what is checked and what is assumed, and the completeness blind spot always lives on the assumed side. For L2 schemes, the assumption is "the proposed candidate set is the right one." For L3/L4 schemes, the assumption moves up but does not vanish: the kernel checks proofs, but the theorem statement—and the case-split coverage it encodes—is a declaration. The strongest baseline in our survey concedes this explicitly: Safe's formal verifier "focuses on the correctness of each step" [4]. The same pattern recurs in our own system: when the verification condition was declared by the LLM under test, the judge faithfully verified a possibly wrong condition—trust recursion pushed one level up, not resolved.
+Every verification scheme draws a line between what is checked and what is assumed, and the completeness blind spot always lives on the assumed side. For L2 schemes, the assumption is "the proposed candidate set is the right one." For L3/L4 schemes, the assumption moves up but does not vanish: the kernel checks proofs, but the theorem statement—and the case-split coverage it encodes—is a declaration. The strongest formal baseline in our survey illustrates the boundary: Safe's verifier checks each step's proof correctness—complete *with respect to the stated theorem*—while the theorem statements, and the case-split coverage they encode, are LLM-generated and unchecked [4]. We cite this as an architectural fact about where the completeness question lives, not as the authors admitting incompleteness. The same pattern recurs in our own system: when the verification condition was declared by the LLM under test, the judge faithfully verified a possibly wrong condition—trust recursion pushed one level up, not resolved.
 
-### 4.5 Why universal completeness is undecidable
+### 4.5 Why universal completeness is impossible
 
-The L5 claim is a universal completeness verifier: an algorithm that, given any program and any property, decides whether the property holds. By Rice's theorem, for any non-trivial semantic property of programs, the question "does this program have the property?" is undecidable. A general-purpose "verify any LLM output against any spec, completely" is therefore not an engineering aspiration but a logical impossibility. The consequence is architectural, not pessimistic: completeness is available locally (within an ODD, at L3/L4) and unavailable globally (L5), so the engineering question is always *which ODD*, never *whether*.
+The L5 claim is a single verifier complete over *arbitrary* properties and inputs. Its impossibility does not rest on any single theorem; it rests on the fact that "arbitrary properties" bundles three classes, each unverifiable-universally for a different reason: (i) program semantic properties—undecidable by Rice's theorem; (ii) empirical propositions about the world—whose truth is not a formal decidable question at all (open-world, natural-language); (iii) subjective properties with no ground truth. Notably, proof checking—verifying a *given* proof against derivation rules—is decidable (it is the L4 kernel); this is precisely why completeness is achievable for the restricted decidable class (L3/L4) but not for the unrestricted one (L5). The consequence is architectural, not pessimistic: completeness is available locally (within an ODD, at L3/L4) and unavailable globally (L5); the engineering question is always *which ODD*, never *whether*.
 
 ### 4.6 Summary
 
@@ -296,6 +298,8 @@ The fourth study reverses the direction of evidence. Chapters 1–3 induced the 
 
 The open prediction, **P3 (type information as the highest-ROI L3 anchor)**, was tested experimentally. We stripped type hints from HumanEval prompts and generated solutions under three conditions: bare (no types), typed, and typed-plus-type-checker-feedback (one mypy round). The result is a clean empty window: **164/164 HumanEval problems and all six hand-written, trap-laden novel problems were solved by the bare condition**—the model leaves no accuracy headroom for type information to improve. The single failure in the typed condition (a novel string-escaping problem) carried a mypy error that the test suite did not catch; the type-checker-feedback condition repaired it in one round.
 
+*Evaluation protocol and caveat.* The 164/164 figure is greedy-decoding pass@1: one sample per problem at temperature 0.2, checked against HumanEval's own tests. This is **not comparable to published pass@1 figures** (which use temperature sampling), and it primarily reflects benchmark saturation rather than general code ability; it is reported only to establish that the accuracy window is empty, not as a code-generation result. Full protocol and per-problem outputs are in the repository (`chapter4/p3_scan.json`).
+
 The significance of Chapter 4 is twofold. First, the framework's central empirical generalization—*LLMs are too strong for accuracy windows to be non-empty on problems near their training distribution*—is now confirmed in a fourth domain, including problems we designed specifically to defeat it. Second, the framework survived a reverse test: predictions stated in advance were supported by independent evidence four out of five, and the fifth is untestable with this model rather than contradicted. Both outcomes are what a falsifiable framework should produce.
 
 ---
@@ -344,6 +348,8 @@ Our accuracy result—the architecture is no better than the raw baseline—is f
 3. **VAL classifies, it does not measure**: a scheme's level states its anchor's epistemic status, not the probability that its verdict is correct. Level and reliability are orthogonal; an L2 verifier can be more accurate than an L3 verifier on in-ODD cases.
 4. **ODD boundaries are fuzzy in practice**: whether a property is "encodable" depends on the solver, the type system, or the rule's inputs, and can change with tooling. ODD honesty is an audit target, not an enforced guarantee (Sec. 3.4): ODD claims carry their own anchor ladder (self-declared → formally characterized), and boundary probes are the engineering check—but neither is automatic.
 5. **VAL itself is unvalidated as a measurement**: we have not tested inter-rater reliability of the decision procedure at scale, nor shown that independent raters reach the same levels on a common corpus. The procedure is deterministic by construction; whether its Q1/Q2 judgments are reproducible is an open empirical question we plan to address with a larger corpus.
+6. **The mathematics negative result is bounded by a ceiling effect**: a 20/20 baseline leaves no accuracy headroom, so the result supports only "no headroom on in-distribution problems," not "verification cannot improve accuracy in general." We do not compare against published verification architectures, so an implementation-quality confound cannot be excluded. The 42/42 calibration tests and the #105 adjudication were author-designed/adjudicated, not independently validated.
+7. **The 17-paper survey omits verification families without clean objective truth**—calibration and uncertainty estimation, red-teaming, RAG citation verification, and reward-model verification—which VAL classifies only as L0/L1. The anchor axis does not cover anchor-less verification; that is a scope boundary, not a claim of coverage.
 
 ---
 
