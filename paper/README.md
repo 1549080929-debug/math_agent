@@ -15,7 +15,7 @@
 | 5 | val_standard.py 作可复现工具引用 | ✅ 已有（仓库根目录，10/10 自测） |
 | 6 | 标题定稿 + 作者块（Yajie Yin，无机构）+ CC-BY 4.0 | ✅ 完成（邮箱/ORCID 已填） |
 | 7 | 全文 v1 草稿（§1–§8 + 附录 A/B/C 已成段） | ✅ 完成（v0.9，待润色） |
-| 8 | arXiv 提交（abstract 关键词、分类 cs.CL / cs.AI） | ⬜ 待做 |
+| 8 | arXiv 提交 | ⬜ 提交包已备好（paper/submission.md，表单字段 copy-paste 即用）；实际提交需用户账号操作 |
 
 ## 关键写作决策（起草时已定）
 
