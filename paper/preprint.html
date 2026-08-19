@@ -19,7 +19,7 @@
 <p><strong>Yajie Yin</strong></p>
 <p>Email: 1549080929@qq.com · ORCID: 0009-0001-6168-2530<br />
 Code &amp; data: https://github.com/1549080929-debug/math_agent<br />
-Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0</p>
+Preprint: arXiv: [TODO — fill in after submission] · License: CC-BY 4.0</p>
 <h2>Abstract</h2>
 <p>Large language models (LLMs) are increasingly paired with "verifiers"—step checkers, self-consistency filters, tool-based fact checkers, and formal proof assistants—that claim to detect the model's errors. Yet the verification literature uses the word <em>level</em> to mean at least five different things: verification granularity, concept abstraction, risk tier, system-stack layer, and the epistemic source of the ground truth. We propose <strong>Verification Autonomy Levels (VAL)</strong>, a meta-standard that classifies any verification scheme along a single axis: <em>where does the verification spec come from, and what does the verdict guarantee?</em> VAL ranges from L0 (LLM self-declaration; no deterministic anchor) through L2 (objective ground truth; correctness only) to L3/L4 (decidable systems with single-property or domain-level completeness), with L5 shown to be impossible in the unrestricted case. Central to VAL is the <strong>completeness blind spot</strong>: substitution- and sampling-based verifiers can confirm that proposed candidates hold, but cannot prove that no candidate was missed. We further identify a dichotomy the literature has not stated: completeness is reachable only for <em>formally specifiable</em> properties, whereas empirical open-world verification (fact-checking, diagnosis) caps at anchored correctness (L2). We document this gap empirically across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation (the fourth a <em>reverse validation</em>: framework predictions stated before evidence)—and in the strongest existing formal-verification baseline, whose own authors note the verifier "focuses on the correctness of each step." We further show that the levels of granularity, concept hierarchy, risk, and system stack are orthogonal to VAL, resolving a systematic conflation across 17 surveyed papers. We release a runnable classifier (<code>val_standard.py</code>) and the full literature assessment as supplementary material.</p>
 <p><strong>Keywords</strong>: LLM verification, verification autonomy, completeness, ground truth, trustworthy AI</p>
@@ -52,7 +52,7 @@ Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0</p>
 <p><strong>Positioning.</strong> We present VAL as a conceptual contribution. The four case studies of Sec. 5 are exercises of the framework, not claims of empirical superiority over baselines—indeed, two report clean negative results (the verification architecture does not improve accuracy in mathematics or code generation). The empirical content is intentionally modest; the claim we defend is structural: that one axis—the source of the verification spec—is measurable, ordinal, and currently untheorized in the LLM-verification literature.</p>
 <hr />
 <h2>2. Related Work: Five Axes, One Word</h2>
-<p>We reviewed 17 representative papers spanning what the literature calls "layered" or "hierarchical" verification, and classified each along five axes. The full assessment—per-paper evidence, confidence levels, and a versioned re-verification trail—is released as supplementary material (<code>docs/07-文献评述.md</code>); here we report the axis structure and the anchor-axis classifications used throughout.</p>
+<p>We reviewed 17 representative papers spanning what the literature calls "layered" or "hierarchical" verification, and classified each along five axes. The full assessment—per-paper evidence, confidence levels, and a versioned re-verification trail—is released as supplementary material (<code>docs/07</code>); here we report the axis structure and the anchor-axis classifications used throughout.</p>
 <h3>2.1 Granularity axis: <em>how fine</em></h3>
 <p>Graph of Verification [2] adapts verification granularity from atomic steps (formal tasks) to whole paragraphs (informal narratives) via a "node block" architecture, trading precision against robustness. Factcheck-GPT [7] annotates factuality at three granularities—claim, sentence, document—with a GPT-4-based annotation scheme and a gold-labeled benchmark. Dr. V [9] decomposes video-hallucination diagnosis into perceptual, temporal, and cognitive levels, grounding the first two in 10k spatial-temporal gold annotations. These are ladders of <em>decomposition fineness</em>. They say nothing about the anchor: the same granularity ladder can be implemented with LLM judgment (L0) or with objective ground truth (L2).</p>
 <h3>2.2 Concept axis: <em>how abstract</em></h3>
@@ -214,7 +214,7 @@ response / which layer</em>; VAL answers <em>on what ground truth, with what gua
 6. correctness + problem-derived rule    → L1
 7. otherwise (LLM-declared / no anchor)  → L0
 </code></pre>
-<p>The procedure is implemented in <code>val_standard.py</code> (10 self-tests) and documented in <code>docs/06-判级标准.md</code>. Its determinism is deliberate: it is a <em>standard</em>, so two raters applying it to the same scheme must obtain the same level; the only legitimate disagreements concern the Q1/Q2 answers, not the mapping. The unit of classification is the verification <em>mechanism</em> (component), not the monolithic system: a mixed architecture is classified per-component, so a label such as "L0/L1" in our survey denotes two components at different levels, not an indeterminate scalar. For a mixed system, the system-level level is <em>claim-relative</em>: a system is L4 with respect to the claim "the theorem is proven" and L0 with respect to the claim "the answer is correct." There is no single scalar system level; VAL composes per claim and per component.</p>
+<p>The procedure is implemented in <code>val_standard.py</code> (11 self-tests) and documented in <code>docs/06</code>. Its determinism is deliberate: it is a <em>standard</em>, so two raters applying it to the same scheme must obtain the same level; the only legitimate disagreements concern the Q1/Q2 answers, not the mapping. The unit of classification is the verification <em>mechanism</em> (component), not the monolithic system: a mixed architecture is classified per-component, so a label such as "L0/L1" in our survey denotes two components at different levels, not an indeterminate scalar. For a mixed system, the system-level level is <em>claim-relative</em>: a system is L4 with respect to the claim "the theorem is proven" and L0 with respect to the claim "the answer is correct." There is no single scalar system level; VAL composes per claim and per component.</p>
 <h3>3.4 Operational Design Domain (ODD)</h3>
 <p>Borrowing from autonomous-driving regulation, an L3/L4 guarantee holds only within an <strong>ODD</strong>—here, the <em>decidable domain</em> in which the property can be encoded and the verdict computed. An ODD must be a <em>pre-declared syntactic predicate</em> over inputs, not a post-hoc description of success. Examples of the correct form: <code>solveset</code> over "polynomial equations of degree ≤ 4 with real coefficients" (checkable before solving); an Alvarado score over "a record with all eight MANTRELS fields present and numeric/boolean"; a borrow checker over "a term parseable in the surface grammar of the type language." These syntactic ODDs are narrow by construction—beyond degree 4 there is no closed form, and a rule-scoped ODD is complete over its own inputs but silent about the open world—and the framework's honesty is that this narrowness is made explicit rather than hidden.</p>
 <p>Two corollaries. First, <strong>completeness is never absolute; it is relative to an ODD.</strong> A verifier that is complete inside its ODD is, by construction, silent about anything outside it—the completeness claim is only as strong as the ODD is honestly specified. Second, <strong>raising a level means enlarging the ODD, not intensifying sampling.</strong> The L2→L3 move for "find all solutions" is achieved by re-encoding the task as solution-set equality, making the property decidable; no sampling density achieves this. The L3→L4 move is achieved by covering a whole class of properties under one decidable system.</p>
@@ -256,7 +256,7 @@ response / which layer</em>; VAL answers <em>on what ground truth, with what gua
 <p>The blind spot has three stable properties: (i) it is invisible to the verifier that suffers it; (ii) it is not fixed by more data or denser sampling; (iii) it can be moved up the ladder (from candidate sets to theorem statements) but not eliminated. The framework's prescription follows directly: when a property is encodable, raise the anchor (L3/L4); when it is not, the verifier is a correctness probe by necessity and should be labeled and deployed as one.</p>
 <hr />
 <h2>5. Empirical Case Studies</h2>
-<p>We exercised the framework across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation. Full archives: <code>RESULTS.md</code> (math), <code>behavior/REPORT.md</code>, <code>medical/REPORT.md</code>, <code>docs/08-第四章-代码生成验证.md</code> (code). Each study followed the same protocol: audit first (build a labeled test bed), measure the value window (baseline comparison), classify failure modes, then test the judge itself. We report honest negative results where they occurred.</p>
+<p>We exercised the framework across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation. Full archives: <code>RESULTS.md</code> (math), <code>behavior/REPORT.md</code>, <code>medical/REPORT.md</code>, <code>docs/08</code> (code). Each study followed the same protocol: audit first (build a labeled test bed), measure the value window (baseline comparison), classify failure modes, then test the judge itself. We report honest negative results where they occurred.</p>
 <h3>5.1 Symbolic mathematics</h3>
 <p>A decompose–solve–verify–combine agent was built on a deterministic SymPy verifier with nine verification types, calibrated to <strong>42/42</strong> unit cases (<code>test_verifier.py</code>). The types span the anchor ladder: substitution-based types (root, extreme, satisfies) are L2; solution-set equivalence and type checking (inequality, solution_set, answer_type) are L3; <code>ANCHOR_LEVELS</code> in <code>verifier.py</code> records each type's level.</p>
 <p>The headline result is a clean negative one: on a 20-problem test set, the full architecture scored <strong>16/15/13</strong> across three runs, while a raw-LLM baseline scored <strong>20/20</strong> in all three. Accuracy was a random variable dominated by the LLM's decomposition; the verification stack did not improve it and sometimes hurt it. We do not claim otherwise.</p>
@@ -357,7 +357,7 @@ response / which layer</em>; VAL answers <em>on what ground truth, with what gua
 <li>Chen, J., Li, C., Yuan, Y., Yao, A.C. <em>Hierarchical Attention Generates Better Proofs.</em> ACL 2025. arXiv:2504.19188.</li>
 <li>Luo, M., Wu, S., et al. <em>Dr. V: A Hierarchical Perception-Temporal-Cognition Framework to Diagnose Video Hallucination.</em> arXiv:2509.11866, 2025.</li>
 <li>Li, Q., Xu, J., et al. <em>A Proprietary Model-Based Safety Response Framework for AI Agents.</em> arXiv:2511.03138, 2025.</li>
-<li>Yang, W., Cheng, H., Zhou, B., et al. <em>M³-SafetyBench: 多领域多场景多维度的大语言模型安全评估体系.</em> 中国科学：信息科学, 55:2923–2940, 2025.</li>
+<li>Yang, W., Cheng, H., Zhou, B., et al. <em>M³-SafetyBench: 多领域多场景多维度的大语言模型安全评估体系</em> [M³-SafetyBench: a comprehensive benchmark for evaluating the safety of large language models across multiple domains, scenarios, and dimensions]. 中国科学：信息科学 [Scientia Sinica Informationis], 55:2923–2940, 2025.</li>
 <li>Khatchadourian, R., Franco, R. <em>LLM Output Drift: Cross-Provider Validation &amp; Mitigation for Financial Workflows.</em> arXiv:2511.07585, 2025.</li>
 <li>Chen, Z., Chen, J., et al. <em>Standard Benchmarks Fail—Auditing LLM Agents in Finance Must Prioritize Risk.</em> arXiv:2502.15865, 2025.</li>
 <li>Liu, X., Wang, J., et al. <em>Prompting Frameworks for Large Language Models: A Survey.</em> ACM Computing Surveys. arXiv:2311.12785.</li>
@@ -368,16 +368,16 @@ response / which layer</em>; VAL answers <em>on what ground truth, with what gua
 <hr />
 <h2>Appendix A: The decision procedure (runnable)</h2>
 <p>The classification procedure of Sec. 3.3 is implemented in <code>val_standard.py</code> (10 self-tests, all passing). Representative outputs:</p>
-<pre><code>LLM 自证'我检查过了'          → L0 | LLM self-declaration / no deterministic anchor
-题面正则提取 final_check      → L1 | deterministic rules from problem text
-代回验证 verify_root          → L2 | correctness + objective truth (completeness blind)
-solveset 解集等价             → L3 | single-property completeness (decidable)
-Rust borrow checker          → L4 | domain-level proof system
-通用完备验证器                → L5 | impossible (unrestricted), rejected
+<pre><code>LLM self-check (&quot;I checked it&quot;)    → L0 | self-declaration / no deterministic anchor
+Problem-derived rule (final_check) → L1 | deterministic rules from problem text
+Substitution (verify_root)         → L2 | correctness + gold-label anchor
+Solution-set equality (solveset)   → L3 | single-property completeness (decidable)
+Rust borrow checker                → L4 | domain-level proof system
+Universal complete verifier        → L5 | impossible (unrestricted), rejected
 </code></pre>
-<p>Full standard with usage criteria and stop conditions: <code>docs/06-判级标准.md</code>.</p>
+<p>Full standard with usage criteria and stop conditions: <code>docs/06</code>.</p>
 <h2>Appendix B: The 17-paper classification</h2>
-<p>Full versioned assessment with per-paper evidence: <code>docs/07-文献评述.md</code>. Compact summary (anchor axis only):</p>
+<p>Full versioned assessment with per-paper evidence: <code>docs/07</code>. Compact summary (anchor axis only):</p>
 <table>
 <thead>
 <tr>
@@ -421,5 +421,5 @@ Rust borrow checker          → L4 | domain-level proof system
 <li>Chapter 1 (math): <code>RESULTS.md</code>, <code>EVALUATION.md</code>, <code>data/testset_results.json</code>, <code>test_verifier.py</code> (42/42), <code>verifier.py</code> (<code>ANCHOR_LEVELS</code>)</li>
 <li>Chapter 2 (behavior): <code>behavior/REPORT.md</code>, <code>behavior/analyze*.py</code>, <code>behavior/data_raw*.json</code></li>
 <li>Chapter 3 (medical): <code>medical/REPORT.md</code>, <code>medical/verify_diag.py</code>, <code>medical/alvarado.py</code>, <code>medical/cases*.json</code></li>
-<li>Chapter 4 (code): <code>docs/08-第四章-代码生成验证.md</code> (predictions &amp; protocol), <code>chapter4/p3_experiment.py</code>, <code>chapter4/hard_problems.py</code>, <code>chapter4/p3_*.json</code> (results)</li>
+<li>Chapter 4 (code): <code>docs/08</code> (predictions &amp; protocol), <code>chapter4/p3_experiment.py</code>, <code>chapter4/hard_problems.py</code>, <code>chapter4/p3_*.json</code> (results)</li>
 </ul></body></html>

@@ -4,7 +4,7 @@
 
 Email: 1549080929@qq.com · ORCID: 0009-0001-6168-2530  
 Code & data: https://github.com/1549080929-debug/math_agent  
-Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0
+Preprint: arXiv: [TODO — fill in after submission] · License: CC-BY 4.0
 
 <!-- 全文 v1.0 (2026-08-18)：§1-§8 + 附录 A/B/C 草稿完成，润色完成。待办：① 矢量 Figure 1；② 提交前终审（分类/备注/摘要关键词）；③ arXiv 提交。作者：Yajie Yin（无机构，arXiv 允许）；邮箱/ORCID 已填。 -->
 
@@ -63,7 +63,7 @@ We argue that the fifth axis is the one that matters for trust, that it has a na
 
 ## 2. Related Work: Five Axes, One Word
 
-We reviewed 17 representative papers spanning what the literature calls "layered" or "hierarchical" verification, and classified each along five axes. The full assessment—per-paper evidence, confidence levels, and a versioned re-verification trail—is released as supplementary material (`docs/07-文献评述.md`); here we report the axis structure and the anchor-axis classifications used throughout.
+We reviewed 17 representative papers spanning what the literature calls "layered" or "hierarchical" verification, and classified each along five axes. The full assessment—per-paper evidence, confidence levels, and a versioned re-verification trail—is released as supplementary material (`docs/07`); here we report the axis structure and the anchor-axis classifications used throughout.
 
 ### 2.1 Granularity axis: *how fine*
 
@@ -200,7 +200,7 @@ The classification is deterministic: given the answers to Q1–Q3, the level is 
 7. otherwise (LLM-declared / no anchor)  → L0
 ```
 
-The procedure is implemented in `val_standard.py` (10 self-tests) and documented in `docs/06-判级标准.md`. Its determinism is deliberate: it is a *standard*, so two raters applying it to the same scheme must obtain the same level; the only legitimate disagreements concern the Q1/Q2 answers, not the mapping. The unit of classification is the verification *mechanism* (component), not the monolithic system: a mixed architecture is classified per-component, so a label such as "L0/L1" in our survey denotes two components at different levels, not an indeterminate scalar. For a mixed system, the system-level level is *claim-relative*: a system is L4 with respect to the claim "the theorem is proven" and L0 with respect to the claim "the answer is correct." There is no single scalar system level; VAL composes per claim and per component.
+The procedure is implemented in `val_standard.py` (11 self-tests) and documented in `docs/06`. Its determinism is deliberate: it is a *standard*, so two raters applying it to the same scheme must obtain the same level; the only legitimate disagreements concern the Q1/Q2 answers, not the mapping. The unit of classification is the verification *mechanism* (component), not the monolithic system: a mixed architecture is classified per-component, so a label such as "L0/L1" in our survey denotes two components at different levels, not an indeterminate scalar. For a mixed system, the system-level level is *claim-relative*: a system is L4 with respect to the claim "the theorem is proven" and L0 with respect to the claim "the answer is correct." There is no single scalar system level; VAL composes per claim and per component.
 
 ### 3.4 Operational Design Domain (ODD)
 
@@ -265,7 +265,7 @@ The blind spot has three stable properties: (i) it is invisible to the verifier 
 
 ## 5. Empirical Case Studies
 
-We exercised the framework across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation. Full archives: `RESULTS.md` (math), `behavior/REPORT.md`, `medical/REPORT.md`, `docs/08-第四章-代码生成验证.md` (code). Each study followed the same protocol: audit first (build a labeled test bed), measure the value window (baseline comparison), classify failure modes, then test the judge itself. We report honest negative results where they occurred.
+We exercised the framework across four domains—symbolic mathematics, behavior monitoring, medical diagnosis, and code generation. Full archives: `RESULTS.md` (math), `behavior/REPORT.md`, `medical/REPORT.md`, `docs/08` (code). Each study followed the same protocol: audit first (build a labeled test bed), measure the value window (baseline comparison), classify failure modes, then test the judge itself. We report honest negative results where they occurred.
 
 ### 5.1 Symbolic mathematics
 
@@ -388,7 +388,7 @@ We thank Jiuzhou Han for a clarifying discussion of VerifiAgent's verification m
 8. Chen, J., Li, C., Yuan, Y., Yao, A.C. *Hierarchical Attention Generates Better Proofs.* ACL 2025. arXiv:2504.19188.
 9. Luo, M., Wu, S., et al. *Dr. V: A Hierarchical Perception-Temporal-Cognition Framework to Diagnose Video Hallucination.* arXiv:2509.11866, 2025.
 10. Li, Q., Xu, J., et al. *A Proprietary Model-Based Safety Response Framework for AI Agents.* arXiv:2511.03138, 2025.
-11. Yang, W., Cheng, H., Zhou, B., et al. *M³-SafetyBench: 多领域多场景多维度的大语言模型安全评估体系.* 中国科学：信息科学, 55:2923–2940, 2025.
+11. Yang, W., Cheng, H., Zhou, B., et al. *M³-SafetyBench: 多领域多场景多维度的大语言模型安全评估体系* [M³-SafetyBench: a comprehensive benchmark for evaluating the safety of large language models across multiple domains, scenarios, and dimensions]. 中国科学：信息科学 [Scientia Sinica Informationis], 55:2923–2940, 2025.
 12. Khatchadourian, R., Franco, R. *LLM Output Drift: Cross-Provider Validation & Mitigation for Financial Workflows.* arXiv:2511.07585, 2025.
 13. Chen, Z., Chen, J., et al. *Standard Benchmarks Fail—Auditing LLM Agents in Finance Must Prioritize Risk.* arXiv:2502.15865, 2025.
 14. Liu, X., Wang, J., et al. *Prompting Frameworks for Large Language Models: A Survey.* ACM Computing Surveys. arXiv:2311.12785.
@@ -403,19 +403,19 @@ We thank Jiuzhou Han for a clarifying discussion of VerifiAgent's verification m
 The classification procedure of Sec. 3.3 is implemented in `val_standard.py` (10 self-tests, all passing). Representative outputs:
 
 ```
-LLM 自证'我检查过了'          → L0 | LLM self-declaration / no deterministic anchor
-题面正则提取 final_check      → L1 | deterministic rules from problem text
-代回验证 verify_root          → L2 | correctness + objective truth (completeness blind)
-solveset 解集等价             → L3 | single-property completeness (decidable)
-Rust borrow checker          → L4 | domain-level proof system
-通用完备验证器                → L5 | impossible (unrestricted), rejected
+LLM self-check ("I checked it")    → L0 | self-declaration / no deterministic anchor
+Problem-derived rule (final_check) → L1 | deterministic rules from problem text
+Substitution (verify_root)         → L2 | correctness + gold-label anchor
+Solution-set equality (solveset)   → L3 | single-property completeness (decidable)
+Rust borrow checker                → L4 | domain-level proof system
+Universal complete verifier        → L5 | impossible (unrestricted), rejected
 ```
 
-Full standard with usage criteria and stop conditions: `docs/06-判级标准.md`.
+Full standard with usage criteria and stop conditions: `docs/06`.
 
 ## Appendix B: The 17-paper classification
 
-Full versioned assessment with per-paper evidence: `docs/07-文献评述.md`. Compact summary (anchor axis only):
+Full versioned assessment with per-paper evidence: `docs/07`. Compact summary (anchor axis only):
 
 | Level | Papers |
 |---|---|
@@ -432,4 +432,4 @@ Full versioned assessment with per-paper evidence: `docs/07-文献评述.md`. Co
 - Chapter 1 (math): `RESULTS.md`, `EVALUATION.md`, `data/testset_results.json`, `test_verifier.py` (42/42), `verifier.py` (`ANCHOR_LEVELS`)
 - Chapter 2 (behavior): `behavior/REPORT.md`, `behavior/analyze*.py`, `behavior/data_raw*.json`
 - Chapter 3 (medical): `medical/REPORT.md`, `medical/verify_diag.py`, `medical/alvarado.py`, `medical/cases*.json`
-- Chapter 4 (code): `docs/08-第四章-代码生成验证.md` (predictions & protocol), `chapter4/p3_experiment.py`, `chapter4/hard_problems.py`, `chapter4/p3_*.json` (results)
+- Chapter 4 (code): `docs/08` (predictions & protocol), `chapter4/p3_experiment.py`, `chapter4/hard_problems.py`, `chapter4/p3_*.json` (results)
