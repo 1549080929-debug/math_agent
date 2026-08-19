@@ -195,48 +195,96 @@ The central theoretical claim of this paper:
 
 > **Substitution- and sampling-based verification (L2) can prove that proposed candidates hold; it cannot prove that no candidate was missed. Completeness is achievable only by re-encoding the property into a decidable system (L3/L4)—or not at all.**
 
-Three kinds of evidence:
+### 4.1 Correctness is not completeness
 
-**Empirical (symbolic mathematics).** In our math agent, substitution verification of the candidate *a = 2* passed for a problem whose true answer is *{0, 2}*; the missed candidate *a = 0* is invisible to substitution by construction. Re-encoding the problem as solution-set equality via `solveset` (an L3 anchor) converts the blindness into a decidable FAIL: claimed `"2"` vs. true `{2, 3}`. Sampling-based final-parameter verification exhibits a *sampling ceiling*: in our 20-problem run, all three false passes stemmed from candidates/voids the sampler did not hit.
+Let *P*(x) be the property of interest (e.g., "a = x makes the maximum of f on [0, 2] equal to 3"), and let *C* be the set of candidates the system proposes. A correctness verifier establishes
 
-**Empirical (behavior monitoring).** A statistical deviation detector (L2, threshold from a baseline distribution) reached 30% FPR at strong-attack TPR 1.0, but could not detect "covert execution" attacks (TPR 0.60) because the property leaves no trace in the output layer—the property cannot be encoded into the anchor at all.
+> ∀ c ∈ C : P(c) — every proposed candidate satisfies the property.
 
-**The strongest baseline's own admission.** The most rigorous verification scheme in our survey—Lean 4 step-level formal verification [Safe]—states: *"our formal verifier focuses on the correctness of each step."* The formal kernel checks proofs of LLM-generated statements; the statements themselves, and the case-split coverage they encode, remain LLM declarations. This is the completeness blind spot pushed to the statement layer, not resolved.
+A completeness verifier establishes the converse direction:
 
-<!-- [TODO] 3.4 的"完备性可判定性"小节：L5 不可判定的严格表述（Rice），及"信任递归必须收敛到可审计原子"的论证 -->
+> ∀ x : P(x) ⇒ x ∈ C — every value satisfying the property was proposed.
+
+These are logically independent. The first is easy for a verifier and says nothing about the second; the second is what users implicitly assume. A verifier that performs the first while being read as the second is the mechanism behind systems that are "confident but wrong" yet still report "verified."
+
+### 4.2 Substitution blindness
+
+Substitution checking evaluates *P* on proposed candidates only. The missed candidate is invisible by construction: the verifier never receives it. In our math experiments, the system proposed *a = 2* for a problem whose true answer is *{0, 2}*; substitution returned PASS, and the omitted *a = 0* was undetectable. This is not an implementation deficiency; the verifier literally cannot ask a question it was not given. Re-encoding the same problem as solution-set equality—`solveset` over the equation, compared set-wise with the claimed answer—makes the property decidable and converts the blindness into a machine-checkable FAIL (claimed `"2"` vs. true `{2, 3}`). The L2→L3 move is a re-encoding, not an intensification.
+
+### 4.3 The sampling ceiling
+
+Sampling-based verification evaluates *P* at a finite set of points. It can falsify (find a counterexample in the sample) but cannot certify (a gap between samples is undetectable by construction). In our 20-problem run with sampling-based final-parameter verification, all three false passes shared one cause: the missed candidate or interior void was not in the sample. Denser sampling narrows the ceiling's shadow but never removes it; the ceiling is the defining property of the L2 paradigm, not a tuning parameter.
+
+### 4.4 The statement layer: where the blind spot hides
+
+Every verification scheme draws a line between what is checked and what is assumed, and the completeness blind spot always lives on the assumed side. For L2 schemes, the assumption is "the proposed candidate set is the right one." For L3/L4 schemes, the assumption moves up but does not vanish: the kernel checks proofs, but the theorem statement—and the case-split coverage it encodes—is a declaration. The strongest baseline in our survey concedes this explicitly: Safe's formal verifier "focuses on the correctness of each step" [4]. The same pattern recurs in our own system: when the verification condition was declared by the LLM under test, the judge faithfully verified a possibly wrong condition—trust recursion pushed one level up, not resolved.
+
+### 4.5 Why universal completeness is undecidable
+
+The L5 claim is a universal completeness verifier: an algorithm that, given any program and any property, decides whether the property holds. By Rice's theorem, for any non-trivial semantic property of programs, the question "does this program have the property?" is undecidable. A general-purpose "verify any LLM output against any spec, completely" is therefore not an engineering aspiration but a logical impossibility. The consequence is architectural, not pessimistic: completeness is available locally (within an ODD, at L3/L4) and unavailable globally (L5), so the engineering question is always *which ODD*, never *whether*.
+
+### 4.6 Summary
+
+The blind spot has three stable properties: (i) it is invisible to the verifier that suffers it; (ii) it is not fixed by more data or denser sampling; (iii) it can be moved up the ladder (from candidate sets to theorem statements) but not eliminated. The framework's prescription follows directly: when a property is encodable, raise the anchor (L3/L4); when it is not, the verifier is a correctness probe by necessity and should be labeled and deployed as one.
 
 ---
 
 ## 5. Empirical Case Studies
 
-We exercised the framework across three domains. Full experiment archives are in the repository (`RESULTS.md`, `behavior/REPORT.md`, `medical/REPORT.md`). Summary:
+We exercised the framework across three domains—symbolic mathematics, behavior monitoring, and medical diagnosis. Full archives: `RESULTS.md` (math), `behavior/REPORT.md`, `medical/REPORT.md`. Each study followed the same protocol: audit first (build a labeled test bed), measure the value window (baseline comparison), classify failure modes, then test the judge itself. We report honest negative results where they occurred.
 
-### 5.1 Symbolic mathematics (Chapter 1)
+### 5.1 Symbolic mathematics
 
-- A deterministic SymPy verifier was calibrated with **42/42** unit cases (L2–L3 depending on verification type; `ANCHOR_LEVELS` in `verifier.py`).
-- **Honest negative result**: on a 20-problem test set, the full decompose–verify–combine architecture scored 16/15/13 across three runs, while the raw LLM baseline scored 20/20. Accuracy is a random variable dominated by LLM decomposition; verification did not improve it. We do not claim otherwise.
-- The architecture's value is not accuracy but *error reportability*: it turned silent errors into labeled ones (e.g., catching `[-1,1]` → correcting to `[0,1]`), and the `solution_set` (L3) verifier catches missed solutions that substitution cannot.
+A decompose–solve–verify–combine agent was built on a deterministic SymPy verifier with eight verification types, calibrated to **42/42** unit cases (`test_verifier.py`). The types span the anchor ladder: substitution-based types (root, extreme, satisfies) are L2; solution-set equivalence and type checking (inequality, solution_set, answer_type) are L3; `ANCHOR_LEVELS` in `verifier.py` records each type's level.
 
-### 5.2 Behavior monitoring (Chapter 2)
+The headline result is a clean negative one: on a 20-problem test set, the full architecture scored **16/15/13** across three runs, while a raw-LLM baseline scored **20/20** in all three. Accuracy was a random variable dominated by the LLM's decomposition; the verification stack did not improve it and sometimes hurt it. We do not claim otherwise.
 
-- Five iterative rounds moved a statistical detector from an illusory AUC 0.82 to a deployable window: probe-conditioning cut FPR from 92% to 30%; semantic embeddings recovered weak-attack TPR from 0.50 to 0.75. The residual boundary—covert execution at TPR 0.60—is an L2 ceiling, not a tuning failure.
+The architecture's measurable value was *error reportability*, not accuracy. Three episodes illustrate it. First, a feedback loop caught a discriminant error (claimed Δ = 16m+12, true 8m−4) and corrected it in one iteration. Second, final-parameter verification caught a tampered answer (claimed [-1,1], true [0,1]) and corrected it—a failure mode invisible to per-step verification. Third, and most relevant to this paper, the L3 `solution_set` verifier catches missed solutions that the L2 substitution verifier cannot see, by construction (Sec. 4.2).
 
-### 5.3 Medical diagnosis (Chapter 3)
+The value window for *accuracy* in this domain is empty (the LLM is too strong on in-distribution problems); the value window for *completeness* is exactly the L3 re-encoding we describe. The two windows must not be conflated; preventing that conflation is the framework's purpose.
 
-- Raw LLM diagnosis: 10/10 textbook, 8/10 hard cases; the failure mode was "confident conclusion from insufficient evidence" (#103, #104).
-- An information-completeness judge (a deterministic post-hoc rule, L2) flagged 3/3 true failures—**including one (#105) missed by human review**—at 0 false positives after calibration. This illustrates the judge's value as *discovery*, not merely re-checking.
+### 5.2 Behavior monitoring
 
-<!-- [TODO] 5.4 医疗章接 L3（Alvarado 等决策规则）后作为"抬级成功"案例；若未完成则标注为 future work -->
+Chapter 2 monitored LLM behavior under prompt injection using a statistical deviation detector—L2 by construction: thresholds learned from a baseline distribution, no completeness possible. Five iterative rounds were required to reach a deployable operating point. A global-statistics detector's apparent success (holdout AUC 0.82) collapsed to a **92% false-positive rate** under realistic input diversity; probe-conditioning (comparing each response only to its own probe's baseline) cut FPR to **30%** while preserving strong-attack TPR 1.0; character n-grams recovered weak-attack TPR at the cost of doubling FPR; real semantic embeddings (a local sentence encoder) recovered weak-attack TPR to 0.75 with FPR unchanged.
+
+The residual failure is the paper's example of a structural L2 ceiling: "covert execution" attacks—the model executes an injected instruction but leaves no trace in its output—were detected at TPR 0.60 across all feature sets. The property cannot be encoded into the anchor at all (the anchor is output-layer statistics). This is not a tuning failure; it is the ODD boundary of the entire paradigm.
+
+### 5.3 Medical diagnosis
+
+Chapter 3 studied LLM diagnostic reasoning as a research object (fictional cases; not a diagnostic tool). The raw LLM was near-perfect on 10 textbook cases (10/10) and acceptable on 8/10 hard cases; the two failures shared a single mode: a confident conclusion from insufficient evidence (diagnosis at confidence 0.7 with no lab results). Confidence calibration and information completeness were decoupled.
+
+A deterministic post-hoc judge—an information-completeness rule (L2, anchored in the case's objective lab fields)—flagged **3/3 true over-confidence failures at zero false positives** after calibration, *including one (#105) that human review had missed*. The judge's value here is discovery, not re-checking: it found a failure the human annotator had labeled correct. This is the empirical analogue of Sec. 4.4: the judge is only as good as its anchor, and a cheap rule anchored in objective fields outperformed human review at one narrow but critical task—catching "conclusion beyond evidence."
+
+### 5.4 Cross-domain synthesis
+
+Across the three studies the pattern is identical. LLMs are too strong for accuracy windows to be non-empty on in-distribution tasks (math: baseline 20/20; medical: textbook 10/10); the non-empty windows are all *verification* windows: error reportability (math), ODD-bounded detection (behavior), and over-confidence catching (medical). The framework predicts this: an L2 judge adds reportability, not accuracy; an L3 judge adds completeness within its ODD; nothing adds completeness outside it.
 
 ---
 
 ## 6. Discussion
 
-**Trust recursion and its termination.** Every judge needs a judge; ungrounded chains are *trust recursion*. The framework shows where recursion can terminate: at the kernel of a decidable system (L4), at a definitional anchor (L3), or at a conventional primary standard (metrology). L5 is the claim that recursion can be terminated universally—which Rice's theorem rules out.
+### 6.1 Trust recursion and its termination
 
-**Division of labor.** VAL implies a canonical architecture: the LLM translates (decomposes, renders), deterministic code judges (within its ODD), and a human anchors the spec and audits the judge. Each component is best at what the others cannot do: the LLM cannot prove, the judge cannot generalize, the human cannot scale.
+Every judge needs a judge; an ungrounded chain is *trust recursion*. The framework shows where recursion can terminate: at the kernel of a decidable system (L4), at a definitional anchor (L3), or at a conventional primary standard (metrology, where calibration chains terminate at definitionally fixed units). L5 is the claim that recursion can be terminated universally, which Rice's theorem rules out (Sec. 4.5). The practical reading: the question is never "who verifies the verifier?" in the abstract, but "which decidable kernel, definitional anchor, or conventional standard terminates *this particular* chain?" In our own system, the chain terminates at `solveset` for solution-set checks, at the case data for the medical judge, and at the probe baselines for the behavior detector—three different termination points, each honest about what it covers.
 
-**When to climb.** The decision to raise a verifier's level is governed by two factors: the cost of silent errors (high in medical/safety/finance) and the encodability of the property (ODD availability). High cost + encodable ⇒ L3/L4 is mandatory; otherwise L1/L2 is honest and sufficient. The framework therefore functions as a *deployment checklist*, not a competition ladder.
+### 6.2 Division of labor
+
+VAL implies a canonical architecture: the LLM translates (decomposes, renders, declares), deterministic code judges within its ODD, and a human anchors the spec and audits the judge. Each component is best at what the others cannot do: the LLM cannot prove, the judge cannot generalize, the human cannot scale. Failures occur when the roles are crossed—when the LLM declares its own verification spec (L0), when the judge is asked to certify outside its ODD, or when a human is expected to re-derive what a deterministic system should decide.
+
+### 6.3 When to climb
+
+Raising a verifier's level is governed by two factors: the cost of silent errors and the encodability of the property.
+
+|  | Encodable (has an ODD) | Not encodable |
+|---|---|---|
+| **Low error cost** | climb to L3 if cheap | stay L1/L2; do not overspend |
+| **High error cost** | **L3/L4 is mandatory** | L2 ceiling + human review; label the risk |
+
+The framework is a deployment checklist, not a competition ladder: an L0 self-check is the right answer for a low-stakes draft summarizer and an indictment for a discharge summary generator. The same verdict text ("verified") carries radically different weight at different levels; the framework's entire point is to make that difference visible.
+
+### 6.4 What the honest negative result teaches
+
+Our accuracy result—the architecture is no better than the raw baseline—is frequently read as a failure of verification. It is not; it is a precise measurement of the value window. Accuracy is the LLM's axis; reportability and completeness are the verifier's. A deployer who needs accuracy should not buy this architecture; a deployer who needs to know *when the answer is not trustworthy* should. Papers that conflate the two axes (Sec. 2) inherit exactly this confusion; our three chapters are, in effect, a controlled experiment showing the two axes come apart.
 
 ---
 
