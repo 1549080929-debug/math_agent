@@ -65,5 +65,5 @@ CC-BY 4.0（arXiv 推荐）
 - [x] 诚实负结果保留（16/15/13 vs 20/20）
 - [x] 伦理边界声明（医疗章：合成病例、非诊断工具）
 - [ ] Figure 1 矢量版（mermaid/ASCII 可先用，不影响提交）
-- [x] 背书已拿到（Jiuzhou Han，EMNLP 2025，已同意；提交时填 jiuzhou.han@monash.edu）
-- [ ] 实际提交操作（须用户本人执行 + 提交后通知背书人点确认）
+- [x] 背书已**官方授权**（2026-08-19 arXiv 确认 cs.CL endorsement；Jiuzhou Han, EMNLP 2025）
+- [ ] 实际提交操作（须用户本人执行，背书步骤已无需再走）
