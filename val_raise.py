@@ -82,6 +82,96 @@ CASES = [
 ]
 
 
+# ---------------------------------------------------------------------------
+# P2: 可判定域自动扫描（性质类型 → 可用可判定锚）
+# ---------------------------------------------------------------------------
+ANCHOR_REGISTRY = {
+    "equation":    [("SymPy solveset", "solver", True, "单变量代数方程，Reals 域解集等价")],
+    "inequality":  [("SymPy solveset(Reals)", "solver", True, "一元不等式解集")],
+    "extreme":     [("solve(deriv)+端点", "solver", True, "二次函数域内完备")],
+    "type":        [("mypy/pyright", "type_system", True, "类型错误判定")],
+    "syntax":      [("编译器/parser", "type_system", True, "语法判定")],
+    "clinical_appendicitis": [("Alvarado (MANTRELS)", "decision_rule", True, "8 项客观输入+区间缺数据语义")],
+    "clinical_pe":     [("Wells / PERC", "decision_rule", True, "PE 风险分层 / 排除规则")],
+    "clinical_pneu":   [("CURB-65", "decision_rule", True, "肺炎严重度分层")],
+    "clinical_chest":  [("HEART", "decision_rule", True, "胸痛风险分层")],
+    "behavior_covert": [],   # 输出层无痕迹攻击：不可编码，无锚——诚实空列表
+}
+
+
+def scan_anchor(kind):
+    """返回某性质类型的可用可判定锚列表；空列表 = 无已知锚（诚实边界）。"""
+    return ANCHOR_REGISTRY.get(kind, [])
+
+
+def has_anchor(kind):
+    return bool(scan_anchor(kind))
+
+
+# ---------------------------------------------------------------------------
+# P3: 半自动重编码（处方 + 代码骨架 + 人工确认环）
+# ---------------------------------------------------------------------------
+SKELETONS = {
+    "A": ("def verify_solution_complete(expr, claimed, var):\n"
+          "    true_set = sp.solveset(expr, var, domain=sp.S.Reals)\n"
+          "    claimed_set = _parse_solution_set(claimed, var)\n"
+          "    return 'PASS' if true_set == claimed_set else 'FAIL'\n",
+          ["确认性质是'求所有解'而非单点", "确认求解器 ODD 覆盖目标方程类",
+           "确认 claimed 解析器支持答案形态（集合/区间/点集）"]),
+    "B": ("def verify_exhaustive(expr, var, candidates):\n"
+          "    # 穷举有限候选空间（端点/驻点/约束解）\n"
+          "    all_candidates = closed_form_candidates(expr, var)\n"
+          "    return 'PASS' if set(claimed) <= set(all_candidates) else 'FAIL'\n",
+          ["确认候选空间有限（否则采样天花板）", "确认闭式解覆盖全部候选"]),
+    "C": ("def check_validated_rule(case, llm_out):\n"
+          "    mn, mx, missing = validated_rule_range(case)  # 如 alvarado.alvarado_range\n"
+          "    # 缺数据 → 区间语义：规则拒绝完整打分\n"
+          "    return verdict_by_range(mn, mx, llm_out)\n",
+          ["确认所选规则是领域已验证规则（有外部文献背书）", "确认输入字段与规则八项对齐",
+           "确认缺数据语义（区间）已实现而非硬编码阈值"]),
+    "D": ("def check_type_feedback(code, header):\n"
+          "    errs = mypy_check(code, header)  # L3 锚：类型检查器\n"
+          "    return 'PASS' if not errs else ('REPAIR', errs)\n",
+          ["确认性质机械可检查（类型/schema/语法）", "确认检查器输出可解析为反馈"]),
+    "E": ("# 用法抬级：可判定系统已存在，改用其完备能力\n"
+          "verify_root(代回) → verify_solution_set(解集等价)\n",
+          ["确认可判定系统已可用（零新依赖）", "确认旧调用方迁移到新 API"]),
+    "F": ("def detect_deterministic(features, rule):\n"
+          "    return rule(features)  # 确定性规则替代统计阈值\n",
+          ["确认性质可编码为确定性特征", "确认规则边界可判定（否则退回统计+L2标注）"]),
+}
+
+
+def prescribe(encodable, method, anchor):
+    """P3：返回 (等级, 可抬级, 模式, 代码骨架, 人工确认清单)。"""
+    lvl, ok, pat, msg = analyze(encodable, method, anchor)
+    if not ok:
+        return (lvl, False, pat, "", [], msg)
+    skel, confirms = SKELETONS.get(pat, ("", []))
+    return (lvl, True, pat, skel, confirms, msg)
+
+
+# ---------------------------------------------------------------------------
+# P4: 评测审计报告（嵌入 Agent 评测流程的产物）
+# ---------------------------------------------------------------------------
+RISK = {"L0": "高（无保证）", "L1": "高（规则匹配）", "L2": "中（正确性探针）",
+        "L3": "低（ODD 内完备）", "L4": "低（域内完备）", "L5": "否决（不可判定）"}
+
+
+def audit_report(entries):
+    """entries: [(name, level)] → Markdown 审计报告（验证栈的等级体检表）。"""
+    lines = ["# 验证栈审计报告", "",
+             "| 验证器/指标 | 等级 | 保证 | 风险 | 抬级建议 |",
+             "|---|---|---|---|---|"]
+    for name, lvl in entries:
+        pat, sug = ("-", "无") if lvl in ("L3", "L4") else ("E", "接入抬级器（val_raise）")
+        lines.append(f"| {name} | {lvl} | {RISK.get(lvl, '?')} | {sug} |")
+    lines.append("")
+    lines.append("> 生成：val_raise.audit_report() —— 评测指标的'等级体检'，自动标注哪些指标"
+                 "只是 L2 正确性探针、哪些达到完备保证。")
+    return "\n".join(lines)
+
+
 def main(argv=None):
     argv = argv if argv is not None else sys.argv[1:]
     if argv:
@@ -98,8 +188,24 @@ def main(argv=None):
         passed += good
         print(f"{'OK ' if good else 'XX '}{name}: [{lvl}] 可抬级={ok} 模式={pat}"
               + (f" 期望={expect}" if not good else ""))
-    print(f"\n=== val_raise 自测：{passed}/{len(CASES)} 通过 ===")
-    return 0 if passed == len(CASES) else 1
+
+    # P2/P3/P4 自测
+    more = [
+        ("scan equation 有锚", scan_anchor("equation") != []),
+        ("scan behavior_covert 无锚(诚实)", scan_anchor("behavior_covert") == []),
+        ("scan clinical_pe 有 Wells/PERC", any("Wells" in a[0] for a in scan_anchor("clinical_pe"))),
+        ("prescribe 返回骨架", "solveset" in prescribe(True, "substitution", "solver")[3]),
+        ("prescribe 不可抬级(诚实)", prescribe(False, "statistical", "none")[1] is False),
+        ("prescribe 有确认清单", len(prescribe(True, "hand_rule", "decision_rule")[4]) >= 3),
+        ("audit_report 产出表格", "| 验证器" in audit_report([("root", "L2"), ("solution_set", "L3")])),
+        ("audit_report 风险标注", "高（无保证）" in audit_report([("self_check", "L0")])),
+    ]
+    for name, ok in more:
+        passed += ok
+        print(f"{'OK ' if ok else 'XX '}{name}")
+    total = len(CASES) + len(more)
+    print(f"\n=== val_raise 自测：{passed}/{total} 通过 ===")
+    return 0 if passed == total else 1
 
 
 if __name__ == "__main__":
