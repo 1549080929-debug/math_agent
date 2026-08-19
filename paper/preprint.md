@@ -1,13 +1,12 @@
 # Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning
 
-**Yajie Yin**<sup>1</sup>
+**Yajie Yin**
 
-<sup>1</sup> [TODO: 机构 / affiliation]  
-Email: [TODO] · ORCID: [TODO]  
+Email: 1549080929@qq.com · ORCID: 0009-0001-6168-2530  
 Code & data: https://github.com/1549080929-debug/math_agent  
 Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0
 
-<!-- 全文 v1.0 (2026-08-18)：§1-§8 + 附录 A/B/C 已成段草稿，润色完成。待办：① 矢量 Figure 1；② arXiv ID 补全（#3/#4/#6/#8 用 ACL Anthology 引用）；③ 作者机构/邮箱/ORCID 填实；④ 提交前终审。 -->
+<!-- 全文 v1.0 (2026-08-18)：§1-§8 + 附录 A/B/C 草稿完成，润色完成。待办：① 矢量 Figure 1；② 提交前终审（分类/备注/摘要关键词）；③ arXiv 提交。作者：Yajie Yin（无机构，arXiv 允许）；邮箱/ORCID 已填。 -->
 
 ## Abstract
 
@@ -319,12 +318,12 @@ Three directions follow. First, validating the standard itself: measuring inter-
 
 1. Han, J., Buntine, W., Shareghi, E. *VerifiAgent: A Unified Verification Agent in Language Model Reasoning.* arXiv:2504.00406, 2025.
 2. Fang, J., Zhang, B., Wang, C., et al. *Graph of Verification (GoV): Structured Verification of LLM Reasoning with Directed Acyclic Graphs.* arXiv:2506.12509, 2025.
-3. Li, Y., Lin, Z., Zhang, S., et al. *Making Large Language Models Better Reasoners with Step-Aware Verifier (DiVERSE).* ACL 2023.
-4. Liu, C., Yuan, Y., Yin, Y., et al. *Safe: Enhancing Mathematical Reasoning in LLMs via Retrospective Step-aware Formal Verification.* ACL 2025.
+3. Li, Y., Lin, Z., Zhang, S., et al. *Making Large Language Models Better Reasoners with Step-Aware Verifier (DiVERSE).* ACL 2023. arXiv:2206.02336.
+4. Liu, C., Yuan, Y., Yin, Y., et al. *Safe: Enhancing Mathematical Reasoning in LLMs via Retrospective Step-aware Formal Verification.* ACL 2025. arXiv:2506.04592.
 5. Miao, N., Teh, Y.W., Rainforth, T. *SelfCheck: Using LLMs to Zero-Shot Check Their Own Step-by-Step Reasoning.* ICLR 2024. arXiv:2308.00436.
-6. Juneja, G., Dutta, S., Chakraborty, T. *LM²: A Simple Society of Language Models Solves Complex Reasoning.* EMNLP 2024.
+6. Juneja, G., Dutta, S., Chakraborty, T. *LM²: A Simple Society of Language Models Solves Complex Reasoning.* EMNLP 2024. arXiv:2404.02255.
 7. Wang, Y., Gangi Reddy, R., et al. *Factcheck-GPT: End-to-End Fine-Grained Document-Level Fact-Checking and Correction of LLM Output.* arXiv:2311.09000, 2023.
-8. Chen, J., Li, C., Yuan, Y., Yao, A.C. *Hierarchical Attention Generates Better Proofs.* ACL 2025.
+8. Chen, J., Li, C., Yuan, Y., Yao, A.C. *Hierarchical Attention Generates Better Proofs.* ACL 2025. arXiv:2504.19188.
 9. Luo, M., Wu, S., et al. *Dr. V: A Hierarchical Perception-Temporal-Cognition Framework to Diagnose Video Hallucination.* arXiv:2509.11866, 2025.
 10. Li, Q., Xu, J., et al. *A Proprietary Model-Based Safety Response Framework for AI Agents.* arXiv:2511.03138, 2025.
 11. Yang, W., Cheng, H., Zhou, B., et al. *M³-SafetyBench: 多领域多场景多维度的大语言模型安全评估体系.* 中国科学：信息科学, 55:2923–2940, 2025.
