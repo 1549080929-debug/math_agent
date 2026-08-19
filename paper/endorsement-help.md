@@ -74,6 +74,45 @@ Yajie Yin
 Email: 1549080929@qq.com
 ```
 
+## 四-b、个性化示例（张铭版，已按候选人校准）
+
+> 注意：给候选人写"连接句"时，**必须与他论文在 VAL 框架中的实际层级一致**（见 docs/07）。
+> 教训案例：初稿把 Safe 写成"L2"是错的——Safe 是 L4 标杆；错写会让通讯作者当场质疑专业性。
+> 正确写法是把它作为"最强形式化基线"来引用。
+
+```
+Subject: Endorsement request for arXiv cs.AI submission (LLM verification)
+
+Dear Prof. Ming Zhang,
+
+I am Yajie Yin, an independent researcher working on verification
+frameworks for large language models. I am preparing my first arXiv
+submission: "Grading the Graders: Verification Autonomy Levels (L0-L5)
+for LLM Reasoning", a conceptual paper proposing a six-level taxonomy
+for classifying LLM verification schemes by their ground-truth anchor
+(LLM self-declaration -> objective truth -> decidable systems).
+
+Your work on Safe (ACL 2025) is directly relevant: it is the strongest
+formal-verification baseline in our survey (L4). In fact, we cite its
+key insight—that formal verification "focuses on the correctness of
+each step"—as central evidence for the completeness blind spot our
+framework addresses.
+
+Because this is my first submission to cs.AI, arXiv requires an
+endorsement from an author with a recent paper in the category. If you
+are comfortable, could you endorse me? It is a quick click on a link
+arXiv sends you—not a review.
+
+The full draft is available at:
+https://github.com/1549080929-debug/math_agent (paper/preprint.pdf)
+
+Thank you for your time and for your contributions to this area.
+
+Best regards,
+Yajie Yin
+Email: 1549080929@qq.com
+```
+
 ## 五、操作建议（重要）
 
 1. **一次只发 1–2 位**，别群发轰炸；等 2–3 天没回再换下一位；
