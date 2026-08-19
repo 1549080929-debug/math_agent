@@ -10,9 +10,9 @@
 | 1 | 6 篇锚定轴论文全文精读（docs/07 V1.3） | ✅ 完成 |
 | 2 | **起草预印本骨架（paper/preprint.md）** | ✅ 完成（2026-08-18） |
 | 3 | 画"金字塔 + 正交轴"图（Figure 1） | ✅ 完成（mermaid + ASCII 版，正式版需矢量重绘） |
-| 4 | docs/06 判级程序作附录（Appendix A） | ⬜ 待做（直接引用 val_standard.py） |
+| 4 | docs/06 判级程序作附录（Appendix A） | ✅ 完成（引用 val_standard.py 输出） |
 | 5 | val_standard.py 作可复现工具引用 | ✅ 已有（仓库根目录，10/10 自测） |
-| 6 | 标题定稿（*Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning*） | ✅ 完成；作者信息 + 许可（arXiv 需 CC-BY 4.0）⬜ 待做 |
+| 6 | 标题定稿 + 作者块（Yajie Yin；机构/邮箱/ORCID 待填）+ CC-BY 4.0 | ✅ 标题与作者块完成；机构/邮箱/ORCID 待用户填实 |
 | 7 | 全文 v1 草稿（§1–§8 + 附录 A/B/C 已成段） | ✅ 完成（v0.9，待润色） |
 | 8 | arXiv 提交（abstract 关键词、分类 cs.CL / cs.AI） | ⬜ 待做 |
 

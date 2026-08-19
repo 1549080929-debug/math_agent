@@ -1,6 +1,13 @@
 # Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning
 
-<!-- 全文 v0.9 (2026-08-18)：§1-§8 + 附录 A/B/C 已成段草稿。待办：① 矢量 Figure 1；② arXiv ID 补全（#3/#4/#6/#8 用 ACL Anthology 引用）；③ 作者信息/许可；④ 语言润色。 -->
+**Yajie Yin**<sup>1</sup>
+
+<sup>1</sup> [TODO: 机构 / affiliation]  
+Email: [TODO] · ORCID: [TODO]  
+Code & data: https://github.com/1549080929-debug/math_agent  
+Preprint: arXiv: [TODO — 提交后填编号] · License: CC-BY 4.0
+
+<!-- 全文 v1.0 (2026-08-18)：§1-§8 + 附录 A/B/C 已成段草稿，润色完成。待办：① 矢量 Figure 1；② arXiv ID 补全（#3/#4/#6/#8 用 ACL Anthology 引用）；③ 作者机构/邮箱/ORCID 填实；④ 提交前终审。 -->
 
 ## Abstract
 
@@ -18,7 +25,7 @@ C. Beyond Self-Checking: Verification Autonomy Levels and the Completeness Blind
 
 ## 1. Introduction
 
-Large language models (LLMs) produce fluent, confident, and frequently wrong reasoning. The dominant mitigation is *verification*: attach a second mechanism that checks the model's claims. The 2023–2025 literature is a torrent of verification proposals—trained step verifiers [3], self-checking schemas [5], tool-augmented fact checkers [17], graph-structured verification [2], and formal proof assistants [4]—each claiming to catch the errors the model cannot self-report. This proliferation raises a question that the literature has not explicitly asked: **what can a given verification scheme actually guarantee, and where does that guarantee come from?**
+Large language models (LLMs) produce fluent, confident, and frequently wrong reasoning. The dominant mitigation is *verification*: attach a second mechanism that checks the model's claims. The 2023–2025 literature has produced a large and rapidly growing body of verification proposals—trained step verifiers [3], self-checking schemas [5], tool-augmented fact checkers [17], graph-structured verification [2], and formal proof assistants [4]—each claiming to catch the errors the model cannot self-report. This proliferation raises a question the literature has not explicitly asked: **what can a given verification scheme actually guarantee, and where does that guarantee come from?**
 
 Answering this question is harder than it appears, because the field uses the word *level* to mean at least five different things:
 
@@ -110,7 +117,7 @@ First, *the anchor, not the judge, determines the level.* A perfectly calibrated
 
 Second, *the guarantee degrades downward but not upward.* A judge built for L3 (e.g., a symbolic solver) can be *used* at L2 (substitution only)—we call this a *usage-degraded* anchor, and the classifier flags it as upgradeable. A judge built for L2 cannot be promoted to L3 by more data: no amount of sampling closes a completeness gap (Sec. 4). This asymmetry is why "more data" is not a level-raising operation.
 
-Third, *every level has a characteristic abstention behavior.* The most honest judges abstain. L0 systems deny error—they "confidently err." L1/L2 systems are silent about what they did not check. L3/L4 systems return a decidable UNSURE-equivalent when a property falls outside their ODD (Safe's "failed formalization" state is exactly this [4]). L5 does not exist. In our experience, a verifier's abstention behavior is a faster diagnostic of its level than any benchmark score.
+Third, *every level has a characteristic abstention behavior, and it is diagnostic.* L0 systems deny error—they "confidently err." L1/L2 systems are silent about what they did not check. L3/L4 systems return a decidable abstention when a property falls outside their ODD (Safe's "failed formalization" state is exactly this [4]). L5 does not exist. In our experience, a verifier's abstention behavior is a faster diagnostic of its level than any benchmark score.
 
 <!-- Figure 1 (mermaid 版) -->
 
@@ -235,7 +242,7 @@ We exercised the framework across three domains—symbolic mathematics, behavior
 
 ### 5.1 Symbolic mathematics
 
-A decompose–solve–verify–combine agent was built on a deterministic SymPy verifier with eight verification types, calibrated to **42/42** unit cases (`test_verifier.py`). The types span the anchor ladder: substitution-based types (root, extreme, satisfies) are L2; solution-set equivalence and type checking (inequality, solution_set, answer_type) are L3; `ANCHOR_LEVELS` in `verifier.py` records each type's level.
+A decompose–solve–verify–combine agent was built on a deterministic SymPy verifier with nine verification types, calibrated to **42/42** unit cases (`test_verifier.py`). The types span the anchor ladder: substitution-based types (root, extreme, satisfies) are L2; solution-set equivalence and type checking (inequality, solution_set, answer_type) are L3; `ANCHOR_LEVELS` in `verifier.py` records each type's level.
 
 The headline result is a clean negative one: on a 20-problem test set, the full architecture scored **16/15/13** across three runs, while a raw-LLM baseline scored **20/20** in all three. Accuracy was a random variable dominated by the LLM's decomposition; the verification stack did not improve it and sometimes hurt it. We do not claim otherwise.
 
@@ -245,7 +252,7 @@ The value window for *accuracy* in this domain is empty (the LLM is too strong o
 
 ### 5.2 Behavior monitoring
 
-Chapter 2 monitored LLM behavior under prompt injection using a statistical deviation detector—L2 by construction: thresholds learned from a baseline distribution, no completeness possible. Five iterative rounds were required to reach a deployable operating point. A global-statistics detector's apparent success (holdout AUC 0.82) collapsed to a **92% false-positive rate** under realistic input diversity; probe-conditioning (comparing each response only to its own probe's baseline) cut FPR to **30%** while preserving strong-attack TPR 1.0; character n-grams recovered weak-attack TPR at the cost of doubling FPR; real semantic embeddings (a local sentence encoder) recovered weak-attack TPR to 0.75 with FPR unchanged.
+Chapter 2 monitored LLM behavior under prompt injection using a statistical deviation detector (L2 by construction: its thresholds are learned from a baseline distribution, so no completeness is possible). Five iterative rounds were required to reach a deployable operating point. A global-statistics detector's apparent success (holdout AUC 0.82) collapsed to a **92% false-positive rate** under realistic input diversity; probe-conditioning (comparing each response only to its own probe's baseline) cut FPR to **30%** while preserving strong-attack TPR 1.0; character n-grams recovered weak-attack TPR at the cost of doubling FPR; real semantic embeddings (a local sentence encoder) recovered weak-attack TPR to 0.75 with FPR unchanged.
 
 The residual failure is the paper's example of a structural L2 ceiling: "covert execution" attacks—the model executes an injected instruction but leaves no trace in its output—were detected at TPR 0.60 across all feature sets. The property cannot be encoded into the anchor at all (the anchor is output-layer statistics). This is not a tuning failure; it is the ODD boundary of the entire paradigm.
 
