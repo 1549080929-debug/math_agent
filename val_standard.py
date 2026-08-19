@@ -24,7 +24,7 @@ def classify(anchor, guarantee, scope=None):
     scope:     "single" | "domain" | "universal"        (Q3 覆盖范围，仅完备性时用)
     """
     if guarantee == "completeness" and scope == "universal":
-        return ("L5", "任意性质完备验证——不可判定（Rice 定理），判级否决")
+        return ("L5", "任意性质完备验证——无限制情形不可能（Rice 仅覆盖程序语义；经验命题/主观性质另两类），判级否决")
     if guarantee == "completeness" and scope == "domain":
         return ("L4", "领域级证明系统（类型系统全域/证明助手内核）")
     if guarantee == "completeness":
@@ -33,7 +33,9 @@ def classify(anchor, guarantee, scope=None):
         if anchor == "decidable":
             return ("L2", "可判定系统只用于正确性——用法降级，可抬级到 L3")
         if anchor == "truth":
-            return ("L2", "正确性 + 独立客观真值（代回/抽样/金标）")
+            return ("L2", "正确性 + 金标锚（独立客观真值/已知正确参照）")
+        if anchor == "silver":
+            return ("L1", "银锚：确定性重计算，客观于计算而非答案——L1/L2 边界，按作者判 L1")
         if anchor == "rule":
             return ("L1", "确定性规则，规格从题面/代码派生")
     return ("L0", "LLM 自证 / 无确定性锚（信任递归）")
@@ -43,6 +45,7 @@ CASES = [
     # (名称, anchor, guarantee, scope, 期望等级)
     ("LLM 自证'我检查过了'",          "llm",       "none",          None,       "L0"),
     ("题面正则提取 final_check",       "rule",      "correctness",   None,       "L1"),
+    ("VerifiAgent 工具（银锚）",       "silver",    "correctness",   None,       "L1"),
     ("代回验证 verify_root",          "truth",     "correctness",   None,       "L2"),
     ("采样验证 final_parameter_set",   "truth",     "correctness",   None,       "L2"),
     ("solveset 但只代回（用法降级）",   "decidable", "correctness",   None,       "L2"),
