@@ -18,42 +18,76 @@ C. Beyond Self-Checking: Verification Autonomy Levels and the Completeness Blind
 
 ## 1. Introduction
 
-LLMs produce fluent, confident, and frequently wrong reasoning. The dominant mitigation is *verification*: attach a second mechanism that checks the model's claims. In 2025 alone, proposals range from trained step verifiers [DiVERSE], self-checking schemas [SelfCheck], tool-augmented fact checkers [FACTOOL], graph-structured verification [GoV], and formal proof assistants [Safe]. This proliferation raises a question that the literature has not explicitly asked: **what can a given verification scheme actually guarantee, and where does that guarantee come from?**
+Large language models (LLMs) produce fluent, confident, and frequently wrong reasoning. The dominant mitigation is *verification*: attach a second mechanism that checks the model's claims. The 2023–2025 literature is a torrent of verification proposals—trained step verifiers [3], self-checking schemas [5], tool-augmented fact checkers [17], graph-structured verification [2], and formal proof assistants [4]—each claiming to catch the errors the model cannot self-report. This proliferation raises a question that the literature has not explicitly asked: **what can a given verification scheme actually guarantee, and where does that guarantee come from?**
 
-Answering this question is harder than it appears, because the word "level" is used inconsistently across the field:
+Answering this question is harder than it appears, because the field uses the word *level* to mean at least five different things:
 
-- *Granularity* levels (claim → sentence → document [Factcheck-GPT]; atomic step → paragraph [GoV]);
-- *Concept* levels (foundational element → high-level concept [Hierarchical Attention]);
-- *Risk* tiers (Safe / Unsafe / Conditionally Safe [SafetyResponse]; output-determinism tiers [OutputDrift]);
-- *System-stack* layers (model → workflow → system [BenchmarksFail]; data → base → execute → service [PromptingSurvey]);
-- *Epistemic* levels—the source and strength of the ground truth a verifier anchors to.
+1. **Granularity**—how finely the output is decomposed for checking: claim → sentence → document [7]; atomic step → paragraph [2].
+2. **Concept abstraction**—the mathematical sophistication at which verification operates: foundational elements → high-level concepts [8].
+3. **Risk/disposition**—what the verdict triggers: safe/unsafe/conditional tiers [10]; output-determinism tiers [12].
+4. **System stack**—which component is audited: model → workflow → system [13]; data → base → execute → service [14].
+5. **Epistemic anchoring**—the source of the ground truth a verdict rests on, and the strength of the guarantee it delivers.
 
-The first four axes answer *what* to check, *how finely*, *at which layer*, and *what to do with the result*. None answers the question that determines whether a verifier can ever be trusted: **on what ground truth does the verdict rest, and does it guarantee correctness, completeness, or neither?**
+Axes 1–4 answer *what* to check, *how finely*, *at which layer*, and *what to do with the result*. None answers the question that determines whether a verifier can ever be trusted: **on what ground truth does the verdict rest, and does it guarantee correctness, completeness, or neither?**
 
-We contribute:
+We argue that the fifth axis is the one that matters for trust, that it has a natural six-level structure, and that the literature's conflation of the five axes has obscured it. Three observations motivate the framework.
 
-1. **VAL**, a six-level epistemic taxonomy (L0–L5) that classifies any verification scheme by its anchor source and guarantee (Sec. 3).
-2. **A disambiguation of five confounded "level" axes**, showing that granularity, concept, risk, and system-stack are orthogonal to VAL (Sec. 4)—resolving the conflation observed across 17 surveyed papers.
-3. **A formal and empirical treatment of the completeness blind spot**: substitution- and sampling-based verification cannot prove that no candidate was missed; we show this in symbolic mathematics, behavior monitoring, and medical diagnosis, and cite the strongest formal-verification baseline's own admission of the gap (Sec. 6).
-4. **A runnable classifier** (`val_standard.py`) and a fully versioned literature assessment (docs/07), both released as supplementary material.
+*First, the anchor is what fails.* In our three-domain study (Sec. 5), every verification failure we catalogued was traceable to the anchor, not to the judge: a well-calibrated verifier (42/42 unit cases) was fed wrong subproblems by the LLM it was checking (decomposition contamination), never saw the final answer it should have checked (combination tampering), or was asked to verify a condition declared by the very model under test (trust recursion). A perfectly calibrated instrument pointed at the wrong object is not a bug; it is a specification problem.
 
-<!-- [TODO] 加一段"为什么这重要"：对部署者的价值（选验证器时先问锚定层级）、对研究者的价值（区分正交轴）、对审阅者的价值（判定声称） -->
+*Second, correctness is not completeness.* The most common verifiers—substitution, sampling, statistical thresholds—can confirm that *proposed* candidates hold, but cannot prove that *no* candidate was missed. We call this the **completeness blind spot** and document it empirically in symbolic mathematics (a missed root that substitution cannot see), in behavior monitoring (a covert-execution attack that leaves no trace in the output layer), and in medical diagnosis (confident conclusions from insufficient evidence). The blind spot is not a tuning failure; it is a property of the verification paradigm (Sec. 4).
+
+*Third, the strongest existing verification concedes the same point.* The most rigorous scheme in our survey—Lean 4 step-level formal verification [4]—states that its formal verifier "focuses on the correctness of each step": the kernel checks proofs of LLM-generated statements, but the statements themselves, and the case coverage they encode, remain LLM declarations. The blind spot does not disappear at the top of the ladder; it is pushed to the statement layer.
+
+**Contributions.** We make four:
+
+1. **Verification Autonomy Levels (VAL)**, a six-level epistemic taxonomy (L0–L5) classifying any verification scheme by its anchor source and guarantee, together with a deterministic decision procedure (Sec. 3) and a runnable classifier (`val_standard.py`).
+2. **A disambiguation of five confounded "level" axes**, showing that granularity, concept abstraction, risk, and system-stack are orthogonal to the VAL axis, and locating 17 representative papers in the resulting space (Sec. 2).
+3. **A formal and empirical treatment of the completeness blind spot**, including a statement of why universal completeness is undecidable (Rice's theorem) and why completeness is always relative to an operational design domain (Sec. 4).
+4. **Three cross-domain case studies**—symbolic mathematics, behavior monitoring, medical diagnosis—that exercise the framework end-to-end and report honest negative results (Sec. 5).
+
+**Why this matters.** For a deployer, VAL is a pre-purchase checklist: ask *where the spec comes from* before trusting any verification claim, and know that an L2 verdict is a correctness probe, not a completeness guarantee. For a researcher, VAL separates the five questions hidden inside "hierarchical verification," preventing category errors such as claiming that finer granularity implies stronger grounding. For a reviewer, VAL supplies a vocabulary for interrogating any claim of the form "our system verifies X": *at what level, within what ODD, with what abstention behavior?*
 
 ---
 
 ## 2. Related Work: Five Axes, One Word
 
-We reviewed 17 representative papers spanning "layered/hierarchical verification" and classified each along the five axes. Full details (with per-paper evidence and versioned re-verification) are in `docs/07-文献评述.md`. Here we summarize the axis structure; the anchor-axis classifications are used throughout.
+We reviewed 17 representative papers spanning what the literature calls "layered" or "hierarchical" verification, and classified each along five axes. The full assessment—per-paper evidence, confidence levels, and a versioned re-verification trail—is released as supplementary material (`docs/07-文献评述.md`); here we report the axis structure and the anchor-axis classifications used throughout.
 
-| Axis | Question it answers | Example papers |
+### 2.1 Granularity axis: *how fine*
+
+Graph of Verification [2] adapts verification granularity from atomic steps (formal tasks) to whole paragraphs (informal narratives) via a "node block" architecture, trading precision against robustness. Factcheck-GPT [7] annotates factuality at three granularities—claim, sentence, document—with a GPT-4-based annotation scheme and a gold-labeled benchmark. Dr. V [9] decomposes video-hallucination diagnosis into perceptual, temporal, and cognitive levels, grounding the first two in 10k spatial-temporal gold annotations. These are ladders of *decomposition fineness*. They say nothing about the anchor: the same granularity ladder can be implemented with LLM judgment (L0) or with objective ground truth (L2).
+
+### 2.2 Concept axis: *how abstract*
+
+Hierarchical Attention [8] regularizes LLM attention toward a five-level hierarchy of mathematical concepts to improve proof generation in formal theorem proving (miniF2F, ProofNet). Its proofs are checked by a formal kernel—an L4 anchor—but the paper's contribution is a generation-time regularizer, and its "levels" are concept-abstraction levels, orthogonal to the anchor.
+
+### 2.3 Risk/disposition axis: *what to do*
+
+A safety-response framework [10] classifies inputs into four disposition tiers (Safe, Unsafe, Conditionally Safe, Focused Attention) via a supervised fine-tuned classifier, reporting 99.3% recall. LLM Output Drift [12] tiers models by output determinism for risk-adapted deployment in finance, combining consistency measurement with invariant checking and SEC-citation validation. M³-SafetyBench [11] evaluates models across content- and functional-safety dimensions with a 170k-item benchmark. These are ladders of *consequence*—what the verdict should trigger. A "four-tier safety classifier" and a "three-level fact-checking pipeline" are frequently cited together, yet one is a disposition ladder and the other a granularity ladder; neither is an epistemic ladder.
+
+### 2.4 System-stack axis: *which layer*
+
+Standard Benchmarks Fail [13] proposes stress-testing financial LLM agents at model, workflow, and system layers, arguing that standard accuracy benchmarks "provide an illusion of reliability." Prompting Frameworks Survey [14] organizes prompting tooling into data, base, execute, and service layers. These are ladders of *audit scope*. [13] is notable as the one paper in our survey that makes completeness of evaluation coverage an explicit thesis.
+
+### 2.5 Anchor axis: *on what ground truth* (this paper)
+
+Classified by the procedure of Sec. 3.3:
+
+- **L0** — SelfCheck [5]: four-stage regenerate-and-compare, explicitly "without resorting to external resources"; the checker itself scores 66.7% verification accuracy and the authors concede "the checks are themselves imperfect." LM² [6]: a verifier language model, fine-tuned on GPT-4 annotations and coordinated with the decomposer and solver via policy learning.
+- **L0/L1 + tools** — VerifiAgent [1]: meta-verification of completeness and consistency performed by the agent itself; tool-based adaptive verification delegates factual and computational checks to a Python interpreter, a search engine, and symbolic computation.
+- **L1/L2** — Factcheck-GPT [7]: verdicts from a GPT-4-based annotation scheme, with gold labels in its benchmark. FACTOOL [17]: tools (Google Search, Google Scholar, code interpreters) gather evidence, but the final factuality verdict is LLM reasoning over that evidence. LLM Output Drift [12]: consistency measurement plus invariant checking with SEC-citation validation.
+- **L2** — DiVERSE [3]: a DeBERTa-v3 step verifier trained on step labels derived by matching against ground-truth answers. M³-SafetyBench [11]: a gold-labeled evaluation benchmark. Dr. V [9]: hallucination diagnosis grounded in gold spatial-temporal annotations.
+- **L3/L4** — Hierarchical Attention [8]: proofs checked by a formal kernel. Safe [4]: Lean 4 step verification—the kernel is L4, but the theorem statements are LLM-generated, i.e., L0 at the statement layer.
+
+| Axis | Question it answers | Representative papers |
 |---|---|---|
-| **Anchor (VAL)** | What ground truth does the verdict rest on? | SelfCheck L0; LM² L0; VerifiAgent L0/L1+tools; DiVERSE L2; FACTOOL L1/L2; Safe L4+L0 |
-| Granularity | How finely is the output decomposed for checking? | GoV, Factcheck-GPT, Dr.V |
-| Concept | What abstraction level does the verifier operate at? | Hierarchical Attention |
+| **Anchor (VAL)** | What ground truth does the verdict rest on, with what guarantee? | SelfCheck L0; LM² L0; VerifiAgent L0/L1+tools; DiVERSE L2; FACTOOL L1/L2; Safe L4+L0 |
+| Granularity | How finely is the output decomposed for checking? | GoV, Factcheck-GPT, Dr. V |
+| Concept | At what abstraction level does verification operate? | Hierarchical Attention |
 | Risk/Disposition | What response does the verdict trigger? | SafetyResponse, OutputDrift, M³-SafetyBench |
 | System stack | Which component of the system is audited? | BenchmarksFail, PromptingSurvey |
 
-The anchor axis is the only one that determines the *epistemic* strength of a verdict, and it is the one axis the literature never formalizes as a ladder. The remaining sections develop it.
+**Observation.** Across all 17 papers, none formalizes the anchor as a ladder, none treats the completeness of a verification scheme itself as an object of study, and the single most explicit acknowledgment of the gap comes from the strongest formal baseline [4]. The conflation is not harmless: it lets "layered verification" papers inherit each other's credibility across axes that do not entail one another. The rest of this paper develops the anchor axis.
 
 ---
 
@@ -69,6 +103,14 @@ The anchor axis is the only one that determines the *epistemic* strength of a ve
 | **L3** | definitional/provable (property encoded in a decidable system) | single-property **completeness** | yes (within ODD) | conditional automation (system owns liability in ODD) |
 | **L4** | domain-level proof systems | domain-wide completeness | yes (within domain) | high automation (no takeover in ODD) |
 | **L5** | universal completeness | any property | **undecidable** (Rice) | full automation—does not exist |
+
+Each level is defined by two properties: the **anchor source** (who or what supplies the ground truth the verdict rests on) and the **guarantee** (what a PASS commits to). Three consequences follow.
+
+First, *the anchor, not the judge, determines the level.* A perfectly calibrated verifier at L2 is still L2: substitution checking that a candidate satisfies an equation proves the candidate holds; it says nothing about candidates not proposed. Improving the *implementation* of an L2 check (denser sampling, a better threshold) moves the system horizontally within L2; only changing the anchor source moves it vertically.
+
+Second, *the guarantee degrades downward but not upward.* A judge built for L3 (e.g., a symbolic solver) can be *used* at L2 (substitution only)—we call this a *usage-degraded* anchor, and the classifier flags it as upgradeable. A judge built for L2 cannot be promoted to L3 by more data: no amount of sampling closes a completeness gap (Sec. 4). This asymmetry is why "more data" is not a level-raising operation.
+
+Third, *every level has a characteristic abstention behavior.* The most honest judges abstain. L0 systems deny error—they "confidently err." L1/L2 systems are silent about what they did not check. L3/L4 systems return a decidable UNSURE-equivalent when a property falls outside their ODD (Safe's "failed formalization" state is exactly this [4]). L5 does not exist. In our experience, a verifier's abstention behavior is a faster diagnostic of its level than any benchmark score.
 
 <!-- Figure 1 (mermaid 版) -->
 
@@ -109,24 +151,41 @@ response / which layer*; VAL answers *on what ground truth, with what guarantee*
 
 ### 3.2 The three decisive questions
 
-Any verification scheme is classified by answering:
+Any verification scheme is classified by answering three questions in order:
 
-- **Q1 (spec source)** — who declares the verification condition? *LLM / problem-derived rule / objective truth / decidable system.*
-- **Q2 (guarantee)** — correctness (given candidates hold) or completeness (no candidate missed)?
-- **Q3 (scope)** — if complete: single property, whole domain, or claimed universal?
+- **Q1 (spec source).** Who declares the verification condition—the thing the verdict is about? The answer is one of: (a) the LLM under test itself ("I checked it," "this is verified"); (b) a deterministic rule derived from the problem or code text (regex, parser, schema); (c) an objective source independent of the problem (gold answer, measured value, external oracle); (d) a property encoded in a decidable system (a symbolic solver, a type system, a decision rule with validated thresholds).
+- **Q2 (guarantee).** What does a PASS commit to? *Correctness*—"every proposed candidate satisfies the condition"—or *completeness*—"no candidate was missed." The distinction is the entire substance of Sec. 4; most deployed verifiers offer the former while being read as the latter.
+- **Q3 (scope).** If the guarantee is completeness, over what domain does it hold: a single property (this equation's solution set), a whole class (all programs' memory safety), or claimed universality?
 
 ### 3.3 Decision procedure
 
-1. completeness + universal scope → **L5** (rejected; Rice's theorem)
-2. completeness + domain scope → **L4**
-3. completeness + single property → **L3**
-4. correctness + decidable/objective anchor → **L2** (decidable anchors used only for correctness are *usage-degraded* and upgradeable)
-5. correctness + problem-derived rule → **L1**
-6. otherwise (LLM self-declared / no deterministic anchor) → **L0**
+The classification is deterministic: given the answers to Q1–Q3, the level is the first rule that fires.
+
+```
+1. completeness + universal scope        → L5   (rejected: undecidable, Rice)
+2. completeness + domain scope           → L4
+3. completeness + single-property scope  → L3
+4. correctness + decidable or objective anchor → L2
+     (decidable anchor used only for correctness → flag "usage-degraded, upgradeable")
+5. correctness + problem-derived rule    → L1
+6. otherwise (LLM-declared / no anchor)  → L0
+```
+
+The procedure is implemented in `val_standard.py` (10 self-tests) and documented in `docs/06-判级标准.md`. Its determinism is deliberate: it is a *standard*, so two raters applying it to the same scheme must obtain the same level; the only legitimate disagreements concern the Q1/Q2 answers, not the mapping.
 
 ### 3.4 Operational Design Domain (ODD)
 
-Borrowing from autonomous-driving regulation, L3/L4 guarantees hold only within an **ODD**—here, the *decidable domain* in which the property can be encoded. `solveset`-based solution-set equivalence has an ODD of "single-variable algebraic equations/inequalities that SymPy can solve in closed form"; Alvarado scoring has an ODD of "suspected appendicitis with the eight objective inputs"; a type system has an ODD of "properties expressible in the type language." **Completeness is never absolute; it is relative to an ODD.** Raising a system's level means enlarging its ODD, not "trying harder" at sampling.
+Borrowing from autonomous-driving regulation, an L3/L4 guarantee holds only within an **ODD**—here, the *decidable domain* in which the property can be encoded and the verdict computed. Examples: solution-set equivalence via `solveset` has an ODD of "single-variable algebraic equations and inequalities that the solver can solve in closed form"; an Alvarado score has an ODD of "suspected appendicitis with all eight objective inputs present"; a Rust borrow checker has an ODD of "memory-safety properties expressible in the ownership/borrowing/lifetime type language."
+
+Two corollaries. First, **completeness is never absolute; it is relative to an ODD.** A verifier that is complete inside its ODD is, by construction, silent about anything outside it—the completeness claim is only as strong as the ODD is honestly specified. Second, **raising a level means enlarging the ODD, not intensifying sampling.** The L2→L3 move for "find all solutions" is achieved by re-encoding the task as solution-set equality, making the property decidable; no sampling density achieves this. The L3→L4 move is achieved by covering a whole class of properties under one decidable system.
+
+### 3.5 What VAL is not
+
+Three non-claims, to preempt misreading:
+
+1. **VAL is not a reliability measure.** A level states the epistemic status of an anchor; it does not state the probability that a verdict is correct. An L2 verifier can be more *accurate* than an L3 verifier on in-ODD cases (our own 42/42 unit tests span L2 and L3); level and reliability are orthogonal.
+2. **VAL is not a utility claim.** We do not argue that higher is always better, nor that L3/L4 should be pursued everywhere. Sec. 6 governs *when* climbing is worth its cost; for low-stakes tasks an honest L1/L2 check may be the correct engineering choice.
+3. **VAL does not certify the anchor.** An L3 anchor guarantees that, *given the encoded property*, the verdict is decidable and complete. It does not guarantee that the property is the right one—that question is itself an anchor question, one level up (Sec. 6). This is the framework's own form of the regress it describes.
 
 ---
 
