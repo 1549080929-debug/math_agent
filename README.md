@@ -57,7 +57,10 @@ python test_verifier.py        # 42/42
 python val_standard.py         # 10/10
 
 # 3b. VAL 抬级器自测
-python val_raise.py            # 10/10
+python val_raise.py            # 18/18
+
+# 3c. VAL 追问层自测（buzzword 穿透）
+python val_interrogate.py --auto   # 5/5
 
 # 4. 跑一道数学题
 python main.py -p "求函数 f(x)=x^2-4x+7 在区间 [1,4] 上的最小值"
