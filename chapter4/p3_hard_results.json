@@ -1,0 +1,68 @@
+[
+ {
+  "task": "hard/0",
+  "A_pass": true,
+  "B_pass": true,
+  "C_pass": true,
+  "mypy_errors_before": 0,
+  "C_repaired": false,
+  "code_A": "def kth_custom_number(n):\n    \"\"\"返回第 n 个（从 1 开始）同时满足以下条件的正整数：\n    ① 数字中包含 7；② 不是素数；③ 十进制各位数字之和是偶数。\n    >>> kth_custom_number(1)\n    57\n    \"\"\"\n    def is_prime(num):\n        if num < 2:\n            return False\n        for i in range(2, int(num**0.5) + 1):\n            if num % i == 0:\n                return False\n        return True\n\n    count = 0\n    num = 1\n    while True:\n        if '7' in str(num) and not is_prime(num) and sum(int(d) for d in str(num)) % 2 == 0:\n            count += 1\n            if count == n:\n                return num\n        num += 1",
+  "code_B": "def kth_custom_number(n: int) -> int:\n    count = 0\n    num = 1\n    while True:\n        s = str(num)\n        if '7' in s:\n            if not is_prime(num):\n                if sum(int(d) for d in s) % 2 == 0:\n                    count += 1\n                    if count == n:\n                        return num\n        num += 1\n\ndef is_prime(x: int) -> bool:\n    if x < 2:\n        return False\n    if x == 2:\n        return True\n    if x % 2 == 0:\n        return False\n    i = 3\n    while i * i <= x:\n        if x % i == 0:\n            return False\n        i += 2\n    return True",
+  "code_C": "def kth_custom_number(n: int) -> int:\n    count = 0\n    num = 1\n    while True:\n        s = str(num)\n        if '7' in s:\n            if not is_prime(num):\n                if sum(int(d) for d in s) % 2 == 0:\n                    count += 1\n                    if count == n:\n                        return num\n        num += 1\n\ndef is_prime(x: int) -> bool:\n    if x < 2:\n        return False\n    if x == 2:\n        return True\n    if x % 2 == 0:\n        return False\n    i = 3\n    while i * i <= x:\n        if x % i == 0:\n            return False\n        i += 2\n    return True"
+ },
+ {
+  "task": "hard/1",
+  "A_pass": true,
+  "B_pass": false,
+  "C_pass": true,
+  "mypy_errors_before": 1,
+  "C_repaired": true,
+  "code_A": "def decode_escaped(s):\n    \"\"\"解码带转义的压缩串。规则：数字 k 后跟 [..] 表示重复 k 次；\n    反斜杠 \\ 转义下一个字符（\\[ 是字面左括号，\\\\ 是字面反斜杠）；\n    未匹配的右括号 ] 按字面输出。\n    >>> decode_escaped('2[a]')\n    'aa'\n    >>> decode_escaped(r'2[a\\[b]')\n    'a[ba[b'  # 转义的 [ 是字面字符，作为内容参与重复\n    \"\"\"\n    stack = []\n    i = 0\n    n = len(s)\n    current = []\n    while i < n:\n        ch = s[i]\n        if ch == '\\\\' and i + 1 < n:\n            current.append(s[i+1])\n            i += 2\n            continue\n        if ch.isdigit():\n            num_start = i\n            while i < n and s[i].isdigit():\n                i += 1\n            num = int(s[num_start:i])\n            if i < n and s[i] == '[':\n                stack.append((current, num))\n                current = []\n                i += 1\n                continue\n            else:\n                current.append(s[num_start:i])\n                continue\n        if ch == '[':\n            stack.append((current, 1))\n            current = []\n            i += 1\n            continue\n        if ch == ']':\n            if stack:\n                prev, repeat = stack.pop()\n                prev.extend(current * repeat)\n                current = prev\n            else:\n                current.append(ch)\n            i += 1\n            continue\n        current.append(ch)\n        i += 1\n    while stack:\n        prev, repeat = stack.pop()\n        prev.extend(current * repeat)\n        current = prev\n    return ''.join(current)",
+  "code_B": "def decode_escaped(s: str) -> str:\n    stack = []\n    i = 0\n    n = len(s)\n    while i < n:\n        ch = s[i]\n        if ch == '\\\\':\n            if i + 1 < n:\n                stack.append(s[i+1])\n                i += 2\n            else:\n                stack.append('\\\\')\n                i += 1\n        elif ch.isdigit():\n            num = 0\n            while i < n and s[i].isdigit():\n                num = num * 10 + int(s[i])\n                i += 1\n            if i < n and s[i] == '[':\n                stack.append((num, []))\n                i += 1\n            else:\n                stack.append(str(num))\n        elif ch == '[':\n            stack.append('[')\n            i += 1\n        elif ch == ']':\n            if stack and isinstance(stack[-1], tuple):\n                num, content = stack.pop()\n                # 收集直到匹配的括号内容\n                temp = []\n                while stack and not (isinstance(stack[-1], tuple) and stack[-1][0] == -1):\n                    if isinstance(stack[-1], tuple):\n                        # 处理嵌套\n                        inner_num, inner_content = stack.pop()\n                        temp = inner_content * inner_num + temp\n                    else:\n                        temp = [stack.pop()] + temp\n                # 反转temp得到正确顺序\n                temp = temp[::-1]\n                decoded = ''.join(temp) * num\n                stack.append(decoded)\n            else:\n                stack.append(']')\n            i += 1\n        else:\n            stack.append(ch)\n            i += 1\n    # 处理栈中剩余内容\n    result = []\n    for item in stack:\n        if isinstance(item, tuple):\n            num, content = item\n            result.append(''.join(content) * num)\n        else:\n            result.append(item)\n    return ''.join(result)",
+  "code_C": "def decode_escaped(s: str) -> str:\n    stack = []\n    i = 0\n    n = len(s)\n    while i < n:\n        ch = s[i]\n        if ch == '\\\\' and i + 1 < n:\n            stack.append(s[i+1])\n            i += 2\n        elif ch.isdigit():\n            j = i\n            while j < n and s[j].isdigit():\n                j += 1\n            num = int(s[i:j])\n            i = j\n            if i < n and s[i] == '[':\n                depth = 1\n                k = i + 1\n                while k < n and depth > 0:\n                    if s[k] == '\\\\' and k + 1 < n:\n                        k += 2\n                        continue\n                    if s[k] == '[':\n                        depth += 1\n                    elif s[k] == ']':\n                        depth -= 1\n                    k += 1\n                inner = s[i+1:k-1]\n                decoded_inner = decode_escaped(inner)\n                stack.append(decoded_inner * num)\n                i = k\n            else:\n                stack.append(str(num))\n        elif ch == ']':\n            stack.append(ch)\n            i += 1\n        else:\n            stack.append(ch)\n            i += 1\n    return ''.join(stack)"
+ },
+ {
+  "task": "hard/2",
+  "A_pass": true,
+  "B_pass": true,
+  "C_pass": true,
+  "mypy_errors_before": 0,
+  "C_repaired": false,
+  "code_A": "def earliest_meeting(busy, duration):\n    current = 0\n    for start, end in busy:\n        if start - current >= duration:\n            return current\n        current = max(current, end)\n    return current",
+  "code_B": "def earliest_meeting(busy: list[tuple[int, int]], duration: int) -> int:\n    current = 0\n    for start, end in busy:\n        if start - current >= duration:\n            return current\n        current = max(current, end)\n    return current",
+  "code_C": "def earliest_meeting(busy: list[tuple[int, int]], duration: int) -> int:\n    current = 0\n    for start, end in busy:\n        if start - current >= duration:\n            return current\n        current = max(current, end)\n    return current"
+ },
+ {
+  "task": "hard/3",
+  "A_pass": true,
+  "B_pass": true,
+  "C_pass": true,
+  "mypy_errors_before": 0,
+  "C_repaired": false,
+  "code_A": "def nibble_swap(x):\n    \"\"\"对 32 位无符号整数 x，每 4 位一组，交换组内高两位与低两位，\n    其余位不变。\n    >>> nibble_swap(0b0001)  # 0001 → 0100\n    4\n    >>> nibble_swap(0b0010)  # 0010 → 1000\n    8\n    \"\"\"\n    return ((x & 0x33333333) << 2) | ((x & 0xCCCCCCCC) >> 2)",
+  "code_B": "def nibble_swap(x: int) -> int:\n    \"\"\"对 32 位无符号整数 x，每 4 位一组，交换组内高两位与低两位，\n    其余位不变。\n    >>> nibble_swap(0b0001)  # 0001 → 0100\n    4\n    >>> nibble_swap(0b0010)  # 0010 → 1000\n    8\n    \"\"\"\n    result = 0\n    for i in range(8):  # 32 bits / 4 bits per nibble = 8 nibbles\n        nibble = (x >> (i * 4)) & 0xF\n        # swap high two bits and low two bits within the nibble\n        swapped = ((nibble & 0b0011) << 2) | ((nibble & 0b1100) >> 2)\n        result |= (swapped << (i * 4))\n    return result",
+  "code_C": "def nibble_swap(x: int) -> int:\n    \"\"\"对 32 位无符号整数 x，每 4 位一组，交换组内高两位与低两位，\n    其余位不变。\n    >>> nibble_swap(0b0001)  # 0001 → 0100\n    4\n    >>> nibble_swap(0b0010)  # 0010 → 1000\n    8\n    \"\"\"\n    result = 0\n    for i in range(8):  # 32 bits / 4 bits per nibble = 8 nibbles\n        nibble = (x >> (i * 4)) & 0xF\n        # swap high two bits and low two bits within the nibble\n        swapped = ((nibble & 0b0011) << 2) | ((nibble & 0b1100) >> 2)\n        result |= (swapped << (i * 4))\n    return result"
+ },
+ {
+  "task": "hard/4",
+  "A_pass": true,
+  "B_pass": true,
+  "C_pass": true,
+  "mypy_errors_before": 1,
+  "C_repaired": false,
+  "code_A": "def same_parity_pair(nums, target):\n    \"\"\"在 nums 中找到两个不同下标的数，二者之和等于 target，\n    且两个数的奇偶性相同（同为奇数或同为偶数）。\n    返回 (小下标, 大下标)；不存在返回 None。\n    >>> same_parity_pair([1, 3, 2, 4], 6)\n    (2, 3)  # 2+4=6，同为偶数\n    \"\"\"\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            j = seen[complement]\n            if (num % 2) == (complement % 2):\n                return (min(i, j), max(i, j))\n        seen[num] = i\n    return None",
+  "code_B": "def same_parity_pair(nums: list[int], target: int) -> tuple[int, int] | None:\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            for j in seen[complement]:\n                if (num % 2) == (complement % 2) and j != i:\n                    return (min(j, i), max(j, i))\n        seen.setdefault(num, []).append(i)\n    return None",
+  "code_C": "def same_parity_pair(nums: list[int], target: int) -> tuple[int, int] | None:\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            for j in seen[complement]:\n                if (num % 2) == (complement % 2) and j != i:\n                    return (min(j, i), max(j, i))\n        seen.setdefault(num, []).append(i)\n    return None"
+ },
+ {
+  "task": "hard/5",
+  "A_pass": true,
+  "B_pass": true,
+  "C_pass": true,
+  "mypy_errors_before": 1,
+  "C_repaired": false,
+  "code_A": "def flatten_skip(data):\n    \"\"\"展平嵌套列表：数字/字符串保留；None 跳过；字典值原样保留（不递归）；\n    元组视为列表递归展平。\n    >>> flatten_skip([1, [2, None, [3]], {'a': [4]}], )\n    [1, 2, 3, {'a': [4]}]\n    \"\"\"\n    result = []\n    for item in data:\n        if item is None:\n            continue\n        if isinstance(item, (list, tuple)):\n            result.extend(flatten_skip(item))\n        else:\n            result.append(item)\n    return result",
+  "code_B": "def flatten_skip(data: list) -> list:\n    result = []\n    for item in data:\n        if item is None:\n            continue\n        if isinstance(item, (list, tuple)):\n            result.extend(flatten_skip(item))\n        else:\n            result.append(item)\n    return result",
+  "code_C": "def flatten_skip(data: list) -> list:\n    result = []\n    for item in data:\n        if item is None:\n            continue\n        if isinstance(item, (list, tuple)):\n            result.extend(flatten_skip(item))\n        else:\n            result.append(item)\n    return result"
+ }
+]
