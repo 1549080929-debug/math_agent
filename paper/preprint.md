@@ -1,6 +1,6 @@
 # Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning
 
-<!-- 骨架稿 v0.1 (2026-08-18)。[TODO] 为待补内容；正文为草稿级英文，可改写。 -->
+<!-- 全文 v0.9 (2026-08-18)：§1-§8 + 附录 A/B/C 已成段草稿。待办：① 矢量 Figure 1；② arXiv ID 补全（#3/#4/#6/#8 用 ACL Anthology 引用）；③ 作者信息/许可；④ 语言润色。 -->
 
 ## Abstract
 
@@ -291,17 +291,20 @@ Our accuracy result—the architecture is no better than the raw baseline—is f
 ## 7. Limitations
 
 1. **Literature assessment is abstract-level for 11 of 17 papers**; 6 anchor-axis papers were verified against full text (`docs/07` V1.3). The classification of the remainder may shift with full-text review, though the axis structure is unaffected.
-2. **Case studies use a single model family** (deepseek-chat) and synthetic data (medical cases are fictional; no patient data).
-3. **VAL classifies, it does not measure**: a scheme's level states its anchor's epistemic status, not the probability that its verdict is correct. Level and reliability are orthogonal.
-4. **ODD boundaries are fuzzy in practice**: whether a property is "encodable" depends on the solver, the type system, or the rule's inputs, and can change with tooling.
+2. **Case studies use a single model family** (deepseek-chat) and synthetic data (medical cases are fictional; no patient data). The framework's claims are structural, but its empirical illustrations are single-model.
+3. **VAL classifies, it does not measure**: a scheme's level states its anchor's epistemic status, not the probability that its verdict is correct. Level and reliability are orthogonal; an L2 verifier can be more accurate than an L3 verifier on in-ODD cases.
+4. **ODD boundaries are fuzzy in practice**: whether a property is "encodable" depends on the solver, the type system, or the rule's inputs, and can change with tooling. The framework requires the ODD to be stated honestly; it does not enforce the honesty.
+5. **VAL itself is unvalidated as a measurement**: we have not tested inter-rater reliability of the decision procedure at scale, nor shown that independent raters reach the same levels on a common corpus. The procedure is deterministic by construction; whether its Q1/Q2 judgments are reproducible is an open empirical question we plan to address with a larger corpus.
 
 ---
 
 ## 8. Conclusion
 
-The verification literature for LLMs is a tower of levels built on different questions. We have argued that one question—*where does the ground truth come from, and what does the verdict guarantee?*—underlies all claims of verification strength, and we have provided a six-level taxonomy (VAL, L0–L5), a decision procedure, and a runnable classifier. Our empirical case studies and literature review support a single headline claim:
+The verification literature for LLMs is a tower of levels built on different questions. We have argued that one question—*where does the ground truth come from, and what does the verdict guarantee?*—underlies all claims of verification strength, and we have provided a six-level taxonomy (VAL, L0–L5), a deterministic decision procedure, and a runnable classifier. Our empirical case studies and literature review support a single headline claim:
 
 > **Others grade answers. We grade the graders—and the highest grade any grader can earn is a guarantee it can actually deliver: correctness within its domain, completeness within its ODD, and honesty when it must abstain.**
+
+Three directions follow. First, validating the standard itself: measuring inter-rater agreement of the decision procedure on a larger corpus of verification schemes, and stress-testing its boundary cases (the L1/L2 borders of RAG-grounded and tool-augmented checkers). Second, operationalizing the ladder's prescription in a concrete deployment: importing validated decision rules (e.g., clinical scores) into the medical judge to demonstrate a documented L2→L3 upgrade. Third, exporting the framework beyond verification—the same "anchor source × guarantee × scope" structure applies to any claim of automated assurance, from unit testing to regulatory attestation.
 
 ---
 
@@ -325,4 +328,39 @@ The verification literature for LLMs is a tower of levels built on different que
 16. González, J., Nori, A.V. *Beyond Words: A Mathematical Framework for Interpreting Large Language Models (HEX).* arXiv:2311.03033, 2023.
 17. FacTool: *Factuality Detection in Generative AI—A Tool Augmented Framework for Multi-Task and Multi-Domain Scenarios.* ICLR 2024. arXiv:2307.13528.
 
-<!-- [TODO] 附录 A：判级程序（引用 docs/06 + val_standard.py 输出）；附录 B：17 篇判级总表（引用 docs/07）；附录 C：三章实验细节 -->
+---
+
+## Appendix A: The decision procedure (runnable)
+
+The classification procedure of Sec. 3.3 is implemented in `val_standard.py` (10 self-tests, all passing). Representative outputs:
+
+```
+LLM 自证'我检查过了'          → L0 | LLM self-declaration / no deterministic anchor
+题面正则提取 final_check      → L1 | deterministic rules from problem text
+代回验证 verify_root          → L2 | correctness + objective truth (completeness blind)
+solveset 解集等价             → L3 | single-property completeness (decidable)
+Rust borrow checker          → L4 | domain-level proof system
+通用完备验证器                → L5 | undecidable (Rice), rejected
+```
+
+Full standard with usage criteria and stop conditions: `docs/06-判级标准.md`.
+
+## Appendix B: The 17-paper classification
+
+Full versioned assessment with per-paper evidence: `docs/07-文献评述.md`. Compact summary (anchor axis only):
+
+| Level | Papers |
+|---|---|
+| L0 | SelfCheck, LM² |
+| L0/L1 + tools | VerifiAgent |
+| L1/L2 | Factcheck-GPT, FACTOOL, LLM Output Drift |
+| L2 | DiVERSE, M³-SafetyBench, Dr. V |
+| L3/L4 | Hierarchical Attention, Safe (L4 kernel + L0 statement layer) |
+| Non-verification (taxonomy) | Trustworthy LLMs, HEX, Prompting Survey |
+| L1/L2 (audit) | Standard Benchmarks Fail |
+
+## Appendix C: Experiment archives
+
+- Chapter 1 (math): `RESULTS.md`, `EVALUATION.md`, `data/testset_results.json`, `test_verifier.py` (42/42), `verifier.py` (`ANCHOR_LEVELS`)
+- Chapter 2 (behavior): `behavior/REPORT.md`, `behavior/analyze*.py`, `behavior/data_raw*.json`
+- Chapter 3 (medical): `medical/REPORT.md`, `medical/verify_diag.py`, `medical/cases*.json`
