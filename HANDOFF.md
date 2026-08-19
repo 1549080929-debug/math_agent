@@ -142,6 +142,7 @@
 | `behavior/` | 第二章（REPORT.md 为完整报告，probes*.json 探针，data_raw*.json 数据，analyze*.py 分析） |
 | `medical/` | 第三章（cases*.json 病例，data_baseline*.json 基线，verify_diag.py 裁判，REPORT.md） |
 | `docs/01~06` | 第一章四份核心文档（05=锚定层级/可迁移结论，06=VAL判级标准） |
+| `docs/07-文献评述.md` | 17 篇"分层验证"论文 × VAL 判级标准（含低置信标注与待办） |
 | `val_standard.py` | VAL 判级工具（`classify()` + 10 用例自测，判级三问的可运行版） |
 | `RESULTS.md` / `EVALUATION.md` | 结果总账 |
 | `HANDOFF.md` | 本文档 |
