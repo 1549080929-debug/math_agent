@@ -144,6 +144,7 @@
 | `docs/01~06` | 第一章四份核心文档（05=锚定层级/可迁移结论，06=VAL判级标准） |
 | `docs/07-文献评述.md` | 17 篇"分层验证"论文 × VAL 判级标准（含低置信标注与待办） |
 | `val_standard.py` | VAL 判级工具（`classify()` + 10 用例自测，判级三问的可运行版） |
+| `paper/` | arXiv 预印本（README=状态清单；preprint.md=英文骨架稿，标题/摘要/正文各节草稿） |
 | `RESULTS.md` / `EVALUATION.md` | 结果总账 |
 | `HANDOFF.md` | 本文档 |
 
