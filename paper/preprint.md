@@ -119,7 +119,7 @@ The distinction from risk-management and maturity frameworks (NIST AI RMF, CMMI)
 |---|---|---|---|---|
 | **L0** | LLM self-declaration | none | none | full manual (the driver "confidently errs") |
 | **L1** | deterministic rules derived from the problem text/code | deterministic matching | no | lane keeping (single-function assist) |
-| **L2** | objective ground truth / oracle / gold labels | correctness | no | partial automation (human must take over) |
+| **L2** | objective ground truth / gold labels / *independent* oracle (not a sibling generator) | correctness | no | partial automation (human must take over) |
 | **L3** | definitional/provable (property encoded in a decidable system) | single-property **completeness** | yes (within ODD) | conditional automation (system owns liability in ODD) |
 | **L4** | domain-level proof systems | domain-wide completeness | yes (within domain) | high automation (no takeover in ODD) |
 | **L5** | universal completeness | any property | **undecidable** (Rice) | full automation—does not exist |
@@ -173,7 +173,9 @@ response / which layer*; VAL answers *on what ground truth, with what guarantee*
 
 Any verification scheme is classified by answering three questions in order:
 
-- **Q1 (spec source).** Who declares the verification condition—the thing the verdict is about? The answer is one of: (a) the LLM under test itself ("I checked it," "this is verified"); (b) a deterministic rule derived from the problem or code text (regex, parser, schema); (c) an objective source independent of the problem (gold answer, measured value, external oracle); (d) a property encoded in a decidable system (a symbolic solver, a type system, a decision rule with validated thresholds).
+- **Q1 (spec source).** Who declares the verification condition—the thing the verdict is about? The answer is one of: (a) the LLM under test itself ("I checked it," "this is verified"); (b) a deterministic rule derived from the problem or code text (regex, parser, schema); (c) an objective source independent of both the problem and the generative mechanism under test (gold answer, measured value, execution result); (d) a property encoded in a decidable system (a symbolic solver, a type system, a decision rule with validated thresholds).
+
+**Anchor independence.** "Objective" in L2 does not mean merely "external to the model under test." An anchor qualifies only if it is *independent of the generative mechanism being verified*—its error mechanism must not be correlated with the verified system's. An answer produced by another LLM is external but not independent: it shares the error-generating mechanism, and is L0 masked as L2. Execution results, symbolic simplification, and physical measurements qualify because their "error mechanism" is the artifact itself, not a correlated generator. This is the operational form of trust-recursion termination (Sec. 6.1): the anchor chain stops at definitional or conventional anchors, never at a sibling generator.
 - **Q2 (guarantee).** What does a PASS commit to? *Correctness*—"every proposed candidate satisfies the condition"—or *completeness*—"no candidate was missed." The distinction is the entire substance of Sec. 4; most deployed verifiers offer the former while being read as the latter.
 - **Q3 (scope).** If the guarantee is completeness, over what domain does it hold: a single property (this equation's solution set), a whole class (all programs' memory safety), or claimed universality?
 
@@ -198,6 +200,8 @@ The procedure is implemented in `val_standard.py` (10 self-tests) and documented
 Borrowing from autonomous-driving regulation, an L3/L4 guarantee holds only within an **ODD**—here, the *decidable domain* in which the property can be encoded and the verdict computed. Examples: solution-set equivalence via `solveset` has an ODD of "single-variable algebraic equations and inequalities that the solver can solve in closed form"; an Alvarado score has an ODD of "suspected appendicitis with all eight objective inputs present"; a Rust borrow checker has an ODD of "memory-safety properties expressible in the ownership/borrowing/lifetime type language."
 
 Two corollaries. First, **completeness is never absolute; it is relative to an ODD.** A verifier that is complete inside its ODD is, by construction, silent about anything outside it—the completeness claim is only as strong as the ODD is honestly specified. Second, **raising a level means enlarging the ODD, not intensifying sampling.** The L2→L3 move for "find all solutions" is achieved by re-encoding the task as solution-set equality, making the property decidable; no sampling density achieves this. The L3→L4 move is achieved by covering a whole class of properties under one decidable system.
+
+**ODD auditability.** ODD honesty is an *audit target*, not an assumption VAL silently guarantees. An ODD claim has its own anchoring ladder—self-declared (L0), tool-documented (L1), empirically tested (L2), formally characterized (L3)—and a completeness claim is only as strong as its ODD's own anchor. The engineering test of ODD honesty is a boundary probe: adversarial instances just outside the claimed ODD must break the completeness claim, confirming the boundary is a capability constraint and not a convenience.
 
 ### 3.5 What VAL is not
 
@@ -338,7 +342,7 @@ Our accuracy result—the architecture is no better than the raw baseline—is f
 1. **Literature assessment is abstract-level for 11 of 17 papers**; 6 anchor-axis papers were verified against full text (`docs/07` V1.3). The classification of the remainder may shift with full-text review, though the axis structure is unaffected.
 2. **Case studies use a single model family** (deepseek-chat) and synthetic data (medical cases are fictional; no patient data). The framework's claims are structural, but its empirical illustrations are single-model.
 3. **VAL classifies, it does not measure**: a scheme's level states its anchor's epistemic status, not the probability that its verdict is correct. Level and reliability are orthogonal; an L2 verifier can be more accurate than an L3 verifier on in-ODD cases.
-4. **ODD boundaries are fuzzy in practice**: whether a property is "encodable" depends on the solver, the type system, or the rule's inputs, and can change with tooling. The framework requires the ODD to be stated honestly; it does not enforce the honesty.
+4. **ODD boundaries are fuzzy in practice**: whether a property is "encodable" depends on the solver, the type system, or the rule's inputs, and can change with tooling. ODD honesty is an audit target, not an enforced guarantee (Sec. 3.4): ODD claims carry their own anchor ladder (self-declared → formally characterized), and boundary probes are the engineering check—but neither is automatic.
 5. **VAL itself is unvalidated as a measurement**: we have not tested inter-rater reliability of the decision procedure at scale, nor shown that independent raters reach the same levels on a common corpus. The procedure is deterministic by construction; whether its Q1/Q2 judgments are reproducible is an open empirical question we plan to address with a larger corpus.
 
 ---
