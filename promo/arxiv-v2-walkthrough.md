@@ -24,8 +24,8 @@
 
 ## 复制粘贴内容
 
-**Abstract**（1758 字符内，ASCII 安全，submission.md §3 全文）：
-见 `paper/submission.md` §3（含 "in the strongest formal-verification baseline in our survey"）
+**Abstract**（1857 字符，ASCII 安全，≤1920）：
+复制 `paper/abstract_v2.txt` 全文（或 `paper/submission.md` §3 修正版）。含 "in our survey"。
 
 **Comments（v2）**：
 ```
