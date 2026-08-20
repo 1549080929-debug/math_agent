@@ -25,9 +25,14 @@ Large language models (LLMs) are increasingly paired with "verifiers"—step che
 
 ## 4. Comments（备注，arXiv 表单字段）
 
+**v2 版（含修订说明 + AI 辅助声明；v1 提交时实际用了 AI 声明，提交包此前漏同步，已补）**：
+
 ```
+v2: added an inter-rater reproducibility study of the decision procedure (kappa~0.8 across four blind raters on 54-70 schemes), an agent-security case study (memory provenance laundering, PPMF), and anchor semantics (intent/truth/effect); 15+ fixes from a cold-eye review (numbers, citations, internal consistency).
+
 Code and data: https://github.com/1549080929-debug/math_agent
 Keywords: LLM verification; verification autonomy; completeness; ground truth; trustworthy AI
+Writing and implementation assisted by an AI language model; all experiments, data, and research decisions are the author's own.
 ```
 
 ## 5. Subject Categories（学科分类）
