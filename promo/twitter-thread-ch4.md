@@ -62,6 +62,6 @@ L3 锚（类型检查器）入环，确实抓到了 L2 测试的盲区。
 
 **11.**
 论文 Grading the Graders（验证自主等级 L0–L5）+ 判级工具 + 全部实验数据，开源：
+arXiv:2608.19009 — arxiv.org/abs/2608.19009
 github.com/1549080929-debug/math_agent
-（arXiv 待上线，PDF 在仓库 paper/preprint.pdf）
 欢迎 battle，尤其反对意见。

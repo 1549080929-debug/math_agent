@@ -3,6 +3,7 @@
 > 副标题：一个"反向验证"实验——LLM 验证框架 VAL 的第四章
 >
 > 论文：Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning
+> arXiv:2608.19009 — https://arxiv.org/abs/2608.19009
 > 代码与数据：https://github.com/1549080929-debug/math_agent
 
 ---
@@ -102,7 +103,7 @@ P3（类型信息提升正确性）没有直接文献，我跑了实验：
 而第四章教会我的事是：**框架的真正价值，不在它解释了什么，在它敢预测什么。**
 
 > 别人给答案分级，我们给"分级"分级。
-> 论文：Grading the Graders（arXiv 待上线，PDF 在仓库）
+> 论文：Grading the Graders — arXiv:2608.19009（https://arxiv.org/abs/2608.19009）
 > 代码与数据：https://github.com/1549080929-debug/math_agent
 
 欢迎讨论——尤其反对意见。

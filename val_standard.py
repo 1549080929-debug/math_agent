@@ -1,7 +1,7 @@
 """VAL 判级标准工具（docs/06-判级标准.md 的可运行版）。
 
 用法：
-    python val_standard.py              # 跑内置 10 用例自测
+    python val_standard.py              # 跑内置 11 用例自测
     python val_standard.py <anchor> <guarantee> [scope]   # 直接判级
 
 代码中使用：
