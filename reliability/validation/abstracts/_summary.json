@@ -1,0 +1,37 @@
+{
+  "N28": {
+    "arxiv_id": "2310.10501",
+    "title": "[2310.10501] NeMo Guardrails: A Toolkit for Controllable and Safe LLM Applications with Programmable Rails",
+    "abstract": "Abstract:"
+  },
+  "N29": {
+    "arxiv_id": "2503.18813",
+    "title": "[2503.18813] Defeating Prompt Injections by Design",
+    "abstract": "Abstract:"
+  },
+  "N30": {
+    "arxiv_id": "2504.11703",
+    "title": "[2504.11703] Progent: Securing AI Agents with Privilege Control",
+    "abstract": "Abstract:"
+  },
+  "N31": {
+    "arxiv_id": "2505.23643",
+    "title": "[2505.23643] Securing AI Agents with Information-Flow Control",
+    "abstract": "Abstract:"
+  },
+  "N32": {
+    "arxiv_id": "2510.02373",
+    "title": "[2510.02373] A-MemGuard: A Proactive Defense Framework for LLM-Based Agent Memory",
+    "abstract": "Abstract:"
+  },
+  "N33": {
+    "arxiv_id": "2210.08726",
+    "title": "[2210.08726] RARR: Researching and Revising What Language Models Say, Using Language Models",
+    "abstract": "Abstract:"
+  },
+  "N41": {
+    "arxiv_id": "2406.04198",
+    "title": "[2406.04198] Flow-induced Oscillations via Hopf Bifurcation in a Fluid-Solid Interaction Problem",
+    "abstract": "Abstract:"
+  }
+}

@@ -23,7 +23,11 @@
       "weakest": "L1",
       "predicted_behavior": "确定性 rails 拦截规则内模式；canonical form 匹配可被同义改写绕过；规则外攻击无防护",
       "predicted_attack": "同义改写/规则外注入",
-      "observed": null
+      "observed": {
+        "data": "摘要确认：可编程 rails，用户定义、独立于 LLM、可解释；无公开 ASR 数字",
+        "src": "arXiv:2310.10501 摘要",
+        "hit": "机制确认（L1 rails）；数字待全文"
+      }
     },
     {
       "id": "N29",
@@ -32,7 +36,11 @@
       "weakest": "L3",
       "predicted_behavior": "数据-控制分离为构造性保证：不可信数据无法驱动控制流（隔离性质完备）；但意图认证若为 LLM 则整体弱锚降级；对非注入类误用无防护",
       "predicted_attack": "语义合法但危险的操作（在授权意图内）",
-      "observed": null
+      "observed": {
+        "data": "AgentDojo: 77% 任务可证明安全（无防御 84%）；untrusted data never impacts program flow",
+        "src": "arXiv:2503.18813 摘要",
+        "hit": "命中（L3 结构保证语言确认）"
+      }
     },
     {
       "id": "N30",
@@ -41,7 +49,11 @@
       "weakest": "L1",
       "predicted_behavior": "声明式权限确定性拦截越权调用；权限粒度/覆盖外的攻击可穿透；策略自身无外部背书",
       "predicted_attack": "权限策略覆盖外操作/策略错配",
-      "observed": null
+      "observed": {
+        "data": "工具调用确定性策略检查 + SMT 单调限制（action space 只能收缩）；显著降低 ASR 保持 utility",
+        "src": "arXiv:2504.11703 摘要",
+        "hit": "机制修正：门=L1 + SMT confinement=L3 注解（B6 基于不完整证据判 L1）"
+      }
     },
     {
       "id": "N31",
@@ -50,7 +62,11 @@
       "weakest": "L3",
       "predicted_behavior": "污点传播为构造性保证：不可信数据到危险 sink 的路径被格策略阻断（信息流性质完备）；不验证内容语义，间接泄漏（侧信道）可能绕过",
       "predicted_attack": "侧信道/策略格表达不了的流",
-      "observed": null
+      "observed": {
+        "data": "动态 taint-tracking 确定性强制策略 + 形式模型刻画可强制性质类；AgentDojo 评估",
+        "src": "arXiv:2505.23643 摘要",
+        "hit": "命中（L3 确认）"
+      }
     },
     {
       "id": "N32",
@@ -59,7 +75,11 @@
       "weakest": "L0",
       "predicted_behavior": "机制未明（统计或 LLM 检测器）：若为 LLM 判定则被对抗改写绕过，无稳定操作点；若为统计则分布内有效、OOD 失效",
       "predicted_attack": "对抗改写（若 LLM 判定）",
-      "observed": null
+      "observed": {
+        "data": "共识验证（多记忆推理路径比较）+ 双记忆结构；ASR 降 95%+（基准内，最小 utility 成本）",
+        "src": "arXiv:2510.02373 摘要",
+        "hit": "部分命中（机制=LLM 共识 L0 判对；95% 为基准内经验数字）"
+      }
     },
     {
       "id": "N33",
@@ -68,7 +88,11 @@
       "weakest": "L2",
       "predicted_behavior": "引用存在性机械核对有效（正确性）；不验证声明真伪（存在≠真实），检索库被污染则失效",
       "predicted_attack": "检索库投毒/声明虽可溯源但为假",
-      "observed": null
+      "observed": {
+        "data": "RARR=LLM 检索+归因比较+修订；显著提升 attribution，非机械存在性检查",
+        "src": "arXiv:2210.08726 摘要",
+        "hit": "机制修正：R3 应判 L0（B6 判 L2 过宽——证据包漏了 LLM 判定细节）"
+      }
     },
     {
       "id": "N34",

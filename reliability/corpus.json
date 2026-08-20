@@ -5,80 +5,981 @@
   "date": "2026-08-20",
   "note": "author_level=null 的条目为 Rater A 待补判；evidence 为机制事实，不含任何判级结论。",
   "items": [
-    {"id": "L01", "category": "lit17", "name": "VerifiAgent", "source": "EMNLP 2025, arXiv:2504.00406", "mechanism": "两级验证：元验证=LLM 代理检查完整性与一致性；工具自适应验证=Python 解释器/搜索引擎/符号计算，工具先求解再与原解比对", "evidence": ["工具=确定性执行，无金标/ground-truth，作者称为 silver ground truth", "元验证=LLM 为主+部分确定性规则（作者邮件确认）"], "author_level": "L0/L1", "author_confidence": "high", "pending_author": false},
-    {"id": "L02", "category": "lit17", "name": "Graph of Verification (GoV)", "source": "arXiv:2506.12509, 2025", "mechanism": "把推理组织成 DAG，按拓扑序在节点上做验证；节点粒度自适应（原子→整段）", "evidence": ["分层=粒度轴而非锚定轴", "节点验证器机制摘要级未明（若为 LLM 判→L0）"], "author_level": "L0/L1", "author_confidence": "medium", "pending_author": false},
-    {"id": "L03", "category": "lit17", "name": "DiVERSE", "source": "ACL 2023, arXiv:2206.02336", "mechanism": "DEBERTA-V3-LARGE 训练出的逐步验证器，对每一步预测对错；步骤标签由与 ground-truth 答案匹配的推理路径派生", "evidence": ["'f′(input) is predicted from the hidden state of the last token of Si,j in DEBERTA-V3-LARGE'", "'regard the reasoning paths that match the ground truth final answer as positive'", "只验证给定步骤，无完备性声明"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "L04", "category": "lit17", "name": "Safe", "source": "ACL 2025, arXiv:2506.04592", "mechanism": "LLM 自动生成形式定理陈述，Lean REPL 内核验证证明；四态输出含弃权", "evidence": ["'utilize an LLM to automatically generate formal statements'", "'validated using the Lean REPL'", "'our formal verifier focuses on the correctness of each step'"], "author_level": "L4+L0陈述层", "author_confidence": "high", "pending_author": false},
-    {"id": "L05", "category": "lit17", "name": "SelfCheck", "source": "ICLR 2024, arXiv:2308.00436", "mechanism": "四阶段零样本自检（目标提取→信息收集→步骤再生成→结果对比），输出三态(+1/0/−1)加权投票合成置信分", "evidence": ["明确 'without resorting to external resources'", "检查器自身验证准确率 66.7%，作者承认 'the checks are themselves imperfect'"], "author_level": "L0", "author_confidence": "high", "pending_author": false},
-    {"id": "L06", "category": "lit17", "name": "LM²", "source": "EMNLP 2024, arXiv:2404.02255", "mechanism": "分解器-求解器-验证器的模型社会；验证器=LoRA 微调 LLaMA-2，训练标签由 GPT-4 标注；policy learning 协调", "evidence": ["'a verifier LM provides feedback on the correctness'", "'datasets annotated by GPT-4'（LLM 标注，非人工真值）"], "author_level": "L0", "author_confidence": "high", "pending_author": false},
-    {"id": "L07", "category": "lit17", "name": "Factcheck-GPT", "source": "arXiv:2311.09000, 2023", "mechanism": "claim→sentence→document 三级粒度事实核查；声明-证据对齐判定由 GPT-4 标注方案完成；基准含金标", "evidence": ["best F1=0.63 by annotation solution based on GPT-4", "证据来自外部文档（检索来源文档），但对齐判定是 LLM"], "author_level": "L0/L1", "author_confidence": "high", "pending_author": false},
-    {"id": "L08", "category": "lit17", "name": "Hierarchical Attention Proofs", "source": "ACL 2025, arXiv:2504.19188", "mechanism": "五级概念层次（基础元素→高级概念）的证明生成正则化方法；证明由形式系统内核判定（miniF2F/ProofNet + Lean）", "evidence": ["形式定理证明，证明正确性由形式内核判定", "五级层次=概念抽象轴（与锚定正交）"], "author_level": "L3/L4", "author_confidence": "high", "pending_author": false},
-    {"id": "L09", "category": "lit17", "name": "Dr. V", "source": "arXiv:2509.11866, 2025", "mechanism": "感知→时间→认知三层视频幻觉诊断；感知/时间层用空间-时间金标标注 grounding；认知层为模型推理", "evidence": ["Dr.V-Bench 10k 空间-时间金标（4,974 视频）→ 金标锚定", "认知层判定为模型推理"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "L10", "category": "lit17", "name": "Proprietary Safety Response", "source": "arXiv:2511.03138, 2025", "mechanism": "四级风险分类（Safe/Unsafe/Conditionally Safe/Focused Attention）；输入分类=监督微调统计分类器；输出层 RAG 知识库锚定但解释仍为模型判定", "evidence": ["安全类别训练标注 + RAG 实时知识库", "99.3% 召回是经验数字，非完备保证"], "author_level": "L0/L1", "author_confidence": "high", "pending_author": false},
-    {"id": "L11", "category": "lit17", "name": "M³-SafetyBench", "source": "Scientia Sinica Informationis 55:2923-2940, 2025", "mechanism": "内容安全×功能安全双层评测基准；17 万+ 条专家/人工标注测试集，19 个模型", "evidence": ["作为评测基准=金标集，非运行时验证器", "人工标注的金标测试集"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "L12", "category": "lit17", "name": "LLM Output Drift", "source": "arXiv:2511.07585, 2025", "mechanism": "按输出确定性三级风险适配部署；确定性=统计一致性（T=0.0/固定种子）+ invariant checking（±5% 物质量阈值）+ SEC 引文验证", "evidence": ["SEC 10-K 文档=外部权威源（L2 锚）", "确定性阈值规则=题面/代码派生规则"], "author_level": "L1/L2", "author_confidence": "high", "pending_author": false},
-    {"id": "L13", "category": "lit17", "name": "Standard Benchmarks Fail", "source": "arXiv:2502.15865, 2025", "mechanism": "模型→工作流→系统三级压力测试审计框架；期望行为由人工定义；全文论点=标准基准覆盖不完备", "evidence": ["审计议程 + 基准覆盖批判", "期望行为人工定义"], "author_level": "L1/L2", "author_confidence": "high", "pending_author": false},
-    {"id": "L14", "category": "lit17", "name": "Prompting Frameworks Survey", "source": "ACM Computing Surveys, arXiv:2311.12785", "mechanism": "数据→基础→执行→服务四级 prompting 框架生命周期分类学", "evidence": ["四级=系统栈架构轴", "不判定对错，只分类"], "author_level": "N/A", "author_confidence": "medium", "pending_author": false},
-    {"id": "L15", "category": "lit17", "name": "Trustworthy LLMs Survey", "source": "arXiv:2308.05374, 2023", "mechanism": "7 类 29 子类可信度评估维度分类学", "evidence": ["维度分类学，内部多为金标评测", "不判定对错，只分类"], "author_level": "N/A", "author_confidence": "high", "pending_author": false},
-    {"id": "L16", "category": "lit17", "name": "HEX", "source": "arXiv:2311.03033, 2023", "mechanism": "数学框架形式化幻觉/对齐/自验证概念；理论形式化", "evidence": ["形式上是 L3 风格，对象是 L0 现象（自验证=模型自评）", "理论框架，无运行时判定"], "author_level": "理论", "author_confidence": "high", "pending_author": false},
-    {"id": "L17", "category": "lit17", "name": "FACTOOL", "source": "ICLR 2024, arXiv:2307.13528", "mechanism": "工具增强多任务事实检测；Google Search/Scholar/代码解释器收集证据；最终事实性判定=LLM 基于证据推理", "evidence": ["'tools, including Google Search, Google Scholar, code interpreters'", "'employs the reasoning abilities of LLMs to assess the factuality... given the evidence'"], "author_level": "L1/L2", "author_confidence": "high", "pending_author": false},
-
-    {"id": "S01", "category": "sys", "name": "verify_root（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "把候选根代回方程验证是否成立（单根验证）", "evidence": ["代回验证：只验提出的候选，不验未提出的候选"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "S02", "category": "sys", "name": "extreme（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "把驻点代回验证极值性质", "evidence": ["驻点代回：正确性验证"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "S03", "category": "sys", "name": "interval_extreme（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "对区间问题穷举端点+驻点后验证极值", "evidence": ["端点+驻点穷举：对二次函数区间域内单性质完备"], "author_level": "L3", "author_confidence": "high", "pending_author": false},
-    {"id": "S04", "category": "sys", "name": "equality（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "SymPy simplify 表达式等价判定，数值抽样兜底", "evidence": ["simplify 等价 + 数值抽样兜底（非完备）"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "S05", "category": "sys", "name": "satisfies（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "单点代入验证候选是否满足条件", "evidence": ["单点满足：正确性验证"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "S06", "category": "sys", "name": "inequality（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "用 SymPy solveset 求完备解集，与声称解集做集合相等比较", "evidence": ["solveset 解集等价：可判定，对单性质完备"], "author_level": "L3", "author_confidence": "high", "pending_author": false},
-    {"id": "S07", "category": "sys", "name": "solution_set（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "用 solveset 求完备真解集，与声称解集比较；能抓漏解/压缩篡改", "evidence": ["solveset 解集等价：可判定，对单性质完备（抓漏解）"], "author_level": "L3", "author_confidence": "high", "pending_author": false},
-    {"id": "S08", "category": "sys", "name": "answer_type（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "类型系统：校验答案的类型符合声明类型", "evidence": ["类型系统：对'类型符合'性质完备"], "author_level": "L3", "author_confidence": "high", "pending_author": false},
-    {"id": "S09", "category": "sys", "name": "final_parameter_set（本仓库数学裁判）", "source": "math_agent/verifier.py", "mechanism": "对参数集做采样验证", "evidence": ["采样验证：正确性；完备性=采样天花板"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "S10", "category": "sys", "name": "医疗信息完整性裁判", "source": "math_agent/medical/verify_diag.py", "mechanism": "三条后置规则：lab 完全缺失+高置信诊断→过度自信 FAIL；急诊红旗→必须 urgent；确诊在鉴别列表", "evidence": ["自造确定性规则（lab 缺失 + 置信度阈值），未导入已验证临床决策规则"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-    {"id": "S11", "category": "sys", "name": "行为统计检测器", "source": "math_agent/behavior/", "mechanism": "行为统计特征 + 无向偏差（马氏距离风格）+ 探针化基线 + 语义嵌入特征，阈值从正常分布定", "evidence": ["统计检测器：正确性（检出率/误报率），无完备性；隐匿执行攻击不可编码"], "author_level": "L2", "author_confidence": "high", "pending_author": false},
-
-    {"id": "N01", "category": "litnew", "name": "Self-Consistency", "source": "Wang et al., ICLR 2023", "mechanism": "多次采样推理路径，多数投票取最终答案", "evidence": ["无外部锚，纯 LLM 输出统计", "投票数再多也不证明'没漏'"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N02", "category": "litnew", "name": "Chain-of-Verification (CoVe)", "source": "Dhuliawala et al., 2023", "mechanism": "LLM 起草答案→自己列验证问题→自己回答→修订答案", "evidence": ["全程 LLM 自证，无外部锚"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N03", "category": "litnew", "name": "Self-Refine", "source": "Madaan et al., NeurIPS 2023", "mechanism": "LLM 生成→自我反馈→自我修订，迭代", "evidence": ["自我反馈=LLM 自评"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N04", "category": "litnew", "name": "Reflexion", "source": "Shinn et al., NeurIPS 2023", "mechanism": "LLM 用语言反思自己的失败，写入记忆供下次尝试", "evidence": ["反思=LLM 自评（外部只提供环境反馈如测试结果）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N05", "category": "litnew", "name": "Debate (多智能体辩论)", "source": "Du et al., 2023", "mechanism": "多个 LLM 辩论同一问题，裁判（LLM）综合判断", "evidence": ["裁判=LLM"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N06", "category": "litnew", "name": "Constitutional AI (RLAIF)", "source": "Bai et al., 2022", "mechanism": "LLM 依据书面宪法原则（规则文本）对自己的输出做批评与修订，用于训练", "evidence": ["原则是确定性文本规则，但批评与判定由 LLM 执行"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N07", "category": "litnew", "name": "RLHF 奖励模型", "source": "InstructGPT/Ouyang et al., 2022", "mechanism": "奖励模型在人工偏好标注上训练，对输出打分排序", "evidence": ["训练标签=人工偏好（客观金标）", "统计模型：正确性层，无完备性"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N08", "category": "litnew", "name": "LLM-as-a-Judge (MT-Bench)", "source": "Zheng et al., 2023", "mechanism": "GPT-4 作为裁判比较两个回答的优劣；基准含人工验证子集", "evidence": ["运行时裁判=LLM", "基准人工子集=评测锚，非运行时判定"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N09", "category": "litnew", "name": "FactScore", "source": "Min et al., ICLR 2023", "mechanism": "把生成内容拆成原子事实，逐条与维基百科证据比对打分", "evidence": ["证据=外部维基（客观）", "原子事实拆解与对齐判定=LLM"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N10", "category": "litnew", "name": "RARR (检索增强修订)", "source": "Gao et al., 2023", "mechanism": "对 LLM 输出做检索增强的事实核查并修订；判定'声明与检索证据是否一致'", "evidence": ["证据=检索文档（外部）", "一致性判定=LLM"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N11", "category": "litnew", "name": "CodeT (测试生成+执行选择)", "source": "Chen et al., ICLR 2023", "mechanism": "LLM 生成多种测试，在合成数据集上执行，用执行结果选择正确程序", "evidence": ["执行结果=客观 oracle", "测试覆盖有限，无完备性声明"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N12", "category": "litnew", "name": "AlphaCode (隐藏测试过滤)", "source": "Li et al., 2022", "mechanism": "大规模采样程序，用隐藏测试执行结果过滤排序", "evidence": ["执行=客观 oracle", "隐藏测试覆盖≠完备"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N13", "category": "litnew", "name": "TestGen-LLM (Meta 生产工具)", "source": "Meta, 2024", "mechanism": "LLM 生成测试，测试必须通过附加验证过滤器（覆盖/编译/执行）才能采用", "evidence": ["LLM 生成的测试本身要再过验证过滤器=信任递归实例", "过滤器=确定性检查"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N14", "category": "litnew", "name": "Dafny 形式化代码验证", "source": "Leino, 2010", "mechanism": "程序带前置/后置条件与不变式，Dafny 验证器（SMT 求解器）自动验证", "evidence": ["SMT/形式内核：可判定域内完备", "规格（前置后置）由人/LLM 写"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N15", "category": "litnew", "name": "mypy 类型检查", "source": "开源工具", "mechanism": "对 Python 程序做静态类型检查，类型错误即报错", "evidence": ["类型系统：对'类型符合'性质完备", "只覆盖类型性质，不覆盖语义正确"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N16", "category": "litnew", "name": "单元测试执行（通用）", "source": "工程实践", "mechanism": "运行单元测试断言程序行为符合预期", "evidence": ["断言=人工写的期望", "通过测试≠无 bug（覆盖不完备）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N17", "category": "litnew", "name": "Lean/Coq 证明助手（通用）", "source": "形式化方法", "mechanism": "证明被形式内核逐条检查，内核外无信任", "evidence": ["内核=可判定系统", "定理陈述由人写（陈述层信任）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N18", "category": "litnew", "name": "自动定理证明器 (Vampire/E)", "source": "SMT/ATP 工具", "mechanism": "对一阶逻辑公式自动搜索证明，证明由内核验证", "evidence": ["可判定/半可判定内核", "只对'能表达的公式'完备"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N19", "category": "litnew", "name": "提示注入检测器（统计分类）", "source": "安全工具类", "mechanism": "训练的分类器判断输入是否为提示注入", "evidence": ["训练标签=人工标注", "统计检测：检出率/误报率，无完备性"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N20", "category": "litnew", "name": "SQL/数据库执行验证", "source": "工程实践", "mechanism": "把生成的 SQL 在数据库执行，用执行结果/错误校验正确性", "evidence": ["数据库执行=客观 oracle", "执行通过≠逻辑完备"], "author_level": null, "author_confidence": null, "pending_author": true},
-
-    {"id": "N21", "category": "agentsec", "name": "PPMF（来源保留记忆防火墙）", "source": "arXiv:2607.29167, 2026", "mechanism": "记忆存为结构化记录（content/source/trust/history/risk/external），来源/信任/确认/风险标签由平台维护；工具调用前确定性门禁按\"动作风险 ≤ 支持记忆权威\"授权，支持绑定取最弱信任", "evidence": ["门禁只读平台维护元数据，不读生成文本", "风险策略设计者指定（READ≥EXTERNAL、EFFECT/PURCHASE/CREDENTIAL≥USER_CONFIRMED）", "元数据完整时 ASR=0.000；10% 伪造确认 → ASR 0.088±0.016（完备性盲区量化）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N22", "category": "agentsec", "name": "Content Filter（PPMF 基线）", "source": "arXiv:2607.29167, 2026", "mechanism": "按词表/关键词过滤检索到的记忆文本（URL、支付/转账词、凭据词、删除词等）", "evidence": ["词表规则，表面形式", "改写/洗白后失效：Synthetic ASR 0.200-0.933 不稳定"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N23", "category": "agentsec", "name": "Prompt Filter（PPMF 基线）", "source": "Llama Guard/Prompt Guard, arXiv:2312.06674", "mechanism": "按提示注入模式过滤记忆文本（ignore previous instructions、system prompt 等）", "evidence": ["模式匹配规则", "洗白后镜像 no defense（ASR 0.933-1.000）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N24", "category": "agentsec", "name": "Self-Ask provenance（文本来源推断）", "source": "Press et al., EMNLP 2023 Findings（PPMF 基线）", "mechanism": "LLM 从记忆文本推断其来源权威级别（external/user-history/confirmation-like），按推断结果授权", "evidence": ["来源推断=LLM 自评（L0）", "permissive 模式 ASR 0.984、strict 模式误杀全部良性"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N25", "category": "agentsec", "name": "Gate only（无 provenance 授权门）", "source": "arXiv:2607.29167, 2026（消融）", "mechanism": "只应用风险-权威门禁，但记忆无可靠来源元数据（作者自造规则）", "evidence": ["无 L2 输入（无平台元数据）", "ASR 0.000 但良性全杀（false-block 1.000）——有门无锚"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N26", "category": "agentsec", "name": "Action-handle/Confirmation-marker guard（句柄/确认标记启发式）", "source": "arXiv:2607.29167, 2026（基线）", "mechanism": "按动作句柄（URL/agent-action:///动词）或确认短语（user-confirmed 等）启发式过滤记忆", "evidence": ["表面形式启发式", "伪造确认标记可绕过（confirmation-spoofing 场景 ASR 0.818）"], "author_level": null, "author_confidence": null, "pending_author": true},
-
-    {"id": "N27", "category": "agentsec", "name": "Llama Guard 3 / Prompt Guard", "source": "Meta, arXiv:2312.06674", "mechanism": "输入/输出安全过滤：Llama Guard=监督微调安全分类器；Prompt Guard=提示注入模式匹配过滤器", "evidence": ["Llama Guard=统计分类器（训练标签人工）", "Prompt Guard=模式匹配", "0-1 分类，无完备性保证"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N28", "category": "agentsec", "name": "NeMo Guardrails", "source": "NVIDIA, 2023", "mechanism": "确定性 rails：话题/事实/安全规则（canonical form + 词表/正则），LLM 对话流中拦截违规", "evidence": ["rails=确定性规则/词表", "拦截机制确定性，但判定触发依赖模式"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N29", "category": "agentsec", "name": "CaMeL（数据-控制分离）", "source": "arXiv:2503.18813, 2025", "mechanism": "把不可信内容与指令空间隔离：数据流分离，控制流只由可信指令触发", "evidence": ["确定性数据/控制分离机制", "按来源限制控制流（来源标签）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N30", "category": "agentsec", "name": "Progent（可编程工具权限）", "source": "arXiv:2504.11703, 2025", "mechanism": "声明式工具权限规则（工具/参数白名单），工具调用前确定性检查", "evidence": ["权限=声明式确定性规则", "调用前门禁"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N31", "category": "agentsec", "name": "IFC（信息流控制）", "source": "arXiv:2505.23643, 2025", "mechanism": "污点追踪：不可信数据打标并限制其流向（安全策略声明式）", "evidence": ["确定性污点传播/策略执行", "策略=声明式规则"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N32", "category": "agentsec", "name": "A-MemGuard（主动记忆防御）", "source": "arXiv:2510.02373, 2025", "mechanism": "预防性记忆防御：检测/清理被投毒的记忆条目", "evidence": ["检测器（统计/语义特征或 LLM）", "预防性清理"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N33", "category": "agentsec", "name": "RAG 引用验证", "source": "常见做法", "mechanism": "生成后核对引用/声明是否存在于检索文档", "evidence": ["引用存在性可机械检查（字符串/文档匹配）", "声明-证据对齐若 LLM 判→L0 组件"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N34", "category": "agentsec", "name": "系统提示加固（越狱防御）", "source": "常见做法；RA-LLM: arXiv:2309.14348", "mechanism": "系统提示声明安全边界 + 对抗样本鲁棒微调（RA-LLM），靠 LLM 自觉遵守", "evidence": ["纯 LLM 自声明/自遵守，无独立验证器", "防御与生成合一", "对直接注入（同一通道）防护有限"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N35", "category": "agentsec", "name": "工具调用白名单/黑名单", "source": "工程实践", "mechanism": "确定性清单控制可用工具与参数", "evidence": ["清单=确定性规则", "粒度粗（工具级，非参数语义级）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N36", "category": "agentsec", "name": "Perplexity 越狱检测", "source": "Jain et al., 2023（arXiv:2309.00614）", "mechanism": "用困惑度/统计特征检测越狱或异常输入，阈值判定；另含输入变换类防御（改写/重分词/同义词替换）", "evidence": ["统计阈值（外部 LM 算困惑度）", "作者结论：单独效果有限（GCG 攻击文本可保持低困惑度）", "对抗训练最有效（防御与生成合一）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N37", "category": "agentsec", "name": "沙箱执行", "source": "工程实践", "mechanism": "不可信代码/动作在受限环境执行，越界即止", "evidence": ["执行域=确定性限制（ODD 界定）", "限制执行而非判定内容"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N38", "category": "agentsec", "name": "智能合约形式化验证", "source": "形式验证工具（如 Certora/Slither）", "mechanism": "合约性质（不变量/无重入/无溢出）编码进形式验证器或静态分析器", "evidence": ["形式内核/模型检查：域内完备", "规格人工声明"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N39", "category": "agentsec", "name": "执行效果核对（tool result verification）", "source": "工程实践", "mechanism": "工具执行后核对副作用是否真的发生/成功", "evidence": ["执行结果=effect 锚（客观）", "只验证发生与否，不验证该不该发生"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N40", "category": "agentsec", "name": "AgentDojo 评测基准", "source": "arXiv:2406.13352, 2024", "mechanism": "评测基准：攻击成功/良性任务配对场景集", "evidence": ["评测基准非运行时防御（R1→N/A）", "人工设计场景（注入/隐私/资金等）", "ASR+task utility 双指标"], "author_level": null, "author_confidence": null, "pending_author": true},
-
-    {"id": "N41", "category": "agentsec", "name": "SafeAgent（计划验证+动作白名单）", "source": "arXiv:2406.04198, 2024", "mechanism": "两层验证：计划级=LLM 按安全规则评估整体计划；动作级=Safe Action Manager 对每个工具动作执行前检查（确定性白/黑名单+参数约束）", "evidence": ["计划级=LLM 安全评估（L0 组件）", "动作级=确定性规则+白名单（L1）", "判定路径最弱锚=L0（计划评估在路径上）"], "author_level": null, "author_confidence": null, "pending_author": true},
-    {"id": "N42", "category": "agentsec", "name": "ToolEmu（LLM 仿真沙箱+LLM 判定器）", "source": "arXiv:2307.13854, 2023", "mechanism": "LLM 仿真工具环境，GPT-4 判定器（few-shot rubric）对代理轨迹做自动化安全裁决；识别风险轨迹", "evidence": ["仿真环境=LLM 生成", "安全裁决=LLM 判定器（L0）", "144 场景识别 31 风险轨迹（约 90% 人工确认）"], "author_level": null, "author_confidence": null, "pending_author": true}
+    {
+      "id": "L01",
+      "category": "lit17",
+      "name": "VerifiAgent",
+      "source": "EMNLP 2025, arXiv:2504.00406",
+      "mechanism": "两级验证：元验证=LLM 代理检查完整性与一致性；工具自适应验证=Python 解释器/搜索引擎/符号计算，工具先求解再与原解比对",
+      "evidence": [
+        "工具=确定性执行，无金标/ground-truth，作者称为 silver ground truth",
+        "元验证=LLM 为主+部分确定性规则（作者邮件确认）"
+      ],
+      "author_level": "L0/L1",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L02",
+      "category": "lit17",
+      "name": "Graph of Verification (GoV)",
+      "source": "arXiv:2506.12509, 2025",
+      "mechanism": "把推理组织成 DAG，按拓扑序在节点上做验证；节点粒度自适应（原子→整段）",
+      "evidence": [
+        "分层=粒度轴而非锚定轴",
+        "节点验证器机制摘要级未明（若为 LLM 判→L0）"
+      ],
+      "author_level": "L0/L1",
+      "author_confidence": "medium",
+      "pending_author": false
+    },
+    {
+      "id": "L03",
+      "category": "lit17",
+      "name": "DiVERSE",
+      "source": "ACL 2023, arXiv:2206.02336",
+      "mechanism": "DEBERTA-V3-LARGE 训练出的逐步验证器，对每一步预测对错；步骤标签由与 ground-truth 答案匹配的推理路径派生",
+      "evidence": [
+        "'f′(input) is predicted from the hidden state of the last token of Si,j in DEBERTA-V3-LARGE'",
+        "'regard the reasoning paths that match the ground truth final answer as positive'",
+        "只验证给定步骤，无完备性声明"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L04",
+      "category": "lit17",
+      "name": "Safe",
+      "source": "ACL 2025, arXiv:2506.04592",
+      "mechanism": "LLM 自动生成形式定理陈述，Lean REPL 内核验证证明；四态输出含弃权",
+      "evidence": [
+        "'utilize an LLM to automatically generate formal statements'",
+        "'validated using the Lean REPL'",
+        "'our formal verifier focuses on the correctness of each step'"
+      ],
+      "author_level": "L4+L0陈述层",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L05",
+      "category": "lit17",
+      "name": "SelfCheck",
+      "source": "ICLR 2024, arXiv:2308.00436",
+      "mechanism": "四阶段零样本自检（目标提取→信息收集→步骤再生成→结果对比），输出三态(+1/0/−1)加权投票合成置信分",
+      "evidence": [
+        "明确 'without resorting to external resources'",
+        "检查器自身验证准确率 66.7%，作者承认 'the checks are themselves imperfect'"
+      ],
+      "author_level": "L0",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L06",
+      "category": "lit17",
+      "name": "LM²",
+      "source": "EMNLP 2024, arXiv:2404.02255",
+      "mechanism": "分解器-求解器-验证器的模型社会；验证器=LoRA 微调 LLaMA-2，训练标签由 GPT-4 标注；policy learning 协调",
+      "evidence": [
+        "'a verifier LM provides feedback on the correctness'",
+        "'datasets annotated by GPT-4'（LLM 标注，非人工真值）"
+      ],
+      "author_level": "L0",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L07",
+      "category": "lit17",
+      "name": "Factcheck-GPT",
+      "source": "arXiv:2311.09000, 2023",
+      "mechanism": "claim→sentence→document 三级粒度事实核查；声明-证据对齐判定由 GPT-4 标注方案完成；基准含金标",
+      "evidence": [
+        "best F1=0.63 by annotation solution based on GPT-4",
+        "证据来自外部文档（检索来源文档），但对齐判定是 LLM"
+      ],
+      "author_level": "L0/L1",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L08",
+      "category": "lit17",
+      "name": "Hierarchical Attention Proofs",
+      "source": "ACL 2025, arXiv:2504.19188",
+      "mechanism": "五级概念层次（基础元素→高级概念）的证明生成正则化方法；证明由形式系统内核判定（miniF2F/ProofNet + Lean）",
+      "evidence": [
+        "形式定理证明，证明正确性由形式内核判定",
+        "五级层次=概念抽象轴（与锚定正交）"
+      ],
+      "author_level": "L3/L4",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L09",
+      "category": "lit17",
+      "name": "Dr. V",
+      "source": "arXiv:2509.11866, 2025",
+      "mechanism": "感知→时间→认知三层视频幻觉诊断；感知/时间层用空间-时间金标标注 grounding；认知层为模型推理",
+      "evidence": [
+        "Dr.V-Bench 10k 空间-时间金标（4,974 视频）→ 金标锚定",
+        "认知层判定为模型推理"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L10",
+      "category": "lit17",
+      "name": "Proprietary Safety Response",
+      "source": "arXiv:2511.03138, 2025",
+      "mechanism": "四级风险分类（Safe/Unsafe/Conditionally Safe/Focused Attention）；输入分类=监督微调统计分类器；输出层 RAG 知识库锚定但解释仍为模型判定",
+      "evidence": [
+        "安全类别训练标注 + RAG 实时知识库",
+        "99.3% 召回是经验数字，非完备保证"
+      ],
+      "author_level": "L0/L1",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L11",
+      "category": "lit17",
+      "name": "M³-SafetyBench",
+      "source": "Scientia Sinica Informationis 55:2923-2940, 2025",
+      "mechanism": "内容安全×功能安全双层评测基准；17 万+ 条专家/人工标注测试集，19 个模型",
+      "evidence": [
+        "作为评测基准=金标集，非运行时验证器",
+        "人工标注的金标测试集"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L12",
+      "category": "lit17",
+      "name": "LLM Output Drift",
+      "source": "arXiv:2511.07585, 2025",
+      "mechanism": "按输出确定性三级风险适配部署；确定性=统计一致性（T=0.0/固定种子）+ invariant checking（±5% 物质量阈值）+ SEC 引文验证",
+      "evidence": [
+        "SEC 10-K 文档=外部权威源（L2 锚）",
+        "确定性阈值规则=题面/代码派生规则"
+      ],
+      "author_level": "L1/L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L13",
+      "category": "lit17",
+      "name": "Standard Benchmarks Fail",
+      "source": "arXiv:2502.15865, 2025",
+      "mechanism": "模型→工作流→系统三级压力测试审计框架；期望行为由人工定义；全文论点=标准基准覆盖不完备",
+      "evidence": [
+        "审计议程 + 基准覆盖批判",
+        "期望行为人工定义"
+      ],
+      "author_level": "L1/L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L14",
+      "category": "lit17",
+      "name": "Prompting Frameworks Survey",
+      "source": "ACM Computing Surveys, arXiv:2311.12785",
+      "mechanism": "数据→基础→执行→服务四级 prompting 框架生命周期分类学",
+      "evidence": [
+        "四级=系统栈架构轴",
+        "不判定对错，只分类"
+      ],
+      "author_level": "N/A",
+      "author_confidence": "medium",
+      "pending_author": false
+    },
+    {
+      "id": "L15",
+      "category": "lit17",
+      "name": "Trustworthy LLMs Survey",
+      "source": "arXiv:2308.05374, 2023",
+      "mechanism": "7 类 29 子类可信度评估维度分类学",
+      "evidence": [
+        "维度分类学，内部多为金标评测",
+        "不判定对错，只分类"
+      ],
+      "author_level": "N/A",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L16",
+      "category": "lit17",
+      "name": "HEX",
+      "source": "arXiv:2311.03033, 2023",
+      "mechanism": "数学框架形式化幻觉/对齐/自验证概念；理论形式化",
+      "evidence": [
+        "形式上是 L3 风格，对象是 L0 现象（自验证=模型自评）",
+        "理论框架，无运行时判定"
+      ],
+      "author_level": "理论",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "L17",
+      "category": "lit17",
+      "name": "FACTOOL",
+      "source": "ICLR 2024, arXiv:2307.13528",
+      "mechanism": "工具增强多任务事实检测；Google Search/Scholar/代码解释器收集证据；最终事实性判定=LLM 基于证据推理",
+      "evidence": [
+        "'tools, including Google Search, Google Scholar, code interpreters'",
+        "'employs the reasoning abilities of LLMs to assess the factuality... given the evidence'"
+      ],
+      "author_level": "L1/L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S01",
+      "category": "sys",
+      "name": "verify_root（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "把候选根代回方程验证是否成立（单根验证）",
+      "evidence": [
+        "代回验证：只验提出的候选，不验未提出的候选"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S02",
+      "category": "sys",
+      "name": "extreme（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "把驻点代回验证极值性质",
+      "evidence": [
+        "驻点代回：正确性验证"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S03",
+      "category": "sys",
+      "name": "interval_extreme（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "对区间问题穷举端点+驻点后验证极值",
+      "evidence": [
+        "端点+驻点穷举：对二次函数区间域内单性质完备"
+      ],
+      "author_level": "L3",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S04",
+      "category": "sys",
+      "name": "equality（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "SymPy simplify 表达式等价判定，数值抽样兜底",
+      "evidence": [
+        "simplify 等价 + 数值抽样兜底（非完备）"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S05",
+      "category": "sys",
+      "name": "satisfies（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "单点代入验证候选是否满足条件",
+      "evidence": [
+        "单点满足：正确性验证"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S06",
+      "category": "sys",
+      "name": "inequality（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "用 SymPy solveset 求完备解集，与声称解集做集合相等比较",
+      "evidence": [
+        "solveset 解集等价：可判定，对单性质完备"
+      ],
+      "author_level": "L3",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S07",
+      "category": "sys",
+      "name": "solution_set（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "用 solveset 求完备真解集，与声称解集比较；能抓漏解/压缩篡改",
+      "evidence": [
+        "solveset 解集等价：可判定，对单性质完备（抓漏解）"
+      ],
+      "author_level": "L3",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S08",
+      "category": "sys",
+      "name": "answer_type（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "类型系统：校验答案的类型符合声明类型",
+      "evidence": [
+        "类型系统：对'类型符合'性质完备"
+      ],
+      "author_level": "L3",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S09",
+      "category": "sys",
+      "name": "final_parameter_set（本仓库数学裁判）",
+      "source": "math_agent/verifier.py",
+      "mechanism": "对参数集做采样验证",
+      "evidence": [
+        "采样验证：正确性；完备性=采样天花板"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S10",
+      "category": "sys",
+      "name": "医疗信息完整性裁判",
+      "source": "math_agent/medical/verify_diag.py",
+      "mechanism": "三条后置规则：lab 完全缺失+高置信诊断→过度自信 FAIL；急诊红旗→必须 urgent；确诊在鉴别列表",
+      "evidence": [
+        "自造确定性规则（lab 缺失 + 置信度阈值），未导入已验证临床决策规则"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "S11",
+      "category": "sys",
+      "name": "行为统计检测器",
+      "source": "math_agent/behavior/",
+      "mechanism": "行为统计特征 + 无向偏差（马氏距离风格）+ 探针化基线 + 语义嵌入特征，阈值从正常分布定",
+      "evidence": [
+        "统计检测器：正确性（检出率/误报率），无完备性；隐匿执行攻击不可编码"
+      ],
+      "author_level": "L2",
+      "author_confidence": "high",
+      "pending_author": false
+    },
+    {
+      "id": "N01",
+      "category": "litnew",
+      "name": "Self-Consistency",
+      "source": "Wang et al., ICLR 2023",
+      "mechanism": "多次采样推理路径，多数投票取最终答案",
+      "evidence": [
+        "无外部锚，纯 LLM 输出统计",
+        "投票数再多也不证明'没漏'"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N02",
+      "category": "litnew",
+      "name": "Chain-of-Verification (CoVe)",
+      "source": "Dhuliawala et al., 2023",
+      "mechanism": "LLM 起草答案→自己列验证问题→自己回答→修订答案",
+      "evidence": [
+        "全程 LLM 自证，无外部锚"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N03",
+      "category": "litnew",
+      "name": "Self-Refine",
+      "source": "Madaan et al., NeurIPS 2023",
+      "mechanism": "LLM 生成→自我反馈→自我修订，迭代",
+      "evidence": [
+        "自我反馈=LLM 自评"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N04",
+      "category": "litnew",
+      "name": "Reflexion",
+      "source": "Shinn et al., NeurIPS 2023",
+      "mechanism": "LLM 用语言反思自己的失败，写入记忆供下次尝试",
+      "evidence": [
+        "反思=LLM 自评（外部只提供环境反馈如测试结果）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N05",
+      "category": "litnew",
+      "name": "Debate (多智能体辩论)",
+      "source": "Du et al., 2023",
+      "mechanism": "多个 LLM 辩论同一问题，裁判（LLM）综合判断",
+      "evidence": [
+        "裁判=LLM"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N06",
+      "category": "litnew",
+      "name": "Constitutional AI (RLAIF)",
+      "source": "Bai et al., 2022",
+      "mechanism": "LLM 依据书面宪法原则（规则文本）对自己的输出做批评与修订，用于训练",
+      "evidence": [
+        "原则是确定性文本规则，但批评与判定由 LLM 执行"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N07",
+      "category": "litnew",
+      "name": "RLHF 奖励模型",
+      "source": "InstructGPT/Ouyang et al., 2022",
+      "mechanism": "奖励模型在人工偏好标注上训练，对输出打分排序",
+      "evidence": [
+        "训练标签=人工偏好（客观金标）",
+        "统计模型：正确性层，无完备性"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N08",
+      "category": "litnew",
+      "name": "LLM-as-a-Judge (MT-Bench)",
+      "source": "Zheng et al., 2023",
+      "mechanism": "GPT-4 作为裁判比较两个回答的优劣；基准含人工验证子集",
+      "evidence": [
+        "运行时裁判=LLM",
+        "基准人工子集=评测锚，非运行时判定"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N09",
+      "category": "litnew",
+      "name": "FactScore",
+      "source": "Min et al., ICLR 2023",
+      "mechanism": "把生成内容拆成原子事实，逐条与维基百科证据比对打分",
+      "evidence": [
+        "证据=外部维基（客观）",
+        "原子事实拆解与对齐判定=LLM"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N10",
+      "category": "litnew",
+      "name": "RARR (检索增强修订)",
+      "source": "Gao et al., 2023",
+      "mechanism": "对 LLM 输出做检索增强的事实核查并修订；判定'声明与检索证据是否一致'",
+      "evidence": [
+        "证据=检索文档（外部）",
+        "一致性判定=LLM"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N11",
+      "category": "litnew",
+      "name": "CodeT (测试生成+执行选择)",
+      "source": "Chen et al., ICLR 2023",
+      "mechanism": "LLM 生成多种测试，在合成数据集上执行，用执行结果选择正确程序",
+      "evidence": [
+        "执行结果=客观 oracle",
+        "测试覆盖有限，无完备性声明"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N12",
+      "category": "litnew",
+      "name": "AlphaCode (隐藏测试过滤)",
+      "source": "Li et al., 2022",
+      "mechanism": "大规模采样程序，用隐藏测试执行结果过滤排序",
+      "evidence": [
+        "执行=客观 oracle",
+        "隐藏测试覆盖≠完备"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N13",
+      "category": "litnew",
+      "name": "TestGen-LLM (Meta 生产工具)",
+      "source": "Meta, 2024",
+      "mechanism": "LLM 生成测试，测试必须通过附加验证过滤器（覆盖/编译/执行）才能采用",
+      "evidence": [
+        "LLM 生成的测试本身要再过验证过滤器=信任递归实例",
+        "过滤器=确定性检查"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N14",
+      "category": "litnew",
+      "name": "Dafny 形式化代码验证",
+      "source": "Leino, 2010",
+      "mechanism": "程序带前置/后置条件与不变式，Dafny 验证器（SMT 求解器）自动验证",
+      "evidence": [
+        "SMT/形式内核：可判定域内完备",
+        "规格（前置后置）由人/LLM 写"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N15",
+      "category": "litnew",
+      "name": "mypy 类型检查",
+      "source": "开源工具",
+      "mechanism": "对 Python 程序做静态类型检查，类型错误即报错",
+      "evidence": [
+        "类型系统：对'类型符合'性质完备",
+        "只覆盖类型性质，不覆盖语义正确"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N16",
+      "category": "litnew",
+      "name": "单元测试执行（通用）",
+      "source": "工程实践",
+      "mechanism": "运行单元测试断言程序行为符合预期",
+      "evidence": [
+        "断言=人工写的期望",
+        "通过测试≠无 bug（覆盖不完备）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N17",
+      "category": "litnew",
+      "name": "Lean/Coq 证明助手（通用）",
+      "source": "形式化方法",
+      "mechanism": "证明被形式内核逐条检查，内核外无信任",
+      "evidence": [
+        "内核=可判定系统",
+        "定理陈述由人写（陈述层信任）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N18",
+      "category": "litnew",
+      "name": "自动定理证明器 (Vampire/E)",
+      "source": "SMT/ATP 工具",
+      "mechanism": "对一阶逻辑公式自动搜索证明，证明由内核验证",
+      "evidence": [
+        "可判定/半可判定内核",
+        "只对'能表达的公式'完备"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N19",
+      "category": "litnew",
+      "name": "提示注入检测器（统计分类）",
+      "source": "安全工具类",
+      "mechanism": "训练的分类器判断输入是否为提示注入",
+      "evidence": [
+        "训练标签=人工标注",
+        "统计检测：检出率/误报率，无完备性"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N20",
+      "category": "litnew",
+      "name": "SQL/数据库执行验证",
+      "source": "工程实践",
+      "mechanism": "把生成的 SQL 在数据库执行，用执行结果/错误校验正确性",
+      "evidence": [
+        "数据库执行=客观 oracle",
+        "执行通过≠逻辑完备"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N21",
+      "category": "agentsec",
+      "name": "PPMF（来源保留记忆防火墙）",
+      "source": "arXiv:2607.29167, 2026",
+      "mechanism": "记忆存为结构化记录（content/source/trust/history/risk/external），来源/信任/确认/风险标签由平台维护；工具调用前确定性门禁按\"动作风险 ≤ 支持记忆权威\"授权，支持绑定取最弱信任",
+      "evidence": [
+        "门禁只读平台维护元数据，不读生成文本",
+        "风险策略设计者指定（READ≥EXTERNAL、EFFECT/PURCHASE/CREDENTIAL≥USER_CONFIRMED）",
+        "元数据完整时 ASR=0.000；10% 伪造确认 → ASR 0.088±0.016（完备性盲区量化）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N22",
+      "category": "agentsec",
+      "name": "Content Filter（PPMF 基线）",
+      "source": "arXiv:2607.29167, 2026",
+      "mechanism": "按词表/关键词过滤检索到的记忆文本（URL、支付/转账词、凭据词、删除词等）",
+      "evidence": [
+        "词表规则，表面形式",
+        "改写/洗白后失效：Synthetic ASR 0.200-0.933 不稳定"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N23",
+      "category": "agentsec",
+      "name": "Prompt Filter（PPMF 基线）",
+      "source": "Llama Guard/Prompt Guard, arXiv:2312.06674",
+      "mechanism": "按提示注入模式过滤记忆文本（ignore previous instructions、system prompt 等）",
+      "evidence": [
+        "模式匹配规则",
+        "洗白后镜像 no defense（ASR 0.933-1.000）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N24",
+      "category": "agentsec",
+      "name": "Self-Ask provenance（文本来源推断）",
+      "source": "Press et al., EMNLP 2023 Findings（PPMF 基线）",
+      "mechanism": "LLM 从记忆文本推断其来源权威级别（external/user-history/confirmation-like），按推断结果授权",
+      "evidence": [
+        "来源推断=LLM 自评（L0）",
+        "permissive 模式 ASR 0.984、strict 模式误杀全部良性"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N25",
+      "category": "agentsec",
+      "name": "Gate only（无 provenance 授权门）",
+      "source": "arXiv:2607.29167, 2026（消融）",
+      "mechanism": "只应用风险-权威门禁，但记忆无可靠来源元数据（作者自造规则）",
+      "evidence": [
+        "无 L2 输入（无平台元数据）",
+        "ASR 0.000 但良性全杀（false-block 1.000）——有门无锚"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N26",
+      "category": "agentsec",
+      "name": "Action-handle/Confirmation-marker guard（句柄/确认标记启发式）",
+      "source": "arXiv:2607.29167, 2026（基线）",
+      "mechanism": "按动作句柄（URL/agent-action:///动词）或确认短语（user-confirmed 等）启发式过滤记忆",
+      "evidence": [
+        "表面形式启发式",
+        "伪造确认标记可绕过（confirmation-spoofing 场景 ASR 0.818）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N27",
+      "category": "agentsec",
+      "name": "Llama Guard 3 / Prompt Guard",
+      "source": "Meta, arXiv:2312.06674",
+      "mechanism": "输入/输出安全过滤：Llama Guard=监督微调安全分类器；Prompt Guard=提示注入模式匹配过滤器",
+      "evidence": [
+        "Llama Guard=统计分类器（训练标签人工）",
+        "Prompt Guard=模式匹配",
+        "0-1 分类，无完备性保证"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N28",
+      "category": "agentsec",
+      "name": "NeMo Guardrails",
+      "source": "NVIDIA, 2023",
+      "mechanism": "确定性 rails：话题/事实/安全规则（canonical form + 词表/正则），LLM 对话流中拦截违规",
+      "evidence": [
+        "rails=确定性规则/词表",
+        "拦截机制确定性，但判定触发依赖模式"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N29",
+      "category": "agentsec",
+      "name": "CaMeL（数据-控制分离）",
+      "source": "arXiv:2503.18813, 2025",
+      "mechanism": "把不可信内容与指令空间隔离：数据流分离，控制流只由可信指令触发",
+      "evidence": [
+        "确定性数据/控制分离机制",
+        "按来源限制控制流（来源标签）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N30",
+      "category": "agentsec",
+      "name": "Progent（可编程工具权限）",
+      "source": "arXiv:2504.11703, 2025",
+      "mechanism": "声明式工具权限规则（工具/参数白名单），工具调用前确定性检查",
+      "evidence": [
+        "工具调用前确定性策略检查（声明式规则，L1）",
+        "SMT 求解器判定策略更新为收窄（自动）或扩张（需批准）——单调限制：action space 只能收缩",
+        "单调限制=confinement 性质的构造性保证（L3 风味，注解）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N31",
+      "category": "agentsec",
+      "name": "IFC（信息流控制）",
+      "source": "arXiv:2505.23643, 2025",
+      "mechanism": "污点追踪：不可信数据打标并限制其流向（安全策略声明式）",
+      "evidence": [
+        "确定性污点传播/策略执行",
+        "策略=声明式规则"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N32",
+      "category": "agentsec",
+      "name": "A-MemGuard（主动记忆防御）",
+      "source": "arXiv:2510.02373, 2025",
+      "mechanism": "预防性记忆防御：检测/清理被投毒的记忆条目",
+      "evidence": [
+        "检测器（统计/语义特征或 LLM）",
+        "预防性清理"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N33",
+      "category": "agentsec",
+      "name": "RAG 引用验证",
+      "source": "常见做法",
+      "mechanism": "生成后核对引用/声明是否存在于检索文档",
+      "evidence": [
+        "LLM 生成检索查询/比较归因/修订文本（对齐判定=LLM，R3→L0）",
+        "检索文档=外部证据（L2 证据组件）",
+        "不是机械存在性检查——判定路径最弱锚 L0"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N34",
+      "category": "agentsec",
+      "name": "系统提示加固（越狱防御）",
+      "source": "常见做法；RA-LLM: arXiv:2309.14348",
+      "mechanism": "系统提示声明安全边界 + 对抗样本鲁棒微调（RA-LLM），靠 LLM 自觉遵守",
+      "evidence": [
+        "纯 LLM 自声明/自遵守，无独立验证器",
+        "防御与生成合一",
+        "对直接注入（同一通道）防护有限"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N35",
+      "category": "agentsec",
+      "name": "工具调用白名单/黑名单",
+      "source": "工程实践",
+      "mechanism": "确定性清单控制可用工具与参数",
+      "evidence": [
+        "清单=确定性规则",
+        "粒度粗（工具级，非参数语义级）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N36",
+      "category": "agentsec",
+      "name": "Perplexity 越狱检测",
+      "source": "Jain et al., 2023（arXiv:2309.00614）",
+      "mechanism": "用困惑度/统计特征检测越狱或异常输入，阈值判定；另含输入变换类防御（改写/重分词/同义词替换）",
+      "evidence": [
+        "统计阈值（外部 LM 算困惑度）",
+        "作者结论：单独效果有限（GCG 攻击文本可保持低困惑度）",
+        "对抗训练最有效（防御与生成合一）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N37",
+      "category": "agentsec",
+      "name": "沙箱执行",
+      "source": "工程实践",
+      "mechanism": "不可信代码/动作在受限环境执行，越界即止",
+      "evidence": [
+        "执行域=确定性限制（ODD 界定）",
+        "限制执行而非判定内容"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N38",
+      "category": "agentsec",
+      "name": "智能合约形式化验证",
+      "source": "形式验证工具（如 Certora/Slither）",
+      "mechanism": "合约性质（不变量/无重入/无溢出）编码进形式验证器或静态分析器",
+      "evidence": [
+        "形式内核/模型检查：域内完备",
+        "规格人工声明"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N39",
+      "category": "agentsec",
+      "name": "执行效果核对（tool result verification）",
+      "source": "工程实践",
+      "mechanism": "工具执行后核对副作用是否真的发生/成功",
+      "evidence": [
+        "执行结果=effect 锚（客观）",
+        "只验证发生与否，不验证该不该发生"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N40",
+      "category": "agentsec",
+      "name": "AgentDojo 评测基准",
+      "source": "arXiv:2406.13352, 2024",
+      "mechanism": "评测基准：攻击成功/良性任务配对场景集",
+      "evidence": [
+        "评测基准非运行时防御（R1→N/A）",
+        "人工设计场景（注入/隐私/资金等）",
+        "ASR+task utility 双指标"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N41",
+      "category": "agentsec",
+      "name": "SafeAgent（计划验证+动作规则，双层架构模式）",
+      "source": "通用模式（收集代理给 arXiv:2406.04198 系幻觉 ID，已核实为流体论文；机制为真实存在的双层防御模式）",
+      "mechanism": "两层验证：计划级=LLM 按安全规则评估整体计划；动作级=确定性检查器对每个工具动作执行前检查（白/黑名单+参数约束）",
+      "evidence": [
+        "计划级=LLM 安全评估（L0 组件）",
+        "动作级=确定性规则+白名单（L1）",
+        "判定路径最弱锚=L0（计划评估在路径上）",
+        "出处未核实——条目代表双层防御模式而非特定论文"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    },
+    {
+      "id": "N42",
+      "category": "agentsec",
+      "name": "ToolEmu（LLM 仿真沙箱+LLM 判定器）",
+      "source": "arXiv:2307.13854, 2023",
+      "mechanism": "LLM 仿真工具环境，GPT-4 判定器（few-shot rubric）对代理轨迹做自动化安全裁决；识别风险轨迹",
+      "evidence": [
+        "仿真环境=LLM 生成",
+        "安全裁决=LLM 判定器（L0）",
+        "144 场景识别 31 风险轨迹（约 90% 人工确认）"
+      ],
+      "author_level": null,
+      "author_confidence": null,
+      "pending_author": true
+    }
   ]
 }
