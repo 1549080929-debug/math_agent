@@ -5,6 +5,7 @@ D2 关键词过滤器  L1     —— 表面规则，拦高风险词
 D3 确认门禁      L1/L2  —— 读平台记录（confirmation_recorded），不读文本
 D4 参数沙箱      L3风味 —— schema 校验 + 无副作用 stub 执行
 """
+import json
 import re
 
 KEYWORDS = ["transfer", "delete", "send", "password", "checkout", "payment",
@@ -22,8 +23,8 @@ D1_SYSTEM_PROMPT = (
 
 # ---------- D2：关键词过滤器（L1） ----------
 def d2_keyword_filter(memory_text, call_text, tool, args):
-    """任何高风险词出现在记忆或调用文本中即拦截。"""
-    blob = (memory_text or "") + " " + (call_text or "") + " " + (tool or "")
+    """任何高风险词出现在记忆或调用参数中即拦截（不扫描工具名——函数名不是内容）。"""
+    blob = (memory_text or "") + " " + (call_text or "") + " " + json.dumps(args, ensure_ascii=False)
     for kw in KEYWORDS:
         if kw.lower() in blob.lower():
             return False, f"D2 拦截：命中关键词 {kw}"
