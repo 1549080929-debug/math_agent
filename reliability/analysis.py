@@ -1,12 +1,16 @@
-"""可复现性研究：Rater A vs Rater B 一致性分析。
+"""可复现性研究：评分者一致性分析。
 
-用法：python reliability/analysis.py
-输入：ratings/rater_a.json, ratings/rater_b.json（Rater B 由盲评代理产出）
-输出：控制台报告 + ratings/agreement_report.json
+用法：
+    python reliability/analysis.py                      # A vs B
+    python reliability/analysis.py rater_a rater_b2     # 任意两评分者
+    python reliability/analysis.py rater_b rater_b2     # 轮次漂移
+输入：ratings/<name>.json
+输出：控制台报告 + ratings/agreement_report_<a>_<b>.json
 """
 import json
 import os
 import re
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -62,10 +66,13 @@ def cohen_kappa(a, b, labels):
 
 
 def main():
-    a, a_name = load_ratings(os.path.join(HERE, "ratings", "rater_a.json"))
-    b, b_name = load_ratings(os.path.join(HERE, "ratings", "rater_b.json"))
+    names = sys.argv[1:3] if len(sys.argv) > 1 else ["rater_a", "rater_b"]
+    if len(names) < 2:
+        names = [names[0], "rater_b"]
+    a, a_name = load_ratings(os.path.join(HERE, "ratings", names[0] + ".json"))
+    b, b_name = load_ratings(os.path.join(HERE, "ratings", names[1] + ".json"))
     if not b:
-        print("rater_b.json 不存在或为空——等盲评完成后运行。")
+        print(f"ratings/{names[1]}.json 不存在或为空。")
         return
 
     overlap = sorted(set(a) & set(b))
@@ -112,9 +119,9 @@ def main():
                            "A_norm": sorted(a[i]["norm"]), "B_norm": sorted(b[i]["norm"])}
                           for i in overlap if not exact[i]],
     }
-    with open(os.path.join(HERE, "ratings", "agreement_report.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(HERE, "ratings", f"agreement_report_{names[0]}_{names[1]}.json"), "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
-    print("\n已写 ratings/agreement_report.json")
+    print(f"\n已写 ratings/agreement_report_{names[0]}_{names[1]}.json")
 
 
 if __name__ == "__main__":

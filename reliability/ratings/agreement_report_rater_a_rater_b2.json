@@ -1,0 +1,148 @@
+{
+  "rater_a": "A (author)",
+  "rater_b": "B2 (LLM, blind, round 2)",
+  "overlap": 28,
+  "agree_count": 17,
+  "agree_pct": 60.7,
+  "kappa": 0.549,
+  "per_category": {
+    "lit17": {
+      "agree": 9,
+      "total": 17
+    },
+    "sys": {
+      "agree": 8,
+      "total": 11
+    }
+  },
+  "disagreements": [
+    {
+      "id": "L02",
+      "A": "L0/L1",
+      "B": "L0",
+      "A_norm": [
+        "L0",
+        "L1"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "L07",
+      "A": "L0/L1",
+      "B": "L0",
+      "A_norm": [
+        "L0",
+        "L1"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "L08",
+      "A": "L3/L4",
+      "B": "L4",
+      "A_norm": [
+        "L3",
+        "L4"
+      ],
+      "B_norm": [
+        "L4"
+      ]
+    },
+    {
+      "id": "L09",
+      "A": "L2",
+      "B": "L0+L2",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L0",
+        "L2"
+      ]
+    },
+    {
+      "id": "L10",
+      "A": "L0/L1",
+      "B": "L2",
+      "A_norm": [
+        "L0",
+        "L1"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    },
+    {
+      "id": "L11",
+      "A": "L2",
+      "B": "N/A",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "N/A"
+      ]
+    },
+    {
+      "id": "L13",
+      "A": "L1/L2",
+      "B": "L1",
+      "A_norm": [
+        "L1",
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "L17",
+      "A": "L1/L2",
+      "B": "L0",
+      "A_norm": [
+        "L1",
+        "L2"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "S04",
+      "A": "L2",
+      "B": "L1",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "S10",
+      "A": "L2",
+      "B": "L1",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "S11",
+      "A": "L2",
+      "B": "L1",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    }
+  ]
+}
