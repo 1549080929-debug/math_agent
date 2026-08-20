@@ -3,21 +3,169 @@
   "note": "预测卡在验证数据收集前冻结（反向验证纪律：预测先于证据）。level 来自 B6 盲评（v2.3）。observed 待 P3 收集 ASR/良性数据后回填。",
   "frozen_date": "2026-08-20",
   "cards": [
-    {"id": "N27", "name": "Llama Guard 3 / Prompt Guard", "level": "L1+L2", "weakest": "L1", "predicted_behavior": "分类器（L2）在分布内有效、越狱改写后下降；模式匹配（L1）可被 paraphrase/改写绕过；无跨步骤上下文，对代理级注入（跨工具）失效", "predicted_attack": "改写绕过 + 跨工具注入", "observed": null},
-    {"id": "N28", "name": "NeMo Guardrails", "level": "L1", "weakest": "L1", "predicted_behavior": "确定性 rails 拦截规则内模式；canonical form 匹配可被同义改写绕过；规则外攻击无防护", "predicted_attack": "同义改写/规则外注入", "observed": null},
-    {"id": "N29", "name": "CaMeL", "level": "L3", "weakest": "L3", "predicted_behavior": "数据-控制分离为构造性保证：不可信数据无法驱动控制流（隔离性质完备）；但意图认证若为 LLM 则整体弱锚降级；对非注入类误用无防护", "predicted_attack": "语义合法但危险的操作（在授权意图内）", "observed": null},
-    {"id": "N30", "name": "Progent", "level": "L1", "weakest": "L1", "predicted_behavior": "声明式权限确定性拦截越权调用；权限粒度/覆盖外的攻击可穿透；策略自身无外部背书", "predicted_attack": "权限策略覆盖外操作/策略错配", "observed": null},
-    {"id": "N31", "name": "IFC", "level": "L3", "weakest": "L3", "predicted_behavior": "污点传播为构造性保证：不可信数据到危险 sink 的路径被格策略阻断（信息流性质完备）；不验证内容语义，间接泄漏（侧信道）可能绕过", "predicted_attack": "侧信道/策略格表达不了的流", "observed": null},
-    {"id": "N32", "name": "A-MemGuard", "level": "L0", "weakest": "L0", "predicted_behavior": "机制未明（统计或 LLM 检测器）：若为 LLM 判定则被对抗改写绕过，无稳定操作点；若为统计则分布内有效、OOD 失效", "predicted_attack": "对抗改写（若 LLM 判定）", "observed": null},
-    {"id": "N33", "name": "RAG 引用验证", "level": "L2", "weakest": "L2", "predicted_behavior": "引用存在性机械核对有效（正确性）；不验证声明真伪（存在≠真实），检索库被污染则失效", "predicted_attack": "检索库投毒/声明虽可溯源但为假", "observed": null},
-    {"id": "N34", "name": "系统提示加固（RA-LLM）", "level": "L0", "weakest": "L0", "predicted_behavior": "纯 LLM 自遵守：强攻击（PAIR/直接注入）下有残余 ASR；对同一通道注入防护有限；训练式加固提升鲁棒性但无保证", "predicted_attack": "直接注入/强越狱（同一通道）", "observed": null},
-    {"id": "N35", "name": "工具调用白名单", "level": "L1", "weakest": "L1", "predicted_behavior": "确定性拦截工具级越权；参数级攻击（合法工具恶意参数）穿透；粒度粗", "predicted_attack": "参数级滥用（合法工具+恶意参数）", "observed": null},
-    {"id": "N36", "name": "Perplexity 越狱检测", "level": "L1", "weakest": "L1", "predicted_behavior": "统计阈值：对高困惑度攻击有效，低困惑度改写绕过；单独使用效果有限（作者结论）", "predicted_attack": "低困惑度改写（GCG 优化后文本）", "observed": null},
-    {"id": "N37", "name": "沙箱执行", "level": "L3", "weakest": "L3", "predicted_behavior": "执行域限制为构造性保证：逃逸被机制性阻断（confine 性质完备）；不判定内容语义——沙箱内的危险动作仍执行（ODD 边界）", "predicted_attack": "沙箱内的合法逃逸漏洞（内核缺陷）/语义危险动作", "observed": null},
-    {"id": "N38", "name": "智能合约形式化验证", "level": "L4", "weakest": "L4", "predicted_behavior": "形式内核域内完备：已编码性质（无重入/溢出）可证明；性质未编码/规格错则失守", "predicted_attack": "规格遗漏/性质未编码", "observed": null},
-    {"id": "N39", "name": "执行效果核对", "level": "L2", "weakest": "L2", "predicted_behavior": "effect 锚客观核对副作用发生与否（正确性）；不验证该不该发生（意图）——意图错误时核对无效", "predicted_attack": "意图错误（该做但用户不想要）", "observed": null},
-    {"id": "N40", "name": "AgentDojo", "level": "N/A", "weakest": "N/A", "predicted_behavior": "评测基准非防御：无运行时判定；用于横向评测防御", "predicted_attack": "不适用", "observed": null},
-    {"id": "N41", "name": "SafeAgent", "level": "L0+L1", "weakest": "L0", "predicted_behavior": "计划级 LLM 评估（L0）在判定路径上：被对抗计划欺骗则整体失守；动作级白名单（L1）只拦工具级越权", "predicted_attack": "对抗性计划（骗过 LLM 计划评估）", "observed": null},
-    {"id": "N42", "name": "ToolEmu", "level": "L0", "weakest": "L0", "predicted_behavior": "仿真环境与安全裁决均为 LLM：判定可被轨迹欺骗；作为审计工具有效（发现风险），作为运行时防御无保证", "predicted_attack": "对抗性轨迹（骗过 LLM 判定器）", "observed": null}
+    {
+      "id": "N27",
+      "name": "Llama Guard 3 / Prompt Guard",
+      "level": "L1+L2",
+      "weakest": "L1",
+      "predicted_behavior": "分类器（L2）在分布内有效、越狱改写后下降；模式匹配（L1）可被 paraphrase/改写绕过；无跨步骤上下文，对代理级注入（跨工具）失效",
+      "predicted_attack": "改写绕过 + 跨工具注入",
+      "observed": {
+        "data": "Llama Guard 2 技术报告内部准确率 0.9007，外部基准（ToxicChat）显著下降",
+        "src": "agent-report, 未核实",
+        "hit": "命中（预测分布内有效/OOD下降）"
+      }
+    },
+    {
+      "id": "N28",
+      "name": "NeMo Guardrails",
+      "level": "L1",
+      "weakest": "L1",
+      "predicted_behavior": "确定性 rails 拦截规则内模式；canonical form 匹配可被同义改写绕过；规则外攻击无防护",
+      "predicted_attack": "同义改写/规则外注入",
+      "observed": null
+    },
+    {
+      "id": "N29",
+      "name": "CaMeL",
+      "level": "L3",
+      "weakest": "L3",
+      "predicted_behavior": "数据-控制分离为构造性保证：不可信数据无法驱动控制流（隔离性质完备）；但意图认证若为 LLM 则整体弱锚降级；对非注入类误用无防护",
+      "predicted_attack": "语义合法但危险的操作（在授权意图内）",
+      "observed": null
+    },
+    {
+      "id": "N30",
+      "name": "Progent",
+      "level": "L1",
+      "weakest": "L1",
+      "predicted_behavior": "声明式权限确定性拦截越权调用；权限粒度/覆盖外的攻击可穿透；策略自身无外部背书",
+      "predicted_attack": "权限策略覆盖外操作/策略错配",
+      "observed": null
+    },
+    {
+      "id": "N31",
+      "name": "IFC",
+      "level": "L3",
+      "weakest": "L3",
+      "predicted_behavior": "污点传播为构造性保证：不可信数据到危险 sink 的路径被格策略阻断（信息流性质完备）；不验证内容语义，间接泄漏（侧信道）可能绕过",
+      "predicted_attack": "侧信道/策略格表达不了的流",
+      "observed": null
+    },
+    {
+      "id": "N32",
+      "name": "A-MemGuard",
+      "level": "L0",
+      "weakest": "L0",
+      "predicted_behavior": "机制未明（统计或 LLM 检测器）：若为 LLM 判定则被对抗改写绕过，无稳定操作点；若为统计则分布内有效、OOD 失效",
+      "predicted_attack": "对抗改写（若 LLM 判定）",
+      "observed": null
+    },
+    {
+      "id": "N33",
+      "name": "RAG 引用验证",
+      "level": "L2",
+      "weakest": "L2",
+      "predicted_behavior": "引用存在性机械核对有效（正确性）；不验证声明真伪（存在≠真实），检索库被污染则失效",
+      "predicted_attack": "检索库投毒/声明虽可溯源但为假",
+      "observed": null
+    },
+    {
+      "id": "N34",
+      "name": "系统提示加固（RA-LLM）",
+      "level": "L0",
+      "weakest": "L0",
+      "predicted_behavior": "纯 LLM 自遵守：强攻击（PAIR/直接注入）下有残余 ASR；对同一通道注入防护有限；训练式加固提升鲁棒性但无保证",
+      "predicted_attack": "直接注入/强越狱（同一通道）",
+      "observed": {
+        "data": "RA-LLM: ASR 从约 80-90% 降至约 10-25%（对抗训练+提示加固）",
+        "src": "agent-report, 未核实",
+        "hit": "命中（预测强攻击有残余 ASR）"
+      }
+    },
+    {
+      "id": "N35",
+      "name": "工具调用白名单",
+      "level": "L1",
+      "weakest": "L1",
+      "predicted_behavior": "确定性拦截工具级越权；参数级攻击（合法工具恶意参数）穿透；粒度粗",
+      "predicted_attack": "参数级滥用（合法工具+恶意参数）",
+      "observed": null
+    },
+    {
+      "id": "N36",
+      "name": "Perplexity 越狱检测",
+      "level": "L1",
+      "weakest": "L1",
+      "predicted_behavior": "统计阈值：对高困惑度攻击有效，低困惑度改写绕过；单独使用效果有限（作者结论）",
+      "predicted_attack": "低困惑度改写（GCG 优化后文本）",
+      "observed": {
+        "data": "Jain 2023: perplexity 过滤单独仅小幅降低 ASR，对抗训练最有效",
+        "src": "agent-report, 未核实",
+        "hit": "命中（预测单独效果有限）"
+      }
+    },
+    {
+      "id": "N37",
+      "name": "沙箱执行",
+      "level": "L3",
+      "weakest": "L3",
+      "predicted_behavior": "执行域限制为构造性保证：逃逸被机制性阻断（confine 性质完备）；不判定内容语义——沙箱内的危险动作仍执行（ODD 边界）",
+      "predicted_attack": "沙箱内的合法逃逸漏洞（内核缺陷）/语义危险动作",
+      "observed": null
+    },
+    {
+      "id": "N38",
+      "name": "智能合约形式化验证",
+      "level": "L4",
+      "weakest": "L4",
+      "predicted_behavior": "形式内核域内完备：已编码性质（无重入/溢出）可证明；性质未编码/规格错则失守",
+      "predicted_attack": "规格遗漏/性质未编码",
+      "observed": null
+    },
+    {
+      "id": "N39",
+      "name": "执行效果核对",
+      "level": "L2",
+      "weakest": "L2",
+      "predicted_behavior": "effect 锚客观核对副作用发生与否（正确性）；不验证该不该发生（意图）——意图错误时核对无效",
+      "predicted_attack": "意图错误（该做但用户不想要）",
+      "observed": null
+    },
+    {
+      "id": "N40",
+      "name": "AgentDojo",
+      "level": "N/A",
+      "weakest": "N/A",
+      "predicted_behavior": "评测基准非防御：无运行时判定；用于横向评测防御",
+      "predicted_attack": "不适用",
+      "observed": {
+        "data": "AgentDojo: 无防御主流模型 ASR 约 70-90%",
+        "src": "agent-report, 未核实",
+        "hit": "基准上下文（N/A 预测不适用）"
+      }
+    },
+    {
+      "id": "N41",
+      "name": "SafeAgent",
+      "level": "L0+L1",
+      "weakest": "L0",
+      "predicted_behavior": "计划级 LLM 评估（L0）在判定路径上：被对抗计划欺骗则整体失守；动作级白名单（L1）只拦工具级越权",
+      "predicted_attack": "对抗性计划（骗过 LLM 计划评估）",
+      "observed": null
+    },
+    {
+      "id": "N42",
+      "name": "ToolEmu",
+      "level": "L0",
+      "weakest": "L0",
+      "predicted_behavior": "仿真环境与安全裁决均为 LLM：判定可被轨迹欺骗；作为审计工具有效（发现风险），作为运行时防御无保证",
+      "predicted_attack": "对抗性轨迹（骗过 LLM 判定器）",
+      "observed": {
+        "data": "ToolEmu: 144 场景识别 31 风险轨迹，约 90% 人工确认真风险",
+        "src": "agent-report, 未核实",
+        "hit": "命中（预测审计有效/非运行时防御）"
+      }
+    }
   ]
 }
