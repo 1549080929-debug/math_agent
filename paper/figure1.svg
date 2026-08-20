@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620" font-family="Georgia, 'Times New Roman', serif">
+  <!-- ===== VAL axis (vertical) ===== -->
+  <line x1="80" y1="58" x2="80" y2="452" stroke="#333" stroke-width="1.5"/>
+  <polygon points="80,42 73,60 87,60" fill="#333"/>
+  <text x="98" y="56" font-size="13" font-style="italic" fill="#333">VAL axis: anchor source &amp; guarantee — this paper</text>
+
+  <!-- ===== L5 (impossible) ===== -->
+  <rect x="80" y="60" width="300" height="36" fill="#fdecea" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="7,5"/>
+  <text x="62" y="83" text-anchor="end" font-size="13.5" font-weight="bold" fill="#c0392b">L5</text>
+  <text x="396" y="83" font-size="13" fill="#c0392b" font-style="italic">universal completeness — impossible (unrestricted)</text>
+
+  <!-- ===== L4 ===== -->
+  <rect x="80" y="113" width="300" height="36" fill="#f2f2f2" stroke="#999"/>
+  <text x="62" y="136" text-anchor="end" font-size="13.5" font-weight="bold" fill="#333">L4</text>
+  <text x="396" y="136" font-size="13" fill="#222">domain-level proof systems (type systems, proof kernels)</text>
+
+  <!-- ===== L3 (completeness highlight) ===== -->
+  <rect x="80" y="166" width="300" height="36" fill="#e8f0fb" stroke="#5b8dd9"/>
+  <text x="62" y="189" text-anchor="end" font-size="13.5" font-weight="bold" fill="#1a4d8f">L3</text>
+  <text x="396" y="189" font-size="13" fill="#1a4d8f">decidable system, single-property <tspan font-weight="bold">COMPLETE</tspan> (solveset, decision rules)</text>
+
+  <!-- ===== L2 ===== -->
+  <rect x="80" y="219" width="300" height="36" fill="#f2f2f2" stroke="#999"/>
+  <text x="62" y="242" text-anchor="end" font-size="13.5" font-weight="bold" fill="#333">L2</text>
+  <text x="396" y="242" font-size="13" fill="#222">objective ground truth / oracle — correctness only (substitution, sampling)</text>
+
+  <!-- ===== L1 ===== -->
+  <rect x="80" y="272" width="300" height="36" fill="#f2f2f2" stroke="#999"/>
+  <text x="62" y="295" text-anchor="end" font-size="13.5" font-weight="bold" fill="#333">L1</text>
+  <text x="396" y="295" font-size="13" fill="#222">deterministic rules derived from problem text/code</text>
+
+  <!-- ===== L0 ===== -->
+  <rect x="80" y="325" width="300" height="36" fill="#f2f2f2" stroke="#999"/>
+  <text x="62" y="348" text-anchor="end" font-size="13.5" font-weight="bold" fill="#333">L0</text>
+  <text x="396" y="348" font-size="13" fill="#222">LLM self-declaration (&quot;I checked it&quot;)</text>
+
+  <!-- ===== Four orthogonal axes (horizontal) ===== -->
+  <text x="560" y="425" text-anchor="middle" font-size="12" font-style="italic" fill="#555">four orthogonal axes the literature conflates with VAL</text>
+  <line x1="80" y1="442" x2="1030" y2="442" stroke="#333" stroke-width="1.5"/>
+  <polygon points="1030,442 1012,436 1012,448" fill="#333"/>
+
+  <line x1="200" y1="442" x2="200" y2="450" stroke="#333" stroke-width="1.2"/>
+  <text x="200" y="470" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">granularity</text>
+  <text x="200" y="490" text-anchor="middle" font-size="10.5" fill="#555">(how fine: claim → doc)</text>
+
+  <line x1="420" y1="442" x2="420" y2="450" stroke="#333" stroke-width="1.2"/>
+  <text x="420" y="470" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">concept</text>
+  <text x="420" y="490" text-anchor="middle" font-size="10.5" fill="#555">(abstraction level)</text>
+
+  <line x1="640" y1="442" x2="640" y2="450" stroke="#333" stroke-width="1.2"/>
+  <text x="640" y="470" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">risk/disposition</text>
+  <text x="640" y="490" text-anchor="middle" font-size="10.5" fill="#555">(what response: safe → focused)</text>
+
+  <line x1="860" y1="442" x2="860" y2="450" stroke="#333" stroke-width="1.2"/>
+  <text x="860" y="470" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">system stack</text>
+  <text x="860" y="490" text-anchor="middle" font-size="10.5" fill="#555">(which layer: model → system)</text>
+</svg>

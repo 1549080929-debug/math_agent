@@ -86,7 +86,7 @@
 
 ## 六、论文与代码
 
-- 论文（英文预印本，15 页）：**Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning**
+- 论文（英文预印本，20 页）：**Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning**
   - 一句话：**别人给答案分级，我们给"分级"分级。**
   - arXiv：**arXiv:2608.19009** — https://arxiv.org/abs/2608.19009
 - 代码：https://github.com/1549080929-debug/math_agent

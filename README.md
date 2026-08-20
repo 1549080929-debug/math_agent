@@ -19,7 +19,7 @@
 
 - **一句话**：别人给答案分级，本项目给"分级"分级。
 - **状态**：**已发布** — arXiv:2608.19009（2026-08-20 公布，cs.CL 主类目）：https://arxiv.org/abs/2608.19009
-- **文件**：`paper/preprint.md`（源稿）· `paper/preprint.pdf`（14 页，可上传版）· `paper/submission.md`（arXiv 表单提交包）
+- **文件**：`paper/preprint.md`（源稿）· `paper/preprint.pdf`（20 页，可上传版）· `paper/submission.md`（arXiv 表单提交包）
 
 ## VAL 验证自主等级（跨三章的元结论）
 
