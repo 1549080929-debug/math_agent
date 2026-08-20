@@ -583,6 +583,188 @@
         "表面形式启发式",
         "伪造确认标记可绕过（confirmation-spoofing 场景 ASR 0.818）"
       ]
+    },
+    {
+      "id": "N27",
+      "name": "Llama Guard 3 / Prompt Guard",
+      "category": "agentsec",
+      "source": "Meta, arXiv:2312.06674",
+      "mechanism": "输入/输出安全过滤：Llama Guard=监督微调安全分类器；Prompt Guard=提示注入模式匹配过滤器",
+      "evidence": [
+        "Llama Guard=统计分类器（训练标签人工）",
+        "Prompt Guard=模式匹配",
+        "0-1 分类，无完备性保证"
+      ]
+    },
+    {
+      "id": "N28",
+      "name": "NeMo Guardrails",
+      "category": "agentsec",
+      "source": "NVIDIA, 2023",
+      "mechanism": "确定性 rails：话题/事实/安全规则（canonical form + 词表/正则），LLM 对话流中拦截违规",
+      "evidence": [
+        "rails=确定性规则/词表",
+        "拦截机制确定性，但判定触发依赖模式"
+      ]
+    },
+    {
+      "id": "N29",
+      "name": "CaMeL（数据-控制分离）",
+      "category": "agentsec",
+      "source": "arXiv:2503.18813, 2025",
+      "mechanism": "把不可信内容与指令空间隔离：数据流分离，控制流只由可信指令触发",
+      "evidence": [
+        "确定性数据/控制分离机制",
+        "按来源限制控制流（来源标签）"
+      ]
+    },
+    {
+      "id": "N30",
+      "name": "Progent（可编程工具权限）",
+      "category": "agentsec",
+      "source": "arXiv:2504.11703, 2025",
+      "mechanism": "声明式工具权限规则（工具/参数白名单），工具调用前确定性检查",
+      "evidence": [
+        "权限=声明式确定性规则",
+        "调用前门禁"
+      ]
+    },
+    {
+      "id": "N31",
+      "name": "IFC（信息流控制）",
+      "category": "agentsec",
+      "source": "arXiv:2505.23643, 2025",
+      "mechanism": "污点追踪：不可信数据打标并限制其流向（安全策略声明式）",
+      "evidence": [
+        "确定性污点传播/策略执行",
+        "策略=声明式规则"
+      ]
+    },
+    {
+      "id": "N32",
+      "name": "A-MemGuard（主动记忆防御）",
+      "category": "agentsec",
+      "source": "arXiv:2510.02373, 2025",
+      "mechanism": "预防性记忆防御：检测/清理被投毒的记忆条目",
+      "evidence": [
+        "检测器（统计/语义特征或 LLM）",
+        "预防性清理"
+      ]
+    },
+    {
+      "id": "N33",
+      "name": "RAG 引用验证",
+      "category": "agentsec",
+      "source": "常见做法",
+      "mechanism": "生成后核对引用/声明是否存在于检索文档",
+      "evidence": [
+        "引用存在性可机械检查（字符串/文档匹配）",
+        "声明-证据对齐若 LLM 判→L0 组件"
+      ]
+    },
+    {
+      "id": "N34",
+      "name": "系统提示加固（越狱防御）",
+      "category": "agentsec",
+      "source": "常见做法；RA-LLM: arXiv:2309.14348",
+      "mechanism": "系统提示声明安全边界 + 对抗样本鲁棒微调（RA-LLM），靠 LLM 自觉遵守",
+      "evidence": [
+        "纯 LLM 自声明/自遵守，无独立验证器",
+        "防御与生成合一",
+        "对直接注入（同一通道）防护有限"
+      ]
+    },
+    {
+      "id": "N35",
+      "name": "工具调用白名单/黑名单",
+      "category": "agentsec",
+      "source": "工程实践",
+      "mechanism": "确定性清单控制可用工具与参数",
+      "evidence": [
+        "清单=确定性规则",
+        "粒度粗（工具级，非参数语义级）"
+      ]
+    },
+    {
+      "id": "N36",
+      "name": "Perplexity 越狱检测",
+      "category": "agentsec",
+      "source": "Jain et al., 2023（arXiv:2309.00614）",
+      "mechanism": "用困惑度/统计特征检测越狱或异常输入，阈值判定；另含输入变换类防御（改写/重分词/同义词替换）",
+      "evidence": [
+        "统计阈值（外部 LM 算困惑度）",
+        "作者结论：单独效果有限（GCG 攻击文本可保持低困惑度）",
+        "对抗训练最有效（防御与生成合一）"
+      ]
+    },
+    {
+      "id": "N37",
+      "name": "沙箱执行",
+      "category": "agentsec",
+      "source": "工程实践",
+      "mechanism": "不可信代码/动作在受限环境执行，越界即止",
+      "evidence": [
+        "执行域=确定性限制（ODD 界定）",
+        "限制执行而非判定内容"
+      ]
+    },
+    {
+      "id": "N38",
+      "name": "智能合约形式化验证",
+      "category": "agentsec",
+      "source": "形式验证工具（如 Certora/Slither）",
+      "mechanism": "合约性质（不变量/无重入/无溢出）编码进形式验证器或静态分析器",
+      "evidence": [
+        "形式内核/模型检查：域内完备",
+        "规格人工声明"
+      ]
+    },
+    {
+      "id": "N39",
+      "name": "执行效果核对（tool result verification）",
+      "category": "agentsec",
+      "source": "工程实践",
+      "mechanism": "工具执行后核对副作用是否真的发生/成功",
+      "evidence": [
+        "执行结果=effect 锚（客观）",
+        "只验证发生与否，不验证该不该发生"
+      ]
+    },
+    {
+      "id": "N40",
+      "name": "AgentDojo 评测基准",
+      "category": "agentsec",
+      "source": "arXiv:2406.13352, 2024",
+      "mechanism": "评测基准：攻击成功/良性任务配对场景集",
+      "evidence": [
+        "评测基准非运行时防御（R1→N/A）",
+        "人工设计场景（注入/隐私/资金等）",
+        "ASR+task utility 双指标"
+      ]
+    },
+    {
+      "id": "N41",
+      "name": "SafeAgent（计划验证+动作白名单）",
+      "category": "agentsec",
+      "source": "arXiv:2406.04198, 2024",
+      "mechanism": "两层验证：计划级=LLM 按安全规则评估整体计划；动作级=Safe Action Manager 对每个工具动作执行前检查（确定性白/黑名单+参数约束）",
+      "evidence": [
+        "计划级=LLM 安全评估（L0 组件）",
+        "动作级=确定性规则+白名单（L1）",
+        "判定路径最弱锚=L0（计划评估在路径上）"
+      ]
+    },
+    {
+      "id": "N42",
+      "name": "ToolEmu（LLM 仿真沙箱+LLM 判定器）",
+      "category": "agentsec",
+      "source": "arXiv:2307.13854, 2023",
+      "mechanism": "LLM 仿真工具环境，GPT-4 判定器（few-shot rubric）对代理轨迹做自动化安全裁决；识别风险轨迹",
+      "evidence": [
+        "仿真环境=LLM 生成",
+        "安全裁决=LLM 判定器（L0）",
+        "144 场景识别 31 风险轨迹（约 90% 人工确认）"
+      ]
     }
   ]
 }
