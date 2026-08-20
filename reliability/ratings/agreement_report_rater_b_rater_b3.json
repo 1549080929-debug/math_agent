@@ -1,0 +1,176 @@
+{
+  "rater_a": "B (LLM, blind)",
+  "rater_b": "B3 (LLM, blind, round 3)",
+  "overlap": 48,
+  "agree_count": 35,
+  "agree_pct": 72.9,
+  "kappa": 0.665,
+  "weakest_agree_pct": 77.1,
+  "weakest_kappa": 0.693,
+  "per_category": {
+    "lit17": {
+      "agree": 12,
+      "total": 17
+    },
+    "litnew": {
+      "agree": 17,
+      "total": 20
+    },
+    "sys": {
+      "agree": 6,
+      "total": 11
+    }
+  },
+  "disagreements": [
+    {
+      "id": "L01",
+      "A": "L0+L1",
+      "B": "L0+L2",
+      "A_norm": [
+        "L0",
+        "L1"
+      ],
+      "B_norm": [
+        "L0",
+        "L2"
+      ]
+    },
+    {
+      "id": "L09",
+      "A": "L0+L2",
+      "B": "L0",
+      "A_norm": [
+        "L0",
+        "L2"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "L10",
+      "A": "L0+L2",
+      "B": "L2",
+      "A_norm": [
+        "L0",
+        "L2"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    },
+    {
+      "id": "L12",
+      "A": "L0+L1+L2",
+      "B": "L1",
+      "A_norm": [
+        "L0",
+        "L1",
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "L13",
+      "A": "L2",
+      "B": "L1",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "N14",
+      "A": "L4+L0",
+      "B": "L4",
+      "A_norm": [
+        "L0",
+        "L4"
+      ],
+      "B_norm": [
+        "L4"
+      ]
+    },
+    {
+      "id": "N15",
+      "A": "L3",
+      "B": "L4",
+      "A_norm": [
+        "L3"
+      ],
+      "B_norm": [
+        "L4"
+      ]
+    },
+    {
+      "id": "N16",
+      "A": "L2",
+      "B": "L1",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "S01",
+      "A": "L1",
+      "B": "L2",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    },
+    {
+      "id": "S02",
+      "A": "L1",
+      "B": "L2",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    },
+    {
+      "id": "S03",
+      "A": "L3",
+      "B": "L1",
+      "A_norm": [
+        "L3"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "S05",
+      "A": "L1",
+      "B": "L2",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    },
+    {
+      "id": "S11",
+      "A": "L2",
+      "B": "L1",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    }
+  ]
+}

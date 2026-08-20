@@ -46,9 +46,26 @@ def load_ratings(path):
     return out, d.get("rater")
 
 
+LV_ORDER = {"L0": 0, "L1": 1, "L2": 2, "L3": 3, "L4": 4, "L5": 5}
+SPECIAL = {"N/A": 10, "理论": 11, "其他": 12}
+
+
+def weakest(norm):
+    """等级集合的最弱锚（论文规定报告等级=最弱锚）。N/A/理论 单独编码为可排序整数。"""
+    if norm is None:
+        return None
+    if "N/A" in norm and len(norm) == 1:
+        return SPECIAL["N/A"]
+    if "理论" in norm and len(norm) == 1:
+        return SPECIAL["理论"]
+    lvs = [LV_ORDER[x] for x in norm if x in LV_ORDER]
+    if not lvs:
+        return SPECIAL["其他"]
+    return min(lvs)
+
+
 def cohen_kappa(a, b, labels):
     """简单 Cohen's kappa（名义类别）。a/b: dict item_id -> label。"""
-    import itertools
     n = len(a)
     if n == 0:
         return None
@@ -85,6 +102,15 @@ def main():
     kappa = cohen_kappa({i: a[i]["norm"] for i in overlap},
                         {i: b[i]["norm"] for i in overlap}, labels)
 
+    # 最弱锚一致性（论文规定报告等级=判定路径最弱锚）
+    wa = {i: weakest(a[i]["norm"]) for i in overlap}
+    wb = {i: weakest(b[i]["norm"]) for i in overlap}
+    wa_exact = {i: (wa[i] == wb[i]) for i in overlap}
+    wa_agree = sum(wa_exact.values())
+    wa_pct = wa_agree / n * 100 if n else 0.0
+    wa_labels = sorted({wa[i] for i in overlap} | {wb[i] for i in overlap})
+    wa_kappa = cohen_kappa(wa, wb, wa_labels)
+
     # 类别
     with open(os.path.join(HERE, "corpus.json"), encoding="utf-8") as f:
         corpus = json.load(f)
@@ -95,6 +121,7 @@ def main():
     print(f"重叠条目: {n} / 48")
     print(f"等级精确一致率: {agree}/{n} = {pct:.1f}%")
     print(f"Cohen's kappa: {kappa:.3f}" if kappa is not None else "Cohen's kappa: N/A")
+    print(f"最弱锚一致率: {wa_agree}/{n} = {wa_pct:.1f}%  (kappa={wa_kappa:.3f})")
     print()
     for c in cats:
         ids = [i for i in overlap if cat.get(i) == c]
@@ -113,6 +140,8 @@ def main():
         "rater_a": a_name, "rater_b": b_name,
         "overlap": n, "agree_count": agree, "agree_pct": round(pct, 1),
         "kappa": round(kappa, 3) if kappa is not None else None,
+        "weakest_agree_pct": round(wa_pct, 1),
+        "weakest_kappa": round(wa_kappa, 3) if wa_kappa is not None else None,
         "per_category": {c: {"agree": sum(exact[i] for i in [x for x in overlap if cat.get(x) == c]),
                              "total": len([x for x in overlap if cat.get(x) == c])} for c in cats},
         "disagreements": [{"id": i, "A": a[i]["raw"], "B": b[i]["raw"],
