@@ -288,6 +288,18 @@ def run_problem(question, standard_answer=None, verbose=True):
             if verbose:
                 print(f"  终局验证：{final_vr.status} | {final_vr.message[:140]}")
 
+    # PPMF 式降级（审计修正第 4 波，依据 docs/12 来源洗白启示）：
+    # 终局规格为 LLM 声明（L0 锚）时，PASS 不构成认证——LLM 可以写一个自己的答案恰好满足的
+    # 规格（#8 假 PASS 根因；PPMF：来源权威缺失应 fail-closed 而非静默接受）。
+    # 只有 FAIL（自相矛盾，真实信号）保留；PASS 降级为 UNSURE（诚实弃权）。
+    # 规则派生（L1 锚）的 PASS 维持原判。fc_anchor 记录规格锚等级（供审计/论文）。
+    fc_anchor = {"rule": "L1", "llm": "L0", "none": None}.get(fc_source)
+    if fc_source == "llm" and final_vr.status == "PASS":
+        final_vr = VerifyResult("UNSURE",
+                                "终局规格为 LLM 声明（L0 锚），PASS 不构成认证——降级弃权（PPMF 式 fail-closed）")
+        if verbose:
+            print("  → 终局验证降级：LLM 声明规格（L0），PASS → UNSURE")
+
     # 终局 FAIL 未修正 → 诚实失败标记
     answer_verified = final_vr.status == "PASS"
     if final_vr.status == "FAIL":
@@ -316,7 +328,7 @@ def run_problem(question, standard_answer=None, verbose=True):
     return {"ok": True, "answer": final_text, "final_answer": final_answer,
             "final_verify": final_vr.status, "answer_verified": answer_verified,
             "has_final_check": bool(final_check and final_check.get("type") == "final_parameter_set"),
-            "final_check_source": fc_source,
+            "final_check_source": fc_source, "final_check_anchor": fc_anchor,
             "context": context, "results": results,
             "trace": trace, "status_counts": status_counts,
             "all_subtasks_verified": all_verified}
