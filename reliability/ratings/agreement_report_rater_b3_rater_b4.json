@@ -1,0 +1,105 @@
+{
+  "rater_a": "B3 (LLM, blind, round 3)",
+  "rater_b": "B4 (LLM, blind, round 4, agentsec validation)",
+  "overlap": 48,
+  "agree_count": 41,
+  "agree_pct": 85.4,
+  "kappa": 0.817,
+  "weakest_agree_pct": 87.5,
+  "weakest_kappa": 0.837,
+  "per_category": {
+    "lit17": {
+      "agree": 14,
+      "total": 17
+    },
+    "litnew": {
+      "agree": 17,
+      "total": 20
+    },
+    "sys": {
+      "agree": 10,
+      "total": 11
+    }
+  },
+  "disagreements": [
+    {
+      "id": "L01",
+      "A": "L0+L2",
+      "B": "L0+L1",
+      "A_norm": [
+        "L0",
+        "L2"
+      ],
+      "B_norm": [
+        "L0",
+        "L1"
+      ]
+    },
+    {
+      "id": "L10",
+      "A": "L2",
+      "B": "L0",
+      "A_norm": [
+        "L2"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "L13",
+      "A": "L1",
+      "B": "N/A",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "N/A"
+      ]
+    },
+    {
+      "id": "N11",
+      "A": "L0",
+      "B": "L1",
+      "A_norm": [
+        "L0"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "N13",
+      "A": "L0",
+      "B": "L1",
+      "A_norm": [
+        "L0"
+      ],
+      "B_norm": [
+        "L1"
+      ]
+    },
+    {
+      "id": "N15",
+      "A": "L4",
+      "B": "L3",
+      "A_norm": [
+        "L4"
+      ],
+      "B_norm": [
+        "L3"
+      ]
+    },
+    {
+      "id": "S09",
+      "A": "L1",
+      "B": "L2",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    }
+  ]
+}
