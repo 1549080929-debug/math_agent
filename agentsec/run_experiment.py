@@ -24,6 +24,7 @@ SCEN = os.path.join(HERE, "scenarios.json")
 SCENARIO_VERSION = "v2"  # 场景/攻击升级后变更，防止旧结果被误续
 
 CONFIGS = {
+    "ND": ([], "无防御基线"),
     "D1": (["D1"], "单防御：系统提示加固(L0)"),
     "D2": (["D2"], "单防御：关键词过滤(L1)"),
     "D3": (["D3"], "单防御：确认门禁(L1/L2)"),
