@@ -516,6 +516,73 @@
         "数据库执行=客观 oracle",
         "执行通过≠逻辑完备"
       ]
+    },
+    {
+      "id": "N21",
+      "name": "PPMF（来源保留记忆防火墙）",
+      "category": "agentsec",
+      "source": "arXiv:2607.29167, 2026",
+      "mechanism": "记忆存为结构化记录（content/source/trust/history/risk/external），来源/信任/确认/风险标签由平台维护；工具调用前确定性门禁按\"动作风险 ≤ 支持记忆权威\"授权，支持绑定取最弱信任",
+      "evidence": [
+        "门禁只读平台维护元数据，不读生成文本",
+        "风险策略设计者指定（READ≥EXTERNAL、EFFECT/PURCHASE/CREDENTIAL≥USER_CONFIRMED）",
+        "元数据完整时 ASR=0.000；10% 伪造确认 → ASR 0.088±0.016（完备性盲区量化）"
+      ]
+    },
+    {
+      "id": "N22",
+      "name": "Content Filter（PPMF 基线）",
+      "category": "agentsec",
+      "source": "arXiv:2607.29167, 2026",
+      "mechanism": "按词表/关键词过滤检索到的记忆文本（URL、支付/转账词、凭据词、删除词等）",
+      "evidence": [
+        "词表规则，表面形式",
+        "改写/洗白后失效：Synthetic ASR 0.200-0.933 不稳定"
+      ]
+    },
+    {
+      "id": "N23",
+      "name": "Prompt Filter（PPMF 基线）",
+      "category": "agentsec",
+      "source": "Llama Guard/Prompt Guard, arXiv:2312.06674",
+      "mechanism": "按提示注入模式过滤记忆文本（ignore previous instructions、system prompt 等）",
+      "evidence": [
+        "模式匹配规则",
+        "洗白后镜像 no defense（ASR 0.933-1.000）"
+      ]
+    },
+    {
+      "id": "N24",
+      "name": "Self-Ask provenance（文本来源推断）",
+      "category": "agentsec",
+      "source": "Press et al., EMNLP 2023 Findings（PPMF 基线）",
+      "mechanism": "LLM 从记忆文本推断其来源权威级别（external/user-history/confirmation-like），按推断结果授权",
+      "evidence": [
+        "来源推断=LLM 自评（L0）",
+        "permissive 模式 ASR 0.984、strict 模式误杀全部良性"
+      ]
+    },
+    {
+      "id": "N25",
+      "name": "Gate only（无 provenance 授权门）",
+      "category": "agentsec",
+      "source": "arXiv:2607.29167, 2026（消融）",
+      "mechanism": "只应用风险-权威门禁，但记忆无可靠来源元数据（作者自造规则）",
+      "evidence": [
+        "无 L2 输入（无平台元数据）",
+        "ASR 0.000 但良性全杀（false-block 1.000）——有门无锚"
+      ]
+    },
+    {
+      "id": "N26",
+      "name": "Action-handle/Confirmation-marker guard（句柄/确认标记启发式）",
+      "category": "agentsec",
+      "source": "arXiv:2607.29167, 2026（基线）",
+      "mechanism": "按动作句柄（URL/agent-action:///动词）或确认短语（user-confirmed 等）启发式过滤记忆",
+      "evidence": [
+        "表面形式启发式",
+        "伪造确认标记可绕过（confirmation-spoofing 场景 ASR 0.818）"
+      ]
     }
   ]
 }
