@@ -66,4 +66,4 @@ CC-BY 4.0（arXiv 推荐）
 - [x] 伦理边界声明（医疗章：合成病例、非诊断工具）
 - [ ] Figure 1 矢量版（mermaid/ASCII 可先用，不影响提交）
 - [x] 背书已**官方授权**（2026-08-19 arXiv 确认 cs.CL endorsement；Jiuzhou Han, EMNLP 2025）
-- [ ] 实际提交操作（须用户本人执行，背书步骤已无需再走）
+- [x] 实际提交完成 → **已公布 arXiv:2608.19009**（2026-08-20）：https://arxiv.org/abs/2608.19009

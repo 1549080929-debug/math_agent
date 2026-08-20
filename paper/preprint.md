@@ -3,6 +3,7 @@
 **Yajie Yin**
 
 Email: 1549080929@qq.com · ORCID: 0009-0001-6168-2530  
+Preprint: arXiv:2608.19009 (https://arxiv.org/abs/2608.19009)  
 Code & data: https://github.com/1549080929-debug/math_agent  
 License: CC-BY 4.0
 
