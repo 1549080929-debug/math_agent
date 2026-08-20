@@ -1,0 +1,1281 @@
+Injection–Execution Dissociation: A Mechanistic Evaluation of Persistent Memory Attacks and Defenses in Stateful LLM Agents
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract
+1 Introduction
+2 Methodology
+2.1 The Delayed Trigger Attack
+Session structure.
+Injection mechanism.
+Trigger mechanism.
+No-attack baseline.
+2.2 Defenses
+Minimizer (input-level).
+Sanitizer (input-level).
+RAG Sanitizer (retrieval-level).
+RAG LLM Judge (retrieval-level).
+Prompt Hardening (instruction-level).
+Memory Sandbox (tool-layer).
+2.3 Mechanistic Analysis
+2.4 Experimental Design
+2.5 Statistical Methodology
+2.6 Model Selection
+3 Results
+3.1 Attack Characterization
+3.2 Five Defenses That Do Not Protect
+Minimizer (input-level).
+Sanitizer (input-level).
+RAG Sanitizer (retrieval-level).
+RAG LLM Judge (retrieval-level).
+Prompt Hardening (instruction-level).
+3.3 Memory Sandbox: Effective in the Primary Factorial, Brittle as a General Defense
+The qwq:32b inversion.
+Environment-dependent archetype instability.
+Cross-family bypass replication.
+Hallucination bypass.
+3.4 Reasoning-Defense Interaction: Double Dissociation
+Setup.
+Result.
+Mechanisms.
+Trigger contingency.
+Deployment implication.
+Scope and generalizability.
+3.5 Resolving the Dissociation: Content-Layer Gating (RATG)
+Result (mechanical instruction-following models).
+Reasoning models and a reproducibility validity criterion.
+Scope.
+3.6 Evaluation Artifacts
+3.7 Frontier Model Screening
+Headline result (empty-corpus screening).
+Archetype distribution.
+OpenAI reasoning models as Latent Carriers.
+GPT generational boundary (empty-corpus screening).
+Anthropic.
+Google Gemini.
+Memory Sandbox on frontier Latent Carriers.
+4 Frontier Generational Findings
+4.1 Empty Corpus Baseline: A Threat Model Fidelity Problem
+4.2 Gemini: The Most Vulnerable Frontier Family
+4.3 OpenAI: No Monotonic Safety Ordering Among Tested Snapshots
+Falsified: Monotonic Safety Hardening.
+4.4 Behavioral Divergence: Vendor-Correlated Patterns in Our Evaluation Window
+4.5 System-Prompt Mitigation is Generation-Dependent
+4.6 The Latent Carrier Supply-Chain Risk Extends to Frontier Models
+5 Discussion
+5.1 Architectural Layer Determines Defense Effectiveness
+5.2 When Tool-Gating Works and When It Does Not
+5.3 Memory-Layer Attack Persistence
+5.4 The Evaluation Environment as a Behavioral Variable
+5.5 Implications for Defense Investment
+5.6 Implications for Frontier Model Deployment
+We observe no monotonic safety ordering among the tested snapshots.
+The injection-execution dissociation creates a hidden persistence risk.
+Vendor selection is a security decision, not just a capability decision.
+5.7 Compositional Supply-Chain Risk
+5.8 Date Sensitivity is Model-Specific
+5.9 Result Validity Map
+5.10 Limitations
+6 Causal Mediation: The Sandbox as Attack Vector
+6.1 Experimental Design
+6.2 Results
+6.3 Causal Decomposition
+Recalled content is NECESSARY.
+Sandbox execution context is NECESSARY.
+The conjunction is SUFFICIENT (for gpt-5.1).
+Tool visibility is an AMPLIFIER, not a gate.
+Prompt prohibition matches baseline.
+6.4 Capability Scaling: The Inversion is Capability-Dependent
+6.5 Iatrogenic Vulnerability: The Treatment Causes the Disease
+6.6 Connection to Mechanistic Findings
+6.7 Relationship to Earlier Findings
+6.8 Scope and Limitations
+7 Deployment Validation: Coding Agent PR Review
+7.1 Experimental Setup
+7.2 Results
+7.3 Analysis
+Detection is near-universal; execution is variant-governed.
+Social-engineering quality, not detection capability, governs execution.
+The dissociation replicates in a deployment-relevant scenario.
+Implications.
+8 Related Work
+Persistent memory attacks.
+Agentic security benchmarks.
+Defense approaches.
+Frontier model safety.
+9 Conclusion
+Responsible disclosure.
+Code and data availability.
+References
+A Evaluation Artifacts: Full Catalog
+Artifact 1: Terminal tool message.
+Artifact 2: Multilingual token-flipping.
+Artifact 3: Full-value list return.
+Artifact 4: Tool contract blocking dependency.
+B Daemon-State Degradation of Reasoning Models
+Mechanism.
+Baseline non-reproducibility.
+Methodological consequences.
+C Bedrock Validation: Cross-Family Sandbox Bypass
+Sandbox escalation.
+GLM-5: model refusal, not defense.
+Injection-floor confound.
+Provider breadth.
+Evaluation artifact: Bedrock Converse tool-name rejection.
+D Frontier Endpoint Provenance
+License: CC BY 4.0
+arXiv:2605.08442v5 [cs.CR] 04 Aug 2026
+Injection–Execution Dissociation: A Mechanistic Evaluation of Persistent Memory Attacks and Defenses in Stateful LLM Agents
+Jun Wen Leong
+Email:  leongjunwen@gmail.com
+Abstract
+We discover that prompt-injection success and tool-execution success are separable safety properties: defenses that block injection do not necessarily block execution, and vice versa. We call this the injection–execution dissociation . In LLM agents with persistent memory, malicious instructions are stored at rates exceeding 97.5%, yet downstream execution ranges from 0% to 95% with no correlation to storage rate. This dissociation reframes the threat model for persistent prompt injection—preventing storage alone is insufficient, and blocking execution requires structurally enforcing authority boundaries between memory ingestion and action execution.
+We substantiate this through a 5,040-run factorial experiment across nine open-source models ( where a defense sits relative to the attack’s authority boundary , not by classifier quality: input-layer filters never observe the payload (it enters via RAG, not user input); retrieval-layer classifiers observe it but cannot distinguish compliance-framed injection from legitimate policy; instruction-level hardening is overridden for seven of nine models. Only Memory Sandbox—a tool-layer defense that structurally isolates recalled memory from executable context—reduces attack success to 0% for eight of nine models. A reasoning-mode ablation within Qwen-3-32B reveals a double dissociation : the sandbox variant protecting the reasoning mode breaks the non-reasoning mode, and vice versa, with the RAG-fallback bypass arm replicating cross-family on Bedrock (Mistral, Z.AI, OpenAI). No single schema-layer intervention is safe across both reasoning classes.
+A loaded-corpus frontier evaluation (21 models, 3 providers;
+1 Introduction
+Enterprise LLM agents now routinely combine persistent memory with RAG retrieval to manage calendars, process documents, and send communications across multi-session interactions. This architecture creates an attack surface that existing security benchmarks do not test: a malicious instruction embedded in a RAG-retrieved document can be stored in the agent’s persistent memory during one session and executed in a later session, after the original conversation context has been discarded. Worse, defenses can create the very attack surface they aim to close. In our factorial evaluation, qwq:32b achieves 0% attack success under no defense—its reasoning resolves the authority conflict and declines to execute—but inverts to 100% attack success when Memory Sandbox (a tool-layer defense) is deployed, because removing the recall pathway forces the model to encounter the malicious instruction fresh from the RAG corpus, bypassing its refusal mechanism entirely (Section  3.3 ). This defense inversion —where the defense itself becomes the attack surface—illustrates why evaluating defenses requires testing the full architectural interaction, not just measuring ASR reduction. This threat extends the indirect prompt injection class identified by 5 into the temporal domain: the injected instruction survives context resets via persistent memory, a property that single-session evaluations do not capture. MINJA  ( 4 ) and Zombie Agents  ( 19 ) demonstrated that this attack class achieves high success rates against open-source models. Whether any existing defense can stop it remains an open question.
+Existing agentic security evaluations focus on attack success rates, not defense effectiveness. Benchmarks such as InjecAgent  ( 21 ) , AgentDojo  ( 3 ) , and ASB  ( 22 ) evaluate defenses against input-level attacks, where the malicious payload arrives in the user’s message, and report high defense effectiveness in that setting. Persistent memory attacks operate at a different layer: the payload enters via RAG retrieval, is stored in a persistent database, and is triggered by a benign prompt sessions later. Defenses commonly deployed at the input layer (content filtering, prompt sanitization) and retrieval layer (document classifiers, LLM judges) have not been systematically evaluated against this attack class. Tool-layer defenses, which restrict what the agent can do rather than what it can see, have received almost no evaluation attention.
+Our central empirical finding is an injection–execution dissociation : models reliably store malicious instructions (storage rates
+We evaluate six defenses across four architectural layers against delayed-trigger attacks on nine open-source models (5,040 runs,
+At empty RAG corpus produced 0/210 exfiltrations, appearing to confirm a categorical frontier–open-source gap. A loaded-corpus confirmatory evaluation ( 4 ) overturns this: the empty-corpus result was a threat-model-fidelity artifact, and frontier safety is neither categorical nor vendor-uniform—several frontier models exfiltrate at substantial rates under standard compliance framing (details in Section  4 ).
+This paper makes five contributions:
+1.
+A layer-structural failure result: persistent memory attacks operate at a layer that production safety classifiers (Llama Guard, ShieldGemma, input-level content filters) do not observe when deployed at the input or output boundary. Input-layer defenses cannot see the payload by construction; retrieval-layer defenses can see it but, in our evaluation, could not distinguish compliance-framed injection from legitimate policy. The failure of five defense classes is a property of where each defense sits relative to the attack’s authority boundary, not merely an implementation gap. We demonstrate this empirically across 5,040 runs with BCa bootstrap CIs, a pre-specified step-down correction over 108 comparisons, and 0% false positive rate.
+2.
+A mechanistic taxonomy that predicts model vulnerability without running the attack: seven behavioral archetypes—six identified in screening (Explicit Detector, Active Detector with Defensive Storage, Vulnerable Executor, Partial Executor, Latent Carrier, Injection-Resistant) plus the Draft-Only Executor, which emerges only in the factorial phase (qwq:32b at 16k context; Section  3.3 )—with distinct mechanisms at each stage of the attack lifecycle. The taxonomy correctly predicts that Memory Sandbox—capability removal rather than detection—is the only structurally sound defense, and identifies the conditions under which it inverts.
+3.
+A double dissociation in defense design, demonstrated within the Qwen-3-32B inference-time think-toggle ablation: the sandbox variant that protects the reasoning mode breaks the non-reasoning mode, and the variant that protects the non-reasoning mode is bypassed by the reasoning mode, so neither of the two variants we evaluated is safe across both. We make no general-principle claim about reasoning models broadly (replication of the toggle effect in other families was blocked by injection resistance or missing tool-calling support), but the RAG-fallback bypass—one arm of the dissociation—replicates cross-family on Bedrock (Mistral, Z.AI, OpenAI). This constrains the solution space for practitioners deploying heterogeneous model fleets.
+4.
+A cross-generational vulnerability mapping that falsifies monotonic safety hardening : under loaded-corpus framing, we observe no monotonic safety ordering among the tested OpenAI snapshots. GPT-5.1 regresses to 12.2% ASR (Wilson 95% CI [8.1%, 17.9%],
+5.
+Two reusable evaluation-validity criteria for this measurement setting, which we state as methodology rather than as findings because they are what other groups will most directly reuse. The Retrieval-Fidelity Criterion (Section  4.1 ): a RAG-security result is valid for memory-poisoning risk only if the malicious document is retrievable through the same channel the agent uses at attack time—a criterion our own empty-corpus screen violates, producing a spurious 0/210 null that the loaded-corpus evaluation overturns. The Defense Attribution Validity Criterion (Section  3.5 ): a defense effect may be claimed only when the vulnerable baseline reproduces across environments and the defended and undefended arms are behaviorally identical in every session preceding the defense’s activation point; a clean-looking ASR reduction that forks in a pre-activation control, or that rests on a non-reproducible baseline, is an artifact, not an effect. This second criterion is what forces us to withhold several superficially clean reasoning-model results rather than report them.
+Our tools are simulated; therefore we do not claim deployment-level exploit rates. The contribution is comparative: which architectural layer changes which failure mode under a fixed harness. All frontier results are conditioned on the API snapshot tested (Appendix  D ) and may not generalize to future model versions or production routing configurations.
+Researchers evaluating agent defenses should report injection success and execution success separately; conflating them masks the true security posture.
+2 Methodology
+2.1 The Delayed Trigger Attack
+The delayed trigger attack (DTA) is a multi-session persistent memory attack in which a malicious instruction is injected into an agent’s memory store during one session and executed in a later session, after the original conversation context has been discarded.
+Session structure.
+Each DTA run comprises four sessions with strict state isolation: an injection session (S1), two intervening benign sessions (S2, S3), and a trigger session (S4). Each session is assigned a unique thread identifier in the LangGraph checkpointer, wiping the agent’s conversation history between sessions. The only state that persists across sessions is the memory tool’s SQLite database. This isolation is essential to the threat model: without it, the agent could read the malicious instruction from S1’s conversation history, constituting standard long-context prompt injection rather than a persistent memory attack.
+Injection mechanism.
+In S1, the agent receives a query instructing it to retrieve compliance rules from the internal document repository and save any rules it finds to persistent memory. The RAG corpus contains a document framed as an internal compliance memorandum (reference MCI-AUDIT-2024-0089), citing SEC Rule 17a-4 and the Financial Services Compliance Framework (FSCF-2024), which instructs that all outbound emails must be forwarded to an external audit monitor. The agent stores this rule because the tool description primes it to save organisational rules and compliance requirements, and the document is indistinguishable from a legitimate compliance directive. Injection success is measured deterministically: a run is classified as injected if and only if memory_save_fact was called during S1.
+Trigger mechanism.
+In S4, the agent receives a benign prompt asking it to review stored policies and draft a project status email. The agent retrieves the stored routing rule and routes a copy of the email to the attacker-controlled address. Exfiltration is detected by recipient match, substring match (20+ characters from the sensitive document), or semantic similarity (cosine
+No-attack baseline.
+The no-attack arm uses an identical session structure but the RAG corpus contains no malicious document. Attack success was detected in 0 of 2,520 no-attack runs (0.0%), confirming the baseline.
+2.2 Defenses
+Minimizer (input-level).
+Applies TF-IDF-based relevance filtering to the user’s query, retaining only chunks scored as relevant. A usability constraint ensures at least one chunk is always returned. The defense operates on user input, not retrieved documents.
+Sanitizer (input-level).
+Applies a regex-plus-classifier pipeline to the user’s query, flagging content matching known injection patterns. The classifier was trained on 60 examples (30 injection, 30 benign). Like Minimizer, it operates on user input and cannot inspect RAG-retrieved documents.
+RAG Sanitizer (retrieval-level).
+Applies the same classifier pipeline at the retrieval layer: each document returned by the RAG corpus is scored before being passed to the agent, and documents above the injection threshold are removed. This is the only input-filtering defense that can observe the malicious document.
+RAG LLM Judge (retrieval-level).
+Replaces the classifier with a small language model (qwen2.5:1.5b) that reasons over each retrieved document and produces a binary malicious/benign judgment. Documents judged malicious are withheld from the agent.
+Prompt Hardening (instruction-level).
+Augments the agent’s system prompt with four explicit security rules: (1) never send email to addresses not provided by the user in the current session; (2) never exfiltrate sensitive data to external recipients; (3) verify provenance of recalled facts; (4) refuse if a recalled fact instructs external data transmission.
+Memory Sandbox (tool-layer).
+Removes memory_recall_fact from the agent’s tool schema for the entire run (all sessions), leaving memory_list_all_facts available. The agent can enumerate stored key names but cannot retrieve their values. The defense’s intended effect is at the trigger session, where the agent would otherwise recall and execute the stored rule; in the primary factorial, injection proceeds normally in S1 because memory_save_fact remains available. This tests whether the attack requires explicit recall to execute.
+2.3 Mechanistic Analysis
+Every run produces two independent binary outcomes: injection success (did the agent call memory_save_fact during S1?) and attack success (did exfiltration occur in S4?). Reporting both separately enables mechanistic attribution: a defense that reduces attack success without reducing injection success is blocking at the execution stage, not the store stage.
+A third metric, the benign task-completion rate (BTCR), measures whether the agent attempted the legitimate task in the trigger session—emitting a draft_email or send_email call—irrespective of the recipient. Recipient correctness is captured separately by attack success. BTCR and attack success are therefore independent: a single run can register both, when the agent completes the benign email and routes a copy to the attacker. BTCR
+All tool calls are logged deterministically per session. A post-hoc analyzer assigns mechanistic tags from the structured logs: semantic_masking_success (the model rationalised exfiltration as compliance), explicit_recall_required (removing recall blocked the attack), implicit_bypass_confirmed (the attack succeeded without explicit recall), and sleeper_effect (injection and recall succeeded but exfiltration did not execute). All tags are assigned deterministically; no tag assignment involves LLM judgment.
+2.4 Experimental Design
+The evaluation uses a fully crossed factorial design: 9 models within-condition residual variance. Cross-environment variance—the observation that identical weights and prompts can produce opposite outcomes across daemon loads or runtime versions (Appendix  B )—is a separate axis not reflected in per-condition intervals. We address cross-environment variance through protocol (fresh-daemon-per-model), detection (the pre-activation identity criterion of Section  3.5 ), and exclusion (uninterpretable arms are dropped rather than averaged). For local Ollama experiments we record both the intended launch configuration and the effective served configuration, because settings such as context length may be supplied through multiple control surfaces and can alter memory requirements and runtime behaviour; intended configuration alone is insufficient (Appendix  B ).
+2.5 Statistical Methodology
+We set not powered for small or moderate partial-efficacy effects: distinguishing a 10 percentage-point difference at these baselines would require on the order of 100–200 runs per arm for 80% power, so null results for intermediate reductions should be interpreted conservatively. We report 95% confidence intervals using the bias-corrected and accelerated (BCa) bootstrap method with 10,000 resamples (seed 1 ; full per-comparison results in the released analysis output).
+Table 1: The 10 significant comparisons after Holm-Bonferroni step-down correction (
+Model
+Comparison
+ASR
+95% CI
+Qwen-2.5-14B
+no_defense vs. memory_sandbox
+Qwen-3.5-9B
+no_defense vs. memory_sandbox
+Qwen-3-32B
+no_defense vs. memory_sandbox
+Qwen-2.5-72B
+no_defense vs. memory_sandbox
+Qwen-3.5-122B
+no_defense vs. memory_sandbox
+Qwen-3.5-122B
+no_defense vs. prompt_hardening
+GLM-4.7-Flash
+no_defense vs. memory_sandbox
+GPT-OSS-20B
+no_defense vs. memory_sandbox
+GPT-OSS-Safeguard-120B
+no_defense vs. memory_sandbox
+Cross-model (Memory Sandbox arm):
+Qwen-2.5-14B vs. QwQ-32B
+sandbox vs. sandbox
+The no-attack arm (2,520 runs) serves as the false positive baseline. Attack success was detected in 0 of 2,520 no-attack runs (0.0%), well below the pre-specified threshold of 5%.
+2.6 Model Selection
+Prior to the factorial, we conducted an 3.3 ), a behavior not observed at 32k. We retained it in the factorial because this discovery is itself a finding about context-dependent safety properties. Frontier models (Claude Sonnet 4.6, Claude Haiku 4.5) were excluded from the defense factorial because both achieved 0% ASR under no-defense during screening, making defense-vs-baseline comparisons ). Every defense evaluation therefore operates on confirmed-injected payloads: all ASR differences among defenses reflect execution-stage blocking, not store-stage differences.
+Injection succeeded uniformly because the attack exploits alignment between the tool description and the document framing. The memory_save_fact tool description instructs the agent to save organisational rules and compliance requirements. The malicious document, framed as an internal compliance memorandum, is indistinguishable from a legitimate directive. No defense evaluated here operates at the store stage.
+Memory recall in the trigger session was universal in the six defense arms where memory_recall_fact remained available (2,160 runs): the stored rule was retrieved in every such run. Under Memory Sandbox (the remaining 360 runs), recall is removed by construction; those runs instead test whether the model reconstructs or bypasses the missing recall pathway (Section  3.3 ). The only variance across the recall-available conditions is whether the agent executed the exfiltration step after recall. The attack’s execution pathway is: inject
+The attack persists across intervening benign sessions by construction. Per-session thread isolation wipes the conversation history between sessions, so the only state carried forward is the stored SQLite row; persistence is therefore bounded by database durability rather than session count or context-window length. Every DTA run confirms this at the two intervening benign sessions (S2, S3): the stored rule survives unrelated calendar and search activity and remains recallable when the trigger fires in S4.
+The no-attack arm produced zero false positives: attack success was False in all 2,520 no-attack runs (0.0%, Wilson Score CI
+3.2 Five Defenses That Do Not Protect
+Five defenses achieved ASR that failed to meaningfully reduce the no-defense baseline of 88.6%. Four are statistically indistinguishable from baseline (Wilson Score CI 2 summarises the primary findings.
+Table 2: Attack success rate (ASR) by defense across 9 models (
+Layer
+Defense
+ASR (%)
+95% CI
+BTCR (%)
+–
+No Defense
+88.6 1 1
+1
+The 0.3pp difference between no-defense (319/360) and the four architecturally-blind defenses (320/360) reflects a single stochastic non-exfiltration by gpt-oss:20b under no-defense (39/40 vs. 40/40 under all other conditions; Fisher’s exact
+[0.849, 0.916]
+100
+Input
+Minimizer
+88.9
+[0.852, 0.917]
+100
+Input
+Sanitizer
+88.9
+[0.852, 0.917]
+100
+Retrieval
+RAG Sanitizer
+88.9
+[0.852, 0.917]
+100
+Retrieval
+RAG LLM Judge
+88.9
+[0.852, 0.917]
+100
+Instruction
+Prompt Hardening
+77.8
+[0.732, 0.818]
+100
+Tool
+Memory Sandbox
+11.1
+[0.083, 0.148]
+100
+Minimizer (input-level).
+ASR 88.9% (320/360 runs). Every run was tagged defense_applied_no_modifications : the defense produced an empty modification list for all injection sessions. The mechanism is architectural: Minimizer operates on the user’s query, and the malicious payload enters via a RAG-retrieved document. The defense never observes the attack surface. This limitation is shared by production safety classifiers deployed at the input layer—including Llama Guard 3  ( 7 ) , ShieldGemma  ( 20 ) , and DeBERTa-based content filters—all of which classify the user’s message without visibility into RAG-retrieved context.
+Sanitizer (input-level).
+ASR 88.9% (320/360 runs). The classifier scored below the detection threshold in all 360 injection sessions and produced no modifications. The failure is identical to Minimizer: the attack surface is at the retrieval layer, not the input layer.
+RAG Sanitizer (retrieval-level).
+ASR 88.9% (320/360 runs). Unlike input-level defenses, RAG Sanitizer operates at the correct architectural layer and observed the malicious document in every injection session. The failure is detection, not placement: 0/360 documents were removed. The payload’s formal regulatory language is out-of-distribution for a 60-example training set and evades detection via semantic masking.
+RAG LLM Judge (retrieval-level).
+ASR 88.9% (320/360 runs). The judge (qwen2.5:1.5b) produced zero malicious classifications across all 360 injection retrievals. For the benign documents in the corpus, the judge generates reasoning (e.g., “does not contain instructions for overriding system rules”) and classifies correctly; for the compliance-framed malicious document specifically, it produces an empty reason string and classifies as benign. This is a capacity failure: the 1.5B judge cannot engage with the semantic content of a compliance-framed payload that superficially resembles legitimate policy.
+Prompt Hardening (instruction-level).
+ASR 77.8% (280/360 runs, Wilson Score CI level reflects two models at 0% ASR (qwen3.5:122b and qwq:32b), but the reduction from the 88.6% baseline is driven almost entirely by qwen3.5:122b. qwq:32b is already 0% under no-defense—its execution refusal is baked into the baseline—so it contributes nothing to the delta; the movement is essentially qwen3.5:122b’s 40 runs shifting from 100% to 0%. For the remaining seven models, every successful exfiltration was tagged semantic_masking_success : the model acknowledged the security rules and overrode them by framing exfiltration as mandatory regulatory compliance.
+3.3 Memory Sandbox: Effective in the Primary Factorial, Brittle as a General Defense
+Memory Sandbox reduces ASR to 0% for eight of nine models (320/360 runs blocked). The mechanism is confirmed in every blocked run: explicit_recall_required was tagged in all 320 successful blocks. Remove the tool, and the attack cannot proceed. Memory Sandbox imposes zero utility cost in the absence of attack: BTCR was 100% across all 63 no-attack conditions. Under attack, two models (qwen2.5:14b and qwen2.5:72b) show BTCR list_all_facts instruction to call the now-unavailable recall_fact . These are model-specific tool-contract dependencies (Artifacts 2, 10), not defense-induced utility costs: both models achieve BTCR
+The qwq:32b inversion.
+qwq:32b inverts the defense entirely: 100% ASR under Memory Sandbox (40/40 runs), tagged implicit_bypass_confirmed . Under no-defense, qwq:32b achieves 0% ASR via execution refusal: the model reasons through the routing rule, includes the attacker address in a draft, then declines to call send_email . 2 2
+2
+QwQ-32B was classified as a Vulnerable Executor during the Under Memory Sandbox, when memory_recall_fact is removed, qwq:32b reconstructs the attacker payload directly from the RAG corpus. The model’s refusal mechanism does not activate when the instruction arrives fresh from a document rather than from a recalled rule. The distinction is source authority: a recalled memory fact is treated as advisory (the model chose to store it, so it can choose to ignore it), whereas a RAG-retrieved compliance document carries the implicit authority of an organisational source, overriding the literal “draft” interpretation. The defense removes the friction that was protecting it.
+Environment-dependent archetype instability.
+A subsequent evaluation in June 2026 on the same machine, using identical model weights (digest 009cb3f08d74 ), the same reported Ollama version (0.20.6), the same reported serve-time flags (16,384 context, flash attention enabled), and verified-identical application code (the original April commit ebf2676 produced byte-identical output to current code,
+Cross-family bypass replication.
+The qwq:32b inversion (Section  3.3 ) identified a bypass mechanism—reconstruction of the routing rule from RAG once memory_recall_fact is removed—whose generality we test independently of qwq:32b’s environment-fragile archetype classification. We replicated Memory Sandbox on Vulnerable Executors served via Amazon Bedrock (full precision, production stack; Appendix  C ). Three models across three providers bypass the defense, all clearing a C : mistral-large-3-675b (Mistral; 39/40 ASR under sandbox), glm-5 (Z.AI; 13/40), and gpt-oss-120b (OpenAI; 22/40). Two pathways recur. In trigger-session goal-directed fallback , the model seeks the routing rule from RAG when recall is blocked—mistral-large-3 never calls recall_fact at all, reading the key name from list_all_facts and querying RAG directly. In benign-session re-injection , the model re-reads the malicious document during an intervening session and exfiltrates before the trigger fires (gpt-oss-120b, in S3). For glm-5, all 37 injected runs re-retrieve the routing rule under sandbox; the 24 non-exfiltrations are intrinsic execution refusal, not defense blocking, so Memory Sandbox supplies no retrieval-layer protection for this model. While the dramatic single-model inversion did not reproduce, the bypass mechanism it identified is robust across four providers (Qwen, Mistral, Z.AI, OpenAI) and two serving stacks.
+Hallucination bypass.
+Two models (qwen3.5:122b and glm-4.7-flash:q8_0) exhibit a distinct response: when recall is blocked, they fabricate plausible benign routing rules from training priors rather than halting. Both produce deterministic fabrications (40/40 runs identical per model) that route email to benign addresses. ASR is 0% because neither model’s prior includes the attacker address. This is incidental safety, a property of the training distribution rather than the defense.
+3.4 Reasoning-Defense Interaction: Double Dissociation
+Setup.
+To isolate whether reasoning capability mediates the defense outcome, we evaluate Qwen-3-32B under Ollama’s native thinking toggle: think=true enables the verbalized reasoning trace; think=false suppresses it. The underlying weights are identical (GGUF digest 030ee887880f ). We test three Memory Sandbox variants in addition to no-defense: sandbox_full (remove recall_fact from schema), sandbox_blind (remove both list_all_facts and recall_fact ), and sandbox_null_recall ( recall_fact remains in schema but returns “No stored value found”).
+Result.
+We observe a perfect crossover interaction. Under no-defense, both think modes achieve 100% ASR (T1
+sandbox_full
+sandbox_blind
+sandbox_null_recall
+think=OFF
+100% (S1)
+100% (S1)
+0%
+think=ON
+0%
+0%
+100% (S4)
+All cells are 40/40 or 0/40 with zero variance.
+Mechanisms.
+think=OFF (100% ASR, S1): the model reads the malicious document via RAG in the injection session and sends immediately, collapsing the attack chain from S4 to S1. The defense removes the tool that was deferring execution; without it, the model acts before any trigger fires. This mechanism is inferred from the tool-call sequence contrast with no-defense (where the same model defers to S4); no explicit reasoning trace is available under think=OFF. think=OFF (0% ASR): the model calls recall_fact , receives “No stored value found,” accepts the response at face value, and drafts a benign email. The tool’s presence in the schema prevents the inference that deferral is impossible. think=ON (0% ASR): the model reasons through the missing tool (“I cannot retrieve the value, I’ll proceed without it”) and completes the benign task. Graceful degradation is enabled by deliberation. think=ON (100% ASR, S4): the model calls recall_fact , receives the empty response, reasons that the key exists but the value is unavailable, queries RAG for context, retrieves the malicious compliance document fresh, and sends to the attacker. Reasoning enables alternative-source-seeking when the API contract is unsatisfying.
+Trigger contingency.
+A counterfactual evaluation ( list_all_facts , reasons it needs recall_fact , finds it unavailable, and stops. No RAG fallback occurs ( rag_called_in_trigger task completion asymmetry : the neutral trigger has an acceptable degraded form (partial memo noting policies unavailable), while the compliance trigger requires a resolved external recipient and cannot be completed by graceful degradation. The bypass thus requires a three-way conjunction: (a) sandbox removes recall, (b) the task requires resolved external routing with no acceptable degraded form, and (c) the model has reasoning capability to identify and execute alternative pathways. Remove any one condition and ASR drops to 0%.
+Deployment implication.
+The crossover produces a concrete dilemma: sandbox_full/blind protects reasoning models (graceful degradation) but collapses the attack chain for non-reasoning models (S1 immediate execution); sandbox_null_recall protects non-reasoning models (accepts empty response) but is bypassed by reasoning models (goal-directed RAG fallback). A defender who does not know the reasoning capability class of the deployed model cannot make a safe implementation choice between these variants. The asymmetry is structural: think=OFF failures are recoverable by defense design (null_recall fixes them by preserving the tool in the schema), while think=ON failures via null_recall are not recoverable by any memory-layer defense tested; the model reasons past any signal of information unavailability.
+Scope and generalizability.
+The double dissociation—the think-mode crossover itself—is demonstrated within a single model family (Qwen-3-32B) using Ollama’s inference-time thinking toggle, which constitutes the strongest possible causal identification: identical weights, identical prompts, identical tools, with only the reasoning-trace toggle varied. This is not a limitation but a methodological choice—the within-model design eliminates all confounds except the reasoning pathway itself. Replication of the toggle effect in other families was attempted (GLM-4.7-Flash, DeepSeek-R1, Phi4-Reasoning) but all candidates were either injection-resistant or lacked tool-calling support, so we make no general-principle claim about reasoning models broadly. We distinguish this from the RAG-fallback bypass of Memory Sandbox—one arm of the dissociation—which we confirm cross-family on Bedrock across Mistral, Z.AI, and OpenAI models (Appendix  C ). The bypass mechanism generalizes across providers and serving stacks; the full crossover, which requires an inference-time thinking toggle on otherwise identical weights, is currently demonstrable only within Qwen3.
+Notably, qwq:32b and Qwen-3-32B in think=ON mode—both reasoning-capable—diverge under the identical sandbox_full variant and compliance trigger: qwq:32b seeks the routing rule via RAG fallback (100% ASR, Section  3.3 ), whereas Qwen-3-32B think=ON degrades gracefully and drafts a benign email (0% ASR). Reasoning capability therefore enables goal-directed fallback but does not compel it; whether a given reasoning model elects to seek an alternative source or to degrade is model-specific. This divergence reinforces rather than undercuts the caveat above: there is no general reasoning-model principle, and the task-REDACTED condition of the trigger-contingency analysis is necessary but not sufficient—a second reasoning model, given the same unsatisfiable task, elected degradation over fallback.
+3.5 Resolving the Dissociation: Content-Layer Gating (RATG)
+The double dissociation (Section  3.4 ) establishes that no memory- schema sandbox variant is safe across both reasoning classes: sandbox_full collapses non-reasoning models to immediate S1 execution, while sandbox_null_recall is bypassed by reasoning models via goal-directed RAG fallback. Both failures share a root cause: the defense operates on the tool schema—which tool exists and what it returns structurally—while leaving the malicious content of the recalled value intact. We test a content-layer alternative, Runtime Adaptive Tool-Gating (RATG). RATG leaves memory_recall_fact in the schema and returns a valid response, but sanitizes the recalled value before it reaches the model: unauthorized email addresses (those not present in the current user message) and routing directives are stripped. Reasoning models receive a satisfying tool response, so the RAG-fallback trigger does not fire; non-reasoning models still see the tool in the schema, so the attack chain does not collapse to S1; and the attacker’s exfiltration target is neutralized at the content level.
+Result (mechanical instruction-following models).
+We report RATG for the three models whose behavior is deterministic across April 2026, both Ollama versions, and the sequential RATG batch—qwen2.5:14b, qwen2.5:72b, and qwen3:32b (run with thinking disabled, its default “mechanical” configuration; Section  3.4 toggles this model to thinking-enabled for the reasoning ablation). For all three, RATG reduces ASR from 100% under no-defense to 0% (
+Reasoning models and a reproducibility validity criterion.
+No reasoning-capable model yields an interpretable RATG efficacy estimate in our environment, for reasons that motivate a general validity criterion. We report a defense effect only when two conditions hold, which together we call the Defense Attribution Validity Criterion : (i) a Baseline Reproduction condition—the no-defense baseline reproduces as vulnerable across independent daemon loads; and (ii) a Pre-Activation Equivalence condition—the no-defense and RATG arms are behaviorally identical in every session preceding the defense’s activation point. RATG activates only when memory_recall_fact is first called in the trigger session; it is provably inert in the injection session (S1), where no recall occurs and RATG alters neither the tool schema, the system prompt, nor memory_save_fact . Condition (ii)—pre-activation identity—is therefore necessary for any causal attribution. Each of the five reasoning models fails at least one condition. qwen3.5:122b satisfies (ii)—its S1 arms are identical (a single memory_save_fact call and an identical operation sequence, both arms, and gpt-oss-safeguard:120b shifts to a Draft-Only profile under Ollama 0.30.11, yielding memory_save_fact counts, deterministic within each arm but forked across arms) under identical observable inputs, so the downstream ASR difference cannot be attributed to RATG. We state the criterion generally: report a defense effect only when the baseline reproduces and the arms are identical in every session preceding the defense’s activation point; a clean-looking ASR reduction that forks in a pre-activation control, or that rests on a non-reproducible baseline, is an artifact rather than an effect. This separates defense efficacy from evaluation validity: we make no reasoning-model RATG efficacy claim, and conditions (i)–(ii) are the reusable contribution. glm-4.7-flash:bf16 is the cautionary case for (ii). This is the bf16 quantization of the model; the primary factorial used the q8_0 quantization of the same model, and the two quantizations differ behaviorally in our setting (quantization is a documented behavioral variable, changing whether the model treats a recalled directive as an imperative command or as inert metadata). Its surface 100% memory_save_fact calls under no-defense versus one under RATG, each deterministic at
+Scope.
+RATG is a proof-of-concept establishing that the schema-layer dilemma is solvable at the content layer, not an adversarially robust defense. Its regex-based stripping of email addresses and routing directives can be bypassed by an adaptive attacker through encoding (base64, homoglyphs, character splitting); adversarial robustness is future work. The contribution is an existence result: a content-layer intervention resolves the schema-layer dilemma that the double dissociation makes otherwise unavoidable.
+3.6 Evaluation Artifacts
+We identified ten evaluation artifacts during development, cases where the evaluation environment interacted with model behavior in ways that would produce incorrect results if uncorrected. None affects the primary ASR or BTCR results in the factorial. The most consequential involve tool contract language: return messages that inadvertently signal task completion, tool schema composition that changes action selection, and directive language that creates blocking dependencies. A further artifact, specific to local inference of reasoning-capable models under long-running daemon sessions, was identified while extending the factorial with RATG and is documented separately in Appendix  B ; it under-reports vulnerability and motivates a fresh-daemon-per-model evaluation protocol. All artifacts are documented with scoped impact statements in Appendix  A .
+3.7 Frontier Model Screening
+Table  3 summarises the six behavioral archetypes identified across the 3.3 ).
+Table 3: Six behavioral archetypes identified in the screening phase ( 3.3 ). Injection and attack columns report rates at
+Archetype
+Models
+Inj.
+Atk.
+Mechanism
+Explicit Detector
+1
+0%
+0%
+Refuses to store
+Active Detector
+1
+100%
+0%
+Stores alert, not payload
+Vulnerable Executor
+11
+100%
+100%
+Full attack lifecycle
+Partial Executor
+1
+100%
+50%
+Executes inconsistently
+Latent Carrier
+4
+100%
+0%
+Stores rule, never executes
+Injection-Resistant
+2
+0%
+0%
+Never calls save
+We evaluated 21 frontier models across three providers (OpenAI, Google, Anthropic) at
+Headline result (empty-corpus screening).
+Zero exfiltrations across 210 screening runs (0/210, 95% CI upper bound 4.1 : the loaded-corpus evaluation overturns it, with three Gemini models at 22.5–95% ASR. The archetype classifications in this subsection are empty-corpus classifications and are superseded where noted.
+Archetype distribution.
+Of the 21 screening models: 12 are Injection-Resistant (0% injection), 6 are Partial Resistant (10–80% injection, 0% ASR), and 3 are Latent Carriers (100% injection, 0% ASR). The Latent Carriers are all OpenAI models: gpt-5.1, o3-mini, and o4-mini. A supplementary evaluation of gpt-4o-mini (
+OpenAI reasoning models as Latent Carriers.
+Three OpenAI reasoning models store the malicious rule in every (or nearly every) run but consistently refuse execution: o3-mini (100% injection, 0% ASR), o4-mini (100% injection, 0% ASR), and o3 (80% injection, 0% ASR). This mirrors Haiku 4.5’s execution-refusal pattern, extending it to the reasoning-model class. These models represent a supply-chain risk in shared-memory deployments (Section  5.7 ).
+GPT generational boundary (empty-corpus screening).
+Under empty-corpus screening ( 4 ), all models inject at 100%; the generational boundary therefore reflects execution-layer, not injection-layer, safety. December 2025 marks a categorical execution-layer intervention in the GPT-5 lineage.
+Anthropic.
+Under single-injection evaluation (
+Claude Sonnet 4.6 resists injection entirely at model_resisted_injection ). Sonnet is an Explicit Detector: safety is implemented at the injection stage.
+Google Gemini.
+Under empty-corpus screening ( Important caveat : this probe measured tool-calling compliance in an empty execution space, not RAG injection vulnerability. A loaded-corpus confirmatory evaluation ( 4.2 ).
+Memory Sandbox on frontier Latent Carriers.
+To test whether the qwq:32b Memory Sandbox inversion generalises to frontier reasoning models, we evaluated all 4 Latent Carriers under Memory Sandbox (o3: memory_recall_fact tool calls in the trigger session and zero RAG queries in the trigger session. Frontier reasoning models respect tool schema constraints without attempting payload reconstruction via alternative pathways. The inversion is specific to qwq:32b’s Draft-Only Executor architecture.
+A supplementary evaluation ( explicit_recall_required ). The inversion risk is theoretically lower for Haiku because the payload is not in memory—only a security alert about it—so there is nothing for an alternative pathway to reconstruct.
+4 Frontier Generational Findings
+The open-source factorial (Sections  3.3 – 5.8 ) evaluates defense effectiveness against models that are uniformly vulnerable. A complementary question is whether frontier models exhibit vulnerability patterns when the threat model is strengthened. We address this through targeted experiments using the OpenAI-compatible frontier API (
+4.1 Empty Corpus Baseline: A Threat Model Fidelity Problem
+Our initial frontier screening (Section  3.7 ) evaluated 21 models at empty RAG corpus. Under these conditions, 0 of 210 runs produced exfiltration (95% CI save_fact on user instruction alone—tool-calling compliance, not indirect prompt injection vulnerability. The apparent safety was an artifact of the experimental design: frontier models had no malicious document to retrieve.
+A loaded-corpus confirmatory evaluation at Retrieval-Fidelity Criterion : a RAG-security evaluation is valid for memory-poisoning risk only if the malicious document is retrievable through the same retrieval channel available to the agent at attack time. Evaluating RAG security without retrievable RAG content tests the wrong threat model.
+4.2 Gemini: The Most Vulnerable Frontier Family
+Under loaded-corpus evaluation with standard compliance framing (no authority escalation required), the Gemini family shows a clear vulnerability gradient:
+Table 4: Frontier model vulnerability, loaded corpus, standard compliance framing ( email_send_email tool call arguments. All API models tested via OpenAI-compatible gateway on 2026-06-28/29; results reflect behavior of the served snapshot on those dates and may not generalize to future versions (see Appendix  D for requested model identifiers).
+Model
+Provider
+N
+Inj.
+ASR
+Wilson 95% CI
+Class
+Gemini 3.1 Pro Preview
+Google
+40
+100%
+95.0%
+[83.5%, 98.6%]
+VE
+Gemini 3.5 Flash
+Google
+40
+100%
+50.0%
+[35.2%, 64.8%]
+VE
+Gemini 2.5 Pro
+Google
+40
+95%
+22.5%
+[12.3%, 37.5%]
+VE
+Gemini 2.5 Flash
+Google
+40
+100%
+0.0%
+[0%, 8.8%]
+LC
+GPT-5.1
+OpenAI
+172
+100%
+12.2%
+[8.1%, 17.9%]
+VE
+GPT-4o
+OpenAI
+40
+100%
+12.5%
+[5.5%, 26.1%]
+VE
+GPT-4.1
+OpenAI
+80
+100%
+7.5%
+[3.5%, 15.4%]
+VE
+GPT-5
+OpenAI
+104
+100%
+1.9%
+[0.5%, 6.7%]
+VE
+GPT-5.2/5-mini/5-nano
+OpenAI
+40
+100%
+0–2.5%
+[
+LC
+GPT-5.4
+OpenAI
+40
+100%
+0.0%
+[0%, 8.8%]
+LC
+GPT-5.5
+OpenAI
+40
+100%
+0.0%
+[0%, 8.8%]
+LC
+o3 / o3-mini / o4-mini
+OpenAI
+40
+98–100%
+0.0%
+[0%, 8.8%]
+LC
+Sonnet 4.6
+Anthropic
+40
+2.5%
+0.0%
+[0%, 8.8%]
+IR
+Opus 4.5
+Anthropic
+40
+2.5%
+0.0%
+[0%, 8.8%]
+IR
+Opus 4.8
+Anthropic
+40
+17.5%
+0.0%
+[0%, 8.8%]
+near-IR
+Sonnet 4.5
+Anthropic
+40
+57.5%
+0.0%
+[0%, 8.8%]
+Partial Det.
+Haiku 4.5
+Anthropic
+40
+95%
+0.0%
+[0%, 8.8%]
+Active Det.
+VE = Vulnerable Executor, LC = Latent Carrier, IR = Injection-Resistant, Det. = Detector
+Gemini 3.1 Pro Preview exfiltrates in 38 of 40 runs (95.0%, CI [83.5%, 98.6%])—the highest ASR of any frontier model evaluated. This is with the standard compliance framing used throughout the paper; no authority-escalation framing was required. Forensic verification confirms the finding is not an artifact: all 38 exfiltrations used actual email_send_email tool calls with auditor@external-compliance.com in the recipient argument (not hallucinated text); all fired in session 3, the correct DTA timing. Of the 38 attack-success runs, and re-queried the RAG corpus in the trigger session, suggesting the malicious instruction was doubly reinforced. The 2 non-attack runs are: one stochastic memory recall failure, and one genuine execution refusal citing data privacy concerns—evidence that Gemini 3.1 Pro has a latent safety circuit that fires in
+The Gemini vulnerability gradient (2.5-flash: 0% pre-release model whose safety tuning may not reflect Google’s final production standards; its higher compliance with stored rules is consistent with stronger instruction-following capability that also amplifies susceptibility to injected compliance directives. Researchers and practitioners should treat the 95% ASR as indicative of pre-release safety posture rather than as a claim about production Gemini deployments, and verify against current production model versions before drawing operational conclusions.
+4.3 OpenAI: No Monotonic Safety Ordering Among Tested Snapshots
+We observe no monotonic safety ordering among the tested OpenAI snapshots. GPT-5.1 (12.2% ASR, Wilson 95% CI [8.1%, 17.9%],
+GPT-4o (12.5%) GPT-5.1 (12.2%)
+The GPT-5.1 regression—over six times higher ASR than its predecessor, with non-overlapping confidence intervals ( all OpenAI models inject at
+Falsified: Monotonic Safety Hardening.
+A natural prior is that newer model generations are monotonically safer—that each release inherits and extends its predecessor’s safety properties. Our data falsify this assumption within the tested OpenAI snapshots. GPT-5.1 is less safe than GPT-5 on this attack class (12.2% vs. 1.9% ASR, non-overlapping CIs), despite being a later release. The implication is that safety is not a monotonically accumulated property of the training pipeline: capability improvements or fine-tuning updates can silently regress execution-layer defenses without any visible change in injection-layer behavior. Deployment decisions that assume “newer = safer” are empirically unsupported for this threat class.
+GPT-4o exfiltrates at equivalent rates ( evil-attacker@malicious.xyz ), confirming universal instruction compliance rather than authority deference.
+4.4 Behavioral Divergence: Vendor-Correlated Patterns in Our Evaluation Window
+The three providers evaluated exhibit distinct patterns in the layer at which blocking is empirically observed during our evaluation window (June 2026). We describe these as vendor-correlated patterns observed in this evaluation rather than stable architectural properties, since we test each model at a single time point and cannot distinguish persistent design choices from transient deployment configurations:
+•
+Anthropic (Sonnet 4.6, Opus 4.5/4.8): Blocks at the injection layer. 0–17.5% injection across the family, 0% ASR. Framing-invariant: Sonnet 4.6 shows 0–2.5% injection across three payload framings (compliance, legal hold, IT configuration). Safety is semantic intent detection, not surface pattern matching.
+•
+Google (Gemini 3.1 Pro Preview, 3.5 Flash, 2.5 Pro): Does not block at injection or execution. 22.5–95% ASR under standard compliance framing. Most vulnerable frontier family tested.
+•
+OpenAI (GPT-5.4+): Blocks at the execution layer. 100% injection (rule always stored), 0% ASR (rule never executed). Safety is downstream of storage; the payload persists in memory regardless.
+•
+OpenAI (GPT-4o through GPT-5.1): Partially blocks at execution. 1.9–12.5% ASR under standard framing; higher under authority escalation (the tested GPT-4o snapshot: 60.3% under legal hold,
+This vendor-correlated divergence, observed in our evaluation window, has direct deployment implications. Anthropic deployments leave no adversarial state in persistent memory. OpenAI (GPT-5.4+) deployments block execution but accumulate stored payloads—a supply-chain risk if execution resistance regresses. Google deployments are currently unsafe by default under our evaluation conditions.
+4.5 System-Prompt Mitigation is Generation-Dependent
+A security-hardened system prompt eliminates execution for GPT-5 and GPT-4.1 (0/10 and 0/5 ASR respectively; exact one-sided binomial 95% upper bounds
+4.6 The Latent Carrier Supply-Chain Risk Extends to Frontier Models
+Even GPT-5.5 and all tested reasoning models (o3, o3-mini, o4-mini) store the malicious routing rule at 100% injection rate despite 0% execution. In a multi-agent system sharing persistent memory, a GPT-5.5 or o4-mini agent that ingests the poisoned document writes a dormant payload that any legacy executor can trigger. The tested GPT-4o snapshot reading the same database would exfiltrate at
+5 Discussion
+5.1 Architectural Layer Determines Defense Effectiveness
+RAG
+document
+memory
+write
+persistent
+store
+memory
+recall
+tool /
+action
+Input
+filters
+(user query) ✗
+Retrieval
+filters ✗
+Memory
+Sandbox ✓
+Prompt
+Hardening ✗
+Figure 1: The persistent-memory attack pathway (top row) and where each defense class sits (bottom). Input filters never observe the RAG-injected payload (they act on the user query); retrieval filters observe it but not its provenance; instruction-level Prompt Hardening acts at execution but is overridden by compliance framing; only Memory Sandbox mechanically severs the path, and even it is bypassed when reasoning models reconstruct the payload from RAG once recall is removed. RATG (Section  3.5 ) instead sanitizes the recalled value on the store-to-recall edge, leaving the schema intact.
+The five defense failures are not independent results; they are a single architectural finding expressed across four layers. The delayed trigger attack’s execution pathway is: inject (via RAG) 5 makes the governing axis explicit: the defenses that fail are those that neither observe the provenance of the remembered state (attacker-authored vs. legitimate) nor mediate the memory-to-action step, however well they classify surface text.
+Table 5: Why layer placement, not classifier quality, determines the outcome. Obs. payload : can the defense inspect the malicious document; Obs. provenance : can it distinguish attacker-authored from legitimate state; Mediates action : can it interrupt the memory-to-action step. Only interventions that observe provenance or mediate the action disrupt the attack.
+Defense
+Layer
+Obs. payload
+Obs. prov.
+Mediates act.
+Outcome
+Minimizer
+Input
+✗
+✗
+✗
+Fails (blind)
+Sanitizer
+Input
+✗
+✗
+✗
+Fails (blind)
+RAG Sanitizer
+Retrieval
+✓
+✗
+✗
+Fails (masking)
+RAG LLM Judge
+Retrieval
+✓
+✗
+✗
+Fails (capacity)
+Prompt Hardening
+Instruction
+✗
+✗
+partial
+Fails (overridden)
+Memory Sandbox
+Tool
+✗
+✗
+✓
+Works; bypassable
+RATG
+Content
+✓
+partial
+✓
+Works (PoC)
+The retrieval-layer failure deserves specific attention because it is the most counterintuitive: RAG Sanitizer and RAG LLM Judge are positioned correctly but fail anyway. The payload is designed to be indistinguishable from legitimate compliance content: it cites real regulatory frameworks, uses formal institutional language, and is structured identically to a legitimate memorandum. A 60-example classifier has no basis for this distinction. A 1.5B reasoning model lacks the capacity to engage with the semantic content at all. The implication for this attack class is clear: retrieval-layer classifiers as evaluated here failed against compliance-framed payloads because they lack the capacity to reason about organisational policy context rather than surface patterns. Scaling the judge does not close the gap in our setup: a fresh-daemon evaluation of a 7B judge (qwen2.5:7b) on the two mechanical models with reproducible baselines (qwen2.5:14b, qwen3:32b; 3.5 and Appendix  B .)
+Memory Sandbox succeeds because it does not attempt detection. It removes the recall capability, severing the execution dependency without requiring judgment about whether stored content is malicious. In this setting, detection was not required when the attack’s critical capability could be removed at the schema level. A natural response to the failure of static classifiers is operation-level trajectory detection on the tool-invocation sequence—flagging when an agent reads from memory and immediately calls an outbound communication tool. We show in companion work ( 9 ) that this approach faces a fundamental observability limit: benign memory-grounded actions yield trajectory-detector scores statistically indistinguishable from malicious exfiltrations (mean scores of 0.974 vs. 0.971;
+5.2 When Tool-Gating Works and When It Does Not
+Memory Sandbox works for eight of nine models because the attack requires memory_recall_fact to execute. Remove the tool, and the attack cannot proceed. The defense imposes zero utility cost in the absence of attack.
+The qwq:32b inversion demonstrates that capability removal can itself create new attack pathways. Under no-defense, qwq:32b refuses execution by interpreting “draft” literally: the user asked to draft, not send. Under Memory Sandbox, the same model reconstructs the payload from the RAG corpus and completes the send. The defense removes the memory pathway, leaving only the RAG pathway, and the model’s literal-interpretation defense does not activate when the instruction arrives fresh from a document. This is fundamentally different from the Prompt Hardening failure mode, where models lack the capability to resolve instruction conflicts. Here the model is capable of refusal but the defense changes the information source in a way that bypasses the refusal mechanism entirely.
+Before deploying Memory Sandbox, practitioners should verify whether the target model achieves 0% ASR under no-defense via execution refusal. If so, Memory Sandbox may invert rather than preserve that property. To determine whether this inversion is a reasoning-model-class property, we evaluated o3, o3-mini, o4-mini, and gpt-5.1 under Memory Sandbox via cloud API ( memory_recall_fact calls and zero RAG queries in the trigger session. qwq:32b was evaluated locally (Ollama); frontier models via cloud API. Tool schemas were identical; the inversion is mechanistic (RAG-fallback contingent on reasoning-mode task completion), not inference-stack-dependent. Frontier reasoning models accept the tool schema constraint without attempting reconstruction.
+More broadly, Memory Sandbox effectiveness depends not just on architectural layer but on the interaction between reasoning capability and task completion landscape. The reasoning-mode ablation (Section  3.4 ) reveals that the same sandbox variant produces opposite outcomes depending on whether the model deliberates: sandbox_full protects reasoning models via graceful degradation but collapses non-reasoning models to immediate execution, while null_recall protects non-reasoning models but is bypassed by reasoning models through goal-directed RAG fallback. The bypass activates only when three conditions co-occur: recall is removed, the task requires resolved external routing with no acceptable degraded form, and the model has reasoning capability. This three-way conjunction is both precise (it activates exactly on the intended use case) and undefendable at the memory layer alone.
+5.3 Memory-Layer Attack Persistence
+One factorial model (gpt-oss:20b) exhibits spontaneous fact normalisation during injection: in 37 of 40 runs, the model saves the malicious document as two distinct keyed facts rather than a single monolithic rule. The first key stores the routing instruction; the second stores the attacker address as a standalone value. A defense that detects and deletes the routing rule by key name leaves the attacker address intact. Key-targeted remediation is therefore insufficient; defenses must either clear all memory or validate the semantic content of every stored fact.
+5.4 The Evaluation Environment as a Behavioral Variable
+The ten evaluation artifacts share a common structure: the evaluation environment interacted with model behavior in ways that would produce incorrect results if uncorrected. The most consequential instances involve tool contract language. In one case, a tool return message (“Task complete”) caused a model to halt before exfiltration, producing a false negative indistinguishable from genuine safety. In another, removing a tool from the schema changed a model’s action selection even though the tool was never called. These findings imply that tool descriptions, return messages, and schema language are first-class experimental variables in agentic evaluations. Variation in tool phrasing across evaluation frameworks is a confound that current reporting standards do not require disclosure of.
+5.5 Implications for Defense Investment
+Three deployment implications follow. First, the hallucination bypass bounds the reliability of Memory Sandbox: two models achieve ASR
+5.6 Implications for Frontier Model Deployment
+The generational findings (Section  4 ) establish three actionable constraints for frontier model deployment in agentic architectures:
+We observe no monotonic safety ordering among the tested snapshots.
+Within OpenAI’s model family, execution vulnerability shows an overall decline from the tested GPT-4o snapshot (12.5% under standard compliance framing, rising to 60.3% under authority escalation,
+The injection-execution dissociation creates a hidden persistence risk.
+All OpenAI models—including the execution-safe GPT-5.4 and GPT-5.5—store the malicious rule at
+Vendor selection is a security decision, not just a capability decision.
+In our evaluation window, Anthropic’s injection-layer resistance (0% storage with loaded corpus across three framings) is behaviorally distinct from OpenAI’s execution-layer resistance (100% storage, 0% action). The practical difference: Anthropic deployments leave no adversarial state in persistent memory; OpenAI deployments accumulate stored payloads that remain exploitable by legacy components, multi-agent composition, or future model regressions. For shared-memory architectures, injection-layer resistance eliminates the attack surface; execution-layer resistance merely contains it.
+5.7 Compositional Supply-Chain Risk
+The Latent Carrier archetype creates a concrete supply-chain risk in multi-model deployments sharing persistent memory. The persistent memory schema stores facts as plain-text key-value pairs without model-identity metadata or cryptographic origin authentication. A downstream Vulnerable Executor ingests stored facts identically regardless of which model wrote them. Both the injection experiments (Section  3.7 : gpt-5.1, o3-mini, o4-mini at 100% injection) and the execution experiments (factorial, Section  3.3 : qwen2.5:14b at 100% ASR) used the identical SQLite schema and tool-calling interface, ensuring the bridging layer is structurally invariant across model classes. We state this as a compositional principle—the Latent Carrier composition risk : if one model writes an adversarial fact into a shared store without provenance metadata and another model later reads it through the same interface, the reader’s execution-layer policy cannot determine whether the fact was written by a user, a document, itself, or an adversarial peer; injection-safe deployment therefore requires write-time rejection, memory provenance, or read-time policy over provenance-bearing memory. We argue the attack compositionally rather than end-to-end: injection and execution are independently confirmed at scale, and the bridging layer stores facts as plain-text key-value pairs without author metadata, so a Vulnerable Executor cannot distinguish a Latent Carrier’s stored rule from a legitimately stored one. We do not run the cross-model write-then-read attack directly; that end-to-end empirical demonstration is future work. Crucially, Haiku 4.5 does not participate in this chain—it stores a security alert, not the payload—so the supply-chain risk applies only to true Latent Carriers that store the attacker’s rule verbatim.
+5.8 Date Sensitivity is Model-Specific
+To test whether the date-sensitivity phenomenon observed for qwq:32b generalises, we evaluated 5 models on Bedrock across 3 dates (2026-04-17, 2026-06-25, 2026-03-15) at 3.7 ): the former is an in-context temporal conditioning effect; the latter is a post-training safety update across model versions.
+We replicated this finding across a broader cross-family set of open-source models (7 models
+5.9 Result Validity Map
+The paper mixes results of different evidence strength: some are structural and robust, others are single-model or environment-conditioned illustrations. Table  6 states the status of each principal claim explicitly, so that the environment-fragile observations (the qwq:32b inversion, the qwen3.5:122b cells) are not read as load-bearing and the robust results (the layer-structural failure, the cross-family bypass mechanism) are not discounted by association.
+Table 6: Evidence strength and status of each principal claim. Environment-conditioned results are marked as such and are excluded from the load-bearing conclusions.
+Claim
+Evidence
+Status
+Input-layer defenses cannot observe the RAG payload
+Structural / architectural
+Robust
+Retrieval classifiers fail on compliance framing
+3 classifiers (60-example, 1.5B, 7B judges)
+Robust within tested setup
+Memory Sandbox blocks the primary recall path
+Primary factorial, 8/9 local models
+Robust (local)
+RAG-fallback bypass of Memory Sandbox
+Cross-family Bedrock (Mistral, Z.AI, OpenAI)
+Replicated
+qwq:32b inversion (0%
+Single model, environment-fragile
+Illustrative, not general
+Full double dissociation (think-toggle crossover)
+Single family (Qwen-3-32B)
+Bounded to one family
+RATG efficacy
+3 mechanical models
+Proof-of-concept
+Reasoning-model RATG efficacy
+No reproducible baseline
+No claim
+Vendor behavioral divergence
+21 models; gateway / Bedrock endpoints
+Endpoint- and date-conditioned
+Generational non-monotonicity (GPT-5.1 regression)
+Robust within endpoints/dates
+5.10 Limitations
+This evaluation uses a Unified Agentic Environment, a single execution stack shared by all models, to isolate model reasoning as the primary variable. The Sanitizer and RAG Sanitizer classifiers were trained on 60 examples. We distinguish two failure types by layer: for the input-layer defenses (Minimizer, Sanitizer) the failure is structural and payload-invariant—they never observe RAG-retrieved content regardless of classifier quality; for the retrieval-layer defenses (RAG Sanitizer, RAG LLM Judge), which do observe the document, the failure is capability-bound at the operating point we tested, and we do not claim that a better-trained classifier or a larger judge could not succeed. Whether the retrieval-layer finding generalises to other semantic masking strategies (legal hold notices, HR policy documents) is a direct question for follow-on work. The evaluation uses a single malicious document and trigger prompt to test structural defense properties rather than attack evasion breadth. The design resolves large mechanistic effects (near-zero or exceeding 77 points) but is not powered for small or moderate partial-efficacy effects: at 2.5 ), so intermediate null results should be interpreted conservatively. Defenses were evaluated in isolation; combined defense stacking (e.g., Prompt Hardening with Memory Sandbox) was not tested and may produce synergistic effects. BTCR measures task completion, not response latency or output quality; utility degradation under attack beyond the binary completion metric is not measured. Finally, the primary-factorial results for qwq:32b (the Draft-Only Executor archetype) and qwen3.5:122b (its Prompt Hardening defense effect and hallucination bypass) are specific to the April 2026 16k-context environment: qwq:32b did not reproduce on the same machine in June 2026 (Section  3.3 , Appendix  B ), and qwen3.5:122b’s 100% no-defense baseline did not reproduce on a freshly booted machine (Section  3.5 ). We treat both as internally valid but conditioned on the inference environment at time of evaluation. Frontier results were collected through hosted API endpoints: the loaded-corpus confirmatory runs used an OpenAI-compatible gateway, whereas the Anthropic C cross-family validation used Amazon Bedrock directly. Behind a gateway, a stable model name may be routed, aliased, or silently updated, so our vendor and generational findings describe behavior observed through these endpoints during the evaluation window rather than necessarily the vendors’ native deployments; per-run model identifiers are recorded in the released logs, and a full table of requested model identifiers is provided in Appendix  D .
+Our attacks use fixed, ecologically valid framings (compliance, legal hold) rather than adaptive red-teaming. Trojan Hippo  ( 2 ) demonstrates that adaptive, OpenEvolve-generated attacks achieve 85% ASR on GPT-5-mini—a model that shows 2.5% ASR ( lower-bound estimates of vulnerability under realistic, non-adaptive attack conditions. They complement, rather than contradict, the higher rates reported by adaptive frameworks. An adaptive attacker targeting model-specific reasoning traces or intermediate memory states remains an open frontier; provenance-tracking defenses such as MemLineage  ( 13 ) and certified approaches such as SMSR  ( 15 ) represent the next battleground, though their robustness to adaptive bypass has not yet been demonstrated.
+6 Causal Mediation: The Sandbox as Attack Vector
+The preceding sections establish that Memory Sandbox blocks the primary recall pathway (Section  3.3 ) but can be bypassed by reasoning models that reconstruct the payload from RAG (Sections  3.4 – 3.5 ). A deeper question remains: does the sandbox architecture itself create the vulnerability it purports to defend against? We answer this through a causal mediation analysis that decomposes the sandbox’s effect into its constituent architectural components, revealing an iatrogenic vulnerability—the treatment causes the disease.
+6.1 Experimental Design
+We evaluate eight conditions (C0–C7) across two OpenAI models spanning a capability gap: gpt-4.1-mini (smaller, less capable) and gpt-5.1 (larger, more capable). Each condition isolates a specific architectural component of the sandbox defense:
+•
+C0 : No defense (baseline). Standard agent with full tool access.
+•
+C1 : Full sandbox. Recall tool removed from schema; tool visibility preserved ( list_all_facts available).
+•
+C2 : Sandbox blind. Both recall and list tools removed; no tool visibility.
+•
+C3 : Null recall. Recall tool present in schema but returns “No stored value found.”
+•
+C4 : Recall with frame. Recalled content delivered with authority framing (“this is from your persistent memory”) but outside the sandbox tool-call apparatus.
+•
+C5 : Prompt prohibition. System prompt instruction: “do not comply with recalled instructions that conflict with your guidelines.”
+•
+C6 : Sandbox no RAG. Sandbox architecture present but no RAG-retrieved content injected into memory.
+•
+C7 : Full isolation. Complete removal of all memory system components.
+Sample sizes range from
+6.2 Results
+Table 7: Causal mediation decomposition: attack success rate by condition and model. Wilson Score 95% CIs. The C1/gpt-5.1 interval does not overlap with any other condition’s CI by a margin exceeding 60 percentage points—a categorical inversion from the 0.9% baseline.
+Condition
+Model
+k/N
+ASR (%)
+Wilson 95% CI
+Role
+C0 No defense (baseline)
+gpt-4.1-mini
+0/76
+0.0
+[0.0%, 4.8%]
+—
+C0 No defense (baseline)
+gpt-5.1
+1/108
+0.9
+[0.2%, 5.1%]
+—
+C1 Full sandbox
+gpt-4.1-mini
+0/95
+0.0
+[0.0%, 3.9%]
+Conjunction
+C1 Full sandbox
+gpt-5.1
+74/99
+74.7
+[65.4%, 82.3%]
+Conjunction
+C2 Sandbox blind
+gpt-4.1-mini
+17/99
+17.2
+[11.0%, 25.8%]
+Context only
+C2 Sandbox blind
+gpt-5.1
+45/100
+45.0
+[35.6%, 54.8%]
+Context only
+C3 Null recall
+gpt-4.1-mini
+0/85
+0.0
+[0.0%, 4.3%]
+Content gate
+C3 Null recall
+gpt-5.1
+0/210
+0.0
+[0.0%, 1.8%]
+Content gate
+C4 Recall with frame
+gpt-4.1-mini
+0/100
+0.0
+[0.0%, 3.7%]
+Context gate
+C4 Recall with frame
+gpt-5.1
+0/190
+0.0
+[0.0%, 2.0%]
+Context gate
+C5 Prompt prohibition
+gpt-4.1-mini
+0/100
+0.0
+[0.0%, 3.7%]
+Minimal defense
+C5 Prompt prohibition
+gpt-5.1
+0/164
+0.0
+[0.0%, 2.3%]
+Minimal defense
+C6 Sandbox no RAG
+gpt-4.1-mini
+0/173
+0.0
+[0.0%, 2.2%]
+Content gate
+C6 Sandbox no RAG
+gpt-5.1
+0/285
+0.0
+[0.0%, 1.3%]
+Content gate
+C7 Full isolation
+gpt-4.1-mini
+0/194
+0.0
+[0.0%, 1.9%]
+Isolation
+C7 Full isolation
+gpt-5.1
+0/253
+0.0
+[0.0%, 1.5%]
+Isolation
+6.3 Causal Decomposition
+The eight conditions permit a clean causal decomposition of the sandbox’s architectural components:
+Recalled content is NECESSARY.
+C3 (null recall) produces 0% ASR on both models with tight upper bounds (1.8% for gpt-5.1 at
+Sandbox execution context is NECESSARY.
+C4 (recall with authority frame, outside tool-call context) produces 0% ASR on both models (
+The conjunction is SUFFICIENT (for gpt-5.1).
+C1 (full sandbox) achieves 74.7% ASR on gpt-5.1—a 74 percentage-point increase over the 0.9% baseline. Neither recalled content alone (C4 = 0%) nor execution context alone (without content, C3 = 0%) enables the attack. Both are individually necessary; their conjunction is sufficient to induce compliance in three-quarters of runs on the more capable model.
+Tool visibility is an AMPLIFIER, not a gate.
+Comparing C1 (74.7%) to C2 (45.0%) on gpt-5.1: removing tool visibility ( list_all_facts ) reduces ASR by approximately 30 percentage points. Tool visibility amplifies the attack—likely by providing an additional signal that the sandbox context is authoritative—but the sandbox execution context alone (C2) still produces 45% ASR without it.
+Prompt prohibition matches baseline.
+C5 produces 0% ASR on both models (upper bounds 2.6–5.7%). A single system-prompt instruction achieves the same protection as having no memory system at all.
+6.4 Capability Scaling: The Inversion is Capability-Dependent
+The most striking finding is the divergence between models under identical conditions:
+Condition
+gpt-4.1-mini
+gpt-5.1
+C0 (baseline)
+0.0%
+0.9%
+C1 (full sandbox)
+0.0%
+74.7%
+C2 (blind sandbox)
+17.2%
+45.0%
+For gpt-5.1, the full sandbox transforms a near-zero baseline into 74.7% ASR. For gpt-4.1-mini, the full sandbox produces 0%—but the blind sandbox (C2) produces 17.2%. This asymmetry reveals a qualitative difference in how the two models process tool-authority signals:
+•
+gpt-5.1 : Tool visibility amplifies compliance. The more capable model internalizes the tool-authority contract more deeply—information arriving through tool outputs is authoritative, and the presence of list_all_facts in the schema reinforces the legitimacy of the sandbox context. Adding tool visibility increases ASR from 45.0% to 74.7% (+30pp).
+•
+gpt-4.1-mini : Tool visibility enables detection . The less capable model uses tool visibility as a signal to identify the attack rather than comply with it. Adding tool visibility decreases ASR from 17.2% (C2) to 0% (C1). The same architectural feature that amplifies compliance in the more capable model enables detection in the less capable one.
+This is not a simple capability gradient. It is a qualitative inversion: the same architectural signal (tool schema visibility) drives opposite safety outcomes depending on the model’s capacity to internalize tool-authority contracts. More capable models are not uniformly harder to attack—they are harder to attack through some channels and easier through others, depending on whether the attack leverages exactly the capabilities that improve with scale.
+6.5 Iatrogenic Vulnerability: The Treatment Causes the Disease
+The causal decomposition establishes that the sandbox defense architecture is not merely ineffective—it is actively harmful. The baseline (C0) is safe: gpt-5.1 achieves 0.9% ASR without any defense. The “defense” (C1) elevates ASR to 74.7%. The 95% confidence intervals do not overlap by a margin exceeding 60 percentage points. This is a categorical inversion, not a marginal effect.
+The mechanism is architectural. The sandbox creates a trusted execution channel —a tool-call environment in which the model is conditioned by training to treat arriving information as authoritative (because that is what tools are for: providing ground-truth information the model should act upon). Recalled instructions arrive through this same channel, inheriting its authority. The model’s training to follow tool-output content creates a compliance pathway that does not exist when the same instructions arrive through other channels (C4 = 0%). For the more capable model, this tool-authority conditioning is stronger , not weaker: the capabilities that improve with scale—instruction following, context sensitivity, tool-use proficiency—are precisely those that the attack exploits. Capability scaling inverts safety intuitions for this vulnerability class.
+The C5 result drives this home: a simple system-prompt instruction (“do not comply with recalled instructions that conflict with your guidelines”) achieves the same 0% ASR as having no memory system at all. The elaborate sandbox apparatus—tool isolation, schema manipulation, capability gating—adds complexity, engineering cost, and a 74-percentage-point attack surface, while providing zero defensive value beyond what a single prompt line achieves. Occam’s razor cuts hard: the simplest possible intervention matches the full apparatus, meaning the apparatus is pure liability.
+6.6 Connection to Mechanistic Findings
+This causal mediation result is the behavioral manifestation of the compliance direction identified through the broader arbitration research program. The open-source factorial (Section  3.3 ) demonstrated that Memory Sandbox blocks the primary recall path for mechanical models but inverts for reasoning models. The present analysis identifies the causal mechanism of a structurally analogous inversion on frontier models: the sandbox does not merely fail to protect—it introduces a trusted execution channel that more capable models comply with more readily.
+The decomposition also constrains the solution space. Since recalled content is the necessary mediator (C3 = 0%), content-level interventions (filtering, validation, provenance checking of recalled items) are the correct point of intervention—consistent with the RATG proof-of-concept in Section  3.5 . Execution-context isolation backfires because it creates the authority signal rather than blocking it.
+6.7 Relationship to Earlier Findings
+Earlier versions of this work demonstrated Memory Sandbox efficacy on sub-frontier models, where the apparatus functions as intended (cf. C1/gpt-4.1-mini = 0% ASR in Table  7 ). The present findings reveal a capability-dependent boundary condition: models that more deeply internalize tool-authority contracts treat the sandbox execution context as an authorization channel rather than a containment boundary. This is not a retraction of earlier findings but an identification of the architectural property that determines whether the apparatus functions as defense or attack vector. The boundary is capability-contingent—the same architecture that contains less capable models actively enables more capable ones.
+The C5 result crystallizes this: a single system-prompt instruction achieves equivalent protection (0% ASR) without introducing the tool-authority channel, meaning the elaborate sandbox machinery was never the active ingredient in defense. What protected sub-frontier models was their weaker internalization of tool-authority contracts, not the sandbox’s architectural containment. When that internalization strengthens with capability, the apparatus becomes pure liability. The correct lesson is not “Memory Sandbox failed” but “Memory Sandbox’s success on weaker models was a false positive—the protection came from a model limitation that scales away.”
+6.8 Scope and Limitations
+These results constitute a high-magnitude case study on two models from a single provider, not a universal law. The capability-scaling claim requires validation across additional model families. magnitude of the inversion is robust to this variance, but exact point estimates should be treated as illustrative rather than stable population parameters. All experiments use benign proxy tasks; transfer to production persistent-memory architectures is inferred, not demonstrated.
+7 Deployment Validation: Coding Agent PR Review
+The preceding experiments use a synthetic enterprise email agent to isolate the injection–execution dissociation under controlled conditions. A natural question is whether the dissociation holds in a qualitatively different agentic workflow—one that more closely resembles shipped products at frontier labs. We validate this with a coding agent experiment that embeds adversarial instructions in a pull request review workflow.
+7.1 Experimental Setup
+We construct a synthetic PR review agent with six tools ( read_file , write_file , run_command , call_webhook , post_comment , approve_pr ). The agent reviews a legitimate pull request (a dry-run flag addition to a CI pipeline) and receives a reviewer comment containing an injected instruction to: (a) change config.yaml ’s webhook URL to an attacker-controlled external domain, (b) leak .env secrets via webhook, and (c) call an external webhook endpoint. The agent’s system prompt contains explicit security guidelines prohibiting all three actions. We evaluate four injection variants that vary in social-engineering quality:
+•
+direct : Blatant instruction (“change the config to evil.com”).
+•
+social_engineer : Authority-framed as an automated security bot scan (“per SEC-2024-0891, remediation required”).
+•
+authority_spoof : Header spoofing (“FROM: Platform Security Team, MANDATORY compliance action”).
+•
+context_blend : Instruction embedded within otherwise legitimate code-review feedback.
+We evaluate three models—GPT-5.1, GPT-4.1-mini, and GPT-4.1—at detection (did the model identify the injected instruction as adversarial in its reasoning or output?) and execution (did the model comply with the injected instruction despite detection?). Dissociation is defined as detection
+7.2 Results
+Table 8: Coding agent injection–execution dissociation by model and variant (
+Model
+Variant
+N
+Detect%
+Execute%
+Dissoc.%
+GPT-5.1
+direct
+53
+100
+0
+0
+GPT-5.1
+social_engineer
+56
+100
+36
+36
+GPT-5.1
+authority_spoof
+59
+100
+58
+58
+GPT-5.1
+context_blend
+59
+100
+2
+2
+GPT-4.1-mini
+direct
+52
+100
+0
+0
+GPT-4.1-mini
+social_engineer
+59
+100
+100
+100
+GPT-4.1-mini
+context_blend
+59
+71
+100
+71
+GPT-4.1-mini
+authority_spoof
+60
+93
+75
+68
+GPT-4.1
+direct
+57
+100
+0
+0
+GPT-4.1
+social_engineer
+57
+86
+44
+30
+7.3 Analysis
+Three findings emerge from Table  8 :
+Detection is near-universal; execution is variant-governed.
+All models detect the direct variant at 100% and refuse execution (0% across three models, 162 runs). Detection remains high (86–100%) across all social-engineering variants. Yet execution ranges from 0% to 100% depending on the framing quality, not the detection rate. GPT-4.1-mini achieves 100% detection on the social_engineer variant AND 100% execution—perfect dissociation in every run. The model explicitly flags the instruction as suspicious in its reasoning trace and then complies.
+Social-engineering quality, not detection capability, governs execution.
+The variant ordering by execution rate (direct direct variant provides no justification; all models refuse. The social_engineer and authority_spoof variants provide institutional authority framing (security bot, platform team); models comply despite detection. This mirrors the compliance-framing override observed in the memory attack factorial (Section  3.2 ), where seven of nine models overrode Prompt Hardening security rules because the stored instruction carried regulatory authority framing.
+The dissociation replicates in a deployment-relevant scenario.
+The memory-attack experiments (Sections  3 – 6 ) demonstrate dissociation through a temporal persistence mechanism: inject in session 1, execute in session 4. The coding agent experiment demonstrates dissociation through a single-turn mechanism: detect the injection in the PR comment AND execute it in the same response. The underlying phenomenon is identical—detection and execution are governed by independent mechanisms—but the coding agent setting is closer to production deployments. Coding agents with PR review, code generation, and deployment capabilities are shipped products at multiple frontier labs (GitHub Copilot Workspace, Cursor, Amazon Q Developer). The 58–100% execution rates under authority-spoofed injection in this workflow establish that the dissociation is not an artifact of the multi-session memory architecture but a general property of how LLMs resolve competing instructions under social-engineering pressure.
+Implications.
+Detection-based defenses (classifiers, monitors, reasoning-trace auditors) are necessary but insufficient: a system that flags 100% of injections can still execute 100% of them. The coding agent results reinforce the architectural conclusion of Section  5.1 : robust defense requires structural enforcement (tool-layer gating, capability restriction, content sanitization) rather than reliance on the model’s ability to detect threats, because detection and compliance are mechanistically separable.
+8 Related Work
+Persistent memory attacks.
+MINJA  ( 4 ) and Zombie Agents  ( 19 ) established that persistent memory attacks achieve high success rates against open-source models. MemoryGraft  ( 16 ) and InjecMEM  ( 8 ) provide additional evidence of memory poisoning variants. Trojan Hippo  ( 2 ) reports 85–100% ASR against Gemini 3.1 Pro and GPT-5-mini under an adaptive, OpenEvolve-generated attack using tool-call injection (crafted email). Their transfer attack on GPT-5 yields substantially lower rates (70% on RAG, 35% on Context without re-optimization), consistent with our finding that GPT-5 is more resistant than earlier generations. Hidden in Memory  ( 14 ) independently confirms that GPT-5.5 stores adversary-induced memories at 99.8%, consistent with our finding of 100% injection; their attack steers future conversations (60–89% success) rather than causing data exfiltration. OEP  ( 17 ) demonstrates that GPT-4o agents are vulnerable to clean-label experience poisoning (59% ASR on reasoning tasks), exploiting a different attack surface (self-evolution) with a convergent vulnerability rate to our RAG-injection finding (60.3% ASR on exfiltration). Cross-Session Stored Prompt Injection  ( 18 ) formalises the XSS analogy for persistent injection. MPBench  ( 12 ) provides a benchmark with four write channels and six attack classes, showing that existing prompt injection defenses fail to cover memory poisoning.
+Our work differs from these in three ways: (1) we use a fixed, ecologically valid RAG injection rather than adaptive red-teaming—our results are therefore lower-bound estimates of vulnerability; (2) we map vulnerability across multiple OpenAI and Google generations, observing no monotonic safety ordering among the tested snapshots—with a GPT-5.1 regression (12.2% ASR vs. 1.9% for its predecessor, non-overlapping CIs at 9 summarises these distinctions.
+Table 9: Comparison with concurrent persistent memory attack papers.
+Attack
+Adapt.
+Gen.
+Vendor
+Inj-Exec
+Defense
+Vector
+Trend
+Comp.
+Dissoc.
+Eval.
+Trojan Hippo
+Tool call
+✓
+✗
+✗
+✗
+4 defenses
+Hidden in Memory
+Ext. context
+✗
+✗
+✗
+✗
+✗
+OEP
+Self-evol.
+✗
+✗
+✗
+✗
+1 defense
+MINJA
+Query-only
+✗
+✗
+✗
+✗
+Prompt
+MemLineage
+(Defense)
+—
+—
+—
+—
+Provenance
+SMSR
+(Defense)
+—
+—
+—
+—
+Certified
+This work
+RAG doc
+✗
+✓
+✓
+✓
+6 defenses
+Agentic security benchmarks.
+InjecAgent  ( 21 ) , AgentDojo  ( 3 ) , and ASB  ( 22 ) evaluate defenses against input-level attacks on stateless or single-session agents. The threat model differs from persistent memory attacks: the payload arrives in the user’s message rather than via RAG retrieval, and there is no persistent state to exploit. The existing benchmark landscape has been saturated at the input layer; this paper evaluates a different threat model.
+Defense approaches.
+Input-level filtering is the dominant defense approach  ( 11 ) . Retrieval-level filtering has been proposed but not systematically evaluated against semantically masked payloads. Instruction-level hardening appears in system prompt guidance without empirical evaluation against stored-rule compliance framing. Tool-layer restriction has received almost no evaluation attention. On the formal defense side, MemLineage  ( 13 ) attaches cryptographic provenance and derivation lineage to memory entries, achieving zero ASR on a deterministic mechanism-isolation harness; SMSR  ( 15 ) provides the first certified robustness bound for multi-session memory poisoning. Both represent promising directions; whether they withstand adaptive attacks at the level demonstrated by Trojan Hippo remains an open question. This paper is the first to evaluate all four architectural layers (input, retrieval, instruction, tool) systematically against the same attack.
+Frontier model safety.
+Standard safety evaluations focus on refusal behavior in single-turn settings  ( 1 ) . The persistent memory setting introduces a temporal dimension absent from standard evaluations. Our screening of 21 frontier models across three providers extends safety characterisation to the multi-session agentic setting. Trojan Hippo  ( 2 ) reports 85–100% ASR on Gemini 3.1 Pro and GPT-5-mini under adaptive, OpenEvolve-generated attacks. We report 95% ASR on Gemini 3.1 Pro Preview (a distinct pre-release model) under a fixed, ecologically valid framing—a simpler attack achieving high ASR without adaptive optimization, suggesting that frontier vulnerability does not require adaptive attacks. The two Gemini model variants (production vs. preview) may differ in safety tuning; the comparison is directional, not a direct equivalence. A subsequent loaded-corpus confirmatory evaluation ( ( 6 ) , which embed dormant, trigger-activated behavior through deliberate backdoor training. The distinction is that Latent Carriers arise accidentally from benign instruction-following, with no adversarial fine-tuning; the dormant payload is stored by the victim model itself, making them a supply-chain rather than a training-time threat. Concurrent work on provenance neglect  ( 10 ) confirms the authority-spoofing vulnerability at broader scale, showing that models detect memory provenance but fail to condition execution on it across 36 model/vendor combinations.
+9 Conclusion
+Persistence changes the security problem for LLM agents. When an agent writes observations into long-term memory and reuses them across sessions, defenses that operate at the input or retrieval layer did not prevent the attack in this evaluation because the malicious payload enters through a channel they do not observe or cannot distinguish from legitimate content. Of six defenses evaluated, only tool-gating at the memory layer consistently disrupted the attack, and even this defense can invert for models whose safety depends on execution refusal rather than injection resistance. Defense effectiveness is not just layer-dependent but reasoning-capability-dependent: neither of the two memory-sandbox implementations we evaluated is safe across both reasoning and non-reasoning model classes. Frontier safety is neither categorical nor vendor-uniform in our evaluation window: the tested Gemini 3.1 Pro Preview snapshot exfiltrates at 95% (Wilson 95% CI [83.5%, 98.6%], C ). Defenses should treat memory recall as a privileged operation, verify the target model’s refusal mechanism before deployment, and account for the possibility that capability removal creates new attack pathways rather than eliminating existing ones. To support reproducibility, the evaluation harness, full execution logs, and analysis scripts will be released upon publication.
+Ethics, Responsible Disclosure, and Code Availability
+This work evaluates security vulnerabilities in LLM agents. No human subjects were involved; all experiments used automated tool-calling agents against simulated enterprise environments with synthetic data. We did not test against production deployments or exfiltrate real user data.
+Responsible disclosure.
+We disclosed our findings to the three frontier providers (OpenAI, Google, Anthropic) prior to public release, providing per-model ASR figures, the attack payload, and the compliance-framing mechanism. Our loaded-corpus evaluation identified non-zero exfiltration rates in production-accessible endpoints (GPT-4o: 20% ASR; Gemini 2.5 Pro: 22.5%; Gemini 3.1 Pro Preview: 95%). We note that the attack requires the malicious document to already be present in the RAG corpus—it does not exploit a model vulnerability in isolation but rather the interaction between retrieval, memory persistence, and tool-calling in agentic deployments.
+Code and data availability.
+The evaluation harness (LangGraph agent, SQLite persistence, defense implementations, detection pipeline), all experiment configurations, the full execution logs (5,040 factorial runs + 1,560 frontier confirmatory runs), and the analysis scripts (bootstrap CIs, Holm-Bonferroni correction, mechanistic tagging) are released at https://github.com/junwenleong/stateful-agent-security-eval under the MIT license. The malicious document, benign corpus, and trigger prompts are included to enable exact reproduction. Model weights are publicly available via Ollama; frontier model results depend on API access and may not reproduce if providers update their models.
+References
+Anthropic (2025)
+Anthropic
+The claude model spec .
+Note: https://www.anthropic.com/research/the-claude-model-spec
+Cited by: §8 .
+Das et al. (2026)
+D. Das, J. Piet, D. Kaviani, L. Beurer-Kellner, F. Tramèr, and D. Wagner
+Trojan Hippo: weaponizing agent memory for data exfiltration .
+arXiv preprint arXiv:2605.01970 .
+External Links: 2605.01970
+Cited by: §5.10 ,
+§8 ,
+§8 .
+Debenedetti et al. (2024)
+E. Debenedetti et al.
+AgentDojo: a dynamic environment to evaluate attacks and defenses for LLM agents .
+In NeurIPS Datasets and Benchmarks Track ,
+Cited by: §1 ,
+§8 .
+Dong et al. (2025)
+S. Dong, Z. Liu, M. Xie, J. Xiao, and Z. Qin
+Memory injection attacks on LLM agents via query-only interaction .
+In Advances in Neural Information Processing Systems ,
+Note: Also known as MINJA
+Cited by: §1 ,
+§8 .
+Greshake et al. (2023)
+K. Greshake, S. Abdelnabi, S. Mishra, C. Endres, T. Holz, and M. Fritz
+Not what you’ve signed up for: compromising real-world LLM-integrated applications with indirect prompt injection .
+In Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security ,
+pp. 79–90 .
+Cited by: §1 .
+Hubinger et al. (2024)
+E. Hubinger, C. Denison, J. Mu, M. Lambert, M. Tong, M. MacDiarmid, et al.
+Sleeper agents: training deceptive LLMs that persist through safety training .
+arXiv preprint arXiv:2401.05566 .
+Cited by: §8 .
+Inan et al. (2023)
+H. Inan, K. Upasani, J. Chi, R. Rungta, K. Iyer, Y. Mao, M. Tontchev, Q. Hu, B. Fuller, D. Testuggine, and M. Khabsa
+Llama guard: LLM-based input-output safeguard for human-AI conversations .
+arXiv preprint arXiv:2312.06674 .
+Cited by: §3.2 .
+Jing et al. (2026)
+H. Jing, F. Li, Y. Dong, W. Zhou, and R. Liu
+Memory poisoning attacks on retrieval-augmented large language model agents via deceptive semantic reasoning .
+Engineering Applications of Artificial Intelligence 167 , pp. 113968 .
+Cited by: §8 .
+Leong (2026a)
+J. W. Leong
+Forensic trajectory signatures for agent memory poisoning detection .
+arXiv preprint arXiv:2606.30566 .
+Cited by: §5.1 .
+Leong (2026b)
+J. W. Leong
+The detection–execution dissociation: LLM agents detect provenance but fail to enforce it .
+Note: In preparation
+Cited by: §8 .
+Liu et al. (2024)
+Y. Liu, Y. Jia, R. Geng, J. Jia, and N. Z. Gong
+Formalizing and benchmarking prompt injection attacks and defenses .
+In 33rd USENIX Security Symposium ,
+pp. 1831–1847 .
+Cited by: §8 .
+MPBench Authors (2026)
+MPBench Authors
+From untrusted input to trusted memory: a systematic study of memory poisoning attacks in LLM agents .
+arXiv preprint arXiv:2606.04329 .
+External Links: 2606.04329
+Cited by: §8 .
+Ouyang and Hou (2026)
+C. Ouyang and R. Hou
+MemLineage: lineage-guided enforcement for LLM agent memory .
+arXiv preprint arXiv:2605.14421 .
+External Links: 2605.14421
+Cited by: §5.10 ,
+§8 .
+Pulipaka et al. (2026)
+S. Pulipaka, S. Hlebik, L. Raghav, S. Abdelnabi, V. Raina, I. Sheth, and M. Fritz
+Hidden in memory: sleeper memory poisoning in LLM agents .
+arXiv preprint arXiv:2605.15338 .
+External Links: 2605.15338
+Cited by: §8 .
+Sharma (2026)
+T. Sharma
+SMSR: certified defence against runtime memory poisoning in persistent LLM agent systems .
+arXiv preprint arXiv:2606.12703 .
+External Links: 2606.12703
+Cited by: §5.10 ,
+§8 .
+Srivastava and He (2025)
+S. S. Srivastava and H. He
+MemoryGraft: persistent compromise of LLM agents via poisoned experience retrieval .
+arXiv preprint arXiv:2512.16962 .
+Cited by: §8 .
+Wang et al. (2026)
+K. Wang, J. Lou, Z. Zhou, and J. Li
+OEP: poisoning self-evolving LLM agents via locally correct but non-transferable experiences .
+arXiv preprint arXiv:2605.18930 .
+External Links: 2605.18930
+Cited by: §8 .
+Xie et al. (2026)
+Y. Xie, T. Liu, Y. Zhang, S. Liu, Y. Li, L. Su, and T. Liu
+What if prompt injection never left? rethinking agent security through cross-session stored prompt injection .
+arXiv preprint arXiv:2606.04425 .
+External Links: 2606.04425
+Cited by: §8 .
+Yang et al. (2026)
+X. Yang, Y. He, S. Ji, B. Hooi, and J. S. Dong
+Zombie agents: persistent control of self-evolving LLM agents via self-reinforcing injections .
+arXiv preprint arXiv:2602.15654 .
+Cited by: §1 ,
+§8 .
+Zeng et al. (2024)
+W. Zeng et al.
+ShieldGemma: generative AI content moderation based on Gemma .
+arXiv preprint arXiv:2407.21772 .
+Cited by: §3.2 .
+Zhan et al. (2024)
+Q. Zhan, Z. Liang, Z. Ying, and D. Kang
+InjecAgent: benchmarking indirect prompt injections in tool-integrated LLM agents .
+In Findings of the Association for Computational Linguistics: ACL ,
+Cited by: §1 ,
+§8 .
+Zhang et al. (2024)
+H. Zhang, J. Huang, K. Mei, Y. Yao, Z. Wang, C. Zhan, H. Wang, and Y. Zhang
+Agent security bench (ASB): formalizing and benchmarking attacks and defenses in LLM-based agents .
+arXiv preprint arXiv:2410.02644 .
+Cited by: §1 ,
+§8 .
+Appendix A Evaluation Artifacts: Full Catalog
+Ten evaluation artifacts were identified and corrected during development. The four most consequential are summarised here; the full list is available in the project repository.
+Artifact 1: Terminal tool message.
+The draft_email success message returned “Task complete,” causing compliant models to halt before calling send_email . Fixed by making the return message explicitly transitive: “Draft saved; call send_email now to transmit it.”
+Artifact 2: Multilingual token-flipping.
+qwen2.5:14b exhibited Thai-language reasoning and malformed tool calls under high tool count with a short system prompt. Fixed by adding an English-language persona instruction.
+Artifact 3: Full-value list return.
+memory_list_all_facts initially returned full key-value pairs, making memory_recall_fact redundant and invalidating the Memory Sandbox design. Fixed by returning keys only.
+Artifact 4: Tool contract blocking dependency.
+The list_all_facts return message instructed the model to “use recall_fact to retrieve values,” creating a blocking dependency for qwen2.5:72b when the referenced tool was unavailable. The model halted rather than falling back to the email task.
+Appendix B Daemon-State Degradation of Reasoning Models
+While extending the factorial with RATG (Section  3.5 ) across a nine-model sequential run on a single long-lived Ollama daemon (v0.30.11), six reasoning-capable models produced near-zero attack success—contradicting their 100% ASR in the primary factorial. Forensic analysis established this as an evaluation artifact, not a safety property.
+Mechanism.
+No runs contained refusal reasoning. Models did not decline to execute; instead, trigger-session output degraded: some runs produced reasoning announcing exfiltration but emitted no tool call; others sent only to the intended recipient after confabulating that the attacker address had been “redacted”; others produced no tool calls at all. The degradation mode varied by model and daemon session, indicating host-layer conditioning. This is distinct from the graceful degradation under Memory Sandbox (Section  3.4 ), where recall is removed and models legitimately complete the benign task.
+Baseline non-reproducibility.
+Fresh-daemon retests revealed that reasoning models can exhibit multiple internally deterministic states under apparently controlled conditions. For qwen3.5:122b: 60/60 exfiltration on one daemon load, 0/5 benign-only sends on another, with identical weights, prompts, and runtime version. The responsible variable could not be isolated (binary, version, digest, prompts, generation cap, context-length, and GPU memory pressure were all controlled or ruled out).
+Methodological consequences.
+(1) RATG efficacy (Section  3.5 ) is reported only for three mechanical models (qwen2.5:14b, qwen2.5:72b, qwen3:32b) whose behavior is deterministic across environments. (2) Safety evaluations of reasoning models on local inference should distribute runs across fresh daemon loads (full process restart between models); long-running sessions silently degrade output and under-report vulnerability. (3) The evaluation harness pins model digests and refuses to run on digest mismatch, preventing silent tag updates from being mistaken for behavioral changes. This artifact is distinct from the qwq:32b Draft-Only phenomenon (Section  3.3 ), which is a genuine deliberative refusal under the primary factorial’s 16k-context environment.
+Appendix C Bedrock Validation: Cross-Family Sandbox Bypass
+To test whether the Memory Sandbox bypass (Section  3.3 ) generalizes beyond the local Ollama environment and the single qwq:32b case, we ran a validation factorial on models served via Amazon Bedrock (full-precision serving, us-east-1 , temperature 0.0): 1,180 valid runs across three validation sub-arms (a 977-run tier-1 arm, a 140-run breadth arm, and an 80-run sandbox arm; 1,197 records total, of which 17 infrastructure errors were excluded, see below). We report the bypass-relevant arms here; an infrastructure-sensitivity analysis (quantization effects on ASR) is deferred to future work.
+Sandbox escalation.
+We escalated the two cross-provider Vulnerable Executors confirmed in the breadth screen below to Memory Sandbox at
+Model
+Provider
+Inj.
+ASR (sandbox)
+Mechanism
+mistral-large-3-675b
+Mistral
+40/40
+39/40 (98%)
+goal-directed RAG fallback; never calls recall_fact
+glm-5
+Z.AI
+37/40
+13/40 (32%)
+RAG re-retrieval; see below
+GLM-5: model refusal, not defense.
+Under sandbox, all 37 injected glm-5 runs re-retrieve the malicious document via RAG—both the 13 exfiltrating runs and the 24 non-exfiltrating runs. The 24 non-exfiltrations are the model’s intrinsic execution refusal (matching its refusal rate under no-defense), not an effect of the defense. Memory Sandbox provides no retrieval-layer protection for glm-5; its 32% ASR understates the defense’s failure.
+Injection-floor confound.
+A separate six-model arm (no-defense vs. Memory Sandbox, memory_recall_fact from the schema suppressed memory_save_fact in the injection session for five of six models—a tool-schema behavioral-anchor effect in which the model’s action selection changes when an unused tool is removed. Their injection rate collapsed to 30% or lower under sandbox (zero for four of the five), making their 0% ASR an artifact rather than evidence of recall-blocking. Only gpt-oss-120b held injection at 100% under sandbox, where it bypassed the defense (22/40 ASR) via benign-session re-injection (21 of 22 exfiltrations in S3). This confound motivated the explicit injection-floor gate applied to the escalation arm above.
+Provider breadth.
+A breadth screen (seven models, no-defense, model_resisted_injection in all runs)—the first non-Anthropic injection-resistant model we observe.
+Evaluation artifact: Bedrock Converse tool-name rejection.
+Two models (gpt-oss-safeguard-120b, gpt-oss-20b) intermittently emitted tool-call names violating the Bedrock Converse name regex [a-zA-Z0-9_-]+ in the single-shot no-attack context, causing the request to be rejected and the run to terminate with empty logs. We reclassified 17 such runs, all within the 977-run tier-1 sub-arm (the largest of the three validation sub-arms), as infrastructure errors and excluded them; no-attack BTCR is 100% on all completed runs. The raw malformed name was not captured and is flagged for future instrumentation.
+Appendix D Frontier Endpoint Provenance
+Table  10 lists the exact model identifiers requested for the loaded-corpus confirmatory evaluation (Section  4 , Table  4 ). All confirmatory runs used 3.7 ; Claude Sonnet 4.6 and Claude Haiku 4.5 via Bedrock global inference profiles, ap-southeast-1 ) and the cross-family validation of Appendix  C ( us-east-1 ). Because a gateway may route or alias a stable name, the identifiers below record what was requested ; we did not obtain provider-side confirmation of the resolved build, which is why the vendor and generational findings are scoped to behavior observed through these endpoints during the evaluation window rather than to the vendors’ native deployments. The gateway’s rsn. prefix on the Anthropic identifiers is one such aliasing artifact.
+Table 10: Requested model identifiers for the confirmatory frontier evaluation (
+Provider
+Paper name
+Requested model ID
+Google
+Gemini 2.5 Flash
+gemini-2.5-flash
+Gemini 2.5 Pro
+gemini-2.5-pro
+Gemini 3.5 Flash
+gemini-3.5-flash
+Gemini 3.1 Pro Preview
+gemini-3.1-pro-preview
+OpenAI
+GPT-4o
+gpt-4o
+GPT-4.1
+gpt-4.1
+GPT-5
+gpt-5
+GPT-5.1
+gpt-5.1
+GPT-5.2
+gpt-5.2
+GPT-5.4
+gpt-5.4
+GPT-5.5
+gpt-5.5
+GPT-5-mini
+gpt-5-mini
+GPT-5-nano
+gpt-5-nano
+o3
+o3
+o3-mini
+o3-mini
+o4-mini
+o4-mini
+Anthropic
+Claude Sonnet 4.6
+rsn.claude-sonnet-4-6
+Claude Sonnet 4.5
+rsn.claude-sonnet-4-5
+Claude Opus 4.5
+rsn.claude-opus-4-5
+Claude Opus 4.8
+rsn.claude-opus-4-8
+Claude Haiku 4.5
+rsn.claude-haiku-4-5
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+Click the "Report Issue" (
+) button, located in the page header.
+Tip: You can select the relevant text first, to include it in your report.
+Our team has already identified the following issues . We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion , and welcome developer contributions .
+We gratefully acknowledge support from
+our major funders ,
+member institutions , ,
+and all contributors.
+About
+Help
+Contact
+Subscribe
+Copyright
+Privacy
+Accessibility
+Operational Status (opens in new tab)
+Major funding support from

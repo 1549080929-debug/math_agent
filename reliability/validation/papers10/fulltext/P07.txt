@@ -1,0 +1,471 @@
+When Does Verification Pay Off?A Closer Look at LLMs as Solution Verifiers
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract
+1 Introduction
+2 Related Work
+3 Preliminaries
+3.1 Datasets, Solvers, and Verifiers
+3.2 Evaluation Metrics
+3.3 Verification Settings
+4 Experimental Setup
+Models.
+Datasets.
+Evaluation.
+Implementation.
+5 Results
+5.1 Does Verifier Gain Predict Improvements from Resampling?
+5.2 Do Better Solvers Make Better Verifiers?
+Solver performance.
+Correlating verifier and solver performance.
+Examining verifier performance at different model families and sizes.
+5.3 Are Verifiers Biased Toward Solutions That Resemble Their Own?
+5.4 How Does Reasoning Post-Training Affect Solver and Verifier Performance?
+Reasoning post-training’s effect on solver performance.
+Reasoning post-training’s effect on verifier performance.
+5.5 How Does Task Type Affect Verifiability?
+6 Conclusion
+Limitations and future work.
+References
+A Additional Details on Verifier Metrics
+B Additional Details on Models
+C Additional Details on Datasets
+C.1 Real-World Datasets
+C.2 Synthetic Datasets
+D Additional Details on Experimental Setup
+E Solver Accuracy by Dataset
+F F1-Score and Precision Visualization
+G Self-Verification Keywords
+H Generation Log-Likelihood as an Alternative Similarity Metric
+I Effect of Reasoning Post-Training on Solver Performance
+License: CC BY 4.0
+arXiv:2512.02304v2 [cs.CL] 21 Apr 2026
+When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers
+Lu et al.
+When Does Verification Pay Off?
+A Closer Look at LLMs as Solution Verifiers
+Jack Lu
+Ryan Teehan
+Jinran Jin
+Mengye RenAgentic Learning AI Lab, New York University {yl11330, rst306, jj3007, mengye}@nyu.edu https://agenticlearning.ai/llm-verification
+November 20, 2025
+0 0 footnotetext: * Equal contribution.
+Abstract
+Large language models (LLMs) can act as both problem solvers and solution verifiers, where the latter select high-quality answers from a pool of solver-generated candidates. This raises the question of under what conditions verification pays off in solver–verifier systems. Prior work has conducted only limited studies of the factors influencing verification performance, focusing primarily on self-verification and examining neither the relationship between solver and verifier model families nor the effects of reasoning post-training. To rectify this, we present a systematic study across 37 models spanning multiple families, sizes, and base vs. post-trained variants, evaluated on 9 benchmarks covering logical reasoning, structured puzzles, symbolic computation, . This can take the form of sample-and-rank approaches ( Nichols et al., 2020 ) , majority vote ( Wang et al., 2023 ) , model-based aggregation ( Chen et al., 2024 ) , or sampling then filtering ( Weng et al., 2023 ) . Recent work has focused on studying scaling test-time compute with verifiers. For example, Zhao et al., 2025 study random sampling with self-verification, Chen et al., 2025 study combining parallel sampling with self-correction, and Singhi et al., 2025 compare Self-Consistency  ( Wang et al., 2023 ) to scaling with a generative verifier. Snell et al., 2025 investigate compute-optimal approaches to test-time scaling with process-level verification.
+Self-improvement. Researchers have also studied LLM self-improvement and self-evaluation, with some voicing skepticism ( Huang et al., 2024b ; Kamoi et al., 2024 ; Olausson et al., 2023 ; Panickssery et al., 2024 ; Stechly et al., 2025 ) . On the other hand, recent work has provided a theoretical framework for self-improvement via distribution sharpening, along with empirical support ( Huang et al., 2024a ) . Zhang et al., 2024 look specifically at self-improvement for small models, arguing that they need to be paired with a stronger verifier. Some practical methods for self-improvement use natural language feedback ( Madaan et al., 2023 ; Shinn et al., 2023 ; Kim et al., 2023 ) or train models for self-correction explicitly ( Welleck et al., 2023 ) . Other methods use tools ( Gou et al., 2024 ) , particularly code interpreters ( Zhou et al., 2024 ) , to iteratively improve solutions.
+Figure 1 :
+Average solver accuracy of each model over all datasets. Base model families are suffixed by -Base . Models within each family are ordered in increasing size. We show information for each evaluated model in Table  1 .
+3   Preliminaries
+In this section, we establish the framework used throughout this work. We define datasets, solvers, and verifiers, introduce the metrics used to evaluate solver and verifier behaviors, and specify the verification settings in our empirical analysis.
+3.1   Datasets, Solvers, and Verifiers
+Let Song et al., 2025 , who find chain-of-thought (CoT) verification more stable than multiple-choice formats, we instruct both solvers and verifiers to generate CoT reasoning before producing their final answers and judgments. We define the correctness indicator as
+3.2   Evaluation Metrics
+We define the accuracy of a solver A for reference) for our verification settings. In addition, we compute the true positive rate (TPR), false positive rate (FPR), and false negative rate (FNR):
+Our primary goal is to evaluate whether using a verifier verifier gain :
+(1)
+This is a simple, yet useful, metric because it quantifies the improvement in correctness induced by filtering with the verifier. TPR/FPR describe the verifier in isolation; solver accuracy describes the generator in isolation, but verifier gain measures the benefit of the combined system. Since this is an asymptotic metric, it serves as a bound on the improvement attainable by verifier-based rejection sampling. Throughout this work, we use verifier gain to compare differences in verification behavior.
+3.3   Verification Settings
+We group models into families (e.g., Llama3 , Qwen2.5 ), where each family contains related models of varying sizes. Because base and post-trained models often exhibit substantially different behaviors, we treat them as distinct families. For example, the base model meta-llama/Llama-3.1-70B belongs to the Llama3-Base family and the post-trained model meta-llama/Llama-3.1-8B-Instruct belongs to the Llama3 family. We study three different verification settings, defined by the solver-verifier relationship:
+•
+Self-Verification. The solver and verifier are the same model, so the model verifies its own solutions. For example, when a 70B Llama3 model is used as both the solver and the verifier, the verification metric (e.g., accuracy, FPR) is computed on this single pairing.
+•
+Intra-Family Verification. The verifier evaluates solutions produced by other models within the same family. For example, a 70B Llama3 verifier may evaluate outputs from 8B or 13B Llama3 solvers. The reported metric is averaged over all such within-family solvers, excluding the self-verification case.
+•
+Cross-Family Verification. The verifier evaluates solutions from models of different families. For example, a base Llama3 verifier may evaluate outputs from Qwen3 or from a post-trained Llama3 . The reported metric is averaged over all such cross-family solvers.
+During our evaluation, we partition our computed verifier metrics according to the verification setting and average within each partition.
+4   Experimental Setup
+Models.
+We evaluate the solver and verifier abilities of 21 post-trained models from the Llama3   ( Grattafiori et al., 2024 ) , Qwen2.5   ( Qwen et al., 2024 ) , Qwen3   ( Yang et al., 2025 ) , and DeepSeek-R1   ( DeepSeek-AI et al., 2025 ) families. For our study of reasoning post-training effects in Section  5.4 , we additionally evaluate 12 base models from the Qwen2.5-Base and Qwen3-Base families.
+We specifically choose off-the-shelf, general-purpose models so that each model can serve as both a solver and a verifier, allowing controlled comparison across these roles.
+Model sizes range from 0.5B to 72B parameters. The full model list, with sizes, families, and HuggingFace identifiers, is provided in Appendix  B . The legend of Figure  1 displays the seven model families and the color scheme assigned to each.
+Datasets.
+We compile a broad suite of real-world and synthetic tasks spanning diverse domains, including tasks requiring , top-p  D .
+Upon publication, we plan to open-source all experiment and data generation code.
+5   Results
+5.1   Does Verifier Gain Predict Improvements from Resampling?
+Figure 2 :
+Verifier gain (Equation  1 ) predicts empirical rejection sampling gain. Each point is one solver–verifier pair averaged across datasets, colored by verifier family.
+We first empirically validate our verifier gain metric, which estimates the expected improvement in a solver’s accuracy when using a verifier for rejection sampling. To assess how well this metric predicts real performance, we conduct rejection sampling experiments across all
+Figure  2 plots the empirical gain against the theoretical verifier gain for each pair, averaged across datasets. The Pearson correlation (
+Takeaway:
+Verifier gain reliably predicts rejection sampling gains and serves as a powerful comparative metric for evaluating solver–verifier pairs. Crucially, it can be estimated from a single verification round without costly rejection sampling experiments.
+5.2   Do Better Solvers Make Better Verifiers?
+Figure 3 :
+Correlation between each verifier’s metrics (rows) and its own solver accuracy for all 21 post-trained models, averaged over all datasets. Each metric is computed over our three verification settings (columns).
+We next study the relationship between solver and verifier performance, and how to best measure the benefits of verification.
+Solver performance.
+We benchmark all 37 models on each of our 9 datasets, averaging performance across tasks (Figure  1 ) and reporting task-level results in Appendix  E . Overall, solver accuracy increases with model capacity. Models in the Qwen3 and DeepSeek families perform particularly well, whereas Llama3-Base performs poorly due to base models being unfamiliar with the question–answering instruction format. Within each family, we observe clear performance scaling for Qwen2.5-Base and DeepSeek , with the remaining families showing similar upward trends.
+Correlating verifier and solver performance.
+After establishing solver accuracy, we analyze whether a model’s solver performance correlates with its performance as a verifier (Figure  3 ). For each of our 21 post-trained models and each dataset, we evaluate verification on the same set of solver models to obtain verifier accuracy, F1-Score, precision, FPR, FNR, and gain for every solver–verifier pair. For each verifier, we then partition the results by our three verification settings and average within each setting over solvers and datasets.
+While verifier accuracy tends to improve with the verifier’s own solver accuracy, the relationship becomes more nuanced when examining other metrics. The FPR increases during self-verification and intra-family verification but decreases slightly during cross-family verification, indicating that when a strong solver is used as a verifier, it is more likely to falsely label a solution as correct if it was generated by itself or another model in its family. We provide additional visualizations for F1-Score and precision in Appendix  F .
+Figure 4 :
+We show each verifier’s metric (rows) against model size for all 21 post-trained models, averaged over all datasets. Models are separated by family and ordered by increasing size. Each metric is computed over our three verification settings (columns).
+To better interpret the trends suggested by the accuracy and FPR results, we examine verifier gain in the final row. This visualization offers a clearer view of verification quality: self-verification yields the smallest gains, and more accurate solvers do not exhibit greater self-improvement. Gains increase slightly in intra-family verification, while cross-family verification provides the greatest potential benefits.
+Examining verifier performance at different model families and sizes.
+In Figure  4 , we repeat the experiments from Figure  3 but plot each verifier metric as a function of model size within each model family. Verification accuracy and FNR consistently improve as models become larger, whereas FPR behaves more inconsistently, often increasing with model size (e.g., intra-family verification for DeepSeek ).
+For state-of-the-art reasoning post-trained models such as Qwen3 and DeepSeek , we find that verifier gains are largest in the cross-family setting, smaller in the intra-family setting, and minimal during self-verification. At first glance, this appears to contradict Song et al., 2025 , who report that self-verification GV-Gaps increase with more pre-training FLOPs. However, their analysis focuses on older model families, and Figure  3 likewise shows larger verifier gains for older models such as Qwen2.5 and Llama3 .
+We hypothesize that stronger reasoning post-trained models like DeepSeek and Qwen3 show negligible gains in self-verification and limited gains in intra-family verification because they may already engage in spontaneous self-verification when used as solvers, reducing the benefit of an additional forced verification round. To test this, we measure the spontaneous self-verification rate of all 21 post-trained models across all 9 datasets by scanning solver outputs for self-verification keywords (e.g., “let me check,” “wait,” “reconsider,” “that’s wrong”; full list in Appendix  G ). Indeed, Qwen3 and DeepSeek self-verify in 96% and 73% of outputs, respectively, while Llama3 and Qwen2.5 self-verify in only 1–2%. This aligns with our hypothesis: models that already spontaneously self-verify during solving leave little room for an additional verification pass to add value. More broadly, it suggests the relevant question is whether reasoning post-training introduces spontaneous self-verification.
+Takeaways:
+1.
+Verifier models are biased toward accepting incorrect solutions when performing self-verification or intra-family verification.
+2.
+Verification accuracy alone is not a reliable predictor of how much a verifier can improve a solver at test time. Instead, computing verifier gain using solver accuracy and verifier precision provides a more reliable metric.
+3.
+While model families like Llama3 and Qwen2.5 show some ability to self-improve, stronger model families like DeepSeek and Qwen3 do not, which we find is linked to the latter already spontaneously self-verifying during solving (73–96% vs. 1–2%).
+5.3   Are Verifiers Biased Toward Solutions That Resemble Their Own?
+Figure 5 :
+Correlation between verifier metrics and similarity scores between solver-verifier pairs. Each marker is colored based on the verifier model family. Self-verification is omitted as it yields only one data point per model, too few for reliable correlation analysis.
+Humans tend to judge solutions that resemble their own reasoning as more likely correct. This mirrors self-enhancement bias  ( Krueger, 1998 ) , where individuals evaluate themselves more favorably than evidence suggests. Our results in Figures  3 and  4 show that strong reasoning models benefit the least from self-verification and the most from cross-family verification, suggesting an analogous effect in solver–verifier interactions.
+To directly investigate this, we study the relationship between verifier performance metrics and the solver–verifier similarity score , defined as the average cosine similarity between two models’ solution embeddings across all dataset problems. We conduct cross-verification experiments using 12 post-trained models (the three smallest from each of four families) and compute all verifier metrics for each pair. For intra-family verification, each solver has 2 same-family verifiers (excluding itself), yielding sentence-transformers /all-mpnet-base-v2 .
+Figure  5 shows that, for both intra-family and cross-family settings, the more similar the solver and verifier distributions, the more likely the verifier is to accept incorrect answers. While intra-family verifier gains are too small to yield a strong correlation, cross-family gains decrease significantly as similarity increases, indicating that choosing a dissimilar verifier leads to more reliable verification. We replicate this analysis using log-likelihood as an alternative similarity metric with the same directional findings, but we prefer cosine similarity as the primary metric because log-likelihood conflates distributional similarity with intrinsic predictability of the solver’s text (see Appendix  H for details).
+Takeaway: Higher similarity between solver and verifier solution distributions increases the verifier’s tendency to accept incorrect solver outputs, reducing verifier gain. Using a verifier with a meaningfully different solution distribution mitigates this bias.
+5.4   How Does Reasoning Post-Training Affect Solver and Verifier Performance?
+Figure 6 :
+Changes in verifier metrics of the Qwen2.5-Base and Qwen3-Base models from reasoning post-training.
+We examine how post-training influences verifier behavior, focusing on the Qwen2.5-Base / Qwen2.5 and Qwen3-Base / Qwen3 pairs, since other families are either too weak ( Llama3-Base ) or lack base models ( DeepSeek ). As both Qwen2.5 and Qwen3 use GRPO for reasoning post-training, our analysis primarily concerns its effects. Verification metrics are computed across all 37 base and post-trained models.
+Reasoning post-training’s effect on solver performance.
+We evaluate how solver accuracy changes after reasoning post-training, computing accuracy averaged across model families and datasets. As expected, post-training yields substantial improvements: Qwen2.5 solvers improve by Qwen3 solvers show a striking
+Reasoning post-training’s effect on verifier performance.
+We next analyze how reasoning post-training affects verifier behavior (Figure  6 ). For each model, we compute verifier metrics against all solvers and datasets, partition by verification setting, and average within families. For both Qwen families, post-training increases FPR and reduces verifier gain in self-verification, despite improvements in FNR. Although Qwen3 benefits more in solver accuracy (Figure  12 ), its post-trained verifiers show higher FPRs and lower gains in both self- and intra-family verification. In contrast, both families, especially Qwen3 , show substantial improvements in cross-family verification. Overall, reasoning post-training exacerbates trends identified previously, increasing false positives and limiting self-verification benefits.
+Takeaway: Reasoning post-training significantly improves problem-solving but can reduce self- and intra-family verification gains, while boosting cross-family verification performance.
+5.5   How Does Task Type Affect Verifiability?
+Thus far, we have examined model-related factors. We now shift to a task-level perspective and ask: are tasks that are easy to solve also easy to verify? In Figure  7 , we recompute the verifier metrics from Section  5.2 , average across all verifier models, and plot them against solver accuracies. Solver accuracy and verifier accuracy correlate strongly in all settings, but the picture is more mixed for verifier gains. During self-verification, we find essentially no correlation between verifier gain and solver accuracy, but a clear positive relationship emerges during intra-family and cross-family verification. Notably, AIME appears as an outlier, potentially because some models encountered similar problems during post-training.
+Figure 7 :
+Correlation of verifier metrics (rows) with solver accuracies, averaged over solver-verifier pairs that belong to each verification setting (columns).
+The best-fit lines for verifier accuracy reveal two distinct task clusters (colored red and blue), leading us to ask: are some tasks inherently easier to verify than others? In Figure  7 , AIME, GSM8K, 3SAT, and Sudoku exhibit a higher ratio of verifier accuracy to solver accuracy and deliver higher gains across all settings. Sudoku and 3SAT require exponential solving time but allow polynomial-time verification, whereas verifying a matrix product offers no such shortcut. Among real-world datasets, GSM8K and AIME involve high-school-level ) in the definitions, but sometimes omit them for brevity when the context is clear.
+Appendix B Additional Details on Models
+We show the information for each of our 37 evaluated models in Table  1 .
+Appendix C Additional Details on Datasets
+C.1   Real-World Datasets
+Note that for MMLU (STEM) and MMLU (Social Sciences), we concatenate questions from all subjects that belong to the STEM and Social Sciences supercategories in  Hendrycks et al., 2021 , respectively.
+C.2   Synthetic Datasets
+We generate three synthetic datasets, named 3SAT, Matrix Multiplication, and Sudoku, with 1000 samples each. We explain each synthetic dataset’s generation parameters below.
+Each 3SAT CNF contains uniformly sampled numbers of variables and clauses from 2 to 8 (inclusive). Each Sudoku puzzle is a 9x9 grid with 12 randomly missing cells. Each Matrix Multiplication problem is about multiplying 2 4x4 integer matrices with values uniformly sampled from
+The generation code files for all synthetic datasets are seeded for reproducibility.
+An example of a generated 3SAT problem:
+## Problem Definition
+**SAT (Boolean Satisfiability Problem)** is a fundamental problem in computer science
+where we need to determine if there exists an assignment of Boolean values (True/False)
+to variables that makes a given Boolean formula evaluate to True.
+**Variables**: In this problem, variables are named as single letters. Each variable can
+be assigned either True (T) or False (F).
+**Literals**: A literal is either a variable (like a) or its negation (like ˜a, meaning
+"not a"). If a is True, then ˜a is False, and vice versa.
+**Clauses**: A clause is a disjunction (OR operation) of literals. A clause is satisfied
+(True) if at least one of its literals is True. For example, the clause (a or ˜b) is True if
+either a is True OR b is False (or both).
+**CNF (Conjunctive Normal Form)**: The Boolean formula is given in CNF, which is a
+conjunction (AND operation) of multiple clauses. The entire formula is satisfied only if
+ALL clauses are satisfied simultaneously.
+**3SAT**: This is a special case of SAT where every clause contains exactly 3 literals.
+## The Problem
+Find a satisfying assignment for the following CNF formula: (˜c or ˜b or d) and
+(d or ˜b or ˜c) and (d or a or c) and (˜c or d or a) and (b or ˜a or d) and (c or d or ˜b)
+## Instructions
+Provide your answer as a list of variable assignments, one per line, in the format
+"variable_name T" or "variable_name F." For example:
+\boxed{
+a T
+b F
+}
+This means a=True, b=False.
+Another example answer is
+\boxed{
+a F
+b T
+}
+This means a=False, b=True.
+Output and only output the T/F values for the variables that appear in the provided
+CNF formula.
+An example of a generated Sudoku problem:
+## Sudoku Problem
+**Sudoku** is a logic-based number-placement puzzle. The objective is to fill a 9x9 grid
+with numbers so that each column, each row, and each of the 3x3 sub-grids contains all
+of the numbers from 1 to 9.
+## The Puzzle
+Complete the following 9x9 Sudoku grid (empty cells are marked with ’_’):
+7 4 2 1 _ 5 8 9 6
+1 6 9 2 4 8 3 5 7
+8 5 3 _ _ 7 2 1 4
+2 _ 8 9 7 1 4 6 5
+5 7 6 4 8 2 9 3 _
+4 9 1 3 _ 6 _ 8 _
+3 1 5 8 2 4 6 7 9
+6 8 _ 7 1 _ 5 2 3
+_ 2 7 5 6 _ 1 4 8
+## Instructions
+Provide your answer as a completed 9x9 grid with all numbers filled in, formatted exactly
+like the puzzle above but with numbers instead of underscores.
+For example, a completed 4x4 grid should look like:
+\boxed{
+1 2 3 4
+3 4 1 2
+2 3 4 1
+4 1 2 3
+}
+An example of a generated Matrix Multiplication problem:
+## Matrix Multiplication Problem
+**Matrix Multiplication** is a fundamental operation in linear algebra where we compute
+the product of two matrices. For two square matrices A and B of size 4x4, the product
+C = A x B is computed as:
+C[i][j] = Sum(k=0 to 3) A[i][k] x B[k][j]
+## The Problem
+Compute the product of the following two 4x4 matrices:
+**Matrix A:**
+0 1 1 4
+-1 3 4 4
+-2 -5 -5 0
+-4 4 5 0
+**Matrix B:**
+1 2 0 5
+1 -2 0 0
+3 -1 -3 -3
+2 5 -4 2
+## Instructions
+Provide your answer as the resulting 4x4 matrix C = A x B, formatted with each row
+on a separate line and numbers separated by spaces.
+For example, a 2x2 result matrix is formatted like:
+\boxed{
+1 2
+3 4
+}
+Appendix D Additional Details on Experimental Setup
+We use the following solver prompt for all models:
+Please reason step by step, and put your final answer within \boxed{{}}.
+{question}
+We use the following verifier prompt for all models:
+You are a teacher that is evaluating a student’s answer to a question.
+Your task is to determine whether the answer is correct or incorrect.
+Question: {question}
+Student’s Answer: {response}
+Please evaluate the student’s answer carefully. Consider:
+- Is the answer factually accurate?
+- Is the reasoning sound and logical?
+- Does it fully address the question asked?
+After your evaluation, provide your judgment in the
+following format:
+- If the answer is correct, write: \boxed{{correct}}.
+- If the answer is incorrect, write: \boxed{{incorrect}}.
+First explain your analysis over the student’s answer, then provide your final judgment in
+the boxed format. Make sure the final judgment is either "correct" or "incorrect" inside
+the \boxed{{}}. Do not put anything else in \boxed{{}}. Do not repeat the student’s answer
+in \boxed{{}}.
+Figure  8 displays the ratio of filtered solver outputs due to not containing a box for answer extraction, averaged across all datasets.
+Figure 8 :
+Average ratio of filtered solver outputs for each model over all datasets. Base model families are suffixed by -Base . Models within each family are ordered in increasing size.
+Appendix E Solver Accuracy by Dataset
+Figure  9 shows the solver accuracies of all 37 models on each of our 9 datasets.
+Figure 9 :
+The solver accuracies of 37 models on each dataset.
+Appendix F F1-Score and Precision Visualization
+Figure  3 shows the correlation between each model’s verification ability and its own solver accuracy for all 21 post-trained models. We additionally display verifier F1-Score and precision in Figure  10 .
+In comparison to verifier accuracy, while F1-Score also positively correlates with the verifier’s own solver accuracy for all verification settings, the slopes decrease from self-verification to intra-family verification, and further decrease for cross-family verification, showing that the increase in false positive rate in Figure  3 has a stronger impact on lowering F1-Score than accuracy.
+While Section  5.2 explains the low verifier gains for self- and intra-family verification through close examination of FPR, we additionally plot verifier precision in Figure  10 . However, since precision is the expected performance of verifier-based rejection sampling in the limit of infinite sampling and our main metric “verifier gain” is defined in terms of it (Equation  1 ), precision does not help explain the differences in verifier gains across verification settings.
+Figure 10 :
+Correlation between each model’s verifier metrics (rows) and its own solver accuracy for all 21 post-trained models, averaged over all datasets. Each verifier metric is computed over three settings (columns): self-verification, intra-family verification, and cross-family verification. We use the same set of post-trained models as the set of solver models.
+Appendix G Self-Verification Keywords
+To measure the spontaneous self-verification rate of solver outputs (Section  5.2 ), we scan each solver output for the following
+case-insensitive keywords (separated by commas):
+let me check, let me verify, double-check, let me recalculate, wait, hold on, going back, reconsider, let me re-, mistake, i made, i forgot, i missed,
+that doesn’t, that’s wrong, that’s not, this is wrong
+A solver output is classified as containing spontaneous self-verification if any of these keywords appear in the generated text.
+Appendix H Generation Log-Likelihood as an Alternative Similarity Metric
+As a complement to the cosine similarity analysis in Section  5.3 , we compute the average per-token log-likelihood that each verifier assigns to each solver’s outputs and use this as an alternative similarity metric. A key limitation of this metric is that it conflates two signals: (a) distributional similarity between the solver and verifier, which is the quantity of interest, and (b) intrinsic predictability of the solver’s text, independent of the evaluating model. For example, short, conventionally structured outputs from Llama3 receive higher likelihood from most verifiers than the long reasoning chains with backtracking produced by DeepSeek , regardless of distributional similarity. To isolate (a), we normalize by solver, subtracting each solver’s mean log-likelihood across all verifiers.
+After normalization, the same directional findings emerge (Figure  11 ): higher generation log-likelihood correlates with higher FPR (intra-family slope  5 .
+Figure 11 :
+Correlation between verifier metrics and solver-normalized generation log-likelihood for each solver–verifier pair. Each marker is colored based on the
+verifier model family. Self-verification is omitted as it yields only one data point per model, too few for reliable correlation analysis.
+Appendix I Effect of Reasoning Post-Training on Solver Performance
+Figure  12 shows the average improvement in solver accuracies of Qwen2.5-Base and Qwen3-Base families of models from their respective post-training procedures.
+Table 1: Complete list of each evaluated model’s HuggingFace identifier, family, and size.
+HuggingFace Identifier
+Family
+Size
+Qwen/Qwen3-0.6B-Base
+Qwen3-Base
+0.6B
+Qwen/Qwen3-1.7B-Base
+Qwen3-Base
+1.7B
+Qwen/Qwen3-4B-Base
+Qwen3-Base
+4B
+Qwen/Qwen3-8B-Base
+Qwen3-Base
+8B
+Qwen/Qwen3-14B-Base
+Qwen3-Base
+14B
+Qwen/Qwen3-0.6B
+Qwen3
+0.6B
+Qwen/Qwen3-1.7B
+Qwen3
+1.7B
+Qwen/Qwen3-4B
+Qwen3
+4B
+Qwen/Qwen3-8B
+Qwen3
+8B
+Qwen/Qwen3-14B
+Qwen3
+14B
+Qwen/Qwen3-32B
+Qwen3
+32B
+Qwen/Qwen2.5-0.5B
+Qwen2.5-Base
+0.5B
+Qwen/Qwen2.5-1.5B
+Qwen2.5-Base
+1.5B
+Qwen/Qwen2.5-3B
+Qwen2.5-Base
+3B
+Qwen/Qwen2.5-7B
+Qwen2.5-Base
+7B
+Qwen/Qwen2.5-14B
+Qwen2.5-Base
+14B
+Qwen/Qwen2.5-32B
+Qwen2.5-Base
+32B
+Qwen/Qwen2.5-72B
+Qwen2.5-Base
+72B
+Qwen/Qwen2.5-0.5B-Instruct
+Qwen2.5
+0.5B
+Qwen/Qwen2.5-1.5B-Instruct
+Qwen2.5
+1.5B
+Qwen/Qwen2.5-3B-Instruct
+Qwen2.5
+3B
+Qwen/Qwen2.5-7B-Instruct
+Qwen2.5
+7B
+Qwen/Qwen2.5-14B-Instruct
+Qwen2.5
+14B
+Qwen/Qwen2.5-32B-Instruct
+Qwen2.5
+32B
+Qwen/Qwen2.5-72B-Instruct
+Qwen2.5
+72B
+meta-llama/Llama-3.2-1B
+Llama3-Base
+1B
+meta-llama/Llama-3.2-3B
+Llama3-Base
+3B
+meta-llama/Llama-3.1-8B
+Llama3-Base
+8B
+meta-llama/Llama-3.1-70B
+Llama3-Base
+70B
+meta-llama/Llama-3.2-1B-Instruct
+Llama3
+1B
+meta-llama/Llama-3.2-3B-Instruct
+Llama3
+3B
+meta-llama/Llama-3.1-8B-Instruct
+Llama3
+8B
+meta-llama/Llama-3.1-70B-Instruct
+Llama3
+70B
+deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+DeepSeek
+1.5B
+deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+DeepSeek
+7B
+deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+DeepSeek
+14B
+deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+DeepSeek
+32B
+Table 2 : HuggingFace information and sizes of real-world datasets.
+Dataset Name
+HuggingFace Identifier
+HuggingFace Split
+Size
+GSM8K
+openai/gsm8k
+test
+1319
+AIME
+TianHongZXY/aime-1983-2025
+test
+963
+MMLU (STEM)
+cais/mmlu
+test
+316
+MMLU (Social Sciences)
+cais/mmlu
+test
+308
+CSQA
+tau/commonsense_qa
+validation
+2442
+GPQA
+Idavidrein/gpqa
+train
+198
+Figure 12 :
+Improvements in solver accuracies of Qwen2.5-Base and Qwen3-Base models from reasoning post-training.
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+Click the "Report Issue" (
+) button, located in the page header.
+Tip: You can select the relevant text first, to include it in your report.
+Our team has already identified the following issues . We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion , and welcome developer contributions .
+We gratefully acknowledge support from
+our major funders ,
+member institutions , ,
+and all contributors.
+About
+Help
+Contact
+Subscribe
+Copyright
+Privacy
+Accessibility
+Operational Status (opens in new tab)
+Major funding support from
