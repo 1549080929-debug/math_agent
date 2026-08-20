@@ -1,0 +1,108 @@
+{
+  "rater_a": "B4 (LLM, blind, round 4, agentsec validation)",
+  "rater_b": "B5 (LLM, blind, round 5)",
+  "overlap": 54,
+  "agree_count": 47,
+  "agree_pct": 87.0,
+  "kappa": 0.837,
+  "weakest_agree_pct": 88.9,
+  "weakest_kappa": 0.857,
+  "per_category": {
+    "agentsec": {
+      "agree": 6,
+      "total": 6
+    },
+    "lit17": {
+      "agree": 14,
+      "total": 17
+    },
+    "litnew": {
+      "agree": 17,
+      "total": 20
+    },
+    "sys": {
+      "agree": 10,
+      "total": 11
+    }
+  },
+  "disagreements": [
+    {
+      "id": "L01",
+      "A": "L0+L1",
+      "B": "L0",
+      "A_norm": [
+        "L0",
+        "L1"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "L10",
+      "A": "L0",
+      "B": "L2",
+      "A_norm": [
+        "L0"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    },
+    {
+      "id": "L12",
+      "A": "L1",
+      "B": "L0",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "N11",
+      "A": "L1",
+      "B": "L0",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "N13",
+      "A": "L1",
+      "B": "L0",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L0"
+      ]
+    },
+    {
+      "id": "N16",
+      "A": "L1",
+      "B": "L2",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L2"
+      ]
+    },
+    {
+      "id": "S03",
+      "A": "L1",
+      "B": "L3",
+      "A_norm": [
+        "L1"
+      ],
+      "B_norm": [
+        "L3"
+      ]
+    }
+  ]
+}

@@ -118,7 +118,7 @@ def main():
     cats = sorted({cat.get(i, "?") for i in overlap})
 
     print(f"== 一致性报告: {a_name} vs {b_name} ==")
-    print(f"重叠条目: {n} / 48")
+    print(f"重叠条目: {n}")
     print(f"等级精确一致率: {agree}/{n} = {pct:.1f}%")
     print(f"Cohen's kappa: {kappa:.3f}" if kappa is not None else "Cohen's kappa: N/A")
     print(f"最弱锚一致率: {wa_agree}/{n} = {wa_pct:.1f}%  (kappa={wa_kappa:.3f})")
