@@ -1,19 +1,6 @@
-# 密钥与本地配置（绝不提交）
-local_config.json
-.env
-
-# Python
 __pycache__/
 *.pyc
-*.pyo
-.venv/
-venv/
-
-# 运行日志（经验库，可自行决定是否提交）
-logs/
-
-# 编辑器/系统
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+local_config.json
+agentsec/sandbox/ledger.jsonl
+agentsec/sandbox/forum.jsonl
+agentsec/sandbox/outbox/
