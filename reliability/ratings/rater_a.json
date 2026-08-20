@@ -1,0 +1,118 @@
+{
+  "rater": "A (author)",
+  "source": "docs/07 (lit17) + docs/06 §7 (sys)",
+  "ratings": {
+    "L01": {
+      "level": "L0/L1",
+      "confidence": "high"
+    },
+    "L02": {
+      "level": "L0/L1",
+      "confidence": "medium"
+    },
+    "L03": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "L04": {
+      "level": "L4+L0陈述层",
+      "confidence": "high"
+    },
+    "L05": {
+      "level": "L0",
+      "confidence": "high"
+    },
+    "L06": {
+      "level": "L0",
+      "confidence": "high"
+    },
+    "L07": {
+      "level": "L0/L1",
+      "confidence": "high"
+    },
+    "L08": {
+      "level": "L3/L4",
+      "confidence": "high"
+    },
+    "L09": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "L10": {
+      "level": "L0/L1",
+      "confidence": "high"
+    },
+    "L11": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "L12": {
+      "level": "L1/L2",
+      "confidence": "high"
+    },
+    "L13": {
+      "level": "L1/L2",
+      "confidence": "high"
+    },
+    "L14": {
+      "level": "N/A",
+      "confidence": "medium"
+    },
+    "L15": {
+      "level": "N/A",
+      "confidence": "high"
+    },
+    "L16": {
+      "level": "理论",
+      "confidence": "high"
+    },
+    "L17": {
+      "level": "L1/L2",
+      "confidence": "high"
+    },
+    "S01": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "S02": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "S03": {
+      "level": "L3",
+      "confidence": "high"
+    },
+    "S04": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "S05": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "S06": {
+      "level": "L3",
+      "confidence": "high"
+    },
+    "S07": {
+      "level": "L3",
+      "confidence": "high"
+    },
+    "S08": {
+      "level": "L3",
+      "confidence": "high"
+    },
+    "S09": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "S10": {
+      "level": "L2",
+      "confidence": "high"
+    },
+    "S11": {
+      "level": "L2",
+      "confidence": "high"
+    }
+  }
+}

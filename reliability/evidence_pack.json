@@ -1,0 +1,521 @@
+{
+  "study": "VAL 判级程序可复现性研究（docs/11）",
+  "protocol": "protocol_v2.md",
+  "instruction": "仅依据每条目的 mechanism/evidence 判级；证据不足标 CONF=low 并按现有证据判；不要参考任何其他文件。",
+  "items": [
+    {
+      "id": "L01",
+      "name": "VerifiAgent",
+      "category": "lit17",
+      "source": "EMNLP 2025, arXiv:2504.00406",
+      "mechanism": "两级验证：元验证=LLM 代理检查完整性与一致性；工具自适应验证=Python 解释器/搜索引擎/符号计算，工具先求解再与原解比对",
+      "evidence": [
+        "工具=确定性执行，无金标/ground-truth，作者称为 silver ground truth",
+        "元验证=LLM 为主+部分确定性规则（作者邮件确认）"
+      ]
+    },
+    {
+      "id": "L02",
+      "name": "Graph of Verification (GoV)",
+      "category": "lit17",
+      "source": "arXiv:2506.12509, 2025",
+      "mechanism": "把推理组织成 DAG，按拓扑序在节点上做验证；节点粒度自适应（原子→整段）",
+      "evidence": [
+        "分层=粒度轴而非锚定轴",
+        "节点验证器机制摘要级未明（若为 LLM 判→L0）"
+      ]
+    },
+    {
+      "id": "L03",
+      "name": "DiVERSE",
+      "category": "lit17",
+      "source": "ACL 2023, arXiv:2206.02336",
+      "mechanism": "DEBERTA-V3-LARGE 训练出的逐步验证器，对每一步预测对错；步骤标签由与 ground-truth 答案匹配的推理路径派生",
+      "evidence": [
+        "'f′(input) is predicted from the hidden state of the last token of Si,j in DEBERTA-V3-LARGE'",
+        "'regard the reasoning paths that match the ground truth final answer as positive'",
+        "只验证给定步骤，无完备性声明"
+      ]
+    },
+    {
+      "id": "L04",
+      "name": "Safe",
+      "category": "lit17",
+      "source": "ACL 2025, arXiv:2506.04592",
+      "mechanism": "LLM 自动生成形式定理陈述，Lean REPL 内核验证证明；四态输出含弃权",
+      "evidence": [
+        "'utilize an LLM to automatically generate formal statements'",
+        "'validated using the Lean REPL'",
+        "'our formal verifier focuses on the correctness of each step'"
+      ]
+    },
+    {
+      "id": "L05",
+      "name": "SelfCheck",
+      "category": "lit17",
+      "source": "ICLR 2024, arXiv:2308.00436",
+      "mechanism": "四阶段零样本自检（目标提取→信息收集→步骤再生成→结果对比），输出三态(+1/0/−1)加权投票合成置信分",
+      "evidence": [
+        "明确 'without resorting to external resources'",
+        "检查器自身验证准确率 66.7%，作者承认 'the checks are themselves imperfect'"
+      ]
+    },
+    {
+      "id": "L06",
+      "name": "LM²",
+      "category": "lit17",
+      "source": "EMNLP 2024, arXiv:2404.02255",
+      "mechanism": "分解器-求解器-验证器的模型社会；验证器=LoRA 微调 LLaMA-2，训练标签由 GPT-4 标注；policy learning 协调",
+      "evidence": [
+        "'a verifier LM provides feedback on the correctness'",
+        "'datasets annotated by GPT-4'（LLM 标注，非人工真值）"
+      ]
+    },
+    {
+      "id": "L07",
+      "name": "Factcheck-GPT",
+      "category": "lit17",
+      "source": "arXiv:2311.09000, 2023",
+      "mechanism": "claim→sentence→document 三级粒度事实核查；声明-证据对齐判定由 GPT-4 标注方案完成；基准含金标",
+      "evidence": [
+        "best F1=0.63 by annotation solution based on GPT-4",
+        "证据来自外部文档（检索来源文档），但对齐判定是 LLM"
+      ]
+    },
+    {
+      "id": "L08",
+      "name": "Hierarchical Attention Proofs",
+      "category": "lit17",
+      "source": "ACL 2025, arXiv:2504.19188",
+      "mechanism": "五级概念层次（基础元素→高级概念）的证明生成正则化方法；证明由形式系统内核判定（miniF2F/ProofNet + Lean）",
+      "evidence": [
+        "形式定理证明，证明正确性由形式内核判定",
+        "五级层次=概念抽象轴（与锚定正交）"
+      ]
+    },
+    {
+      "id": "L09",
+      "name": "Dr. V",
+      "category": "lit17",
+      "source": "arXiv:2509.11866, 2025",
+      "mechanism": "感知→时间→认知三层视频幻觉诊断；感知/时间层用空间-时间金标标注 grounding；认知层为模型推理",
+      "evidence": [
+        "Dr.V-Bench 10k 空间-时间金标（4,974 视频）→ 金标锚定",
+        "认知层判定为模型推理"
+      ]
+    },
+    {
+      "id": "L10",
+      "name": "Proprietary Safety Response",
+      "category": "lit17",
+      "source": "arXiv:2511.03138, 2025",
+      "mechanism": "四级风险分类（Safe/Unsafe/Conditionally Safe/Focused Attention）；输入分类=监督微调统计分类器；输出层 RAG 知识库锚定但解释仍为模型判定",
+      "evidence": [
+        "安全类别训练标注 + RAG 实时知识库",
+        "99.3% 召回是经验数字，非完备保证"
+      ]
+    },
+    {
+      "id": "L11",
+      "name": "M³-SafetyBench",
+      "category": "lit17",
+      "source": "Scientia Sinica Informationis 55:2923-2940, 2025",
+      "mechanism": "内容安全×功能安全双层评测基准；17 万+ 条专家/人工标注测试集，19 个模型",
+      "evidence": [
+        "作为评测基准=金标集，非运行时验证器",
+        "人工标注的金标测试集"
+      ]
+    },
+    {
+      "id": "L12",
+      "name": "LLM Output Drift",
+      "category": "lit17",
+      "source": "arXiv:2511.07585, 2025",
+      "mechanism": "按输出确定性三级风险适配部署；确定性=统计一致性（T=0.0/固定种子）+ invariant checking（±5% 物质量阈值）+ SEC 引文验证",
+      "evidence": [
+        "SEC 10-K 文档=外部权威源（L2 锚）",
+        "确定性阈值规则=题面/代码派生规则"
+      ]
+    },
+    {
+      "id": "L13",
+      "name": "Standard Benchmarks Fail",
+      "category": "lit17",
+      "source": "arXiv:2502.15865, 2025",
+      "mechanism": "模型→工作流→系统三级压力测试审计框架；期望行为由人工定义；全文论点=标准基准覆盖不完备",
+      "evidence": [
+        "审计议程 + 基准覆盖批判",
+        "期望行为人工定义"
+      ]
+    },
+    {
+      "id": "L14",
+      "name": "Prompting Frameworks Survey",
+      "category": "lit17",
+      "source": "ACM Computing Surveys, arXiv:2311.12785",
+      "mechanism": "数据→基础→执行→服务四级 prompting 框架生命周期分类学",
+      "evidence": [
+        "四级=系统栈架构轴",
+        "不判定对错，只分类"
+      ]
+    },
+    {
+      "id": "L15",
+      "name": "Trustworthy LLMs Survey",
+      "category": "lit17",
+      "source": "arXiv:2308.05374, 2023",
+      "mechanism": "7 类 29 子类可信度评估维度分类学",
+      "evidence": [
+        "维度分类学，内部多为金标评测",
+        "不判定对错，只分类"
+      ]
+    },
+    {
+      "id": "L16",
+      "name": "HEX",
+      "category": "lit17",
+      "source": "arXiv:2311.03033, 2023",
+      "mechanism": "数学框架形式化幻觉/对齐/自验证概念；理论形式化",
+      "evidence": [
+        "对象是模型自评（自验证）现象的理论形式化",
+        "无运行时判定"
+      ]
+    },
+    {
+      "id": "L17",
+      "name": "FACTOOL",
+      "category": "lit17",
+      "source": "ICLR 2024, arXiv:2307.13528",
+      "mechanism": "工具增强多任务事实检测；Google Search/Scholar/代码解释器收集证据；最终事实性判定=LLM 基于证据推理",
+      "evidence": [
+        "'tools, including Google Search, Google Scholar, code interpreters'",
+        "'employs the reasoning abilities of LLMs to assess the factuality... given the evidence'"
+      ]
+    },
+    {
+      "id": "S01",
+      "name": "verify_root（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "把候选根代回方程验证是否成立（单根验证）",
+      "evidence": [
+        "代回验证：只验提出的候选，不验未提出的候选"
+      ]
+    },
+    {
+      "id": "S02",
+      "name": "extreme（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "把驻点代回验证极值性质",
+      "evidence": [
+        "驻点代回：正确性验证"
+      ]
+    },
+    {
+      "id": "S03",
+      "name": "interval_extreme（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "对区间问题穷举端点+驻点后验证极值",
+      "evidence": [
+        "端点+驻点穷举（对二次函数区间问题）"
+      ]
+    },
+    {
+      "id": "S04",
+      "name": "equality（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "SymPy simplify 表达式等价判定，数值抽样兜底",
+      "evidence": [
+        "simplify 等价 + 数值抽样兜底（非完备）"
+      ]
+    },
+    {
+      "id": "S05",
+      "name": "satisfies（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "单点代入验证候选是否满足条件",
+      "evidence": [
+        "单点满足：正确性验证"
+      ]
+    },
+    {
+      "id": "S06",
+      "name": "inequality（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "用 SymPy solveset 求完备解集，与声称解集做集合相等比较",
+      "evidence": [
+        "solveset 解集等价：可判定，对单性质完备"
+      ]
+    },
+    {
+      "id": "S07",
+      "name": "solution_set（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "用 solveset 求完备真解集，与声称解集比较；能抓漏解/压缩篡改",
+      "evidence": [
+        "solveset 解集等价：可判定，对单性质完备（抓漏解）"
+      ]
+    },
+    {
+      "id": "S08",
+      "name": "answer_type（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "类型系统：校验答案的类型符合声明类型",
+      "evidence": [
+        "类型系统：校验答案的类型符合声明类型"
+      ]
+    },
+    {
+      "id": "S09",
+      "name": "final_parameter_set（本仓库数学裁判）",
+      "category": "sys",
+      "source": "math_agent/verifier.py",
+      "mechanism": "对参数集做采样验证",
+      "evidence": [
+        "采样验证：正确性；完备性=采样天花板"
+      ]
+    },
+    {
+      "id": "S10",
+      "name": "医疗信息完整性裁判",
+      "category": "sys",
+      "source": "math_agent/medical/verify_diag.py",
+      "mechanism": "三条后置规则：lab 完全缺失+高置信诊断→过度自信 FAIL；急诊红旗→必须 urgent；确诊在鉴别列表",
+      "evidence": [
+        "自造确定性规则（lab 缺失 + 置信度阈值），未导入已验证临床决策规则"
+      ]
+    },
+    {
+      "id": "S11",
+      "name": "行为统计检测器",
+      "category": "sys",
+      "source": "math_agent/behavior/",
+      "mechanism": "行为统计特征 + 无向偏差（马氏距离风格）+ 探针化基线 + 语义嵌入特征，阈值从正常分布定",
+      "evidence": [
+        "统计检测器：正确性（检出率/误报率），无完备性；隐匿执行攻击不可编码"
+      ]
+    },
+    {
+      "id": "N01",
+      "name": "Self-Consistency",
+      "category": "litnew",
+      "source": "Wang et al., ICLR 2023",
+      "mechanism": "多次采样推理路径，多数投票取最终答案",
+      "evidence": [
+        "无外部锚，纯 LLM 输出统计",
+        "投票数再多也不证明'没漏'"
+      ]
+    },
+    {
+      "id": "N02",
+      "name": "Chain-of-Verification (CoVe)",
+      "category": "litnew",
+      "source": "Dhuliawala et al., 2023",
+      "mechanism": "LLM 起草答案→自己列验证问题→自己回答→修订答案",
+      "evidence": [
+        "全程 LLM 自证，无外部锚"
+      ]
+    },
+    {
+      "id": "N03",
+      "name": "Self-Refine",
+      "category": "litnew",
+      "source": "Madaan et al., NeurIPS 2023",
+      "mechanism": "LLM 生成→自我反馈→自我修订，迭代",
+      "evidence": [
+        "自我反馈=LLM 自评"
+      ]
+    },
+    {
+      "id": "N04",
+      "name": "Reflexion",
+      "category": "litnew",
+      "source": "Shinn et al., NeurIPS 2023",
+      "mechanism": "LLM 用语言反思自己的失败，写入记忆供下次尝试",
+      "evidence": [
+        "反思=LLM 自评（外部只提供环境反馈如测试结果）"
+      ]
+    },
+    {
+      "id": "N05",
+      "name": "Debate (多智能体辩论)",
+      "category": "litnew",
+      "source": "Du et al., 2023",
+      "mechanism": "多个 LLM 辩论同一问题，裁判（LLM）综合判断",
+      "evidence": [
+        "裁判=LLM"
+      ]
+    },
+    {
+      "id": "N06",
+      "name": "Constitutional AI (RLAIF)",
+      "category": "litnew",
+      "source": "Bai et al., 2022",
+      "mechanism": "LLM 依据书面宪法原则（规则文本）对自己的输出做批评与修订，用于训练",
+      "evidence": [
+        "原则是确定性文本规则，但批评与判定由 LLM 执行"
+      ]
+    },
+    {
+      "id": "N07",
+      "name": "RLHF 奖励模型",
+      "category": "litnew",
+      "source": "InstructGPT/Ouyang et al., 2022",
+      "mechanism": "奖励模型在人工偏好标注上训练，对输出打分排序",
+      "evidence": [
+        "训练标签=人工偏好（客观金标）",
+        "统计模型：正确性层，无完备性"
+      ]
+    },
+    {
+      "id": "N08",
+      "name": "LLM-as-a-Judge (MT-Bench)",
+      "category": "litnew",
+      "source": "Zheng et al., 2023",
+      "mechanism": "GPT-4 作为裁判比较两个回答的优劣；基准含人工验证子集",
+      "evidence": [
+        "运行时裁判=LLM",
+        "基准人工子集=评测锚，非运行时判定"
+      ]
+    },
+    {
+      "id": "N09",
+      "name": "FactScore",
+      "category": "litnew",
+      "source": "Min et al., ICLR 2023",
+      "mechanism": "把生成内容拆成原子事实，逐条与维基百科证据比对打分",
+      "evidence": [
+        "证据=外部维基（客观）",
+        "原子事实拆解与对齐判定=LLM"
+      ]
+    },
+    {
+      "id": "N10",
+      "name": "RARR (检索增强修订)",
+      "category": "litnew",
+      "source": "Gao et al., 2023",
+      "mechanism": "对 LLM 输出做检索增强的事实核查并修订；判定'声明与检索证据是否一致'",
+      "evidence": [
+        "证据=检索文档（外部）",
+        "一致性判定=LLM"
+      ]
+    },
+    {
+      "id": "N11",
+      "name": "CodeT (测试生成+执行选择)",
+      "category": "litnew",
+      "source": "Chen et al., ICLR 2023",
+      "mechanism": "LLM 生成多种测试，在合成数据集上执行，用执行结果选择正确程序",
+      "evidence": [
+        "执行结果=客观 oracle",
+        "测试覆盖有限，无完备性声明"
+      ]
+    },
+    {
+      "id": "N12",
+      "name": "AlphaCode (隐藏测试过滤)",
+      "category": "litnew",
+      "source": "Li et al., 2022",
+      "mechanism": "大规模采样程序，用隐藏测试执行结果过滤排序",
+      "evidence": [
+        "执行=客观 oracle",
+        "隐藏测试覆盖≠完备"
+      ]
+    },
+    {
+      "id": "N13",
+      "name": "TestGen-LLM (Meta 生产工具)",
+      "category": "litnew",
+      "source": "Meta, 2024",
+      "mechanism": "LLM 生成测试，测试必须通过附加验证过滤器（覆盖/编译/执行）才能采用",
+      "evidence": [
+        "LLM 生成的测试本身要再过验证过滤器=信任递归实例",
+        "过滤器=确定性检查"
+      ]
+    },
+    {
+      "id": "N14",
+      "name": "Dafny 形式化代码验证",
+      "category": "litnew",
+      "source": "Leino, 2010",
+      "mechanism": "程序带前置/后置条件与不变式，Dafny 验证器（SMT 求解器）自动验证",
+      "evidence": [
+        "SMT/形式内核：可判定域内完备",
+        "规格（前置后置）由人/LLM 写"
+      ]
+    },
+    {
+      "id": "N15",
+      "name": "mypy 类型检查",
+      "category": "litnew",
+      "source": "开源工具",
+      "mechanism": "对 Python 程序做静态类型检查，类型错误即报错",
+      "evidence": [
+        "类型系统：对'类型符合'性质完备",
+        "只覆盖类型性质，不覆盖语义正确"
+      ]
+    },
+    {
+      "id": "N16",
+      "name": "单元测试执行（通用）",
+      "category": "litnew",
+      "source": "工程实践",
+      "mechanism": "运行单元测试断言程序行为符合预期",
+      "evidence": [
+        "断言=人工写的期望",
+        "通过测试≠无 bug（覆盖不完备）"
+      ]
+    },
+    {
+      "id": "N17",
+      "name": "Lean/Coq 证明助手（通用）",
+      "category": "litnew",
+      "source": "形式化方法",
+      "mechanism": "证明被形式内核逐条检查，内核外无信任",
+      "evidence": [
+        "内核=可判定系统",
+        "定理陈述由人写（陈述层信任）"
+      ]
+    },
+    {
+      "id": "N18",
+      "name": "自动定理证明器 (Vampire/E)",
+      "category": "litnew",
+      "source": "SMT/ATP 工具",
+      "mechanism": "对一阶逻辑公式自动搜索证明，证明由内核验证",
+      "evidence": [
+        "可判定/半可判定内核",
+        "只对'能表达的公式'完备"
+      ]
+    },
+    {
+      "id": "N19",
+      "name": "提示注入检测器（统计分类）",
+      "category": "litnew",
+      "source": "安全工具类",
+      "mechanism": "训练的分类器判断输入是否为提示注入",
+      "evidence": [
+        "训练标签=人工标注",
+        "统计检测：检出率/误报率，无完备性"
+      ]
+    },
+    {
+      "id": "N20",
+      "name": "SQL/数据库执行验证",
+      "category": "litnew",
+      "source": "工程实践",
+      "mechanism": "把生成的 SQL 在数据库执行，用执行结果/错误校验正确性",
+      "evidence": [
+        "数据库执行=客观 oracle",
+        "执行通过≠逻辑完备"
+      ]
+    }
+  ]
+}
