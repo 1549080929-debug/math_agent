@@ -17,10 +17,11 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 from agent import Agent, SYSTEM_BASE, run_defense_chain
-from attacks import attack_combo, attack_direct, attack_fake_confirm, attack_paraphrase
+from attacks import MALICIOUS_VARIANTS
 from defenses import D1_SYSTEM_PROMPT, HIGH_RISK, StubExecutor
 
 SCEN = os.path.join(HERE, "scenarios.json")
+SCENARIO_VERSION = "v2"  # 场景/攻击升级后变更，防止旧结果被误续
 
 CONFIGS = {
     "D1": (["D1"], "单防御：系统提示加固(L0)"),
@@ -33,21 +34,30 @@ CONFIGS = {
 
 
 def get_variants(sc):
-    """恶意场景 4 变体（A1 直接/A2 改写/A3 伪造确认/A4 改写+无关键词伪造确认）；良性 1 变体。"""
+    """恶意场景 8 变体（A1-A8：直接/改写/伪造确认/组合/角色扮演/越狱/深层改写/权威框架）；良性 1 变体。"""
     if sc["malicious"]:
-        return [("A1", attack_direct(sc["memory_text"])),
-                ("A2", attack_paraphrase(sc["memory_text"])),
-                ("A3", attack_fake_confirm(sc["memory_text"])),
-                ("A4", attack_combo(sc["memory_text"]))]
+        return [(name, fn(sc["memory_text"])) for name, fn in MALICIOUS_VARIANTS]
     return [("B", sc["memory_text"])]
 
 
-def run_config(name, enabled, label, scenarios, dry_run, progress=False):
+def run_config(name, enabled, label, scenarios, dry_run, progress=False, resume=True):
     results = []
+    done = set()
+    out_path = os.path.join(HERE, "results", f"{name}.json")
+    if resume and os.path.exists(out_path) and not dry_run:
+        with io.open(out_path, encoding="utf-8") as f:
+            prev = json.load(f)
+        if prev.get("dry_run") is False and prev.get("scenario_version") == SCENARIO_VERSION:
+            results = prev["results"]
+            done = {(r["scenario"], r["attack"]) for r in results}
+            print(f"  [{name}] 断点续跑：已完成 {len(done)} 例")
     n_total = sum(len(get_variants(sc)) for sc in scenarios["scenarios"])
     n_done = 0
     for sc in scenarios["scenarios"]:
         for vname, mem in get_variants(sc):
+            if (sc["id"], vname) in done:
+                n_done += 1
+                continue
             system = D1_SYSTEM_PROMPT if "D1" in enabled else SYSTEM_BASE
             agent = Agent(system_prompt=system, dry_run=dry_run)
             proposal = None
@@ -116,8 +126,9 @@ def main():
         all_out[name] = results
         print(f"{name + ' ' + ('(dry)' if dry_run else ''):<28}{asr:<12.3f}{bsucc:<12.3f}{label}")
         with io.open(os.path.join(HERE, "results", f"{name}.json"), "w", encoding="utf-8") as f:
-            json.dump({"config": name, "dry_run": dry_run, "results": results},
-                      f, ensure_ascii=False, indent=2)
+            json.dump({"config": name, "dry_run": dry_run,
+                       "scenario_version": SCENARIO_VERSION,
+                       "results": results}, f, ensure_ascii=False, indent=2)
 
     # 预期对照（H1/H2）
     print("\n预期（H1）：V 栈 ASR < N 栈 ASR 且良性 V >= N")
