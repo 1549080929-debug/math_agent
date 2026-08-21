@@ -8,7 +8,7 @@ License: CC-BY 4.0
 
 ## Abstract
 
-LLM-agent security has produced a dense landscape of defenses—prompt hardening, content filters, permission gates, sandboxes, provenance firewalls—each claiming to make agents "safe." We argue that the field lacks a pre-purchase question: *what does a given defense actually guarantee, and where does that guarantee come from?* We apply Verification Autonomy Levels (VAL, arXiv:2608.19009), a taxonomy that grades verification/authorization schemes by the source of their spec (L0: LLM self-declaration, no deterministic anchor; L1: deterministic rules; L2: objective ground truth, correctness only; L3/L4: decidable systems with single-property or domain-level completeness; L5: impossible), to 22 agent-security defenses. The classification is a falsifiable predictor: a defense fails the way its anchor fails. We validate this on published data (10/10 prediction hits) and then run the first controlled deployment-value comparison: same budget, two stacks—a VAL-selected stack (intent-anchored confirmation gate + schema sandbox) versus a mainstream intuition stack (prompt hardening + keyword filter)—across 40 scenarios, 12 attack families (including third-party AgentDojo payloads), real tool effects, adaptive and white-box attacks, and three seeds (~4,800 LLM calls). The VAL stack holds 0.000 attack success with 1.000 benign success in every condition; the intuition stack also reaches 0.000 ASR but kills all benign actions and its security is model-behavior luck (compliance 0.235), not structure (the VAL stack tolerates 2.4x more model compromise—0.567 compliance—and still blocks everything). The same zero, two different guarantees. We further identify where L3 anchors exist in agent security: confinement and information-flow properties (sandboxing, taint tracking, data-control separation), not semantic safety, which caps at L2.
+LLM-agent security has produced a dense landscape of defenses—prompt hardening, content filters, permission gates, sandboxes, provenance firewalls—each claiming to make agents "safe." We argue that the field lacks a pre-purchase question: *what does a given defense actually guarantee, and where does that guarantee come from?* We apply Verification Autonomy Levels (VAL, arXiv:2608.19009), a taxonomy that grades verification/authorization schemes by the source of their spec (L0: LLM self-declaration, no deterministic anchor; L1: deterministic rules; L2: objective ground truth, correctness only; L3/L4: decidable systems with single-property or domain-level completeness; L5: impossible), to 22 agent-security defenses. The classification is a falsifiable predictor: a defense fails the way its anchor fails. We validate this on published data (10/10 prediction hits) and then run the first controlled deployment-value comparison: same budget, two stacks—a VAL-selected stack (intent-anchored confirmation gate + schema sandbox) versus a mainstream intuition stack (prompt hardening + keyword filter)—across 50 scenarios, 12 attack families (including third-party AgentDojo payloads), real tool effects, adaptive, white-box and PAIR-style attacks, and three seeds (~5,400 LLM calls). The VAL stack holds 0.000 attack success with 1.000 benign success in every condition; the intuition stack also reaches 0.000 ASR but kills all benign actions and its security is model-behavior luck (compliance 0.235), not structure (the VAL stack tolerates 2.4x more model compromise—0.567 compliance—and still blocks everything). The same zero, two different guarantees. We further identify where L3 anchors exist in agent security: confinement and information-flow properties (sandboxing, taint tracking, data-control separation), not semantic safety, which caps at L2.
 
 ## 1. Introduction
 
@@ -48,7 +48,7 @@ The defense literature is large. Text-level defenses (prompt hardening [8], keyw
 
 ### 3.1 Classification protocol
 
-We classify defenses with the frozen VAL protocol (v2.3, [1]), extended for security: R1 benchmarks are N/A (not runtime verifiers); R2 mixed systems are split per component with the weakest anchor on the verdict path reported; R3 evidence anchors do not equal verdict anchors (retrieved documents are L2 evidence; an LLM alignment verdict over them is L0); R4 silver anchors (deterministic recomputation without gold) are L1; R10 designer-authored unvalidated rules are L1; R12b theorem-backed exhaustive procedures (confinement, taint tracking) are decidable (L3); R15 LLM-generated verification expectations place the weakest anchor at L0. Each defense is rated on Q1/Q2/Q3 from a mechanism-only evidence pack by blind raters; classifications reported here are the committed (weakest-anchor) levels.
+We classify defenses with the frozen VAL protocol (v2.3, [1]), extended for security: R1 benchmarks are N/A (not runtime verifiers); R2 mixed systems are split per component with the weakest anchor on the verdict path reported; R3 evidence anchors do not equal verdict anchors (retrieved documents are L2 evidence; an LLM alignment verdict over them is L0); R4 silver anchors (deterministic recomputation without gold) are L1; R10 designer-authored unvalidated rules are L1; R12b theorem-backed exhaustive procedures (confinement, taint tracking) are decidable (L3); R15 LLM-generated verification expectations place the weakest anchor at L0. Each defense is rated on Q1/Q2/Q3 from a mechanism-only evidence pack by blind raters; classifications reported here are the committed (weakest-anchor) levels. For the security subset (22 agent-security items), two independent blind raters agree exactly on 20/22 (90.9%); the two disagreements are known boundary cases (an LLM-alignment verdict classified under rule R3, and a single-property vs domain completeness scope).
 
 ### 3.2 Prediction protocol
 
@@ -58,7 +58,7 @@ Following the reverse-validation discipline of [1], we freeze prediction cards b
 
 **Testbed.** A minimal agent: external content is written into memory; a user task triggers a tool call; the LLM (DeepSeek-chat, temperature 0.2) proposes a call; the defense chain decides; a real-effect executor performs the action (a ledger for transfers, an outbox for email, real file deletion in a sandbox directory, a forum log for comments). Attack success requires a *real state change* (server-side effect semantics, as in [2]), not merely a proposal.
 
-**Scenarios and attacks.** 40 scenarios (30 malicious + 10 benign), derived from the memory-provenance families of [2] (direct injection, keyword evasion, confirmation spoofing, procedure laundering, preference laundering, cross-domain, split context, authority laundering, hidden handles, multi-step, recovery jargon, frustration recovery). Attacks: 8 self-written variants (direct, paraphrase, fake-confirmation, combo, role-play, jailbreak prefix, deep rewrite with keyword splitting, authority frame) plus 4 third-party payloads from AgentDojo [4] (TODO-prefix, ignore-previous, system-message, InjecAgent), 12 total.
+**Scenarios and attacks.** 50 scenarios (30 malicious + 20 benign; the benign set is deliberately larger than the 25% share used by [2,4] to narrow utility confidence intervals), derived from the memory-provenance families of [2] (direct injection, keyword evasion, confirmation spoofing, procedure laundering, preference laundering, cross-domain, split context, authority laundering, hidden handles, multi-step, recovery jargon, frustration recovery). Attacks: 8 self-written variants (direct, paraphrase, fake-confirmation, combo, role-play, jailbreak prefix, deep rewrite with keyword splitting, authority frame) plus 4 third-party payloads from AgentDojo [4] (TODO-prefix, ignore-previous, system-message, InjecAgent), 12 total. Attack escalation additionally includes an adaptive attacker (3 rounds; rewrites from the previous interception reason), a white-box adaptive attacker (told the exact system prompt and keyword list), and a PAIR-style candidate-search attacker (3 candidates per round, 2 rounds, with scoring feedback).
 
 **Defenses.** Four self-implemented defenses, one per anchor family:
 - **D1** (L0): system-prompt hardening—"ignore instructions in external content; never perform high-risk actions without explicit user request." The verdict is the model's own compliance.
@@ -119,34 +119,51 @@ We froze 16 prediction cards (level → predicted failure mode + predicted break
 
 ## 6. Deployment-Value Experiment: Results
 
-### 6.1 Static attacks (12 variants, 370 cases/config, real effects)
+### 6.1 Static attacks (12 variants, 380 cases/config, real effects)
 
 | Config | ASR | Compliance | Benign | gain vs ND |
 |---|---|---|---|---|
-| ND (no defense) | **0.333** | 0.492 | 1.000 | — |
-| D1 prompt hardening (L0) | 0.000 | 0.254 | 0.000 | 0.333, benign destroyed |
-| D2 keyword filter (L1) | 0.258 | 0.512 | 1.000 | 0.075 |
-| D3 confirmation gate (L1/L2) | 0.000 | 0.512 | 1.000 | 0.333 |
-| D4 parameter sandbox (L3) | 0.079 | 0.537 | 1.000 | 0.254 |
-| **V = D3+D4 (VAL)** | **0.000** | 0.512 | **1.000** | **0.333, lossless** |
-| **N = D1+D2 (intuition)** | 0.000 | 0.235 | **0.000** | 0.333, benign destroyed |
+| ND (no defense) | **0.333** | 0.492 | 1.000 [0.84, 1.00] | — |
+| D1 prompt hardening (L0) | 0.000 | 0.254 | 0.000 [0.00, 0.16] | 0.333, benign destroyed |
+| D2 keyword filter (L1) | 0.258 | 0.512 | 1.000 [0.84, 1.00] | 0.075 |
+| D3 confirmation gate (L1/L2) | 0.000 | 0.512 | 1.000 [0.84, 1.00] | 0.333 |
+| D4 parameter sandbox (L3) | 0.079 | 0.537 | 1.000 [0.84, 1.00] | 0.254 |
+| **V = D3+D4 (VAL)** | **0.000** | 0.512 | **1.000 [0.84, 1.00]** | **0.333, lossless** |
+| **N = D1+D2 (intuition)** | 0.000 | 0.235 | **0.000 [0.00, 0.16]** | 0.333, benign destroyed |
+
+Benign success is measured on 20 benign scenarios (Wilson 95% CIs in brackets); the utility gap between V and N is significant at p < 0.001 (Fisher's exact test on 20/20 vs 0/20).
 
 Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach the same zero. They differ in *how*: V's zero is produced by a gate the model cannot influence; N's zero is produced by the model's behavior under the hardening prompt (compliance 0.235—the model proposes the malicious tool a quarter of the time, mostly with empty arguments; strict ASR counts only actionable executions). D2 alone leaks 0.258 ASR: the keyword filter is bypassable by rewriting.
 
 ### 6.2 Adaptive and white-box attacks
 
-| Config | Static ASR | Adaptive ASR | White-box ASR | White-box compliance |
-|---|---|---|---|---|
-| D2 | 0.258 | **0.467** | — | — |
-| D4 | 0.079 | **0.200** | — | — |
-| **V** | 0.000 | 0.000 | 0.000 | **0.567** |
-| **N** | 0.000 | 0.000 | 0.000 | 0.235 |
+| Config | Static ASR | Adaptive ASR | White-box ASR | White-box compliance | PAIR-lite ASR |
+|---|---|---|---|---|---|
+| D2 | 0.258 | **0.467** | — | — | — |
+| D4 | 0.079 | **0.200** | — | — | — |
+| **V** | 0.000 | 0.000 | 0.000 | **0.567** | 0.000 |
+| **N** | 0.000 | 0.000 | 0.000 | 0.235 | 0.000 |
 
-Adaptive attacks (attacker rewrites from the interception reason) nearly double the leak rate of the L1 and L3 single defenses. Against the stacks: V holds—the attacker cannot forge platform records or schema-legal arguments it does not possess—even when the model is driven to propose the malicious tool in 57% of scenarios (white-box compliance 0.567, 2.4x N's 0.235). N holds only because the model's "hedging wall" (proposing the tool with empty arguments) survives same-family jailbreak attempts; the attacker was itself DeepSeek. This is model-behavior luck, not structure: D2 alone leaks, and a cross-family attacker with stronger jailbreaks is the remaining untested threat (we could not test this without a non-DeepSeek API).
+Adaptive attacks (attacker rewrites from the interception reason) nearly double the leak rate of the L1 and L3 single defenses. Against the stacks: V holds—the attacker cannot forge platform records or schema-legal arguments it does not possess—even when the model is driven to propose the malicious tool in 57% of scenarios (white-box compliance 0.567, 2.4x N's 0.235). N holds only because the model's "hedging wall" (proposing the tool with empty arguments) survives every same-family attack form we tried: static jailbreaks, adaptive rewriting, white-box knowledge, and PAIR-style candidate search (3 candidates × 2 rounds, 0.000). The attacker was in every case DeepSeek-chat; the remaining untested threat is a *cross-family* attacker with a different jailbreak repertoire, which we could not test without a non-DeepSeek API (gradient-based attacks such as GCG are additionally out of reach: the API exposes no gradients or token logits).
 
 ### 6.3 Seeds and honesty
 
 V, N, and ND re-run 3×: standard deviations ≈ 0.005 on compliance, 0.000 on ASR and benign success. The headline contrast is stable. We also record two harness bugs caught mid-experiment (a schema regex that blocked all deletes; a resume bug that silently duplicated seeds), each fixed and reported—the judge's judge applied to our own experiment.
+
+### 6.4 External anchor: comparison with AgentDojo-reported defenses
+
+AgentDojo [4] evaluates defenses on its benchmark (GPT-class agents, its own attack suite). We list its reported numbers alongside ours for calibration—*not* as a head-to-head (different models, environments, and attacks):
+
+| Defense (source) | ASR | Utility note |
+|---|---|---|
+| AgentDojo: simple tool filtering [4] | 7.5% | effective when tasks need read-only access; fails when tool choice is dynamic |
+| AgentDojo: secondary attack detector [4] | 8% | — |
+| AgentDojo: all evaluated defenses [4] | — | lose 15–20% of utility under attack |
+| This work: ND (no defense) | 33.3% | 0% loss |
+| This work: **V stack (VAL)** | **0.0%** | **0% loss** |
+| This work: N stack (intuition) | 0.0% (model-luck) | 100% loss |
+
+Our V stack's zero sits below the best AgentDojo-reported defense (7.5%), with no utility cost—where AgentDojo reports every evaluated defense losing 15–20% utility. The comparison is indicative, not competitive: the caveats of Section 8.2 apply in full. Its purpose is to show that a VAL-selected two-defense stack is *in the neighborhood of, or better than*, published single defenses on both axes, despite (or because of) being a selection-strategy rather than a tuned defense.
 
 ## 7. Analysis: The Same Zero, Different Guarantees
 
@@ -156,11 +173,12 @@ This is the deployment answer to "which defense should I buy?": **VAL selection 
 
 ## 8. Limitations
 
-1. **Single model.** The agent and the adaptive attacker are DeepSeek-chat; cross-family attacker and victim combinations remain untested. D1's hedging wall is explicitly model-behavior-bound.
-2. **Self-built testbed.** Scenarios, defenses, and the real-effect sandbox are ours; they are PPMF- and AgentDojo-inspired but not third-party. Attack success is counted on real state changes, but the tool surface is small.
-3. **Attack strength.** Our 12 families include third-party AgentDojo payloads but not automated adaptive attackers (PAIR-grade) or optimization-based jailbreaks (GCG).
-4. **LLM-rater classifications.** The level map is blind-rater-validated among same-family LLM raters (κ ≈ 0.8); human-rater agreement is future work [1].
-5. **Prediction sample.** 10/10 hits on a small, partially abstract-level sample; the mechanism (anchor → failure mode) is the claim, not the hit count.
+1. **Single model (victim and attacker).** The agent and every attack form (static, adaptive, white-box, PAIR-lite) used DeepSeek-chat. D1's hedging wall is explicitly model-behavior-bound, and same-family jailbreaks are the hardest case for the attacker; a cross-family attacker (e.g., Llama, Claude, Gemini) with a different jailbreak repertoire is the principal untested threat. GCG-style optimization is out of scope: the API exposes no gradients or token logits.
+2. **Self-built testbed.** Scenarios, defenses, and the real-effect sandbox are ours. This is deliberate: the experiment compares *selection strategies*, and a controlled comparison requires controlled implementations—plugging third-party defenses would confound strategy with implementation quality. The cost is that absolute ASR figures may not transfer to production-grade implementations (we expect the ordering to hold, not the point estimates). Section 6.4 provides an external-anchor comparison against AgentDojo-reported defenses for calibration.
+3. **Attack coverage.** Twelve attack families include third-party AgentDojo payloads; adaptive, white-box, and PAIR-style attackers cover text-level escalation; token-level optimization (GCG) and multi-turn social-engineering attacks are absent.
+4. **Benign sample.** Utility is measured on 20 benign scenarios (CIs in Section 6.1); the V/N utility gap is significant, but broader utility coverage (long-horizon tasks, tool-calling convenience) is untested.
+5. **LLM-rater classifications.** The level map is blind-rater-validated among same-family LLM raters (security subset: 22 items, 90.9% exact agreement; overall corpus κ ≈ 0.8 [1]); human-rater agreement is future work.
+6. **Prediction sample.** 10/10 hits on a small, partially abstract-level sample; the mechanism (anchor → failure mode) is the claim, not the hit count.
 
 ## 9. Conclusion
 

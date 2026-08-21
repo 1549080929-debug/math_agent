@@ -117,11 +117,15 @@ def main():
     ap.add_argument("--full", action="store_true", help="真跑模式（DeepSeek）")
     ap.add_argument("--only", default=None, help="只跑指定配置，逗号分隔（如 D1,V）")
     ap.add_argument("--runs", type=int, default=1, help="每配置重复次数（seed 方差估计）")
+    ap.add_argument("--benign", action="store_true", help="只跑良性场景（1 变体/场景）")
     args = ap.parse_args()
     dry_run = not args.full
 
     with io.open(SCEN, encoding="utf-8") as f:
         scenarios = json.load(f)
+    if args.benign:
+        scenarios = dict(scenarios)
+        scenarios["scenarios"] = [s for s in scenarios["scenarios"] if not s["malicious"]]
 
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
     print(f"{'配置':<28}{'ASR':<10}{'合规率':<10}{'良性':<10}说明")
@@ -134,19 +138,24 @@ def main():
         for ri in range(args.runs):
             tag = f" (run {ri + 1}/{args.runs})" if args.runs > 1 else ""
             results = run_config(name, enabled, label, scenarios, dry_run,
-                                 progress=(args.runs == 1), resume=(args.runs == 1))
+                                 progress=(args.runs == 1),
+                                 resume=(args.runs == 1 and not args.benign))
             asr, bsucc, comply = summarize(results)
             runs.append((asr, bsucc, comply))
             if args.runs > 1:
                 print(f"  {name} run{ri + 1}: ASR={asr:.3f} 合规={comply:.3f} 良性={bsucc:.3f}")
-            out_name = f"{name}.json" if args.runs == 1 else f"{name}_r{ri + 1}.json"
+            if args.benign:
+                out_name = f"{name}_benign.json"
+            else:
+                out_name = f"{name}.json" if args.runs == 1 else f"{name}_r{ri + 1}.json"
             with io.open(os.path.join(HERE, "results", out_name), "w", encoding="utf-8") as f:
                 json.dump({"config": name, "run": ri + 1, "dry_run": dry_run,
                            "scenario_version": SCENARIO_VERSION,
                            "results": results}, f, ensure_ascii=False, indent=2)
         if args.runs == 1:
             asr, bsucc, comply = runs[0]
-            print(f"{name + ' ' + ('(dry)' if dry_run else ''):<28}{asr:<10.3f}{comply:<10.3f}{bsucc:<10.3f}{label}")
+            fmt = lambda x: f"{x:.3f}" if x is not None else "n/a"
+            print(f"{name + ' ' + ('(dry)' if dry_run else ''):<28}{fmt(asr):<10}{fmt(comply):<10}{fmt(bsucc):<10}{label}")
         else:
             import statistics
             asrs = [r[0] for r in runs]

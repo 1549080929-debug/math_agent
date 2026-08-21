@@ -1,0 +1,29 @@
+{
+  "rater": "B7 (LLM, blind, agentsec subset)",
+  "source": "protocol_v2.md (v2.3) + evidence_pack.json (agentsec N21-N42, 22 items)（盲评，未接触作者判级与其他评分者）",
+  "anchor_disclosure": "Rater B7 为 LLM 评分者（L0/L1 锚）：一致性测的是协议可复现性，不构成效度证据。",
+  "ratings": {
+    "N21": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "设计者指定风险策略规则，正确性档"},
+    "N22": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "词表关键词确定性过滤，改写可绕过"},
+    "N23": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "模式匹配规则，洗白后即失效"},
+    "N24": {"Q1": "llm", "Q2": "correctness", "Q3": "n/a", "level": "L0", "conf": "high", "just": "来源推断=LLM自评，无外部锚"},
+    "N25": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "无元数据锚的自造确定性规则"},
+    "N26": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "表面形式启发式，伪造标记可绕过"},
+    "N27": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1+L2", "conf": "high", "just": "混合：人工标注分类器L2+模式匹配L1，取弱"},
+    "N28": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "rails=设计者确定性规则/词表"},
+    "N29": {"Q1": "decidable", "Q2": "completeness", "Q3": "single", "level": "L3", "conf": "medium", "just": "数据/控制分离=结构隔离保证"},
+    "N30": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "medium", "just": "白名单规则L1+SMT单调限制L3注解"},
+    "N31": {"Q1": "decidable", "Q2": "completeness", "Q3": "single", "level": "L3", "conf": "medium", "just": "确定性污点追踪+策略执行，结构保证"},
+    "N32": {"Q1": "llm", "Q2": "correctness", "Q3": "n/a", "level": "L0", "conf": "low", "just": "检测器机制未明（统计或LLM），取弱"},
+    "N33": {"Q1": "llm", "Q2": "correctness", "Q3": "n/a", "level": "L0", "conf": "high", "just": "对齐判定=LLM（R3），证据组件不抬级"},
+    "N34": {"Q1": "llm", "Q2": "none", "Q3": "n/a", "level": "L0", "conf": "high", "just": "纯LLM自声明自遵守，无独立验证器"},
+    "N35": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "确定性白名单/黑名单规则，工具级"},
+    "N36": {"Q1": "rule", "Q2": "correctness", "Q3": "n/a", "level": "L1", "conf": "high", "just": "困惑度统计阈值=自造规则，效果有限"},
+    "N37": {"Q1": "decidable", "Q2": "completeness", "Q3": "single", "level": "L3", "conf": "medium", "just": "执行域确定性限制=结构围栏（ODD）"},
+    "N38": {"Q1": "decidable", "Q2": "completeness", "Q3": "single", "level": "L3", "conf": "high", "just": "形式内核/模型检查，声明性质完备"},
+    "N39": {"Q1": "truth", "Q2": "correctness", "Q3": "n/a", "level": "L2", "conf": "medium", "just": "执行结果=客观effect锚，仅验发生"},
+    "N40": {"Q1": "n/a", "Q2": "n/a", "Q3": "n/a", "level": "N/A", "conf": "high", "just": "纯评测基准，非运行时防御（R1）"},
+    "N41": {"Q1": "llm", "Q2": "correctness", "Q3": "n/a", "level": "L0+L1", "conf": "high", "just": "计划级LLM评估L0+动作级规则L1，取弱"},
+    "N42": {"Q1": "llm", "Q2": "correctness", "Q3": "n/a", "level": "L0", "conf": "high", "just": "安全裁决=GPT-4 LLM判定器"}
+  }
+}
