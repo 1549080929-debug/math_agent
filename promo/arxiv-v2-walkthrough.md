@@ -2,6 +2,7 @@
 
 > 准备：2026-08-20。PDF 已就绪：`paper/preprint.pdf`（21 页，v2 全量内容，含 arXiv ID 页脚）。
 > 提交包：`paper/submission.md`（摘要/Comments 已同步 v2，AI 声明已补）。
+> **状态：✅ 已完成**——v2 于 2026-08-20 公布：https://arxiv.org/abs/2608.19009v2（submit/7972294）。
 
 ---
 
