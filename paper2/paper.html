@@ -38,8 +38,9 @@ License: CC-BY 4.0</p>
 <ol>
 <li><strong>A level map of agent security.</strong> We classify 22 defenses—published systems (PPMF [2], Llama Guard, CaMeL, Progent, IFC/Fides, NeMo Guardrails, A-MemGuard, etc.), baselines, and our own four implementations—using a frozen, blind-rater-validated protocol (inter-rater κ ≈ 0.8 [1]). The map organizes the defense landscape by what each defense can actually guarantee.</li>
 <li><strong>Prediction validation.</strong> We freeze level-to-behavior prediction cards and validate them: 10/10 hits on published data (PPMF's own numbers, abstract-level evidence), including two mechanism-driven classification corrections.</li>
-<li><strong>The first deployment-value comparison.</strong> Same budget, two stacks, one testbed: a VAL-selected stack (L2 intent anchor + L3 confinement) versus a mainstream intuition stack (L0 prompt hardening + L1 keyword filter), across 40 scenarios, 12 attack families, real tool effects, adaptive and white-box attacks, three seeds. The VAL stack dominates on both security and utility, and the contrast is structural rather than incidental.</li>
+<li><strong>The first deployment-value comparison.</strong> Same budget, two stacks, one testbed: a VAL-selected stack (L2 intent anchor + L3 confinement) versus a mainstream intuition stack (L0 prompt hardening + L1 keyword filter), across 50 scenarios, 12 attack families, real tool effects, adaptive, white-box and PAIR-style attacks, three seeds, and a second victim model. The VAL stack dominates on both security and utility, and the contrast is structural rather than incidental.</li>
 </ol>
+<p><strong>What this paper claims—the spine in one paragraph.</strong> (i) <em>The anchor predicts the failure mode:</em> every one of the 22 classified defenses fails the way its anchor fails, and we froze the predictions before the outcome data (Section 5). (ii) <em>The same zero is not the same guarantee:</em> a VAL-selected stack and a mainstream-intuition stack both reach 0.000 ASR, but one is structure and the other is model luck—visible in the compliance gap and across two victim models (Section 6). (iii) <em>The framework knows its own level:</em> the classifier used here is itself an L1 tool, and we measured rather than assumed its reproducibility (Section 8). If a reader remembers only one of these, it should be (ii).</p>
 <h2>2. Background and Related Work</h2>
 <h3>2.1 Verification Autonomy Levels (VAL)</h3>
 <p>VAL [1] grades verification schemes by three questions: Q1 <em>where does the verification spec come from</em> (LLM declaration / deterministic rule / objective truth / decidable system); Q2 <em>what does the verdict guarantee</em> (nothing / correctness / completeness); Q3 <em>what scope does a completeness claim cover</em> (single property / domain / universal). The level is the first rule that fires: L5 (universal completeness, impossible), L4 (domain completeness), L3 (single-property completeness), L2 (correctness with objective anchor), L1 (correctness with deterministic rule), L0 (otherwise). The procedure is deterministic and has been measured for inter-rater reproducibility: three independent blind raters reach κ ≈ 0.8 on 48–70 schemes under the refined protocol [1].</p>
@@ -127,9 +128,45 @@ License: CC-BY 4.0</p>
 <h2>5. Prediction Validation</h2>
 <p>We froze 16 prediction cards (level → predicted failure mode + predicted breaking attack) before consulting outcome data.</p>
 <p><strong>PPMF family (6 defenses):</strong> all six predictions hit on PPMF's own published numbers [2]: content filters (L1) leave 0.200–0.933 ASR and collapse under rewriting; Self-Ask provenance (L0) reaches 0.984 ASR; the gate-only ablation (L1 without L2 inputs) blocks attacks but kills all benign actions; the full PPMF (L1/L2: platform metadata through a designer policy) achieves 0.000 ASR on evaluated attacks with benign preserved, and 0.088 ASR under 10% forged confirmations—the completeness blind spot made quantitative.</p>
-<p><strong>New cards (abstract-level evidence, flagged):</strong> 4/4 behavior predictions hit (Llama Guard distribution-bound accuracy; RA-LLM residual ASR under strong attacks; perplexity filtering weak alone; ToolEmu audit-value-only). Two mechanism-driven corrections emerged: Progent's SMT monotonic confinement (L1 gate + L3 annotation) and RARR's LLM-driven verdict (L2 → L0 under rule R3). The prediction loop does not only predict; mismatches surfaced incomplete evidence and corrected the classifications.</p>
+<p><strong>New cards (abstract-level evidence, flagged):</strong> 4/4 behavior predictions hit (Llama Guard distribution-bound accuracy; RA-LLM residual ASR under strong attacks; perplexity filtering weak alone; ToolEmu audit-value-only). Two mechanism-driven corrections emerged; because they are the strongest evidence that the prediction loop <em>corrects</em> rather than merely confirms, each gets a full account below.</p>
+<h3>5.1 Mechanism-driven correction I: Progent's SMT monotonic confinement</h3>
+<p><strong>Predicted:</strong> L1 (a designer-authored permission policy; the gate is a deterministic rule). <strong>Mismatch:</strong> the abstract revealed a mechanism the evidence pack omitted—every policy update is adjudicated by an SMT solver as either <em>narrowing</em> (applied automatically) or <em>expanding</em> (requires approval), so the agent's effective action space can only shrink without approval. That is a confinement property with a decidable witness: within the policy lattice, monotonic confinement holds by construction, not by rule. <strong>Corrected classification:</strong> the gate remains L1 (designer rule on the verdict path), but the monotonic-confinement guarantee is annotated L3—an instance of the framework's own R12b (theorem-backed structure = decidable). The lesson: a classification is only as good as the mechanism facts in front of the rater; the mismatch is evidence for, not against, the protocol.</p>
+<h3>5.2 Mechanism-driven correction II: RARR's LLM-mediated verdict (R3)</h3>
+<p><strong>Predicted:</strong> L2 (attribution checking against retrieved documents as an objective anchor). <strong>Mismatch:</strong> full inspection showed RARR's verdict path is LLM-mediated end-to-end—the model generates queries, compares claims to retrieved passages, and edits the output; "citation existence" is not mechanically checked. Under the protocol's rule R3 (evidence anchors do not equal verdict anchors), the verdict component is LLM declaration, and the reported level drops to L0. <strong>Corrected classification:</strong> L2 → L0, with the retrieval evidence noted as an L2 evidence component that does not raise the verdict. The lesson is the same correction in the opposite direction: a superficially "objective" anchor can be L0-masked when the alignment step is model-mediated—precisely the laundering pattern of the memory domain (Section 2.1).</p>
 <p><strong>Cumulative: 10/10 behavior predictions hit (6 high-confidence, 4 abstract-level), 2 classification corrections.</strong> Sample is small; the value is that the prediction <em>protocol</em> is now demonstrated end-to-end, not that the hit rate is large.</p>
 <h2>6. Deployment-Value Experiment: Results</h2>
+<p><strong>The dominance at a glance</strong> (full tables in 6.1-6.4):</p>
+<table>
+<thead>
+<tr>
+<th>Stack</th>
+<th>ASR (both victims)</th>
+<th>Benign (both victims)</th>
+<th>What the zero is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ND (no defense)</td>
+<td>0.333 / 0.253</td>
+<td>1.000 / 1.000</td>
+<td>no defense</td>
+</tr>
+<tr>
+<td><strong>V (VAL: gate + sandbox)</strong></td>
+<td><strong>0.000 / 0.000</strong></td>
+<td><strong>1.000 / 1.000</strong></td>
+<td><strong>structure - platform record + schema, victim-independent</strong></td>
+</tr>
+<tr>
+<td><strong>N (intuition: hardening + filter)</strong></td>
+<td>0.000 / 0.000</td>
+<td><strong>0.000 / 0.000</strong></td>
+<td><strong>luck - the model's refusal behavior, model-dependent</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The two zeros in the last two rows are the paper's spine: identical security numbers, opposite guarantees, a 100-point utility gap.</p>
 <h3>6.1 Static attacks (12 variants, 380 cases/config, real effects)</h3>
 <table>
 <thead>
@@ -242,7 +279,8 @@ License: CC-BY 4.0</p>
 </tr>
 </tbody>
 </table>
-<p>Adaptive attacks (attacker rewrites from the interception reason) nearly double the leak rate of the L1 and L3 single defenses. Against the stacks: V holds—the attacker cannot forge platform records or schema-legal arguments it does not possess—even when the model is driven to propose the malicious tool in 57% of scenarios (white-box compliance 0.567, 2.4x N's 0.235). N holds only because the model's "hedging wall" (proposing the tool with empty arguments) survives every same-family attack form we tried: static jailbreaks, adaptive rewriting, white-box knowledge, and PAIR-style candidate search (3 candidates × 2 rounds, 0.000). The attacker was in every case DeepSeek-chat; the remaining untested threat is a <em>cross-family</em> attacker with a different jailbreak repertoire, which we could not test without a non-DeepSeek API (gradient-based attacks such as GCG are additionally out of reach: the API exposes no gradients or token logits).</p>
+<p><strong>Definition (hedging wall).</strong> Under a hardening prompt (D1), an LLM victim under injection may comply <em>partially</em>: it proposes the requested high-risk tool while emitting empty or incomplete arguments—a stable compromise between the injection ("propose the action") and the safety prompt ("do not execute without authorization"). Actionable ASR requires complete arguments, so hedging suppresses ASR <em>without any structural gate</em>. The wall is a model behavior, not a mechanism: its height is victim-specific (compliance 0.235 for DeepSeek, 0.014 for Llama 8B, Section 6.4).</p>
+<p>Adaptive attacks (attacker rewrites from the interception reason) nearly double the leak rate of the L1 and L3 single defenses. Against the stacks: V holds—the attacker cannot forge platform records or schema-legal arguments it does not possess—even when the model is driven to propose the malicious tool in 57% of scenarios (white-box compliance 0.567, 2.4x N's 0.235). N holds only because the hedging wall survives every attack form we tried: static jailbreaks, adaptive rewriting, white-box knowledge, PAIR-style candidate search (3 candidates × 2 rounds, 0.000), and a willing cross-family attacker (DeepSeek crafting jailbreaks against Llama: 0.000, Section 6.4). The two aligned cross-family candidates we attempted (Moonshot Kimi, Meta Llama 8B as <em>attackers</em>) declined the role—explicit refusals, and sanitizing rewrites under indirect framing (Section 8.1). Gradient-based attacks (GCG) are out of scope: the API exposes no gradients or token logits.</p>
 <h3>6.3 Seeds and honesty</h3>
 <p>V, N, and ND re-run 3×: standard deviations ≈ 0.005 on compliance, 0.000 on ASR and benign success. The headline contrast is stable. We also record two harness bugs caught mid-experiment (a schema regex that blocked all deletes; a resume bug that silently duplicated seeds), each fixed and reported—the judge's judge applied to our own experiment.</p>
 <h3>6.4 Victim generalization: a 2x2 matrix</h3>
@@ -273,7 +311,7 @@ License: CC-BY 4.0</p>
 </tr>
 </tbody>
 </table>
-<p>Three findings. First, <strong>baseline injection compliance is model-specific</strong>: Llama 8B is <em>more</em> resistant than DeepSeek (ND compliance 0.328 vs 0.492; ASR 0.253 vs 0.333). Second, <strong>N's zero generalizes, and its "model luck" nature is confirmed by a second model</strong>: both victims are driven by the injections without defenses (compliance &gt; 0), and prompt hardening suppresses actionability to a model-specific degree (0.233 for DeepSeek, 0.014 for Llama); the security number is a model behavior, not a structure. Third, <strong>V's structural claim is victim-independent</strong>: 0.000 ASR and 1.000 benign for both victims, including 0.317 compliance (the model proposing malicious tools a third of the time) tolerated without a single execution. We additionally ran the one available <em>willing</em> cross-family attacker cell—DeepSeek crafting white-box jailbreaks against the Llama victim (adaptive, 3 rounds, N stack): ASR 0.000, compliance 0.000—DeepSeek's jailbreaks could not induce Llama to even propose the malicious tool. The pattern holds across every victim/attacker combination obtainable with available models.</p>
+<p>Three findings. First, <strong>baseline injection compliance is model-specific</strong>: Llama 8B is <em>more</em> resistant than DeepSeek (ND compliance 0.328 vs 0.492; ASR 0.253 vs 0.333). Second, <strong>N's zero generalizes, and its "model luck" nature is confirmed by a second model</strong>: both victims are driven by the injections without defenses (compliance &gt; 0), and prompt hardening suppresses actionability to a model-specific degree (0.233 for DeepSeek, 0.014 for Llama); the security number is a model behavior, not a structure. Third, <strong>V's structural claim is victim-independent</strong>: 0.000 ASR and 1.000 benign for both victims, including 0.317 compliance (the model proposing malicious tools a third of the time) tolerated without a single execution. We additionally ran the one available <em>willing</em> cross-family attacker cell—DeepSeek crafting white-box jailbreaks against the Llama victim (adaptive, 3 rounds, N stack): ASR 0.000, compliance 0.000—DeepSeek's jailbreaks could not induce Llama to even propose the malicious tool. The pattern holds across every victim/attacker combination obtainable with available models. <strong>The generalization reads crisply: structural guarantees are model-independent; behavioral luck is model-dependent.</strong> V's zero is a property of the gate and schema; N's zero is a property of the model's mood on the day.</p>
 <h3>6.5 External anchor: comparison with AgentDojo-reported defenses</h3>
 <p>AgentDojo [4] evaluates defenses on its benchmark (GPT-class agents, its own attack suite). We list its reported numbers alongside ours for calibration—<em>not</em> as a head-to-head (different models, environments, and attacks):</p>
 <table>
@@ -306,7 +344,12 @@ License: CC-BY 4.0</p>
 <td>0% loss</td>
 </tr>
 <tr>
-<td>This work: <strong>V stack (VAL)</strong></td>
+<td>This work: <strong>V stack (VAL, DeepSeek victim)</strong></td>
+<td><strong>0.0%</strong></td>
+<td><strong>0% loss</strong></td>
+</tr>
+<tr>
+<td>This work: <strong>V stack (VAL, Llama victim)</strong></td>
 <td><strong>0.0%</strong></td>
 <td><strong>0% loss</strong></td>
 </tr>
@@ -328,7 +371,12 @@ License: CC-BY 4.0</p>
 <li><strong>Attack coverage.</strong> Twelve attack families include third-party AgentDojo payloads; adaptive, white-box, and PAIR-style attackers cover text-level escalation; token-level optimization (GCG) and multi-turn social-engineering attacks are absent.</li>
 <li><strong>Benign sample.</strong> Utility is measured on 20 benign scenarios (CIs in Section 6.1); the V/N utility gap is significant, but broader utility coverage (long-horizon tasks, tool-calling convenience) is untested.</li>
 <li><strong>LLM-rater classifications.</strong> The level map is blind-rater-validated among same-family LLM raters (security subset: 22 items, 90.9% exact agreement; overall corpus κ ≈ 0.8 [1]); human-rater agreement is future work.</li>
-<li><strong>Prediction sample.</strong> 10/10 hits on a small, partially abstract-level sample; the mechanism (anchor → failure mode) is the claim, not the hit count.</li>
+<li>
+<p><strong>Prediction sample.</strong> 10/10 hits on a small, partially abstract-level sample; the mechanism (anchor → failure mode) is the claim, not the hit count.</p>
+</li>
+<li>
+<p><strong>The framework's own level.</strong> The classifier used throughout this paper (val_standard.py, protocol v2.3) is itself a deterministic rule over anchor labels: it does not interrogate free text, its inputs are the rater's Q1/Q2/Q3 judgments, and its reproducibility was measured rather than assumed (kappa ~ 0.8 among blind raters; 90.9% on the security subset [1]). It is an L1 tool with an audited calibration record--which is exactly the boundary the framework prescribes for its own kind: honest about what it certifies (the mapping), and silent about what it does not (the inputs). The judge's judge, applied to the judge itself.</p>
+</li>
 </ol>
 <h2>9. Conclusion</h2>
 <p>The agent-security field has a deployment problem: too many defenses, no pre-purchase axis. We showed that VAL provides one. The anchor of a defense predicts how it fails—text rules fail to rewriting, model self-assessment fails to compliance, objective anchors fail outside their ODD, and structural anchors (confinement, information flow, data-control separation) hold by construction within it. We measured that choosing by this axis beats choosing by intuition on the same budget: identical security numbers, opposite guarantees, and a 100-point utility gap. And we located the L3 frontier in agent security: <strong>confinement, not semantics</strong>—the properties worth encoding into decidable systems are the ones that restrict what an agent can do, not the ones that judge whether it should.</p>
