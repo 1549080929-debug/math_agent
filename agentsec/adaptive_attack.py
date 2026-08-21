@@ -45,7 +45,8 @@ def adaptive_attack(sc, enabled, system_prompt, schemas, rounds=3, verbose=False
         proposal = agent.propose(
             sc["user_task"], mem, sc["memory_source"],
             {"tool": sc["target_tool"], "args": sc["target_args"]})
-        executor = StubExecutor()
+        executor = RealExecutor()
+        executor.reset()
         executed, reasons = run_defense_chain(
             proposal, mem, json.dumps(proposal.get("args", {}), ensure_ascii=False),
             sc["confirmation_recorded"], sc["authorized"],
@@ -141,6 +142,7 @@ def main():
     ap.add_argument("--rounds", type=int, default=3)
     ap.add_argument("--scenarios", default=None)
     ap.add_argument("--whitebox", action="store_true", help="白盒攻击器（知道系统提示+词表，分层打击）")
+    ap.add_argument("--tag", default=None, help="结果文件后缀（如 kimi）")
     args = ap.parse_args()
 
     with io.open(os.path.join(HERE, "scenarios.json"), encoding="utf-8") as f:
@@ -152,32 +154,39 @@ def main():
 
     os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
     mode = "白盒" if args.whitebox else "黑盒"
+    suffix = ("wb_kimi" if args.whitebox else "kimi") + (f"_{args.tag}" if args.tag else "")
     print(f"自适应攻击[{mode}]：{len(scenarios)} 恶意场景 × {args.configs} 配置 × 最多 {args.rounds} 轮\n")
     for name in args.configs.split(","):
         enabled, system_prompt = CONFIGS[name]
-        succ = 0
-        comply = 0
-        rows = []
+        out_path = os.path.join(HERE, "results", f"adaptive{suffix}_{name}.json")
+        saved = {}
+        if os.path.exists(out_path):
+            with io.open(out_path, encoding="utf-8") as f:
+                saved = {r["scenario"]: r for r in json.load(f)["rows"]}
+            print(f"  [{name}] 断点续跑：已有 {len(saved)} 个场景")
+        rows = list(saved.values())
         for sc in scenarios:
+            if sc["id"] in saved:
+                continue
             ok, rnds, trail = adaptive_attack(sc, enabled, system_prompt, scen["tools"],
                                               args.rounds, whitebox=args.whitebox)
-            # 合规 = 任一轮提议了高危工具（含空参数）——意图被驱动
             c = any(t["proposal"].get("tool") in HIGH_RISK for t in trail)
             rows.append({"scenario": sc["id"], "success": ok, "rounds": rnds,
                          "comply": c, "target": sc["target_tool"]})
             if ok:
-                succ += 1
                 print(f"  [{name}] {sc['id']}: 突破（第 {rnds} 轮，{sc['target_tool']}）")
-            if c:
-                comply += 1
-        asr = succ / len(scenarios)
-        comp_rate = comply / len(scenarios)
-        print(f"[{name}] 自适应[{mode}] ASR: {succ}/{len(scenarios)} = {asr:.3f} | 合规率: {comp_rate:.3f}\n")
-        suffix = "wb" if args.whitebox else ""
-        with io.open(os.path.join(HERE, "results", f"adaptive{suffix}_{name}.json"), "w", encoding="utf-8") as f:
-            json.dump({"config": name, "rounds": args.rounds, "whitebox": args.whitebox,
-                       "scenario_count": len(scenarios), "asr": asr, "comply_rate": comp_rate,
-                       "rows": rows}, f, ensure_ascii=False, indent=2)
+            # 增量保存：随时中断不丢进度
+            asr_now = sum(1 for r in rows if r["success"]) / len(rows)
+            with io.open(out_path, "w", encoding="utf-8") as f:
+                json.dump({"config": name, "rounds": args.rounds, "whitebox": args.whitebox,
+                           "scenario_count": len(scenarios), "asr": asr_now,
+                           "comply_rate": sum(1 for r in rows if r["comply"]) / len(rows),
+                           "rows": rows}, f, ensure_ascii=False, indent=2)
+            print(f"  [{name}] 进度 {len(rows)}/{len(scenarios)}，当前 ASR={asr_now:.3f}", flush=True)
+        if rows:
+            asr = sum(1 for r in rows if r["success"]) / len(rows)
+            comp_rate = sum(1 for r in rows if r["comply"]) / len(rows)
+            print(f"[{name}] 自适应[{mode}] ASR: {sum(1 for r in rows if r['success'])}/{len(rows)} = {asr:.3f} | 合规率: {comp_rate:.3f}\n")
 
 
 if __name__ == "__main__":

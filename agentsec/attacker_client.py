@@ -13,8 +13,10 @@ import urllib.request
 from config import ATTACKER_API_KEY, ATTACKER_BASE_URL, ATTACKER_MODEL
 
 
-def attacker_chat(messages, temperature=0.8, max_tokens=600, attempts=3):
-    """攻击者 LLM 调用（用于改写/生成攻击载荷）。返回文本。"""
+def attacker_chat(messages, temperature=0.8, max_tokens=600, attempts=8):
+    """攻击者 LLM 调用（用于改写/生成攻击载荷）。429 限流退避重试（Kimi 组织级 3 RPM）。"""
+    import time
+    import urllib.error
     body = json.dumps({
         "model": ATTACKER_MODEL,
         "messages": messages,
@@ -29,9 +31,19 @@ def attacker_chat(messages, temperature=0.8, max_tokens=600, attempts=3):
                 data=body,
                 headers={"Authorization": f"Bearer {ATTACKER_API_KEY}",
                          "Content-Type": "application/json"})
-            with urllib.request.urlopen(req, timeout=60) as r:
+            with urllib.request.urlopen(req, timeout=90) as r:
                 d = json.loads(r.read().decode("utf-8"))
             return d["choices"][0]["message"]["content"].strip()
+        except urllib.error.HTTPError as e:
+            last_err = e
+            if e.code == 429:
+                retry = int(e.headers.get("Retry-After", "20") or 20)
+                wait = max(retry + 2, 20)  # 3 RPM 下限：每次至少等 20s
+                print(f"  [限流] 等待 {wait}s 后重试（{i + 1}/{attempts}）...", flush=True)
+                time.sleep(wait)
+                continue
+            time.sleep(5)
         except Exception as e:
             last_err = e
+            time.sleep(5)
     raise RuntimeError(f"攻击者 LLM 调用失败（{ATTACKER_MODEL}）：{last_err}")
