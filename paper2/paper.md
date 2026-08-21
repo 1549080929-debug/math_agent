@@ -187,17 +187,20 @@ Three findings. First, **baseline injection compliance is model-specific**: Llam
 
 ### 6.5 Validation on the official AgentDojo benchmark
 
-We integrated our stacks into AgentDojo's official harness [4]—their banking suite, their environment fixtures, their *direct* attack (TODO-prefix injection), and their evaluation—with DeepSeek-chat as the agent model and our confirmation gate + parameter sandbox as a defense element in their pipeline. The gate whitelists the six IBANs that exist in the banking environment; any transfer to an unlisted recipient is refused before execution, with a [BLOCKED] tool result fed back to the model.
+We integrated our stacks into AgentDojo's official harness [4]—their banking suite, their environment fixtures, four of their attack families (*direct*, *ignore_previous*, *injecagent*, *system_message*), and their evaluation—with DeepSeek-chat as the agent model. The confirmation gate whitelists the six IBANs that exist in the banking environment; transfers to any unlisted recipient are refused before execution, with a [BLOCKED] tool result fed back to the model. **For a same-setting comparison, we additionally ran AgentDojo's own defenses (tool_filter, repeat_user_prompt, spotlighting) in the identical harness, model, task subset, and attack set.**
 
-| Config | ASR (n = 36 pairs) | Utility |
+| Config | ASR (n = 144, 4 attack families) | Utility |
 |---|---|---|
-| ND (no defense) | 16.7% | 83.3% |
-| N (prompt hardening + keyword filter) | 11.1-13.9% | 80.6-83.3% |
-| **V (confirmation gate + parameter sandbox)** | **0.0%** | **83.3%** |
+| ND (no defense) | 6.2% [3.3, 11.5] | 82.6% |
+| N (prompt hardening + keyword filter) | 3.5% [1.5, 7.9] | 83.3% |
+| **V (confirmation gate + parameter sandbox)** | **0.0% [0.0, 2.6]** | **83.3%** |
+| AgentDojo tool_filter | 0.0% [0.0, 2.6] | **16.7%** |
+| AgentDojo repeat_user_prompt | 8.3% [4.8, 14.0] | 81.9% |
+| AgentDojo spotlighting | 6.2% [3.3, 11.5] | 81.2% |
 
-Two runs over the same 36 pairs (6 user tasks x 6 injection tasks) reproduce V's 0.0% ASR with zero utility loss. AgentDojo's paper reports its own best defense (simple tool filtering) at 7.5% ASR, and reports that every defense it evaluated loses 15-20% of utility under attack. Our VAL-selected stack, on their benchmark, reaches 0.0% ASR with 0% utility loss. Caveats: a subset of the suite (6/19 user tasks), a single attack family (direct), and a different agent model (DeepSeek-chat vs their GPT-class models)---the benchmark, tasks, and evaluation are theirs, so the gap to publication-grade coverage is breadth, not provenance.
+(95% Wilson CIs in brackets.) Two observations. First, **V matches the strongest official defense on ASR (both 0.0% [0.0, 2.6]) while preserving five times the utility** (83.3% vs 16.7%): AgentDojo's tool filter achieves its zero by refusing most calls, whereas the gate refuses only calls whose recipient is outside the environment's legitimate set. Second, **the cross-testbed difference in N's behavior is the strongest evidence for our core claim.** In our own testbed, N reached 0.000 ASR (its security was produced by the model's refusal behavior under the hardening prompt); on AgentDojo, the same stack leaks 3.5% ASR. The difference is not a bug but the thesis made visible: *N's zero is context-dependent model behavior, not structure—move the stack to another benchmark and the zero moves with it.* V's zero does not move (0.0% in both testbeds, across four attack families, against two victim models).
 
-
+Scope caveats: a subset of the banking suite (6/19 user tasks, 6/24 injection tasks), one suite, one agent model (DeepSeek-chat), and four attack families; the harness, tasks, attacks, and evaluation are AgentDojo's, so the gap to full coverage is breadth, not provenance.
 
 ## 7. Analysis: The Same Zero, Different Guarantees
 

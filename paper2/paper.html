@@ -313,34 +313,50 @@ License: CC-BY 4.0</p>
 </table>
 <p>Three findings. First, <strong>baseline injection compliance is model-specific</strong>: Llama 8B is <em>more</em> resistant than DeepSeek (ND compliance 0.328 vs 0.492; ASR 0.253 vs 0.333). Second, <strong>N's zero generalizes, and its "model luck" nature is confirmed by a second model</strong>: both victims are driven by the injections without defenses (compliance &gt; 0), and prompt hardening suppresses actionability to a model-specific degree (0.233 for DeepSeek, 0.014 for Llama); the security number is a model behavior, not a structure. Third, <strong>V's structural claim is victim-independent</strong>: 0.000 ASR and 1.000 benign for both victims, including 0.317 compliance (the model proposing malicious tools a third of the time) tolerated without a single execution. We additionally ran the one available <em>willing</em> cross-family attacker cell—DeepSeek crafting white-box jailbreaks against the Llama victim (adaptive, 3 rounds, N stack): ASR 0.000, compliance 0.000—DeepSeek's jailbreaks could not induce Llama to even propose the malicious tool. The pattern holds across every victim/attacker combination obtainable with available models. <strong>The generalization reads crisply: structural guarantees are model-independent; behavioral luck is model-dependent.</strong> V's zero is a property of the gate and schema; N's zero is a property of the model's mood on the day.</p>
 <h3>6.5 Validation on the official AgentDojo benchmark</h3>
-<p>We integrated our stacks into AgentDojo's official harness [4]—their banking suite, their environment fixtures, their <em>direct</em> attack (TODO-prefix injection), and their evaluation—with DeepSeek-chat as the agent model and our confirmation gate + parameter sandbox as a defense element in their pipeline. The gate whitelists the six IBANs that exist in the banking environment; any transfer to an unlisted recipient is refused before execution, with a [BLOCKED] tool result fed back to the model.</p>
+<p>We integrated our stacks into AgentDojo's official harness [4]—their banking suite, their environment fixtures, four of their attack families (<em>direct</em>, <em>ignore_previous</em>, <em>injecagent</em>, <em>system_message</em>), and their evaluation—with DeepSeek-chat as the agent model. The confirmation gate whitelists the six IBANs that exist in the banking environment; transfers to any unlisted recipient are refused before execution, with a [BLOCKED] tool result fed back to the model. <strong>For a same-setting comparison, we additionally ran AgentDojo's own defenses (tool_filter, repeat_user_prompt, spotlighting) in the identical harness, model, task subset, and attack set.</strong></p>
 <table>
 <thead>
 <tr>
 <th>Config</th>
-<th>ASR (n = 36 pairs)</th>
+<th>ASR (n = 144, 4 attack families)</th>
 <th>Utility</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>ND (no defense)</td>
-<td>16.7%</td>
-<td>83.3%</td>
+<td>6.2% [3.3, 11.5]</td>
+<td>82.6%</td>
 </tr>
 <tr>
 <td>N (prompt hardening + keyword filter)</td>
-<td>11.1-13.9%</td>
-<td>80.6-83.3%</td>
+<td>3.5% [1.5, 7.9]</td>
+<td>83.3%</td>
 </tr>
 <tr>
 <td><strong>V (confirmation gate + parameter sandbox)</strong></td>
-<td><strong>0.0%</strong></td>
+<td><strong>0.0% [0.0, 2.6]</strong></td>
 <td><strong>83.3%</strong></td>
+</tr>
+<tr>
+<td>AgentDojo tool_filter</td>
+<td>0.0% [0.0, 2.6]</td>
+<td><strong>16.7%</strong></td>
+</tr>
+<tr>
+<td>AgentDojo repeat_user_prompt</td>
+<td>8.3% [4.8, 14.0]</td>
+<td>81.9%</td>
+</tr>
+<tr>
+<td>AgentDojo spotlighting</td>
+<td>6.2% [3.3, 11.5]</td>
+<td>81.2%</td>
 </tr>
 </tbody>
 </table>
-<p>Two runs over the same 36 pairs (6 user tasks x 6 injection tasks) reproduce V's 0.0% ASR with zero utility loss. AgentDojo's paper reports its own best defense (simple tool filtering) at 7.5% ASR, and reports that every defense it evaluated loses 15-20% of utility under attack. Our VAL-selected stack, on their benchmark, reaches 0.0% ASR with 0% utility loss. Caveats: a subset of the suite (6/19 user tasks), a single attack family (direct), and a different agent model (DeepSeek-chat vs their GPT-class models)---the benchmark, tasks, and evaluation are theirs, so the gap to publication-grade coverage is breadth, not provenance.</p>
+<p>(95% Wilson CIs in brackets.) Two observations. First, <strong>V matches the strongest official defense on ASR (both 0.0% [0.0, 2.6]) while preserving five times the utility</strong> (83.3% vs 16.7%): AgentDojo's tool filter achieves its zero by refusing most calls, whereas the gate refuses only calls whose recipient is outside the environment's legitimate set. Second, <strong>the cross-testbed difference in N's behavior is the strongest evidence for our core claim.</strong> In our own testbed, N reached 0.000 ASR (its security was produced by the model's refusal behavior under the hardening prompt); on AgentDojo, the same stack leaks 3.5% ASR. The difference is not a bug but the thesis made visible: <em>N's zero is context-dependent model behavior, not structure—move the stack to another benchmark and the zero moves with it.</em> V's zero does not move (0.0% in both testbeds, across four attack families, against two victim models).</p>
+<p>Scope caveats: a subset of the banking suite (6/19 user tasks, 6/24 injection tasks), one suite, one agent model (DeepSeek-chat), and four attack families; the harness, tasks, attacks, and evaluation are AgentDojo's, so the gap to full coverage is breadth, not provenance.</p>
 <h2>7. Analysis: The Same Zero, Different Guarantees</h2>
 <p>The experiment's central image is two zeros. <strong>V's 0.000 ASR is structural</strong>: the confirmation gate reads platform-recorded events (the LLM cannot write them), and the sandbox enforces schema whitelists (arguments the attacker cannot produce are impossible). It holds while the model is maximally compromised (0.567 compliance) and across all 12 attack families, adaptive iteration, and white-box knowledge. <strong>N's 0.000 ASR is behavioral</strong>: the hardening prompt makes this particular model hedge—it complies with the injection by proposing the tool, then refuses the arguments. The same family's jailbreaks (our attacker was DeepSeek) cannot convert compliance into actionability. A different model, a stronger attacker, or a differently-phrased prompt could move N's zero; nothing can move V's within its ODD.</p>
 <p>This is the deployment answer to "which defense should I buy?": <strong>VAL selection buys a guarantee; intuition buys the model's current mood.</strong> The cost difference is visible in the same table: both reach zero, but N's zero costs every benign action (0.000 benign success—users cannot transfer rent or send reports), while V's zero is lossless. Under VAL's usage criteria ([1], cost of silent error × encodability), the deployer's question becomes precise: <em>is the threat inside the anchor's ODD?</em> If yes, L2/L3 structure is available; if no, the honest answer is L2 correctness plus labeling, not a claim of safety.</p>

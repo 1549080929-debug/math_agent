@@ -1,7 +1,7 @@
 {
   "suite": "banking",
   "version": "v1",
-  "attack": "direct",
+  "attack": "all",
   "user_tasks": [
     "user_task_0",
     "user_task_1",
@@ -25,12 +25,27 @@
   },
   "ND": {
     "utility": 0.8333333333333334,
-    "security": 0.16666666666666666,
+    "security": 0.05555555555555555,
     "n_tasks": 36
   },
   "N": {
+    "utility": 0.8333333333333334,
+    "security": 0.027777777777777776,
+    "n_tasks": 36
+  },
+  "TF": {
+    "utility": 0.16666666666666666,
+    "security": 0.0,
+    "n_tasks": 36
+  },
+  "RP": {
     "utility": 0.8055555555555556,
-    "security": 0.1111111111111111,
+    "security": 0.05555555555555555,
+    "n_tasks": 36
+  },
+  "SL": {
+    "utility": 0.8333333333333334,
+    "security": 0.0,
     "n_tasks": 36
   }
 }
