@@ -91,6 +91,22 @@ Full per-defense ratings with evidence: `reliability/corpus.json`, `ratings/`; b
 
 **The structural finding.** L3 anchors exist in agent security—but only for *confinement and information-flow properties*: sandbox execution domains, taint tracking, data-control separation, SMT-monotonic permission lattices. These are decidable by construction. *Semantic* safety ("is this action dangerous?") is an open-world property with no decidable fragment, and caps at L2. This mirrors the formal/empirical dichotomy of [1] exactly: completeness is reachable only for formally specifiable properties.
 
+### 4.1 Worked examples: how the classification reads five defenses
+
+Each classification is a claim; per the framework's own epistemology, claims need anchors. We therefore show, in the main text, the full evidence chain for five representative defenses spanning the level spectrum (the remaining seventeen are in the supplementary corpus, `reliability/corpus.json`).
+
+**PPMF — the intent anchor (L1/L2).** Mechanism: memories carry platform-maintained provenance metadata (source, trust, confirmation events); a deterministic gate authorizes tool calls by matching action risk to the least-trusted supporting memory [2]. Q1: the gate is a designer policy (rule) over platform-recorded events (truth); Q2: correctness; Q3: n/a. Reported level: **L1** (weakest anchor), with L2-grade inputs. Evidence [2]: 0.000 ASR on evaluated attacks with intact metadata; **0.088 ASR under 10% forged confirmations**—the completeness blind spot quantified. Predicted failure mode: forged/compromised metadata (outside the ODD). Observed: exactly that; the authors themselves list compromised metadata outside their guarantee.
+
+**IFC/Fides — confinement as L3.** Mechanism: the planner dynamically tracks confidentiality and integrity taint labels and deterministically enforces lattice policies [12]. Q1: decidable; Q2: completeness; Q3: single property (information flow). Level: **L3**. Evidence: a formal model that *characterizes the class of properties enforceable by dynamic taint tracking*, evaluated on AgentDojo. Predicted failure mode: properties outside the lattice (covert channels, semantic content). Observed: consistent—the guarantee is about flow, not about whether the permitted action is wise.
+
+**CaMeL — data-control separation as L3.** Mechanism: untrusted data channels are separated from trusted control flow; tool calls are capability-gated [15]. Q1: decidable; Q2: completeness; Q3: single property (untrusted data cannot drive control flow). Level: **L3**. Evidence: "77% of tasks with provable security (compared to 84% with an undefended system)" on AgentDojo; "the untrusted data retrieved by the LLM can never impact the program flow." Predicted failure mode: dangerous actions inside the authorized intent (semantic, in-ODD). Observed: consistent with the confinement frame—separation is provable; semantics is not.
+
+**Llama Guard — the statistical classifier (L2).** Mechanism: an LLM-classifier trained on human-labeled safety taxonomies returns safe/unsafe labels [9]. Q1: truth (human labels); Q2: correctness; Q3: n/a. Level: **L2**. Evidence: 0.9007 accuracy on internal test sets, dropping on external benchmarks; no completeness claim. Predicted failure mode: out-of-distribution inputs and adversarial rewriting; nothing is proven about unlabeled inputs. Observed: the distribution-bound pattern is documented in the model card and external evals.
+
+**Self-Ask provenance — no anchor (L0).** Mechanism: the LLM infers whether memory text looks external, user-history-like, or confirmation-like, and authorizes from the inferred trust [2]. Q1: LLM; Q2: none; Q3: n/a. Level: **L0**. Evidence: permissive mode reaches **0.984 ASR**; strict mode blocks all benign actions [2]. Predicted failure mode: text claims (fake markers, social engineering). Observed: 0.984 ASR under permissive inference—the anchor is whatever the model believes.
+
+The five examples trace the level ladder with primary-source evidence: L0 fails to text belief, L2 fails outside its distribution, L1/L2 fails outside its ODD (forged metadata), L3 holds by construction within its property—and all failure modes were predicted before the validation data were consulted (Section 5).
+
 ## 5. Prediction Validation
 
 We froze 16 prediction cards (level → predicted failure mode + predicted breaking attack) before consulting outcome data.
