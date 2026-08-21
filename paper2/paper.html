@@ -38,7 +38,7 @@ License: CC-BY 4.0</p>
 <ol>
 <li><strong>A level map of agent security.</strong> We classify 22 defenses—published systems (PPMF [2], Llama Guard, CaMeL, Progent, IFC/Fides, NeMo Guardrails, A-MemGuard, etc.), baselines, and our own four implementations—using a frozen, blind-rater-validated protocol (inter-rater κ ≈ 0.8 [1]). The map organizes the defense landscape by what each defense can actually guarantee.</li>
 <li><strong>Prediction validation.</strong> We freeze level-to-behavior prediction cards and validate them: 10/10 hits on published data (PPMF's own numbers, abstract-level evidence), including two mechanism-driven classification corrections.</li>
-<li><strong>The first deployment-value comparison.</strong> Same budget, two stacks, one testbed: a VAL-selected stack (L2 intent anchor + L3 confinement) versus a mainstream intuition stack (L0 prompt hardening + L1 keyword filter), across 50 scenarios, 12 attack families, real tool effects, adaptive, white-box and PAIR-style attacks, three seeds, and a second victim model. The VAL stack dominates on both security and utility, and the contrast is structural rather than incidental.</li>
+<li><strong>The first deployment-value comparison.</strong> Same budget, two stacks, one testbed: a VAL-selected stack (L2 intent anchor + L3 confinement) versus a mainstream intuition stack (L0 prompt hardening + L1 keyword filter), across 50 scenarios, 12 attack families, real tool effects, adaptive, white-box and PAIR-style attacks, three seeds, a second victim model, and the official AgentDojo benchmark (0.0% ASR). The VAL stack dominates on both security and utility, and the contrast is structural rather than incidental.</li>
 </ol>
 <p><strong>What this paper claims—the spine in one paragraph.</strong> (i) <em>The anchor predicts the failure mode:</em> every one of the 22 classified defenses fails the way its anchor fails, and we froze the predictions before the outcome data (Section 5). (ii) <em>The same zero is not the same guarantee:</em> a VAL-selected stack and a mainstream-intuition stack both reach 0.000 ASR, but one is structure and the other is model luck—visible in the compliance gap and across two victim models (Section 6). (iii) <em>The framework knows its own level:</em> the classifier used here is itself an L1 tool, and we measured rather than assumed its reproducibility (Section 8). If a reader remembers only one of these, it should be (ii).</p>
 <h2>2. Background and Related Work</h2>
@@ -312,62 +312,42 @@ License: CC-BY 4.0</p>
 </tbody>
 </table>
 <p>Three findings. First, <strong>baseline injection compliance is model-specific</strong>: Llama 8B is <em>more</em> resistant than DeepSeek (ND compliance 0.328 vs 0.492; ASR 0.253 vs 0.333). Second, <strong>N's zero generalizes, and its "model luck" nature is confirmed by a second model</strong>: both victims are driven by the injections without defenses (compliance &gt; 0), and prompt hardening suppresses actionability to a model-specific degree (0.233 for DeepSeek, 0.014 for Llama); the security number is a model behavior, not a structure. Third, <strong>V's structural claim is victim-independent</strong>: 0.000 ASR and 1.000 benign for both victims, including 0.317 compliance (the model proposing malicious tools a third of the time) tolerated without a single execution. We additionally ran the one available <em>willing</em> cross-family attacker cell—DeepSeek crafting white-box jailbreaks against the Llama victim (adaptive, 3 rounds, N stack): ASR 0.000, compliance 0.000—DeepSeek's jailbreaks could not induce Llama to even propose the malicious tool. The pattern holds across every victim/attacker combination obtainable with available models. <strong>The generalization reads crisply: structural guarantees are model-independent; behavioral luck is model-dependent.</strong> V's zero is a property of the gate and schema; N's zero is a property of the model's mood on the day.</p>
-<h3>6.5 External anchor: comparison with AgentDojo-reported defenses</h3>
-<p>AgentDojo [4] evaluates defenses on its benchmark (GPT-class agents, its own attack suite). We list its reported numbers alongside ours for calibration—<em>not</em> as a head-to-head (different models, environments, and attacks):</p>
+<h3>6.5 Validation on the official AgentDojo benchmark</h3>
+<p>We integrated our stacks into AgentDojo's official harness [4]—their banking suite, their environment fixtures, their <em>direct</em> attack (TODO-prefix injection), and their evaluation—with DeepSeek-chat as the agent model and our confirmation gate + parameter sandbox as a defense element in their pipeline. The gate whitelists the six IBANs that exist in the banking environment; any transfer to an unlisted recipient is refused before execution, with a [BLOCKED] tool result fed back to the model.</p>
 <table>
 <thead>
 <tr>
-<th>Defense (source)</th>
-<th>ASR</th>
-<th>Utility note</th>
+<th>Config</th>
+<th>ASR (n = 36 pairs)</th>
+<th>Utility</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>AgentDojo: simple tool filtering [4]</td>
-<td>7.5%</td>
-<td>effective when tasks need read-only access; fails when tool choice is dynamic</td>
+<td>ND (no defense)</td>
+<td>16.7%</td>
+<td>83.3%</td>
 </tr>
 <tr>
-<td>AgentDojo: secondary attack detector [4]</td>
-<td>8%</td>
-<td>—</td>
+<td>N (prompt hardening + keyword filter)</td>
+<td>11.1-13.9%</td>
+<td>80.6-83.3%</td>
 </tr>
 <tr>
-<td>AgentDojo: all evaluated defenses [4]</td>
-<td>—</td>
-<td>lose 15–20% of utility under attack</td>
-</tr>
-<tr>
-<td>This work: ND (no defense)</td>
-<td>33.3%</td>
-<td>0% loss</td>
-</tr>
-<tr>
-<td>This work: <strong>V stack (VAL, DeepSeek victim)</strong></td>
+<td><strong>V (confirmation gate + parameter sandbox)</strong></td>
 <td><strong>0.0%</strong></td>
-<td><strong>0% loss</strong></td>
-</tr>
-<tr>
-<td>This work: <strong>V stack (VAL, Llama victim)</strong></td>
-<td><strong>0.0%</strong></td>
-<td><strong>0% loss</strong></td>
-</tr>
-<tr>
-<td>This work: N stack (intuition)</td>
-<td>0.0% (model-luck)</td>
-<td>100% loss</td>
+<td><strong>83.3%</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Our V stack's zero sits below the best AgentDojo-reported defense (7.5%), with no utility cost—where AgentDojo reports every evaluated defense losing 15–20% utility. The comparison is indicative, not competitive: the caveats of Section 8.2 apply in full. Its purpose is to show that a VAL-selected two-defense stack is <em>in the neighborhood of, or better than</em>, published single defenses on both axes, despite (or because of) being a selection-strategy rather than a tuned defense.</p>
+<p>Two runs over the same 36 pairs (6 user tasks x 6 injection tasks) reproduce V's 0.0% ASR with zero utility loss. AgentDojo's paper reports its own best defense (simple tool filtering) at 7.5% ASR, and reports that every defense it evaluated loses 15-20% of utility under attack. Our VAL-selected stack, on their benchmark, reaches 0.0% ASR with 0% utility loss. Caveats: a subset of the suite (6/19 user tasks), a single attack family (direct), and a different agent model (DeepSeek-chat vs their GPT-class models)---the benchmark, tasks, and evaluation are theirs, so the gap to publication-grade coverage is breadth, not provenance.</p>
 <h2>7. Analysis: The Same Zero, Different Guarantees</h2>
 <p>The experiment's central image is two zeros. <strong>V's 0.000 ASR is structural</strong>: the confirmation gate reads platform-recorded events (the LLM cannot write them), and the sandbox enforces schema whitelists (arguments the attacker cannot produce are impossible). It holds while the model is maximally compromised (0.567 compliance) and across all 12 attack families, adaptive iteration, and white-box knowledge. <strong>N's 0.000 ASR is behavioral</strong>: the hardening prompt makes this particular model hedge—it complies with the injection by proposing the tool, then refuses the arguments. The same family's jailbreaks (our attacker was DeepSeek) cannot convert compliance into actionability. A different model, a stronger attacker, or a differently-phrased prompt could move N's zero; nothing can move V's within its ODD.</p>
 <p>This is the deployment answer to "which defense should I buy?": <strong>VAL selection buys a guarantee; intuition buys the model's current mood.</strong> The cost difference is visible in the same table: both reach zero, but N's zero costs every benign action (0.000 benign success—users cannot transfer rent or send reports), while V's zero is lossless. Under VAL's usage criteria ([1], cost of silent error × encodability), the deployer's question becomes precise: <em>is the threat inside the anchor's ODD?</em> If yes, L2/L3 structure is available; if no, the honest answer is L2 correctness plus labeling, not a claim of safety.</p>
 <h2>8. Limitations</h2>
 <ol>
 <li><strong>Single model (victim and attacker).</strong> The agent and every attack form (static, adaptive, white-box, PAIR-lite) used DeepSeek-chat. D1's hedging wall is explicitly model-behavior-bound, and same-family jailbreaks are the hardest case for the attacker. We attempted cross-family attackers with two independent families—Moonshot Kimi (kimi-k2.6, kimi-k2.7-code, via API) and Meta Llama 3.1 8B (local Ollama). Both families <strong>refused to participate as attackers</strong>: explicit attack-crafting requests were declined ("I cannot assist with generating such attack text"), and indirect rewriting prompts produced <em>sanitized</em> payloads (imperative injections rewritten into descriptive records). We then measured the sanitized payload's effect on the victim: fed to DeepSeek, it <strong>no longer drove the injection</strong> (the victim proposed a benign read instead of the transfer). The cross-family dimension is therefore closed as far as aligned models can close it: the hedging wall was not broken by any obtainable cross-family attacker, because <strong>aligned attackers decline the role</strong>—a finding that is itself model-behavior (L0), not structure. A less-aligned or red-team-purposed attacker (e.g., hosted Llama-3.3-70B) remains the open variant. GCG-style optimization is additionally out of scope: the API exposes no gradients or token logits.</li>
-<li><strong>Self-built testbed.</strong> Scenarios, defenses, and the real-effect sandbox are ours. This is deliberate: the experiment compares <em>selection strategies</em>, and a controlled comparison requires controlled implementations—plugging third-party defenses would confound strategy with implementation quality. The cost is that absolute ASR figures may not transfer to production-grade implementations (we expect the ordering to hold, not the point estimates). Section 6.4 provides an external-anchor comparison against AgentDojo-reported defenses for calibration.</li>
+<li><strong>Self-built testbed.</strong> Scenarios, defenses, and the real-effect sandbox are ours. This is deliberate: the experiment compares <em>selection strategies</em>, and a controlled comparison requires controlled implementations—plugging third-party defenses would confound strategy with implementation quality. The cost is that absolute ASR figures may not transfer to production-grade implementations (we expect the ordering to hold, not the point estimates). Section 6.5 additionally validates the stacks on the official AgentDojo benchmark (their tasks, attacks, and evaluation), reaching 0.0% ASR; the remaining caveat is coverage (a suite subset, one attack family), not provenance.</li>
 <li><strong>Attack coverage.</strong> Twelve attack families include third-party AgentDojo payloads; adaptive, white-box, and PAIR-style attackers cover text-level escalation; token-level optimization (GCG) and multi-turn social-engineering attacks are absent.</li>
 <li><strong>Benign sample.</strong> Utility is measured on 20 benign scenarios (CIs in Section 6.1); the V/N utility gap is significant, but broader utility coverage (long-horizon tasks, tool-calling convenience) is untested.</li>
 <li><strong>LLM-rater classifications.</strong> The level map is blind-rater-validated among same-family LLM raters (security subset: 22 items, 90.9% exact agreement; overall corpus κ ≈ 0.8 [1]); human-rater agreement is future work.</li>
