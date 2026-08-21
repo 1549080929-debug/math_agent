@@ -4,3 +4,4 @@ local_config.json
 agentsec/sandbox/ledger.jsonl
 agentsec/sandbox/forum.jsonl
 agentsec/sandbox/outbox/
+agentsec/logs/
