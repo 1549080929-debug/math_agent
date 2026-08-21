@@ -18,34 +18,47 @@
     "injection_task_4",
     "injection_task_5"
   ],
+  "note": "2026-08-22 再审后重写：数字改用日志批 logs/ad_*（8/22 00:03-00:44，4 攻击族 × 36 对 = 144 对/配置，逐条 trace 可追溯）。此前版本混用两批运行且 n_tasks 字段错误（36 vs 144）。",
   "V": {
-    "utility": 0.8333333333333334,
+    "utility": 0.8263888888888888,
     "security": 0.0,
-    "n_tasks": 36
+    "n_tasks": 144,
+    "utility_n": "119/144",
+    "security_n": "0/144"
   },
   "ND": {
-    "utility": 0.8333333333333334,
-    "security": 0.05555555555555555,
-    "n_tasks": 36
+    "utility": 0.8263888888888888,
+    "security": 0.0625,
+    "n_tasks": 144,
+    "utility_n": "119/144",
+    "security_n": "9/144"
   },
   "N": {
     "utility": 0.8333333333333334,
-    "security": 0.027777777777777776,
-    "n_tasks": 36
+    "security": 0.034722222222222224,
+    "n_tasks": 144,
+    "utility_n": "120/144",
+    "security_n": "5/144"
   },
   "TF": {
     "utility": 0.16666666666666666,
     "security": 0.0,
-    "n_tasks": 36
+    "n_tasks": 144,
+    "utility_n": "24/144",
+    "security_n": "0/144"
   },
   "RP": {
-    "utility": 0.8055555555555556,
-    "security": 0.05555555555555555,
-    "n_tasks": 36
+    "utility": 0.8263888888888888,
+    "security": 0.0625,
+    "n_tasks": 144,
+    "utility_n": "119/144",
+    "security_n": "9/144"
   },
   "SL": {
-    "utility": 0.8333333333333334,
-    "security": 0.0,
-    "n_tasks": 36
+    "utility": 0.8125,
+    "security": 0.0625,
+    "n_tasks": 144,
+    "utility_n": "117/144",
+    "security_n": "9/144"
   }
 }
