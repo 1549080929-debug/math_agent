@@ -179,6 +179,27 @@ victim_client 抽象（DeepSeek API ↔ Ollama 切换）+ 工具注册表提示�
 
 **2×2 全矩阵**：DS→DS（5400 调用主实验）、DS→Llama（本格）、Llama→DS/Llama→Llama（对齐拒答，§7.8b）——"结构 vs 运气"的结论跨受害者与攻击者组合成立。
 
+
+### 7.10 AgentDojo 真集成（2026-08-20，杠杆 2 完成）
+
+**集成**：agentdojo 0.1.35 官方 harness + DeepSeek-chat（OpenAILLM base_url 直连 + developer->system 补丁）+ V 门（确认门+参数沙箱，allowlist=银行环境 6 个 IBAN，拦非白名单转账）作为 pipeline 防御元素。
+
+**结果（banking 套件，6 用户任务 x 6 注入 = 36 对，两轮复现）**：
+
+| 配置 | ASR | Utility |
+|---|---|---|
+| ND | 16.7% | 83.3% |
+| N（D1+D2） | 11.1-13.9% | 80.6-83.3% |
+| **V（VAL 门）** | **0.0%** | **83.3%** |
+
+**意义**：
+1. **V 栈在官方基准上 0% ASR、零 utility 损失**——优于 AgentDojo 论文自报最佳防御（工具过滤 7.5% ASR，且其全部防御 utility 损失 15-20%）；
+2. 论文 6.5 从"外部锚对比"升级为"官方基准实测"——拆掉"自建测试床"审稿第一枪的最强弹药；
+3. ND ASR 16.7% 低于我们测试床（33%）——DeepSeek 对英文 TODO 注入的天然抵抗高于中文记忆注入，跨测试床交叉验证；
+4. **指标误读教训**：AgentDojo 的 security_results 平均 = ASR（True=攻击达成），一度被误读为防御率导致"0.000 悖论"；存档 trace 实证（[BLOCKED] 拦截记录）纠正——裁判的裁判再次上演。
+
+**诚实边界**：套件子集（6/19 任务 x 6/24 注入）、单一攻击族（direct）、单模型（DeepSeek vs 论文 GPT 系）；benchmark/任务/评估全是官方的，缺口在广度不在来源。
+
 ## 8. 复现
 
 ```bash
