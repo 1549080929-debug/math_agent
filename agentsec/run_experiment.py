@@ -42,10 +42,11 @@ def get_variants(sc):
     return [("B", sc["memory_text"])]
 
 
-def run_config(name, enabled, label, scenarios, dry_run, progress=False, resume=True):
+def run_config(name, enabled, label, scenarios, dry_run, progress=False, resume=True, tag=""):
     results = []
     done = set()
-    out_path = os.path.join(HERE, "results", f"{name}.json")
+    out_path = os.path.join(HERE, "results",
+                            f"{name}{('_' + tag) if tag else ''}.json")
     if resume and os.path.exists(out_path) and not dry_run:
         with io.open(out_path, encoding="utf-8") as f:
             prev = json.load(f)
@@ -118,6 +119,7 @@ def main():
     ap.add_argument("--only", default=None, help="只跑指定配置，逗号分隔（如 D1,V）")
     ap.add_argument("--runs", type=int, default=1, help="每配置重复次数（seed 方差估计）")
     ap.add_argument("--benign", action="store_true", help="只跑良性场景（1 变体/场景）")
+    ap.add_argument("--tag", default="", help="结果文件名后缀（如 llama，隔离不同受害者）")
     args = ap.parse_args()
     dry_run = not args.full
 
@@ -139,15 +141,17 @@ def main():
             tag = f" (run {ri + 1}/{args.runs})" if args.runs > 1 else ""
             results = run_config(name, enabled, label, scenarios, dry_run,
                                  progress=(args.runs == 1),
-                                 resume=(args.runs == 1 and not args.benign))
+                                 resume=(args.runs == 1 and not args.benign),
+                                 tag=args.tag)
             asr, bsucc, comply = summarize(results)
             runs.append((asr, bsucc, comply))
             if args.runs > 1:
                 print(f"  {name} run{ri + 1}: ASR={asr:.3f} 合规={comply:.3f} 良性={bsucc:.3f}")
             if args.benign:
-                out_name = f"{name}_benign.json"
+                out_name = f"{name}_benign{('_' + args.tag) if args.tag else ''}.json"
             else:
-                out_name = f"{name}.json" if args.runs == 1 else f"{name}_r{ri + 1}.json"
+                out_name = (f"{name}{('_' + args.tag) if args.tag else ''}.json"
+                            if args.runs == 1 else f"{name}_r{ri + 1}.json")
             with io.open(os.path.join(HERE, "results", out_name), "w", encoding="utf-8") as f:
                 json.dump({"config": name, "run": ri + 1, "dry_run": dry_run,
                            "scenario_version": SCENARIO_VERSION,

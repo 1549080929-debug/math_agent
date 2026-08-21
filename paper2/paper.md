@@ -150,7 +150,19 @@ Adaptive attacks (attacker rewrites from the interception reason) nearly double 
 
 V, N, and ND re-run 3×: standard deviations ≈ 0.005 on compliance, 0.000 on ASR and benign success. The headline contrast is stable. We also record two harness bugs caught mid-experiment (a schema regex that blocked all deletes; a resume bug that silently duplicated seeds), each fixed and reported—the judge's judge applied to our own experiment.
 
-### 6.4 External anchor: comparison with AgentDojo-reported defenses
+### 6.4 Victim generalization: a 2x2 matrix
+
+All results above use DeepSeek-chat as the victim. To test whether the structural pattern is victim-specific, we ran the same static attack suite with a second, independent victim—Meta Llama 3.1 8B (local Ollama, same harness, tool registry added to the prompt):
+
+| Config | DeepSeek victim ASR / compl. / benign | **Llama victim** ASR / compl. / benign |
+|---|---|---|
+| ND (no defense) | 0.333 / 0.492 / 1.000 | 0.253 / 0.328 / 1.000 |
+| N (D1+D2) | 0.000 / 0.233 / 0.000 | 0.000 / 0.014 / 0.000 |
+| V (D3+D4) | 0.000 / 0.497 / 1.000 | 0.000 / 0.317 / 1.000 |
+
+Three findings. First, **baseline injection compliance is model-specific**: Llama 8B is *more* resistant than DeepSeek (ND compliance 0.328 vs 0.492; ASR 0.253 vs 0.333). Second, **N's zero generalizes, and its "model luck" nature is confirmed by a second model**: both victims are driven by the injections without defenses (compliance > 0), and prompt hardening suppresses actionability to a model-specific degree (0.233 for DeepSeek, 0.014 for Llama); the security number is a model behavior, not a structure. Third, **V's structural claim is victim-independent**: 0.000 ASR and 1.000 benign for both victims, including 0.317 compliance (the model proposing malicious tools a third of the time) tolerated without a single execution. We additionally ran the one available *willing* cross-family attacker cell—DeepSeek crafting white-box jailbreaks against the Llama victim (adaptive, 3 rounds, N stack): ASR 0.000, compliance 0.000—DeepSeek's jailbreaks could not induce Llama to even propose the malicious tool. The pattern holds across every victim/attacker combination obtainable with available models.
+
+### 6.5 External anchor: comparison with AgentDojo-reported defenses
 
 AgentDojo [4] evaluates defenses on its benchmark (GPT-class agents, its own attack suite). We list its reported numbers alongside ours for calibration—*not* as a head-to-head (different models, environments, and attacks):
 
