@@ -13,7 +13,7 @@
 | `acl.sty` / `acl_latex.tex` / `acl_natbib.bst` | ACL 官方模板 |
 | `rebuild_full.py` | **主管线**（一条命令完成全部） |
 | `build_arr.py` | ACL preamble + 正文组装（含动态 CSL 提取） |
-| `fix_latex.py` | Unicode 转义 + longtable → table*（正确列数） |
+| `fix_latex.py` | Unicode 转义 + longtable → table*（tabularx 等分列，总宽 \textwidth） |
 | `fix_format.py` | 章节编号去重 + Appendix → section* |
 | `fix_natbib3.py` | 参考文献 → enumerate（绕开 natbib） |
 | `acl_submit.tex` | 生成的 LaTeX |
@@ -44,7 +44,7 @@ paper_arr.md
 
 - natbib 警告（参考文献转 enumerate 后 acl.sty 的 natbib 风格提示）——不影响 PDF 内容
 - Appendix 编号为 section*（不编号），A.1/A.2/A.4 手动编号
-- 表格为 l 列（左对齐，内容正确；宽度非等分）
+- 表格为 tabularx 等分列（总宽 = \textwidth，内容自动换行，2026-08-22 修复：原 l 列 + minipage{\linewidth} 导致全部表格 Overfull 超宽 946–2348pt、溢出页面右边界）
 
 ## 环境
 

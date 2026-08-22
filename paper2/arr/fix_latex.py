@@ -68,10 +68,10 @@ while BEG in s:
     inner = re.sub(re.escape(BS) + r'label\{[^}]*\}', '', inner)
     inner = inner.strip()
 
-    colspec_new = 'l' * ncols
+    colspec_new = 'X' * ncols
     repl = (BS + 'begin{table*}[!t]' + chr(10) + BS + 'centering' + chr(10) + BS + 'small' + chr(10)
-            + BS + 'begin{tabular}{' + colspec_new + '}' + chr(10) + inner + chr(10)
-            + BS + 'end{tabular}' + chr(10) + BS + 'end{table*}' + chr(10))
+            + BS + 'begin{tabularx}{' + BS + 'textwidth}{' + colspec_new + '}' + chr(10) + inner + chr(10)
+            + BS + 'end{tabularx}' + chr(10) + BS + 'end{table*}' + chr(10))
     s = s[:i] + repl + s[e + len(END):]
     n += 1
 
