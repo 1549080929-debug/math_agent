@@ -38,7 +38,9 @@ PREAMBLE = r"""\documentclass[11pt]{article}
 __CSL_BLOCK__
 
 \title{The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security}
-\author{Anonymous}
+\author{Yajie Yin \\
+  Independent Researcher \\
+  \texttt{1549080929@qq.com}}
 
 \begin{document}
 \maketitle

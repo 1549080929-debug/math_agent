@@ -76,9 +76,7 @@
 \urlstyle{same}
 
 \title{The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security}
-\author{Yajie Yin \\
-  Independent Researcher \\
-  \texttt{1549080929@qq.com}}
+\author{Anonymous}
 
 \begin{document}
 \maketitle
@@ -87,7 +85,7 @@
 
 \begin{abstract}
 
-LLM-agent security has produced a dense landscape of defenses---prompt hardening, content filters, permission gates, sandboxes, provenance firewalls---each claiming to make agents ``safe.'' We argue that the field lacks a pre-purchase question: \emph{what does a given defense actually guarantee, and where does that guarantee come from?} We apply Verification Autonomy Levels (VAL, arXiv:2608.19009), a taxonomy that grades verification/authorization schemes by the source of their spec (L0: LLM self-declaration, no deterministic anchor; L1: deterministic rules; L2: objective ground truth, correctness only; L3/L4: decidable systems with single-property or domain-level completeness; L5: impossible), to 22 agent-security defenses. The classification is a falsifiable predictor: a defense fails the way its anchor fails. We validate this with frozen prediction cards on a small published sample (10/10 hits, flagged as such) and then run the first controlled deployment-value comparison: same budget, two stacks---a VAL-guided stack (intent-anchored confirmation gate + schema sandbox) versus a mainstream intuition stack (prompt hardening + keyword filter)---across 50 scenarios, 12 attack families (including third-party AgentDojo payloads), real tool effects, adaptive, white-box and PAIR-style attacks, and three seeds (\textasciitilde7,000 LLM calls). The VAL stack holds 0.000 attack success with 1.000 benign success in every condition; the intuition stack also reaches 0.000 ASR but kills all benign actions and its security is model-behavior luck (compliance 0.235), not structure (the VAL stack tolerates 2.4x more model compromise---0.567 compliance---and still blocks everything). The same zero, two different guarantees---zero is an outcome, not a guarantee. Under escalating attacks, zero stability becomes a measurable axis: some zeros collapse abruptly, others erode gradually, and indistinguishable stability trajectories can rest on opposite guarantees (model behavior vs.~platform record). VAL is a guarantee-provenance framework for LLM-agent security: it identifies what an observed security outcome is grounded in, and hence where it will fail. We further identify where L3 anchors exist in agent security: confinement and information-flow properties (sandboxing, taint tracking, data-control separation), not unrestricted semantic safety, which caps at L2 (restricted semantic properties that can be formally encoded remain eligible for higher levels).
+LLM-agent security has produced a dense landscape of defenses---prompt hardening, content filters, permission gates, sandboxes---each claiming to make agents safe, lacking a pre-purchase question: what does a given defense actually guarantee, and where does that guarantee come from? We apply Verification Autonomy Levels (VAL), which grades verification schemes by the source of their specification (L0: LLM self-declaration; L1: deterministic rules; L2: objective ground truth; L3/L4: decidable completeness; L5: impossible), to 22 agent-security defenses. The taxonomy is falsifiable: a defense fails the way its anchor fails. We validate this with frozen prediction cards on a small published sample (10/10 hits, flagged), then run the first controlled deployment-value comparison: same budget, a VAL-guided stack (intent-anchored confirmation gate + schema sandbox) versus a mainstream intuition stack (prompt hardening + keyword filter), across 50 scenarios and 12 attack families under adaptive/white-box/PAIR escalation, three seeds (\textasciitilde7,000 calls). The VAL stack holds 0.000 attack success with 1.000 benign success; the intuition stack reaches 0.000 ASR but kills all benign actions, its security resting on model-behavior luck (compliance 0.235) rather than structure (the VAL stack tolerates 2.4x more compromise---0.567 compliance---and still blocks everything). The same zero, two different guarantees: zero is an outcome, not a guarantee.
 
 \end{abstract}
 \section{Introduction}\label{introduction}
@@ -96,7 +94,7 @@ Large language model (LLM) agents are moving from single-turn assistants to pers
 
 This paper asks the question the field has not asked explicitly: \textbf{what does a given agent-security defense guarantee, and where does that guarantee come from?}
 
-We answer with Verification Autonomy Levels (VAL), a taxonomy proposed in (Yin 2026) for verification schemes generally. VAL classifies any verification/authorization scheme along a single axis---the source of its verification spec---into six levels:
+We answer with Verification Autonomy Levels (VAL), a taxonomy proposed in (Anonymous 2026) for verification schemes generally. VAL classifies any verification/authorization scheme along a single axis---the source of its verification spec---into six levels:
 
 \begin{itemize}
 
@@ -136,7 +134,7 @@ We make three contributions:
 
 \item
 
-  \textbf{A level map of agent security.} We classify 22 defenses using a frozen, blind-rater-validated protocol (inter-rater $\kappa$ $\approx$ 0.8 (Yin 2026)), organizing the landscape by what each defense can actually guarantee.
+  \textbf{A level map of agent security.} We classify 22 defenses using a frozen, blind-rater-validated protocol (inter-rater $\kappa$ $\approx$ 0.8 (Anonymous 2026)), organizing the landscape by what each defense can actually guarantee.
 
 \item
 
@@ -156,9 +154,9 @@ We make three contributions:
 
 \subsection{Verification Autonomy Levels (VAL)}\label{verification-autonomy-levels-val}
 
-VAL (Yin 2026) grades verification schemes by three questions: Q1 \emph{where does the verification spec come from} (LLM declaration / deterministic rule / objective truth / decidable system); Q2 \emph{what does the verdict guarantee} (nothing / correctness / completeness); Q3 \emph{what scope does a completeness claim cover} (single property / domain / universal). The level is the first rule that fires: L5 (universal completeness, impossible), L4 (domain completeness), L3 (single-property completeness), L2 (correctness with objective anchor), L1 (correctness with deterministic rule), L0 (otherwise). The procedure is deterministic and has been measured for inter-rater reproducibility: three independent blind raters reach $\kappa$ $\approx$ 0.8 on 48--70 schemes under the refined protocol (Yin 2026).
+VAL (Anonymous 2026) grades verification schemes by three questions: Q1 \emph{where does the verification spec come from} (LLM declaration / deterministic rule / objective truth / decidable system); Q2 \emph{what does the verdict guarantee} (nothing / correctness / completeness); Q3 \emph{what scope does a completeness claim cover} (single property / domain / universal). The level is the first rule that fires: L5 (universal completeness, impossible), L4 (domain completeness), L3 (single-property completeness), L2 (correctness with objective anchor), L1 (correctness with deterministic rule), L0 (otherwise). The procedure is deterministic and has been measured for inter-rater reproducibility: three independent blind raters reach $\kappa$ $\approx$ 0.8 on 48--70 schemes under the refined protocol (Anonymous 2026).
 
-Two refinements matter. First, \textbf{anchor semantics} (Zhang et al. 2026): objective anchors split by what they certify---intent (a recorded decision event), truth (a fact), effect (an execution outcome). A confirmation record is an intent anchor: it authorizes, but says nothing about correctness; conflating intent with effect is the category error behind most authorization failures. Second, \textbf{the completeness blind spot} (Yin 2026): checks verify proposed candidates but cannot prove none was missed---the analog in security is the \emph{un-enumerated attack}: a gate blocking all evaluated attacks is a correctness probe over the evaluated distribution, not a guarantee over all attack paths.
+Two refinements matter. First, \textbf{anchor semantics} (Zhang et al. 2026): objective anchors split by what they certify---intent (a recorded decision event), truth (a fact), effect (an execution outcome). A confirmation record is an intent anchor: it authorizes, but says nothing about correctness; conflating intent with effect is the category error behind most authorization failures. Second, \textbf{the completeness blind spot} (Anonymous 2026): checks verify proposed candidates but cannot prove none was missed---the analog in security is the \emph{un-enumerated attack}: a gate blocking all evaluated attacks is a correctness probe over the evaluated distribution, not a guarantee over all attack paths.
 
 \subsection{Agent-security defenses and their taxonomies}\label{agent-security-defenses-and-their-taxonomies}
 
@@ -168,13 +166,13 @@ The defense literature spans text-level (prompt hardening, filters, Llama Guard)
 
 \subsection{Classification protocol}\label{classification-protocol}
 
-We classify defenses with the frozen VAL protocol (v2.3, (Yin 2026)) extended for security: R2 mixed systems split per component (weakest anchor on the verdict path); R3 evidence anchors do not equal verdict anchors; R10 designer rules are L1; R12b theorem-backed exhaustive procedures (confinement, taint tracking) are L3; R15 LLM-generated expectations are L0. Each defense is rated on Q1/Q2/Q3 from a mechanism-only evidence pack by blind raters. For the security subset (22 items), two independent raters agree exactly on 20/22 (90.9\%); the two disagreements are known boundary cases.
+We classify defenses with the frozen VAL protocol (v2.3, (Anonymous 2026)) extended for security: R2 mixed systems split per component (weakest anchor on the verdict path); R3 evidence anchors do not equal verdict anchors; R10 designer rules are L1; R12b theorem-backed exhaustive procedures (confinement, taint tracking) are L3; R15 LLM-generated expectations are L0. Each defense is rated on Q1/Q2/Q3 from a mechanism-only evidence pack by blind raters. For the security subset (22 items), two independent raters agree exactly on 20/22 (90.9\%); the two disagreements are known boundary cases.
 
 \textbf{On the validity of the taxonomy.} Agreement among raters shows the categories are \emph{usable}, not \emph{right}. We offer three independent lines instead: \emph{out-of-sample prediction} (cards frozen before outcome data, 10/10 hits with two mechanism-driven corrections---retrospective storytelling cannot produce that pattern); \emph{cross-benchmark convergence} (the same anchor logic predicts our testbed, AgentDojo, JADE, and LITMUS results---four sources with no shared implementation); and \emph{falsifiability} (each card names the attack predicted to break its defense). We claim VAL is a productive organizing principle, not the unique correct ontology.
 
 \subsection{Prediction protocol}\label{prediction-protocol}
 
-Following (Yin 2026), we freeze prediction cards before outcome data: for each defense, level $\rightarrow$ predicted behavior pattern + the specific attack predicted to break it, validated against published data (PPMF's numbers; abstract-level evidence flagged as such). The protocol also generalizes out of sample: before running JADE's MCP instances (Section 6.5) we froze five predictions (e.g., N's keyword filter will leak the post\_tweet variant---its action word absent from the filter's vocabulary; V's sandbox will block every variant by whitelist enumeration). All five held, including the boundary prediction.
+Following (Anonymous 2026), we freeze prediction cards before outcome data: for each defense, level $\rightarrow$ predicted behavior pattern + the specific attack predicted to break it, validated against published data (PPMF's numbers; abstract-level evidence flagged as such). The protocol also generalizes out of sample: before running JADE's MCP instances (Section 6.5) we froze five predictions (e.g., N's keyword filter will leak the post\_tweet variant---its action word absent from the filter's vocabulary; V's sandbox will block every variant by whitelist enumeration). All five held, including the boundary prediction.
 
 \subsection{Deployment-value experiment}\label{deployment-value-experiment}
 
@@ -194,9 +192,9 @@ Following (Yin 2026), we freeze prediction cards before outcome data: for each d
 
 The full level map (all 22 defenses) is in Appendix A.1.
 
-Full per-defense ratings with evidence: \texttt{reliability/corpus.json}, \texttt{ratings/}; blind-rater agreement for the security subset is 100\% between the two most recent raters (6/6 agentsec items, $\kappa$ $\approx$ 0.88 overall (Yin 2026)).
+Full per-defense ratings with evidence are summarized in Appendix A.1; blind-rater agreement for the security subset is 100\% between the two most recent raters (6/6 agentsec items, $\kappa$ $\approx$ 0.88 overall (Anonymous 2026)).
 
-\textbf{The structural finding.} L3 anchors exist in agent security---but only for \emph{confinement and information-flow properties}: sandbox execution domains, taint tracking, data-control separation, SMT-monotonic permission lattices. These are decidable by construction. \emph{Semantic} safety (``is this action dangerous?'') is an open-world property for which no decidable fragment is available in the unrestricted setting, and hence caps at L2; restricted semantic properties that can be formally encoded (e.g., a bounded action taxonomy) remain eligible for higher levels. This mirrors the formal/empirical dichotomy of (Yin 2026) exactly: completeness is reachable only for formally specifiable properties.
+\textbf{The structural finding.} L3 anchors exist in agent security---but only for \emph{confinement and information-flow properties}: sandbox execution domains, taint tracking, data-control separation, SMT-monotonic permission lattices. These are decidable by construction. \emph{Semantic} safety (``is this action dangerous?'') is an open-world property for which no decidable fragment is available in the unrestricted setting, and hence caps at L2; restricted semantic properties that can be formally encoded (e.g., a bounded action taxonomy) remain eligible for higher levels. This mirrors the formal/empirical dichotomy of (Anonymous 2026) exactly: completeness is reachable only for formally specifiable properties.
 
 \subsection{Worked examples: how the classification reads three defenses}\label{worked-examples-how-the-classification-reads-three-defenses}
 
@@ -378,7 +376,7 @@ The experiment's central image is two zeros. \textbf{V's 0.000 is structural}: t
 
 This is the deployment answer to ``which defense should I buy?'': \textbf{VAL selection buys a guarantee; intuition buys the model's current mood.} Both reach zero, but N's zero costs every benign action while V's is lossless; the AgentDojo tool filter is the same story from the other side\u2014a defense anchored in the model's instruction-following \emph{destroys usability} when the model does not comply. Under VAL's usage criteria, the deployer's question becomes precise: \emph{is the threat inside the anchor's ODD?} If yes, L2/L3 structure is available; if no, the honest answer is L2 correctness plus labeling, not a claim of safety.
 
-\textbf{The account extends to the behavioral layer.} \textbf{Execution Hallucination (EH)}\u2014an agent verbally refuses while the operation completes at the OS level\u2014was measured by LITMUS (Zhang et al. 2026) across six agents (EHR 7.98\u201317.97\%), invisible to every semantic-only framework. Under VAL this is a prediction: the anchor for a \emph{behavioral} claim must live on the physical layer; a semantic-layer anchor cannot verify what the model did but did not say (TPR 0.60 (Yin 2026)). \#\# 8. Limitations
+\textbf{The account extends to the behavioral layer.} \textbf{Execution Hallucination (EH)}\u2014an agent verbally refuses while the operation completes at the OS level\u2014was measured by LITMUS (Zhang et al. 2026) across six agents (EHR 7.98\u201317.97\%), invisible to every semantic-only framework. Under VAL this is a prediction: the anchor for a \emph{behavioral} claim must live on the physical layer; a semantic-layer anchor cannot verify what the model did but did not say (TPR 0.60 (Anonymous 2026)). \#\# 8. Limitations
 
 \begin{enumerate}
 
@@ -392,7 +390,7 @@ This is the deployment answer to ``which defense should I buy?'': \textbf{VAL se
 
 \item
 
-  \textbf{Self-built testbed.} Scenarios, defenses, and sandbox are ours\u2014deliberate for a controlled comparison; Section 6.5 validates on AgentDojo's official harness (0.0\% ASR). Our behavioral blind spot (covert execution, TPR 0.60 (Yin 2026)) is independently reproduced by LITMUS (Zhang et al. 2026); we did not run its harness.
+  \textbf{Self-built testbed.} Scenarios, defenses, and sandbox are ours\u2014deliberate for a controlled comparison; Section 6.5 validates on AgentDojo's official harness (0.0\% ASR). Our behavioral blind spot (covert execution, TPR 0.60 (Anonymous 2026)) is independently reproduced by LITMUS (Zhang et al. 2026); we did not run its harness.
 
 \item
 
@@ -400,7 +398,7 @@ This is the deployment answer to ``which defense should I buy?'': \textbf{VAL se
 
 \item
 
-  \textbf{Raters and prediction sample.} Blind-validated (security subset 90.9\%, \u03ba \u2248 0.8 (Yin 2026)); 10/10 hits on a small sample\u2014the mechanism is the claim, not the hit count.
+  \textbf{Raters and prediction sample.} Blind-validated (security subset 90.9\%, \u03ba \u2248 0.8 (Anonymous 2026)); 10/10 hits on a small sample\u2014the mechanism is the claim, not the hit count.
 
 \end{enumerate}
 
@@ -606,6 +604,10 @@ V (D3+D4) & 0.000 / 0.497 / 1.000 & 0.000 / 0.317 / 1.000 \\
 
 \item
 
+Anonymous. 2026. \emph{Grading the Graders: Verification Autonomy Levels (L0--L5) for LLM Reasoning}.
+
+\item
+
 \emph{CaMeL: Data-Control Separation for LLM Agents (Source-Gated Control Flow)}. 2025. \url{https://arxiv.org/abs/2503.18813}.
 
 \item
@@ -631,10 +633,6 @@ Debenedetti, Edoardo, Tianjiu Zhang, Mislav Balunovic, Lukas Beurer-Kellner, Mar
 \item
 
 Xu, J., Y. Xiao, W. Shao, H. Liu, and X. Li. 2026. \emph{Memory Provenance Laundering in LLM Agents: A Non-Amplification Firewall for Persistent Memory}. \url{https://arxiv.org/abs/2607.29167}.
-
-\item
-
-Yin, Yajie. 2026. \emph{Grading the Graders: Verification Autonomy Levels (L0--L5) for LLM Reasoning}. \url{https://arxiv.org/abs/2608.19009}.
 
 \item
 

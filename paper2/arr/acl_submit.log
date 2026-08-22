@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 22:36
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 22:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -545,26 +545,26 @@ Package: xurl 2022/01/09 v 0.10 modify URL breaks
 No file acl_submit.aux.
 \openout1 = `acl_submit.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -606,18 +606,18 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 83.
+Package hyperref Info: Link coloring OFF on input line 81.
 
 
 Package hyperref Warning: Rerun to get /PageLabels entry.
 
-LaTeX Info: Redefining \microtypecontext on input line 83.
-Package microtype Info: Applying patch `item' on input line 83.
-Package microtype Info: Applying patch `toc' on input line 83.
-Package microtype Info: Applying patch `eqnum' on input line 83.
-Package microtype Info: Applying patch `footnote' on input line 83.
-Package microtype Info: Applying patch `verbatim' on input line 83.
-LaTeX Info: Redefining \microtypesetup on input line 83.
+LaTeX Info: Redefining \microtypecontext on input line 81.
+Package microtype Info: Applying patch `item' on input line 81.
+Package microtype Info: Applying patch `toc' on input line 81.
+Package microtype Info: Applying patch `eqnum' on input line 81.
+Package microtype Info: Applying patch `footnote' on input line 81.
+Package microtype Info: Applying patch `verbatim' on input line 81.
+LaTeX Info: Redefining \microtypesetup on input line 81.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: No adjustment of tracking.
@@ -626,98 +626,71 @@ Package microtype Info: No adjustment of kerning.
 (c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-Underfull \hbox (badness 1147) in paragraph at lines 90--91
+Underfull \hbox (badness 1147) in paragraph at lines 88--89
 []\T1/ptm/m/n/10 LLM-agent se-cu-rity has pro-duced a dense
  []
 
 
-Underfull \hbox (badness 3792) in paragraph at lines 90--91
+Underfull \hbox (badness 3792) in paragraph at lines 88--89
 \T1/ptm/m/n/10 land-scape of defenses---prompt hard-en-ing,
  []
 
 
-Underfull \hbox (badness 2903) in paragraph at lines 90--91
-\T1/ptm/m/n/10 agents ``safe.'' We ar-gue that the field
+Underfull \hbox (badness 2547) in paragraph at lines 88--89
+\T1/ptm/m/n/10 1.000 be-nign suc-cess; the in-tu-ition stack
  []
 
 
-Underfull \hbox (badness 1226) in paragraph at lines 90--91
-\T1/ptm/m/n/10 lacks a pre-purchase ques-tion: \T1/ptm/m/it/10 what does
+Underfull \hbox (badness 2393) in paragraph at lines 88--89
+\T1/ptm/m/n/10 0.567 compliance---and still blocks ev-ery-
  []
 
 
-Underfull \hbox (badness 3503) in paragraph at lines 90--91
-\T1/ptm/m/it/10 a given de-fense ac-tu-ally guar-an-tee, and
+Underfull \hbox (badness 1521) in paragraph at lines 97--98
+\T1/ptm/m/n/10.95 (VAL), a tax-on-omy pro-posed in (Anony-mous
  []
 
 
-Underfull \hbox (badness 6412) in paragraph at lines 90--91
-\T1/ptm/m/it/10 where does that guar-an-tee come from?
+Underfull \hbox (badness 1552) in paragraph at lines 97--98
+\T1/ptm/m/n/10.95 clas-si-fies any ver-i-fi-ca-tion/authorization scheme
  []
-
-
-Underfull \hbox (badness 6725) in paragraph at lines 90--91
-\T1/ptm/m/n/10 We ap-ply Ver-i-fi-ca-tion Au-ton-omy Lev-els
- []
-
-
-Underfull \hbox (badness 1509) in paragraph at lines 90--91
-\T1/ptm/m/n/10 the source of their spec (L0: LLM self-
- []
-
-
-Underfull \hbox (badness 2205) in paragraph at lines 90--91
-\T1/ptm/m/n/10 with single-property or domain-level com-
- []
-
-
-Underfull \hbox (badness 2165) in paragraph at lines 90--91
-\T1/ptm/m/n/10 plete-ness; L5: im-pos-si-ble), to 22 agent-
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-06.
-
+04.
 (c:/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [1
-
-
-
-]
-Underfull \hbox (badness 1742) in paragraph at lines 115--116
+)
+Underfull \hbox (badness 1742) in paragraph at lines 113--114
 []\T1/ptm/b/n/10.95 L2\T1/ptm/m/n/10.95 : ob-jec-tive ground truth (gold la-bel
 s,
  []
 
 
-Underfull \hbox (badness 3118) in paragraph at lines 115--116
+Underfull \hbox (badness 3118) in paragraph at lines 113--114
 \T1/ptm/m/n/10.95 Guar-an-tees \T1/ptm/m/it/10.95 cor-rect-ness only\T1/ptm/m/n
 /10.95 : ev-ery-thing
  []
 
 
-Underfull \hbox (badness 1418) in paragraph at lines 115--116
+Underfull \hbox (badness 1418) in paragraph at lines 113--114
 \T1/ptm/m/n/10.95 what was not checked (the com-plete-ness
  []
 
-(c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+[1
+
+
+
+] (c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 13
-9.
+7.
 
 (c:/TinyTeX/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 139
+LaTeX Font Info:    Trying to load font information for U+msa on input line 137
 .
 
 (c:/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -726,7 +699,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 139
+LaTeX Font Info:    Trying to load font information for U+msb on input line 137
 .
 
 (c:/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -735,259 +708,276 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Underfull \hbox (badness 2856) in paragraph at lines 143--144
+Underfull \hbox (badness 3039) in paragraph at lines 137--138
+\T1/ptm/m/n/10.95 sify 22 de-fenses us-ing a frozen, blind-
+ []
+
+
+Underfull \hbox (badness 1442) in paragraph at lines 137--138
+\T1/ptm/m/n/10.95 (Anony-mous 2026)), or-ga-niz-ing the land-
+ []
+
+
+Underfull \hbox (badness 2856) in paragraph at lines 141--142
 []\T1/ptm/b/n/10.95 Prediction val-i-da-tion. \T1/ptm/m/n/10.95 Frozen level-to
 -
  []
 
 
-Underfull \hbox (badness 2486) in paragraph at lines 143--144
+Underfull \hbox (badness 2486) in paragraph at lines 141--142
 \T1/ptm/m/n/10.95 lished sam-ple (10/10 hits, flagged; two
  []
 
 
-Underfull \hbox (badness 1320) in paragraph at lines 147--148
+Underfull \hbox (badness 1320) in paragraph at lines 145--146
 []\T1/ptm/b/n/10.95 Deployment-value com-par-i-son and zero
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 147--148
+Underfull \hbox (badness 10000) in paragraph at lines 145--146
 \T1/ptm/m/n/10.95 guided vs. main-stream in-tu-ition), one
  []
 
 
-Underfull \hbox (badness 1248) in paragraph at lines 147--148
+Underfull \hbox (badness 1248) in paragraph at lines 145--146
 \T1/ptm/m/n/10.95 testbed---50 sce-nar-ios, 12 at-tack fam-i-lies,
  []
 
 
-Underfull \hbox (badness 4416) in paragraph at lines 147--148
+Underfull \hbox (badness 4416) in paragraph at lines 145--146
 \T1/ptm/m/n/10.95 real ef-fects, adaptive/white-box/PAIR es-
  []
 
 
-Underfull \hbox (badness 1509) in paragraph at lines 147--148
+Underfull \hbox (badness 1509) in paragraph at lines 145--146
 \T1/ptm/m/n/10.95 the of-fi-cial Agent-Dojo bench-mark. The
  []
 
 
-Underfull \hbox (badness 2856) in paragraph at lines 147--148
+Underfull \hbox (badness 2856) in paragraph at lines 145--146
 \T1/ptm/m/n/10.95 sep-a-rate de-fenses by fail-ure mor-phol-ogy
  []
 
 
-Underfull \hbox (badness 1286) in paragraph at lines 147--148
+Underfull \hbox (badness 1286) in paragraph at lines 145--146
 \T1/ptm/m/n/10.95 (abrupt col-lapse, pro-gres-sive ero-sion, flat
  []
 
 
-Underfull \hbox (badness 3323) in paragraph at lines 147--148
+Underfull \hbox (badness 3323) in paragraph at lines 145--146
 \T1/ptm/m/n/10.95 ti-cal tra-jec-to-ries still re-quire prove-nance
  []
 
+
+Underfull \hbox (badness 6675) in paragraph at lines 157--158
+\T1/ptm/m/n/10.95 VAL (Anony-mous 2026) grades ver-i-fi-ca-tion
+ []
+
 [2]
-Underfull \hbox (badness 2020) in paragraph at lines 183--184
+Underfull \vbox (badness 5893) has occurred while \output is active []
+
+
+Underfull \vbox (badness 5893) has occurred while \output is active []
+
+
+Underfull \hbox (badness 2020) in paragraph at lines 181--182
 \T1/ptm/m/n/10.95 vari-ants (di-rect, para-phrase, fake-confirmation,
  []
 
 
-Underfull \hbox (badness 1308) in paragraph at lines 185--186
+Underfull \hbox (badness 1308) in paragraph at lines 183--184
 \T1/ptm/m/n/10.95 ory and call text (trans-fer/delete/send/payment
  []
 
 [3]
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 19
-7.
- (c:/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd
-File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
-)
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 197.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `zi4' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-
-Underfull \hbox (badness 10000) in paragraph at lines 197--198
-[]\T1/ptm/m/n/10.95 Full per-defense rat-ings with ev-i-dence:
- []
-
-
-Underfull \hbox (badness 2828) in paragraph at lines 197--198
-\T1/zi4/m/n/10.95 reliability/corpus.json\T1/ptm/m/n/10.95 , \T1/zi4/m/n/10.95 
-ratings/\T1/ptm/m/n/10.95 ; blind-
- []
-
-
-Underfull \hbox (badness 1603) in paragraph at lines 199--200
+Underfull \hbox (badness 1603) in paragraph at lines 197--198
 \T1/ptm/m/n/10.95 agent security---but only for \T1/ptm/m/it/10.95 con-fine-men
 t and
  []
 
 
-Underfull \hbox (badness 2020) in paragraph at lines 207--208
+Underfull \hbox (badness 2020) in paragraph at lines 205--206
 \T1/ptm/b/n/10.95 ASR un-der 10% forged con-fir-ma-tions\T1/ptm/m/n/10.95 ---th
 e
  []
 
 [4]
-Underfull \hbox (badness 7397) in paragraph at lines 219--220
+Underfull \hbox (badness 7397) in paragraph at lines 217--218
 \T1/ptm/m/n/10.95 4/4 be-hav-ior pre-dic-tions hit (Llama Guard
  []
 
 
-Underfull \hbox (badness 1052) in paragraph at lines 219--220
+Underfull \hbox (badness 1052) in paragraph at lines 217--218
 \T1/ptm/m/n/10.95 ASR un-der strong at-tacks; per-plex-ity fil-ter-ing
  []
 
 
-Underfull \hbox (badness 2103) in paragraph at lines 227--228
+Underfull \hbox (badness 2103) in paragraph at lines 225--226
 \T1/ptm/b/n/10.95 Predicted: \T1/ptm/m/n/10.95 L2 (at-tri-bu-tion check-ing). \
 T1/ptm/b/n/10.95 Mis-
  []
 
 
-Underfull \vbox (badness 3623) has occurred while \output is active []
-
-
-Underfull \vbox (badness 3623) has occurred while \output is active []
-
-
-Overfull \hbox (1413.73239pt too wide) in paragraph at lines 240--270
+Overfull \hbox (1413.73239pt too wide) in paragraph at lines 238--268
  [][] 
  []
 
 
-Overfull \hbox (1880.97652pt too wide) in paragraph at lines 284--326
+Overfull \hbox (1880.97652pt too wide) in paragraph at lines 282--324
  [][] 
  []
 
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 339--340
+
+Underfull \hbox (badness 10000) in paragraph at lines 337--338
 \T1/ptm/m/n/10.95 The full es-ca-la-tion ta-ble is in Ap-pendix
  []
 
 
-Underfull \hbox (badness 1205) in paragraph at lines 339--340
+Underfull \hbox (badness 1205) in paragraph at lines 337--338
 \T1/ptm/m/n/10.95 A.5; the key con-trast: D1/D3 hold at 0.000
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 339--340
+Underfull \hbox (badness 10000) in paragraph at lines 337--338
 \T1/ptm/m/n/10.95 across static/adaptive/white-box, while D2
  []
 
-
+[5]
 Underfull \vbox (badness 1755) has occurred while \output is active []
 
 
 Underfull \vbox (badness 1755) has occurred while \output is active []
 
- [6]
-Underfull \hbox (badness 1112) in paragraph at lines 347--348
+
+Underfull \hbox (badness 1112) in paragraph at lines 345--346
 \T1/ptm/m/n/10.95 prompt (D1), an LLM vic-tim un-der in-jec-tion
  []
 
 
-Underfull \hbox (badness 2221) in paragraph at lines 361--362
+Underfull \vbox (badness 2698) has occurred while \output is active []
+
+
+Underfull \vbox (badness 2698) has occurred while \output is active []
+
+ [6]
+Underfull \hbox (badness 2221) in paragraph at lines 359--360
 \T1/ptm/b/n/10.95 independent\T1/ptm/m/n/10.95 : 0.000 ASR and 1.000 be-nign
  []
 
 [7]
-Underfull \hbox (badness 1147) in paragraph at lines 377--378
+Underfull \hbox (badness 1147) in paragraph at lines 375--376
 \T1/ptm/b/n/10.95 0.000 is struc-tural\T1/ptm/m/n/10.95 : the gate reads platfo
 rm-
  []
 
 
-Underfull \hbox (badness 2717) in paragraph at lines 381--382
+Underfull \hbox (badness 2717) in paragraph at lines 379--380
 \T1/ptm/m/n/10.95 the OS level[]2014was mea-sured by LIT-MUS
  []
 
 
-Underfull \hbox (badness 1383) in paragraph at lines 381--382
+Underfull \hbox (badness 1383) in paragraph at lines 379--380
 \T1/ptm/m/n/10.95 7.98[]201317.97%), in-vis-i-ble to ev-ery semantic-
  []
 
 
-Underfull \hbox (badness 1400) in paragraph at lines 391--392
+Underfull \hbox (badness 1400) in paragraph at lines 389--390
 \T1/ptm/m/n/10.95 A less-aligned at-tacker and GCG re-main
  []
 
 
-Underfull \hbox (badness 1152) in paragraph at lines 395--396
+Underfull \hbox (badness 1152) in paragraph at lines 393--394
 \T1/ptm/m/n/10.95 Agent-Dojo's of-fi-cial har-ness (0.0% ASR).
  []
 
 
-Underfull \hbox (badness 2119) in paragraph at lines 399--400
+Underfull \hbox (badness 2119) in paragraph at lines 397--398
 []\T1/ptm/b/n/10.95 Coverage. \T1/ptm/m/n/10.95 Twelve at-tack fam-i-lies plus
  []
 
 
-Underfull \hbox (badness 2809) in paragraph at lines 399--400
+Underfull \hbox (badness 2809) in paragraph at lines 397--398
 \T1/ptm/m/n/10.95 adaptive/white-box/PAIR; token-level op-ti-
  []
 
 
-Underfull \hbox (badness 2119) in paragraph at lines 403--404
+Underfull \hbox (badness 2119) in paragraph at lines 401--402
 []\T1/ptm/b/n/10.95 Raters and pre-dic-tion sam-ple. \T1/ptm/m/n/10.95 Blind-
  []
 
-[8]
-Overfull \hbox (2348.22064pt too wide) in paragraph at lines 420--464
+
+Overfull \hbox (2348.22064pt too wide) in paragraph at lines 418--462
  [][] 
  []
 
 
-Overfull \hbox (946.48827pt too wide) in paragraph at lines 476--508
+Overfull \hbox (946.48827pt too wide) in paragraph at lines 474--506
  [][] 
  []
 
 
-Overfull \hbox (1525.22986pt too wide) in paragraph at lines 520--556
+Overfull \hbox (1525.22986pt too wide) in paragraph at lines 518--554
  [][] 
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 561.
+(hyperref)                removing `math shift' on input line 559.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\times' on input line 561.
+(hyperref)                removing `\times' on input line 559.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 561.
+(hyperref)                removing `math shift' on input line 559.
 
 
-Overfull \hbox (946.48827pt too wide) in paragraph at lines 568--594
+Overfull \hbox (946.48827pt too wide) in paragraph at lines 566--592
  [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 625--626
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8]
+Underfull \hbox (badness 1371) in paragraph at lines 607--608
+\T1/ptm/m/it/10.95 Ver-i-fi-ca-tion Au-ton-omy Lev-els (L0--L5) for
+ []
+
+
+Underfull \vbox (badness 4096) has occurred while \output is active []
+
+
+Underfull \vbox (badness 4096) has occurred while \output is active []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 627--628
 []\T1/ptm/m/it/10.95 LLM-Based Test Or-a-cles: Source-of-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 625--626
+Underfull \hbox (badness 10000) in paragraph at lines 627--628
 \T1/ptm/m/it/10.95 Authority Taxonomy---a Sys-tem-atic
  []
 
 
-Underfull \hbox (badness 7981) in paragraph at lines 625--626
+Underfull \hbox (badness 7981) in paragraph at lines 627--628
 \T1/ptm/m/it/10.95 Lit-er-a-ture Re-view\T1/ptm/m/n/10.95 . 2026. []$h t t p s 
 :
  []
 
-
-Underfull \hbox (badness 2293) in paragraph at lines 645--646
+[9]
+Underfull \hbox (badness 2293) in paragraph at lines 643--644
 []\T1/ptm/m/n/10.95 Zhou, Andy et al. 2023. \T1/ptm/m/it/10.95 De-fend-ing
  []
 
-[9] [10] (./acl_submit.aux)
+[10
+
+] (./acl_submit.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
@@ -998,12 +988,12 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 15662 strings out of 469837
- 249152 string characters out of 5467244
- 703656 words of memory out of 5000000
- 44375 multiletter control sequences out of 15000+600000
- 656730 words of font info for 89 fonts, out of 8000000 for 9000
+ 15631 strings out of 469837
+ 248630 string characters out of 5467244
+ 702608 words of memory out of 5000000
+ 44348 multiletter control sequences out of 15000+600000
+ 654710 words of font info for 87 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,9n,93p,2541b,416s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,9n,93p,1502b,474s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on acl_submit.pdf (10 pages).

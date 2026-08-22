@@ -23,7 +23,7 @@
 - **语料**：判级语料 70 条；JADE 公开实例 16 用例（8 变体 × 2 投毒型）
 - **评分者**：A + B2–B7（6 个 LLM 盲评者）· 一致性报告 15+
 - **工具链**：val_* 38 自测 · 数学裁判 42/42 · 判级协议 v2.3 · jade_integration.py（真实 MCP 协议）· Z(α) 提取脚本
-- **论文**：① arXiv:2608.19009（v2 已公布）· ② The Same Zero（paper2/，已提交 arXiv 待公布，2026-08-20）
+- **论文**：① arXiv:2608.19009（v2 已公布）· ② The Same Zero（paper2/，arXiv 退回；ARR October 2026 周期投稿准备中，匿名化 PDF + 表单材料包就绪）
 - **专著**：《给"分级"分级》21 章（book/，含新增第 19 章"论文 2 定位与证据链"）
 - **第三方验证**：AgentDojo 官方基准 · 复旦 JADE 真实 MCP · LITMUS 行为层互证
 - **审计记录**：v2/v3 口径混用修复（D2 0.258→0.200、D4 0.079→0.067）· 论文 8 项审稿边界收紧
@@ -40,7 +40,7 @@
 
 ## 四、待办（按优先级）
 
-1. **第二篇论文投稿**：⚠️ **arXiv 退回（08-20 提交的老版本）**——arXiv 建议"找专业同行审批"（endorsement/分类问题待确认）。新版 The Same Zero（含 4 贡献 + Z(α)/funnel + 8 项边界收紧）已是投稿版。投稿点候选：ARR 2026-12 → ACL 2027 / EMNLP 2027（docs/17 已有规划）；CCS/USENIX（需补 threat model）；AAAI/Findings。**重新提交 arXiv 新版 vs 直接走正式投稿，待用户定夺**
+1. **第二篇论文投稿（ARR October 2026 周期，10-12 截止）**：✅ 匿名化投稿 PDF 就绪（无作者/邮箱/ORCID/GitHub/自引 arXiv 号，pypdf 全文扫描 clean）+ 表单材料包就绪（`paper2/arr/submission_form.md`：title/199 词 abstract/comments/track=LLM agents/checklist 草稿）。**待用户操作**：① 注册 OpenReview + 完善 profile（affiliation/semantic scholar/dblp/anthology）② 提交后 48h 内所有作者注册 reviewer ③ 决定 preprint binding 选项 ④ aclpubcheck 过稿 + acl.sty 对照官方最新模板 ⑤ 可选增强：C1 另一半（bounded exception）。⚠️ 周期修正：ARR 无 12 月周期（10 周一轮），最近窗口 2026-10-12
 2. **沟通跟进**：复旦 JADE（docs/20 信）与南航 LITMUS（docs/22 信）邮件已发（08-22），**暂无回音**——待跟进
 3. **C1a 扩展**（已完成首测 0.533 vs 0.000）：更大变体集、第二模型、bounded exception 变体（C1 另一半）、多轮 exploit
 4. 可选：Groq Llama-3.3-70B 攻击者（跨家族最后开放变体）

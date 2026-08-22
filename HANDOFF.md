@@ -1,7 +1,7 @@
 # 项目交接文档（HANDOFF v4）
 
 > 用途：压缩对话，转移新对话框。把本文件全文粘贴给新 AI 的第一条消息即可继续。
-> 最后更新：2026-08-22（v4）。v3 交接于同日（覆盖 Z(α)/funnel/JADE/LITMUS/方法论宣言），本版新增：C1a 完成、arXiv 退回、ARR 投稿管线（8 页版就绪）。
+> 最后更新：2026-08-22（v5）。v4 交接于同日（C1a/arXiv 退回/ARR 管线）；本版新增：**ARR 周期修正（10-12 提交，非 12 月）、匿名化投稿 PDF 就绪、表单材料包（submission_form.md）、ARR 官方要求核实（页数/匿名/checklist/Limitations 硬性）**。
 > 阅读顺序：本文 → docs/24（方法论宣言）→ STATUS.md → paper2/arr/README.md（ARR 管线）→ agentsec/REPORT.md → paper2/paper.md
 
 ---
@@ -17,7 +17,7 @@
 | 论文 | 状态 |
 |---|---|
 | **Grading the Graders**（arXiv:2608.19009） | ✅ v2 已公布，cs.CL |
-| **The Same Zero**（paper2/） | ⚠️ **arXiv 退回（08-20 老版本）**——arXiv moderation 判定需正式同行评审；appeal 需期刊 DOI。**决定：投 ARR 2026-12 → ACL 2027**（docs/17 规划） |
+| **The Same Zero**（paper2/） | ⚠️ **arXiv 退回**；**ARR October 2026 周期（10-12 提交）→ ACL 2027**。匿名化 PDF + 表单材料包就绪（v5） |
 
 **The Same Zero 内容**：4 贡献（level map / prediction validation / deployment comparison + Z(α) zero stability）、8 项边界收紧（VAL-guided 等）、三第三方验证（AgentDojo/JADE/LITMUS）、funnel、可证伪预测（D1 运气零）。
 
@@ -32,7 +32,7 @@
 - **流程文档**：`paper2/arr/README.md`（步骤/纪律/边界）
 - **版本存档**：`paper2/arr/versions/`（v12 压缩前 + scripts_compression 压缩轨迹）
 
-**下一步（ARR）**：提交表单（title/abstract ≤200 words/comments/分类 cs.CL 主）、可能需再打磨 natbib 警告（可接受）、ARR 2026-12 提交。
+**下一步（ARR）**：见 `paper2/arr/submission_form.md`（权威材料包：title/199 词 abstract/comments/track=LLM agents/checklist 草稿/开放问题）。⚠️ **周期修正**：ARR 无 12 月周期（10 周一轮）；最近窗口 = **2026-10-12（October 2026）→ meta-review 12-20 → 2027-01 承诺 ACL 2027**。匿名化已做（build_arr.py \author Anonymous + paper_arr.md 去身份块 + refs.bib 自引匿名 + 摘要去 arXiv 号；命名版备份 versions/anon_prep_20260822/）。
 
 ## 3. C1a 实验完成（候选命题受控证据）
 
@@ -63,7 +63,7 @@
 
 | 路径 | 内容 |
 |---|---|
-| `paper2/arr/` | ARR 管线（README.md 是入口）|
+| `paper2/arr/` | ARR 管线（README.md 入口）；**`submission_form.md` = 提交表单材料包（权威）**；`versions/anon_prep_20260822/` = 匿名化前命名版备份 |
 | `paper2/arr/versions/` | 版本存档 |
 | `agentsec/specs.py` | 审计独立性 v1（判定规格）|
 | `agentsec/c1a_*.py` | C1a 实验 + 审计 |
