@@ -1,90 +1,131 @@
-# 项目交接文档（HANDOFF v2）
+# 项目交接文档（HANDOFF v3）
 
 > 用途：压缩对话，转移新对话框。把本文件全文粘贴给新 AI 的第一条消息即可继续。
-> 最后更新：2026-08-20。v1 交接于 2026-08-18（三章实证时代），本版覆盖至"两篇论文 + AgentDojo 集成"。
+> 最后更新：2026-08-22。v2 交接于 2026-08-20（两篇论文 + AgentDojo 集成），本版覆盖至"构造实验（Z(α)/funnel）+ 方法论宣言 + 审计独立性 + 候选命题"。
+> 阅读顺序建议：本文 → STATUS.md → docs/24（方法论宣言）→ agentsec/REPORT.md → paper2/paper.md
 
 ---
 
 ## 0. 一句话定位
 
-**一个仓库、三章实证、两条延伸线、两篇论文、一本专著**：
-研究"LLM 验证/安全防御的失败模式"，核心框架 **VAL（验证自主等级 L0–L5）**——按"验证规格的来源"给验证方案分级。
-元教训："裁判的裁判也需要裁判"（框架/实验/代码三层审计，均已实证上演）。
+**一个仓库、两篇论文、一本专著、一份方法论宣言**：
+研究"LLM 验证/安全防御的失败模式"，核心框架 **VAL（验证自主等级 L0–L5）**。
+元教训：**"裁判的裁判也需要裁判"**——已推广为更一般的候选不变量（docs/24）：**当系统内部不可直接获得时，找外部可作用面、可观测响应、证据锚点、失败边界**。
 
 ## 1. 论文（两条线）
 
 | 论文 | 状态 | 内容 |
 |---|---|---|
-| **Grading the Graders**（arXiv:2608.19009） | ✅ v1（08-19）+ v2（08-20）**已公布**，cs.CL | VAL 框架 + 完备性盲区 + 四域实证 + 可复现性研究（κ≈0.8）+ PPMF 案例 + 锚语义 + 15+ 修正 |
-| **The Same Zero**（paper2/，14 页） | 📤 **已提交 arXiv（08-20）待公布** | 22 防御等级图 + 预测验证 10/10 + 部署价值实验 + 2×2 + **AgentDojo 官方基准同设置对比** |
+| **Grading the Graders**（arXiv:2608.19009） | ✅ v2 已公布，cs.CL | VAL 框架 + 四域实证 + 可复现性研究（κ≈0.8）+ 隐匿执行 TPR 0.60 天花板 |
+| **The Same Zero**（paper2/，标题已改） | 📤 已提交 arXiv（08-20）待公布 | **标题从 "The Anchor Decides" 改为 "The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security"**（arXiv v2 预案） |
 
-**第二篇论文的关键数字（投稿版）**：
-- 部署价值实验（自研测试床，~5400 calls）：ND ASR 33.3% → **V 栈（确认门+参数沙箱）0.000/1.000 良性** vs N 栈（提示加固+关键词过滤）0.000/0.000——同一个 0，V 是结构（平台记录+schema，双受害者免疫），N 是模型运气（合规 0.235，半配合墙）
-- **2×2 矩阵**（Llama 8B 第二受害者）：ND 0.253/0.328（Llama 更抗注入）、N 0.000/0.014、V 双受害者 0.000/1.000——结构跨受害者成立，运气跨受害者证实
-- **跨家族尝试**：Kimi（kimi-k2.6/k2.7）与 Llama 8B **拒绝当攻击者**（显式拒答/中性改写消毒/消毒产物受害者侧无效）——"攻击者侧对齐约束跨家族红队招募"是可报告发现
-- **AgentDojo 官方基准同设置对比**（banking，6 任务×6 注入×4 攻击=144 对/配置，DeepSeek）：**V 0.0% ASR [0, 2.6] @ 83.3% utility**；官方 tool_filter 0.0% @ **16.7%** utility；RP 8.3%、SL 6.2%、ND 6.2%、N 3.5%——V 与最强官方防御 ASR 持平、utility 5 倍
-- **N 栈跨测试床漂移是运气主张的最强证据**：我们测试床 0.000 vs AgentDojo 3.5%——"N 的零是上下文相关的模型行为，换基准零就移动；V 的零不动"（论文 §6.5 原话）
-- 审稿 8 项 P0/P1 修正 + 审查 7 条（CI/同设置对比/N 栈转正/四攻击族）**全部落地**
+**The Same Zero 的 4 条贡献（当前版）**：
+1. **Level map**：22 防御分级（L0-L5，盲评 κ≈0.8）
+2. **Prediction validation**：10/10 + JADE 5/5（已降级为 falsifiability 证据，非 headline）
+3. **Deployment-value comparison**：V 栈（D3+D4）0.000 ASR/1.000 良性 vs N 栈（D1+D2）0.000/0.000——same zero different guarantee
+4. **Zero stability as measurable axis（Z(α)）**：failure morphology（abrupt collapse / progressive erosion / behavioral plateau / structural plateau）
 
-## 2. 三章实证（v1 时代，已封存）
+**审稿演练沉淀的 8 项边界收紧**（全部落地）：数字统一（5400/4800→7000，370→380）、claim 软化（do-not-claim + "in the cases we can measure"）、VAL 客观性辩护（三重独立证据）、baseline 辩护（非 beats all）、D3/D4 分工、JADE 预测并入、三基准 ND 差异解释、VAL-selected→**VAL-guided**（不声称最优选择器）。
 
-- 数学：42/42 裁判、20 题 16/15/13 vs baseline 20/20（准确率窗口空，架构价值=错误可报告性）
-- 行为观测：FPR 92%→30%，隐匿执行 0.60 是 L2 结构天花板
-- 医疗诊断：教科书 10/10、硬病例 8/10、信息完整性裁判 3/3（含 #105 人工漏判发现）
-- 代码生成（第四章）：164/164、6/6，反向验证 4/5 预测命中
-- 失败模式分类学：9 模式（docs/02，含新增"来源洗白"）
+**关键数字（v3 口径，全部可追溯）**：
+- 自建测试床：ND 0.333、D1 0.000、D2 **0.200**、D3 0.000、D4 **0.067**、V 0.000、N 0.000（v2 旧值 0.258/0.079 已废弃）
+- AgentDojo：V 0.0% @ 82.6% utility vs tool_filter 0.0% @ 16.7%
+- JADE 真实 MCP：ND 87.5%、N 6.2%（M6 词表盲区）、V 0%（模型被驱动 93.8% 仍全拦）
+- LITMUS 互证：EH（EHR 7.98–17.97%）vs 我们的 covert execution（TPR 0.60）
 
-## 3. 研究资产现状
+## 2. 构造实验（2026-08-22 新增，第二篇的核心深化）
 
-- **可复现性研究**（方向 1，五轮收束）：协议 v2.3（R1–R15）· 70 条语料 · 评分者 A + B2–B7 · 两两 κ 0.77–0.93 · 安全子集 22 条 90.9% · 作者 6 处判级偏差定位
-- **方向 3**（Agent 安全）：docs/12（PPMF 案例）· docs/13（锚语义 intent/truth/effect）· docs/14（VAL→ASR 预测协议）· docs/15（论文骨架→完整草稿）· docs/17（2027 投稿规划）
-- **专著**：《给"分级"分级》127 页（book/，`py book/build_book.py` 重建）——待更新 2×2/跨家族/AgentDojo 新发现
-- **演示**：`py demo/showcase.py [--batch]`（1 分钟 live：VAL 判级 + 智能体安全对比 + κ + 作品集）
-- **工具链**：val_standard（11 自测）/val_raise（22）/val_interrogate（5）/val_chain（38）/verifier（42）
+**Z(α)（7 轮，8 点梯度，30 例/点）**：
 
-## 4. 关键文件索引
+| cfg | 静态 | 轮1 | 轮2 | 轮4 | 轮7 |
+|---|---|---|---|---|---|
+| D1 behavioral | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| D2 surface rule | 0.200 | 0.233 | 0.467 | 0.733 | **0.833** |
+| D3 authorization | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| D4 confinement | 0.067 | 0.067 | 0.300 | 0.300 | 0.300 |
+
+- **D2 单调崩溃（3 轮 0.467 低估真实 0.833）、D4 轮 2 跳升后持平、D1/D3 8 点完全重合**
+- **核心 claim**：Identical observed zero-stability profiles do not establish equivalent guarantees
+- **D1 证伪攻击失败**（增强攻击者提示+7 轮）：0.000——读作"更强支持"，非"不能破"；合规 0.367 证明它仍是行为
+
+**Execution Funnel（静态快照，与 Z(α) 分开报告）**：
+
+| cfg | compliance | complete_args | authorized | 断开层 |
+|---|---|---|---|---|
+| D1 | 0.219 | **0.000** | 0.000 | 参数完整性（模型行为，无结构性 verifier） |
+| D3 | 0.497 | 0.497 | **0.000** | 授权检查（平台记录） |
+
+- **D3 的模型给了完整参数（49.7%）是授权门拦的；D1 的模型不给参数（0%）是半配合**——两个零在漏斗不同层级断开
+- 机制确认：D1 下空参数 send_email 被执行且 state_changed=True（To: None 伪文件）——ASR 判定（args 非空）正确排除
+
+**实验修复（审计驱动）**：发现论文 §6.1 混用 v2/v3 口径 → 重跑 v3 真效果 → 补 D1/D3 自适应+白盒（预测卡 5/6 和 4/6）→ forensic audit 通过（无 stale/duplicate，D2 突破分散 7 轮证明独立跑）。
+
+## 3. 第三方验证（三个独立来源）
+
+| 来源 | 结果 | 对论文的支撑 |
+|---|---|---|
+| AgentDojo 官方基准 | V 0.0% @ 82.6% vs tool_filter 0.0% @ 16.7% | utility 5 倍，同设置 |
+| 复旦 JADE 真实 MCP | ND 87.5%（复现官方 83%）、N 6.2%（M6 漏）、V 0%（合规 93.8% 仍全拦） | 真实协议 + 预测卡 5/5 |
+| LITMUS（南航）互证 | EH ≈ covert execution，独立复现语义层盲区 | 结构声称的外部支持（未跑其 harness） |
+
+沟通信已备：docs/20（复旦张谧）、docs/22（南航周璐）。
+
+## 4. 方法论沉淀（docs/24 + 候选命题）
+
+**docs/24-方法论宣言**：不变量（黑盒→外部可作用面/锚/失败边界）+ 三精确化（有序打开/终极裁判不可达/VAL 锚即实例化）+ 失效边界 + 物理测量理论同构。
+
+**候选命题（新，未实验）**：
+- **C1**：Systems are more robust when rule-generating and rule-executing authorities remain within the scope of the rules they are subject to, **or when any exception is explicitly bounded (time-limited, revocable, traceable)**
+- **C1a（可测，AI）**：agent 授予自授权通道 → 规则漂移概率高于无特权对照组（测试床可构造）
+- **C1b（历史）**：例外受限的制度长期稳定性更高
+
+**审计独立性（操作化方向）**：当前审计与实验共享作者（AI），交叉验证会"一致地错"的风险——外部基准提供真独立性；待做：判定 spec 单一化 + 独立实现者（L3）。
+
+## 5. 关键文件索引
 
 | 路径 | 内容 |
 |---|---|
-| `paper/` | 论文 1 源稿+PDF（21 页 v2）+ 提交包 + figure1 |
-| `paper2/` | 论文 2 源稿+PDF（14 页）+ 提交包 + 构建脚本 |
-| `agentsec/` | 测试床（scenarios 50 场景/attacks 12+4 变体/defenses D1-D4/effects 真效果执行器/victim_client 双模型/adaptive 自适应+白盒+PAIR-lite/**agentdojo_integration.py**）+ REPORT.md（含 7.10 同设置对比） |
-| `reliability/` | 判级语料/评分/分析/预测卡/arXiv 抓取/validation（含 AgentDojo 论文全文） |
-| `docs/01–17` | 研究文档全集（17 篇） |
-| `book/` | 专著 |
-| `STATUS.md` | 状态总账（VAL 视角定级） |
-| `CAPABILITIES.md` | 能力清单 |
-| `promo/` | 知乎/推特/邮件/两篇 arXiv 走查 |
-| `local_config.json` | API key（gitignored）——**DeepSeek key 当前有效** |
+| `paper/` | 论文 1 源稿+PDF（21 页 v2）+ figure1 |
+| `paper2/` | 论文 2（The Same Zero）+ PDF + submission + patch_*.py（修改轨迹） |
+| `agentsec/` | 测试床 + REPORT.md（含 §7.13 构造实验）+ jade/（JADE 集成+Z(α)/funnel 图）+ PREDICTION_*.md（冻结预测卡）+ forensic_audit.py |
+| `results/` | 实验 json（**注意 adaptivekimi_*=7 轮黑盒，adaptive_*=旧 3 轮**） |
+| `docs/01-24` | 研究文档全集（**18-JADE 沟通准备、19-JADE 验证报告、20-复旦信、21-LITMUS 调查、22-南航信、23-论文 2 定位与证据链、24-方法论宣言**） |
+| `book/` | 专著 21 章（含第 19 章论文 2 定位） |
+| `STATUS.md` | 状态总账（2026-08-22 更新） |
+| `HANDOFF.md` | 本文件（v3） |
+| `promo/` | 推广材料 |
 
-## 5. 环境配置
+## 6. 环境配置
 
-- Python：`C:\Users\殷雅杰\AppData\Local\Programs\Python\Python313\python.exe`（`py` 启动器）
-- DeepSeek：api.deepseek.com / deepseek-chat（local_config.json，已验证）
-- 本地 Ollama：llama3.1:8b（RTX 4050 6GB）——受害者切换：local_config 的 VICTIM_* 三字段
-- 攻击者/受害者抽象：`agentsec/attacker_client.py` / `victim_client.py`（OpenAI 兼容，可接任意端点）
-- git：SSH over 443 已配；命令用 `;` 分隔（PowerShell 5.1 不支持 &&）；**每步提交推送**
-- 网络：arxiv/PyPI/GitHub 可直连；Google 被墙（WebSearch 类工具会超时，用 arxiv API/curl 代替）
-
-## 6. 待办（按优先级）
-
-1. **第二篇 arXiv ID 公布后**：更新 README/STATUS 链接（同第一篇流程）
-2. **P2 实验扩展**（可选）：workspace/slack 套件 · Llama 受害者跑 AgentDojo · per-pair utility 明细
-3. **ARR 2027 周期**（docs/17）：增强五杠杆（未对齐攻击者 Groq 70B / AgentDojo 已✅ / 2×2 多 seed / P02 SLR 对话节 / 良性扩样）→ 12 月 ARR 第一轮（目标 ACL 2027）→ 5-6 月 EMNLP 2027
-4. **专著 v2**：吸收 2×2/跨家族/AgentDojo 结果
-5. 可选：作者补判（N 系列，人机一致性）、第二篇 arXiv v2（若公布后还需修正）
+- Python：`py` 启动器（Python 3.13）
+- DeepSeek：api.deepseek.com / deepseek-chat（local_config.json，gitignored）
+- 本地 Ollama：llama3.1:8b（RTX 4050 6GB）
+- MCP：`pip install mcp fastmcp`（JADE 真实 server 用）
+- git：SSH over 443；PowerShell 用 `;` 分隔；**每步提交推送**
+- 网络：arxiv/PyPI/GitHub 可直连；Google 被墙；**DeepSeek API 偶发 SSL 抖动（等待 15-25s 重试）**
 
 ## 7. 纪律与血泪教训（新 AI 必读）
 
-1. **审计先行、测价值窗口、诚实负结果、每步提交推送**——项目的方法论本身
-2. **裁判的裁判**：判级被盲评修正 6 处 · main.py 回退洗白面被关（LLM 规格 PASS→UNSURE）· 实验 3 个 bug（schema 正则/resume 假 seed/指标误读）被抓——**对数字永远做 trace 级验证**
-3. **指标方向陷阱**：AgentDojo 的 security_results 平均 = ASR（True=攻击达成），曾误读为防御率导致"0.000 悖论"——跨库指标先查语义再解读
-4. **API key 安全**：曾误入 git 的 `git add -A`（amend 清除、未推送）——local_config.json 已 gitignore，commit 前检查
-5. **对齐模型不愿当攻击者**：跨家族红队需"愿意配合"的攻击者（Groq Llama 70B 候选），显式越狱框架会被拒答
-6. **半配合墙**：模型在加固提示下对注入"提议工具但给空参数"——压制 ASR 但不构成结构保证（双受害者实测）
+1. **审计先行、测价值窗口、诚实负结果、每步提交推送**
+2. **裁判的裁判**：判级/实验/代码三层审计；对数字做 trace 级验证（已抓：v2/v3 口径混用、resume 假 seed、指标误读、命名混乱）
+3. **resume 坑**：adaptive_attack.py 会跳过已完成场景——改 rounds 后重跑**必须删旧文件**（本次 7 轮被旧 3 轮顶替过）
+4. **文件命名**：黑盒自适应写 `adaptivekimi_*`（旧 `adaptive_*` 是 3 轮）——审计前先核对
+5. **指标方向陷阱**：AgentDojo security_results 平均 = ASR（True=攻击达成）
+6. **API key 安全**：local_config.json gitignored，commit 前检查
+7. **对齐模型不愿当攻击者**：跨家族红队需愿意配合的攻击者
+8. **claim 边界画在证据边界上**：措辞比证据略窄（VAL-selected→VAL-guided 等 8 项收紧）
+9. **审计独立性**：审计脚本与实验共享作者——外部基准是真独立性；交叉验证会"一致地错"
 
-## 8. 给新 AI 的起点建议
+## 8. 未测试预测清单（模型的保留条款，防止过拟合历史）
 
-1. 读 `STATUS.md`（级别总账）→ `agentsec/REPORT.md`（实验全史）→ `paper2/paper.md`（论文 2 现状）
-2. 验证环境：`py agentsec/test_keys.py`（两端 OK 才算环境就绪）
-3. 与用户确认走待办 1/2/3 哪条；执行纪律见 §7
+1. **D1 运气零**：在足以击败 DeepSeek 拒绝行为的攻击下（异族攻击者/GCG 级）应断裂；D3 不会（除非 substrate 被攻破）——未测试
+2. **C1a privileged node**：agent 自授权通道 → 规则漂移概率更高——未实验（测试床可构造）
+3. **连续 Z(α) frontier**：7 点离散梯度 → 连续失败前沿——未做
+4. **LITMUS 真跑**：需 Ubuntu+OpenClaw——未做
+
+## 9. 给新 AI 的起点建议
+
+1. 读 `docs/24`（方法论宣言）→ `STATUS.md` → `agentsec/REPORT.md` → `paper2/paper.md`
+2. 验证环境：`py agentsec/test_keys.py`
+3. 与用户确认走哪条：arXiv v2 提交预案 / 构造实验继续（C1a 或连续 Z(α)）/ 专著收尾 / HANDOFF 本身
+4. 执行纪律见 §7；未测试预测见 §8（**先测预测，别急着加新东西**）
