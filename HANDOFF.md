@@ -1,8 +1,8 @@
-# 项目交接文档（HANDOFF v3）
+# 项目交接文档（HANDOFF v4）
 
 > 用途：压缩对话，转移新对话框。把本文件全文粘贴给新 AI 的第一条消息即可继续。
-> 最后更新：2026-08-22。v2 交接于 2026-08-20（两篇论文 + AgentDojo 集成），本版覆盖至"构造实验（Z(α)/funnel）+ 方法论宣言 + 审计独立性 + 候选命题"。
-> 阅读顺序建议：本文 → STATUS.md → docs/24（方法论宣言）→ agentsec/REPORT.md → paper2/paper.md
+> 最后更新：2026-08-22（v4）。v3 交接于同日（覆盖 Z(α)/funnel/JADE/LITMUS/方法论宣言），本版新增：C1a 完成、arXiv 退回、ARR 投稿管线（8 页版就绪）。
+> 阅读顺序：本文 → docs/24（方法论宣言）→ STATUS.md → paper2/arr/README.md（ARR 管线）→ agentsec/REPORT.md → paper2/paper.md
 
 ---
 
@@ -10,122 +10,90 @@
 
 **一个仓库、两篇论文、一本专著、一份方法论宣言**：
 研究"LLM 验证/安全防御的失败模式"，核心框架 **VAL（验证自主等级 L0–L5）**。
-元教训：**"裁判的裁判也需要裁判"**——已推广为更一般的候选不变量（docs/24）：**当系统内部不可直接获得时，找外部可作用面、可观测响应、证据锚点、失败边界**。
+元教训：**"裁判的裁判也需要裁判"** + **"经过验证的结果才有资格改变模型"**（docs/24 底层纪律）。
 
-## 1. 论文（两条线）
+## 1. 论文状态（重要变化）
 
-| 论文 | 状态 | 内容 |
-|---|---|---|
-| **Grading the Graders**（arXiv:2608.19009） | ✅ v2 已公布，cs.CL | VAL 框架 + 四域实证 + 可复现性研究（κ≈0.8）+ 隐匿执行 TPR 0.60 天花板 |
-| **The Same Zero**（paper2/，标题已改） | 📤 已提交 arXiv（08-20）待公布 | **标题从 "The Anchor Decides" 改为 "The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security"**（arXiv v2 预案） |
+| 论文 | 状态 |
+|---|---|
+| **Grading the Graders**（arXiv:2608.19009） | ✅ v2 已公布，cs.CL |
+| **The Same Zero**（paper2/） | ⚠️ **arXiv 退回（08-20 老版本）**——arXiv moderation 判定需正式同行评审；appeal 需期刊 DOI。**决定：投 ARR 2026-12 → ACL 2027**（docs/17 规划） |
 
-**The Same Zero 的 4 条贡献（当前版）**：
-1. **Level map**：22 防御分级（L0-L5，盲评 κ≈0.8）
-2. **Prediction validation**：10/10 + JADE 5/5（已降级为 falsifiability 证据，非 headline）
-3. **Deployment-value comparison**：V 栈（D3+D4）0.000 ASR/1.000 良性 vs N 栈（D1+D2）0.000/0.000——same zero different guarantee
-4. **Zero stability as measurable axis（Z(α)）**：failure morphology（abrupt collapse / progressive erosion / behavioral plateau / structural plateau）
+**The Same Zero 内容**：4 贡献（level map / prediction validation / deployment comparison + Z(α) zero stability）、8 项边界收紧（VAL-guided 等）、三第三方验证（AgentDojo/JADE/LITMUS）、funnel、可证伪预测（D1 运气零）。
 
-**审稿演练沉淀的 8 项边界收紧**（全部落地）：数字统一（5400/4800→7000，370→380）、claim 软化（do-not-claim + "in the cases we can measure"）、VAL 客观性辩护（三重独立证据）、baseline 辩护（非 beats all）、D3/D4 分工、JADE 预测并入、三基准 ND 差异解释、VAL-selected→**VAL-guided**（不声称最优选择器）。
+## 2. ARR 投稿管线（本次对话核心成果）
 
-**关键数字（v3 口径，全部可追溯）**：
-- 自建测试床：ND 0.333、D1 0.000、D2 **0.200**、D3 0.000、D4 **0.067**、V 0.000、N 0.000（v2 旧值 0.258/0.079 已废弃）
-- AgentDojo：V 0.0% @ 82.6% utility vs tool_filter 0.0% @ 16.7%
-- JADE 真实 MCP：ND 87.5%、N 6.2%（M6 词表盲区）、V 0%（模型被驱动 93.8% 仍全拦）
-- LITMUS 互证：EH（EHR 7.98–17.97%）vs 我们的 covert execution（TPR 0.60）
+**管线就绪，一条命令**：`python paper2/arr/rebuild_full.py`（map citations → pandoc → build_arr → fix_latex → fix_format → fix_natbib3 → xelatex）
 
-## 2. 构造实验（2026-08-22 新增，第二篇的核心深化）
+- **源**：`paper2/arr/paper_arr.md`（ARR 压缩版，~5,540 words；完整版 `paper2/paper.md` 不动）
+- **产物**：`paper2/arr/acl_submit.pdf`（**正文 8 页 + References + 附录**，格式全修）
+- **环境**：TinyTeX（C:\TinyTeX，**ASCII 路径必须**——中文路径 kpathsea 不认）+ pandoc 3.9（pypandoc-binary）+ xelatex（Unicode 原生）
+- **格式修复记录**：章节编号去重、行号禁用（xelatex+lineno 兼容）、表格列格式（fix_latex colspec 截断 bug 修复）、References→enumerate（绕开 natbib）、Appendix section*
+- **流程文档**：`paper2/arr/README.md`（步骤/纪律/边界）
+- **版本存档**：`paper2/arr/versions/`（v12 压缩前 + scripts_compression 压缩轨迹）
 
-**Z(α)（7 轮，8 点梯度，30 例/点）**：
+**下一步（ARR）**：提交表单（title/abstract ≤200 words/comments/分类 cs.CL 主）、可能需再打磨 natbib 警告（可接受）、ARR 2026-12 提交。
 
-| cfg | 静态 | 轮1 | 轮2 | 轮4 | 轮7 |
-|---|---|---|---|---|---|
-| D1 behavioral | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
-| D2 surface rule | 0.200 | 0.233 | 0.467 | 0.733 | **0.833** |
-| D3 authorization | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
-| D4 confinement | 0.067 | 0.067 | 0.300 | 0.300 | 0.300 |
+## 3. C1a 实验完成（候选命题受控证据）
 
-- **D2 单调崩溃（3 轮 0.467 低估真实 0.833）、D4 轮 2 跳升后持平、D1/D3 8 点完全重合**
-- **核心 claim**：Identical observed zero-stability profiles do not establish equivalent guarantees
-- **D1 证伪攻击失败**（增强攻击者提示+7 轮）：0.000——读作"更强支持"，非"不能破"；合规 0.367 证明它仍是行为
+**C1**：规则制定者/执行者应处于规则 scope 内，或例外显式受限（有时限/可撤销/可追溯）
+**C1a 已验证**：agent 自授权通道 → 规则漂移
 
-**Execution Funnel（静态快照，与 Z(α) 分开报告）**：
+- **结果**：对照（D3 平台记录）0.000 vs 实验（privileged）**0.717**（43/60，v2 trace-complete 独立重算）
+- **审计**：`agentsec/c1a_set_audit.py`——S⊆A 验证（43/43 success 全经 self_authorize）、S∩A∩C=43 机制链完整、ctrl 52/60 尝试利用但被结构拦截
+- **文件**：`agentsec/c1a_experiment_v2.py`（120 cases jsonl）、`c1a_summary.py`（独立 aggregator）、docs/25
+- **诚实边界**：需强注入（A6/A8）+ exploit 包装；幅度 v1 0.533 vs v2 0.717（随机性，方向稳定）；早期-stop 的 round 是 time-to-success
+- **下一步（C1 另一半）**：bounded exception 变体（有时限/可撤销）能否压回 0
 
-| cfg | compliance | complete_args | authorized | 断开层 |
-|---|---|---|---|---|
-| D1 | 0.219 | **0.000** | 0.000 | 参数完整性（模型行为，无结构性 verifier） |
-| D3 | 0.497 | 0.497 | **0.000** | 授权检查（平台记录） |
+## 4. 方法论沉淀
 
-- **D3 的模型给了完整参数（49.7%）是授权门拦的；D1 的模型不给参数（0%）是半配合**——两个零在漏斗不同层级断开
-- 机制确认：D1 下空参数 send_email 被执行且 state_changed=True（To: None 伪文件）——ASR 判定（args 非空）正确排除
+- **docs/24-方法论宣言**：不变量（黑盒→外部可作用面/锚/失败边界）+ 底层纪律（"经过验证的结果才有资格改变模型"+递归补充+硬币另一面）
+- **审计独立性 v1**：`agentsec/specs.py`（ASR/compliance/funnel 判定规格单一化，source of truth）
+- **候选命题**：C1/C1a（已测）、C1b（历史制度，未测）
 
-**实验修复（审计驱动）**：发现论文 §6.1 混用 v2/v3 口径 → 重跑 v3 真效果 → 补 D1/D3 自适应+白盒（预测卡 5/6 和 4/6）→ forensic audit 通过（无 stale/duplicate，D2 突破分散 7 轮证明独立跑）。
+## 5. 第三方验证与沟通
 
-## 3. 第三方验证（三个独立来源）
+| 对象 | 状态 |
+|---|---|
+| 复旦 JADE（docs/18-20） | ✅ 真实 MCP 验证（ND 87.5%/N 6.2%/V 0%）+ 信已发（docs/20） |
+| 南航 LITMUS（docs/21-22） | ✅ 论文整合（§7/§8 互证）+ 信已发（docs/22） |
+| **沟通跟进** | ⚠️ **邮件已发无回音（08-22）**——待跟进 |
 
-| 来源 | 结果 | 对论文的支撑 |
-|---|---|---|
-| AgentDojo 官方基准 | V 0.0% @ 82.6% vs tool_filter 0.0% @ 16.7% | utility 5 倍，同设置 |
-| 复旦 JADE 真实 MCP | ND 87.5%（复现官方 83%）、N 6.2%（M6 漏）、V 0%（合规 93.8% 仍全拦） | 真实协议 + 预测卡 5/5 |
-| LITMUS（南航）互证 | EH ≈ covert execution，独立复现语义层盲区 | 结构声称的外部支持（未跑其 harness） |
-
-沟通信已备：docs/20（复旦张谧）、docs/22（南航周璐）。
-
-## 4. 方法论沉淀（docs/24 + 候选命题）
-
-**docs/24-方法论宣言**：不变量（黑盒→外部可作用面/锚/失败边界）+ 三精确化（有序打开/终极裁判不可达/VAL 锚即实例化）+ 失效边界 + 物理测量理论同构。
-
-**候选命题（新，未实验）**：
-- **C1**：Systems are more robust when rule-generating and rule-executing authorities remain within the scope of the rules they are subject to, **or when any exception is explicitly bounded (time-limited, revocable, traceable)**
-- **C1a（可测，AI）**：agent 授予自授权通道 → 规则漂移概率高于无特权对照组（测试床可构造）
-- **C1b（历史）**：例外受限的制度长期稳定性更高
-
-**审计独立性（操作化方向）**：当前审计与实验共享作者（AI），交叉验证会"一致地错"的风险——外部基准提供真独立性；待做：判定 spec 单一化 + 独立实现者（L3）。
-
-## 5. 关键文件索引
+## 6. 关键文件索引（本次新增）
 
 | 路径 | 内容 |
 |---|---|
-| `paper/` | 论文 1 源稿+PDF（21 页 v2）+ figure1 |
-| `paper2/` | 论文 2（The Same Zero）+ PDF + submission + patch_*.py（修改轨迹） |
-| `agentsec/` | 测试床 + REPORT.md（含 §7.13 构造实验）+ jade/（JADE 集成+Z(α)/funnel 图）+ PREDICTION_*.md（冻结预测卡）+ forensic_audit.py |
-| `results/` | 实验 json（**注意 adaptivekimi_*=7 轮黑盒，adaptive_*=旧 3 轮**） |
-| `docs/01-24` | 研究文档全集（**18-JADE 沟通准备、19-JADE 验证报告、20-复旦信、21-LITMUS 调查、22-南航信、23-论文 2 定位与证据链、24-方法论宣言**） |
-| `book/` | 专著 21 章（含第 19 章论文 2 定位） |
-| `STATUS.md` | 状态总账（2026-08-22 更新） |
-| `HANDOFF.md` | 本文件（v3） |
-| `promo/` | 推广材料 |
-
-## 6. 环境配置
-
-- Python：`py` 启动器（Python 3.13）
-- DeepSeek：api.deepseek.com / deepseek-chat（local_config.json，gitignored）
-- 本地 Ollama：llama3.1:8b（RTX 4050 6GB）
-- MCP：`pip install mcp fastmcp`（JADE 真实 server 用）
-- git：SSH over 443；PowerShell 用 `;` 分隔；**每步提交推送**
-- 网络：arxiv/PyPI/GitHub 可直连；Google 被墙；**DeepSeek API 偶发 SSL 抖动（等待 15-25s 重试）**
+| `paper2/arr/` | ARR 管线（README.md 是入口）|
+| `paper2/arr/versions/` | 版本存档 |
+| `agentsec/specs.py` | 审计独立性 v1（判定规格）|
+| `agentsec/c1a_*.py` | C1a 实验 + 审计 |
+| `docs/24-方法论宣言.md` | 底层纪律 |
+| `docs/25-C1a特权节点实验.md` | C1a 完整记录 |
+| `STATUS.md` | 状态总账（2026-08-22）|
 
 ## 7. 纪律与血泪教训（新 AI 必读）
 
 1. **审计先行、测价值窗口、诚实负结果、每步提交推送**
-2. **裁判的裁判**：判级/实验/代码三层审计；对数字做 trace 级验证（已抓：v2/v3 口径混用、resume 假 seed、指标误读、命名混乱）
-3. **resume 坑**：adaptive_attack.py 会跳过已完成场景——改 rounds 后重跑**必须删旧文件**（本次 7 轮被旧 3 轮顶替过）
-4. **文件命名**：黑盒自适应写 `adaptivekimi_*`（旧 `adaptive_*` 是 3 轮）——审计前先核对
-5. **指标方向陷阱**：AgentDojo security_results 平均 = ASR（True=攻击达成）
-6. **API key 安全**：local_config.json gitignored，commit 前检查
-7. **对齐模型不愿当攻击者**：跨家族红队需愿意配合的攻击者
-8. **claim 边界画在证据边界上**：措辞比证据略窄（VAL-selected→VAL-guided 等 8 项收紧）
-9. **审计独立性**：审计脚本与实验共享作者——外部基准是真独立性；交叉验证会"一致地错"
+2. **裁判的裁判**：对数字做 trace 级验证；**pypdf 提取文本 ≠ 视觉渲染**（表格乱要转图看，不能只看文本提取）
+3. **改 md 必须重跑全管线**（rebuild_full.py），不能只跑下游——下游产物会 stale
+4. **anchor 必须唯一**：'not the hit count.' 在 §1 和 §8 都有 → 误删过正文（git 恢复）
+5. **TinyTeX 必须 ASCII 路径**（C:\TinyTeX；中文路径 kpathsea 不认）
+6. **resume 坑**：adaptive_attack 跳过已完成场景，改 rounds 重跑需删旧文件
+7. **指标方向陷阱**：AgentDojo security_results 平均 = ASR
+8. **claim 边界画在证据边界上**（措辞比证据略窄）
+9. **审计独立性**：审计与实验共享作者——外部基准是真独立性
 
-## 8. 未测试预测清单（模型的保留条款，防止过拟合历史）
+## 8. 未测试预测清单（防过拟合）
 
-1. **D1 运气零**：在足以击败 DeepSeek 拒绝行为的攻击下（异族攻击者/GCG 级）应断裂；D3 不会（除非 substrate 被攻破）——未测试
-2. **C1a privileged node**：agent 自授权通道 → 规则漂移概率更高——未实验（测试床可构造）
-3. **连续 Z(α) frontier**：7 点离散梯度 → 连续失败前沿——未做
+1. **D1 运气零**：更强攻击（异族攻击者/GCG 级）下应断裂；D3 不会
+2. **C1b**（历史制度）：例外受限的制度长期稳定性更高——未测
+3. **连续 Z(α) frontier**：7 点离散 → 连续——未做
 4. **LITMUS 真跑**：需 Ubuntu+OpenClaw——未做
+5. **bounded exception 变体**（C1 另一半）：privileged 通道加"有时限/可撤销"能否压回 0——未做
 
 ## 9. 给新 AI 的起点建议
 
-1. 读 `docs/24`（方法论宣言）→ `STATUS.md` → `agentsec/REPORT.md` → `paper2/paper.md`
-2. 验证环境：`py agentsec/test_keys.py`
-3. 与用户确认走哪条：arXiv v2 提交预案 / 构造实验继续（C1a 或连续 Z(α)）/ 专著收尾 / HANDOFF 本身
-4. 执行纪律见 §7；未测试预测见 §8（**先测预测，别急着加新东西**）
+1. 读 `docs/24`（方法论）→ `paper2/arr/README.md`（ARR 管线）→ `STATUS.md` → `agentsec/REPORT.md`
+2. 验证环境：`py agentsec/test_keys.py` + `py paper2/arr/rebuild_full.py`（重建 8 页 PDF）
+3. 与用户确认走哪条：**ARR 提交准备**（表单/打磨）/ **C1 另一半**（bounded exception）/ **沟通跟进**（复旦/南航）/ **专著更新**
+4. 执行纪律见 §7；未测试预测见 §8（先测预测，别急着加新东西）
