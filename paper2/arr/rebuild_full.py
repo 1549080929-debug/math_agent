@@ -66,3 +66,13 @@ if ok:
     from pypdf import PdfReader
     pdf = PdfReader('acl_submit.pdf')
     print(f'   PDF {len(pdf.pages)} 页')
+
+# 8. 清理中间产物到 archive/（主目录只留源 + PDF，token 友好）
+import shutil
+ARCHIVE = os.path.join(os.path.dirname(os.path.dirname(HERE)), 'archive', 'arr_intermediates')
+os.makedirs(ARCHIVE, exist_ok=True)
+for f in ['paper_arr_cite.md', 'paper_arr.tex', 'acl_submit.tex', 'acl_submit.log', 'acl_submit.aux', 'acl_submit.out']:
+    p = os.path.join(HERE, f)
+    if os.path.exists(p):
+        shutil.move(p, os.path.join(ARCHIVE, f))
+print('8. intermediates archived')

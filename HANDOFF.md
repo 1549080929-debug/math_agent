@@ -1,7 +1,7 @@
 # 项目交接文档（HANDOFF v4）
 
 > 用途：压缩对话，转移新对话框。把本文件全文粘贴给新 AI 的第一条消息即可继续。
-> 最后更新：2026-08-22（v5）。v4 交接于同日（C1a/arXiv 退回/ARR 管线）；本版新增：**ARR 周期修正（10-12 提交，非 12 月）、匿名化投稿 PDF 就绪、表单材料包（submission_form.md）、ARR 官方要求核实（页数/匿名/checklist/Limitations 硬性）**。
+> 最后更新：2026-08-22（v6）。v5 交接于同日（ARR 周期修正/匿名化/表单材料包）；本版新增：**表格溢出修复（tabularx）、Level map 列宽修复（p{1.2cm}）、项目瘦身（archive/ 归档）、坑总结 docs/26、按任务读文件工作流（token 优化）**。
 > 阅读顺序：本文 → docs/24（方法论宣言）→ STATUS.md → paper2/arr/README.md（ARR 管线）→ agentsec/REPORT.md → paper2/paper.md
 
 ---
@@ -63,12 +63,14 @@
 
 | 路径 | 内容 |
 |---|---|
-| `paper2/arr/` | ARR 管线（README.md 入口）；**`submission_form.md` = 提交表单材料包（权威）**；`versions/anon_prep_20260822/` = 匿名化前命名版备份 |
+| `paper2/arr/` | ARR 管线（README.md 入口）；**`submission_form.md` = 提交表单材料包（权威）**；匿名化前命名版备份在 `archive/arr_versions/anon_prep_20260822/` |
 | `paper2/arr/versions/` | 版本存档 |
 | `agentsec/specs.py` | 审计独立性 v1（判定规格）|
 | `agentsec/c1a_*.py` | C1a 实验 + 审计 |
 | `docs/24-方法论宣言.md` | 底层纪律 |
 | `docs/25-C1a特权节点实验.md` | C1a 完整记录 |
+| `docs/26-坑总结与工作流.md` | 表格/环境坑 + 按任务读文件清单（token 优化） |
+| `archive/` | 历史/中间/一次性产物（勿主动读，需要时取；arr_intermediates / paper2_patches / agentsec_results / agentsec_jade_assets / book_builds / arr_versions / logs） |
 | `STATUS.md` | 状态总账（2026-08-22）|
 
 ## 7. 纪律与血泪教训（新 AI 必读）

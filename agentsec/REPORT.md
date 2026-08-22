@@ -343,4 +343,4 @@ python agentsec/run_experiment.py --full  # 真跑（DeepSeek，7 配置含 ND�
 python agentsec/adaptive_attack.py        # 自适应攻击（N/V/D2/D4）
 python agentsec/summarize_results.py      # 汇总
 ```
-原始数据：`agentsec/results/*.json`（7 配置 × 250 用例 + adaptive_*.json），含每个用例的 LLM 提议与拦截原因
+原始数据：`archive/agentsec_results/results/*.json`（7 配置 × 250 用例 + adaptive_*.json，已归档），含每个用例的 LLM 提议与拦截原因

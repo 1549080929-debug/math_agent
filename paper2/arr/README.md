@@ -16,9 +16,9 @@
 | `fix_latex.py` | Unicode 转义 + longtable → table*（tabularx 等分列，总宽 \textwidth） |
 | `fix_format.py` | 章节编号去重 + Appendix → section* |
 | `fix_natbib3.py` | 参考文献 → enumerate（绕开 natbib） |
-| `acl_submit.tex` | 生成的 LaTeX |
+| `acl_submit.tex` | 生成的 LaTeX（管线跑完自动归档 `archive/arr_intermediates/`） |
 | `acl_submit.pdf` | **投稿 PDF**（正文 8 页 + 附录 + 参考文献） |
-| `versions/` | 版本存档（v12 压缩前 + scripts_compression 压缩轨迹） |
+| `archive/arr_versions/` | 版本存档（v12 压缩前 + scripts_compression + anon_prep_20260822，已移出主目录） |
 
 ## 管线步骤（rebuild_full.py 自动执行）
 
@@ -37,8 +37,8 @@ paper_arr.md
 
 1. **改 paper_arr.md 后必须重跑 rebuild_full.py**（全管线），不能只跑下游——否则下游产物 stale
 2. **完整版（paper2/paper.md）不动**——ARR 压缩只在 paper_arr.md
-3. 版本存档：压缩前版本在 `versions/v12_body10p_20260822/`
-4. 修复轨迹脚本在 `versions/scripts_compression/`（可重放每步压缩）
+3. 版本存档：压缩前版本在 `archive/arr_versions/v12_body10p_20260822/`
+4. 修复轨迹脚本在 `archive/arr_versions/scripts_compression/`（可重放每步压缩）
 
 ## 已知边界
 

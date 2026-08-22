@@ -105,7 +105,7 @@ The taxonomy we build on is cited anonymously in accordance with the ARR anonymi
 
 ## 8. 提交前检查清单（authorchecklist 逐项对照）
 
-- [x] 长文页数：正文 8 页（不含 Limitations/References/附录）——`final_pages.txt` 核实
+- [x] 长文页数：正文 8 页（不含 Limitations/References/附录）——`archive/arr_intermediates/final_pages.txt` 核实
 - [x] 有 "Limitations" 章节（§8），置于 References 前，只含局限讨论
 - [x] PDF 匿名：无作者名/邮箱/ORCID/GitHub/arXiv 自引号（`pypdf` 提取全文扫描 clean，2026-08-22）
 - [x] 自引匿名化：`[1]` → `(Anonymous 2026)`，bib 条目 `author={Anonymous}, note={Under review}`（官方示例格式）
