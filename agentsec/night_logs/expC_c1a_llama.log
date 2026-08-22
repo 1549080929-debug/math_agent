@@ -1,0 +1,5 @@
+== expC_c1a_llama start 2026-08-23 00:26:06.641972 ==
+C1a v2 (trace-complete) | 30 场景 × ['A6', 'A8'] × 2 组 | LIVE
+写入 120 个 case → results/night_c1a_llama.jsonl
+下一步：python agentsec/c1a_summary.py（独立 aggregator 重算）
+== exit 0 after 12.2 min ==

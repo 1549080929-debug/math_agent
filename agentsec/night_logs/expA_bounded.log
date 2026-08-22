@@ -1,0 +1,5 @@
+== expA_bounded start 2026-08-22 23:37:35.558928 ==
+C1a bounded 探针 | 30 场景 × ['A6', 'A8'] × 3 组 | LIVE
+写入 180 个 case → results/night_bounded.jsonl
+下一步：python agentsec/c1a_bounded_report.py --in results/c1a_bounded.jsonl
+== exit 0 after 9.0 min ==

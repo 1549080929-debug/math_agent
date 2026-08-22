@@ -1,0 +1,11 @@
+night run finished 2026-08-23 00:38:17.561849
+A_bounded: OK
+B_adaptive_D1D3_10r: OK
+C_c1a_llama: OK
+--- 明早审计流程 ---
+1. 独立聚合（勿用实验脚本内部逻辑）：
+   - bounded: results/night_bounded.jsonl -> 按组算 ASR (specs.is_asr_success)
+   - adaptive: results/adaptive_night2_D1.json / D3 -> 每轮累计 ASR (Z(alpha))
+   - c1a_llama: results/night_c1a_llama.jsonl -> ASR/benign 与 DeepSeek 版对比
+2. trace 级抽检：从 jsonl 抽查 success 判定与 trace 一致
+3. 对照预测卡核对（docs/27 纪律：声明 vs 结果）
