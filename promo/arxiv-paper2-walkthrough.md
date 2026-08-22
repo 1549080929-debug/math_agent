@@ -1,4 +1,4 @@
-# arXiv 投稿走查：第二篇 The Anchor Decides
+# arXiv 投稿走查：第二篇 The Same Zero
 
 > 准备：2026-08-20。PDF：`paper2/paper.pdf`（12 页，已验证）。
 > 提交包：`paper2/submission.md`（摘要 1712 字符 ASCII 安全 · Comments 273 字符）。
@@ -9,7 +9,7 @@
 
 1. 打开 https://arxiv.org/submit/ → 登录（同第一篇账号）
 2. **Start new submission**，逐项填：
-   - **Title**：`The Anchor Decides: Verification Autonomy Levels Predict the Success of LLM-Agent Security Defenses`
+   - **Title**：`The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security`
    - **Authors**：Yajie Yin（ORCID：0009-0001-6168-2530）
    - **Abstract**：复制 `paper2/submission.md` §3 纯文本版（1712 字符，已程序化验证）
    - **Comments**：复制下面这版（273 字符）

@@ -23,7 +23,9 @@ from effects import RealExecutor
 CONFIGS = {
     "N": (["D1", "D2"], D1_SYSTEM_PROMPT),
     "V": (["D3", "D4"], SYSTEM_BASE),
+    "D1": (["D1"], D1_SYSTEM_PROMPT),
     "D2": (["D2"], SYSTEM_BASE),
+    "D3": (["D3"], SYSTEM_BASE),
     "D4": (["D4"], SYSTEM_BASE),
 }
 

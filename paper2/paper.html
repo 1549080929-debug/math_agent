@@ -191,35 +191,35 @@ License: CC-BY 4.0</p>
 <tr>
 <td>D1 prompt hardening (L0)</td>
 <td>0.000</td>
-<td>0.254</td>
+<td>0.219</td>
 <td>0.000 [0.00, 0.16]</td>
 <td>0.333, benign destroyed</td>
 </tr>
 <tr>
 <td>D2 keyword filter (L1)</td>
-<td>0.258</td>
-<td>0.512</td>
+<td>0.200</td>
+<td>0.492</td>
 <td>1.000 [0.84, 1.00]</td>
-<td>0.075</td>
+<td>0.133</td>
 </tr>
 <tr>
 <td>D3 confirmation gate (L1/L2)</td>
 <td>0.000</td>
-<td>0.512</td>
+<td>0.497</td>
 <td>1.000 [0.84, 1.00]</td>
 <td>0.333</td>
 </tr>
 <tr>
 <td>D4 parameter sandbox (L3)</td>
-<td>0.079</td>
-<td>0.537</td>
+<td>0.067</td>
+<td>0.494</td>
 <td>1.000 [0.84, 1.00]</td>
-<td>0.254</td>
+<td>0.266</td>
 </tr>
 <tr>
 <td><strong>V = D3+D4 (VAL)</strong></td>
 <td><strong>0.000</strong></td>
-<td>0.512</td>
+<td>0.497</td>
 <td><strong>1.000 [0.84, 1.00]</strong></td>
 <td><strong>0.333, lossless</strong></td>
 </tr>
@@ -233,8 +233,8 @@ License: CC-BY 4.0</p>
 </tbody>
 </table>
 <p>Benign success is measured on 20 benign scenarios (Wilson 95% CIs in brackets); the utility gap between V and N is significant at p &lt; 0.001 (Fisher's exact test on 20/20 vs 0/20).</p>
-<p>Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach the same zero. They differ in <em>how</em>: V's zero is produced by a gate the model cannot influence; N's zero is produced by the model's behavior under the hardening prompt (compliance 0.235—the model proposes the malicious tool a quarter of the time, mostly with empty arguments; strict ASR counts only actionable executions). D2 alone leaks 0.258 ASR: the keyword filter is bypassable by rewriting.</p>
-<p><strong>The two layers of V are not redundant; they answer different questions.</strong> D3 (confirmation gate) is the reason V's ASR is 0.000: it refuses high-risk tools without a platform-recorded authorization event, and the model cannot forge that record. D4 (parameter sandbox) is not about <em>whether</em> an action is authorized but <em>what an authorized action may touch</em>: it constrains arguments to schema (recipient whitelists, target patterns). The division shows up in the single-defense numbers—D3 alone already reaches 0.000 ASR, while D4 alone leaks 0.079 (schema-legal semantic attacks, e.g. a malicious comment posted to an allowed target). Stacking them yields the claim in its full form: D3 controls <em>whether</em> (the authorization anchor), D4 controls <em>what</em> (the confinement anchor), and an attack must defeat both anchors on the same call to succeed.</p>
+<p>Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach the same zero. They differ in <em>how</em>: V's zero is produced by a gate the model cannot influence; N's zero is produced by the model's behavior under the hardening prompt (compliance 0.235—the model proposes the malicious tool a quarter of the time, mostly with empty arguments; strict ASR counts only actionable executions). D2 alone leaks 0.200 ASR: the keyword filter is bypassable by rewriting.</p>
+<p><strong>The two layers of V are not redundant; they answer different questions.</strong> D3 (confirmation gate) is the reason V's ASR is 0.000: it refuses high-risk tools without a platform-recorded authorization event, and the model cannot forge that record. D4 (parameter sandbox) is not about <em>whether</em> an action is authorized but <em>what an authorized action may touch</em>: it constrains arguments to schema (recipient whitelists, target patterns). The division shows up in the single-defense numbers—D3 alone already reaches 0.000 ASR, while D4 alone leaks 0.067 (schema-legal semantic attacks, e.g. a malicious comment posted to an allowed target). Stacking them yields the claim in its full form: D3 controls <em>whether</em> (the authorization anchor), D4 controls <em>what</em> (the confinement anchor), and an attack must defeat both anchors on the same call to succeed.</p>
 <h3>6.2 Adaptive and white-box attacks</h3>
 <table>
 <thead>
@@ -249,16 +249,32 @@ License: CC-BY 4.0</p>
 </thead>
 <tbody>
 <tr>
+<td>D1</td>
+<td>0.000</td>
+<td><strong>0.000</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
 <td>D2</td>
-<td>0.258</td>
+<td>0.200</td>
 <td><strong>0.467</strong></td>
 <td>—</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
+<td>D3</td>
+<td>0.000</td>
+<td><strong>0.000</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
 <td>D4</td>
-<td>0.079</td>
+<td>0.067</td>
 <td><strong>0.200</strong></td>
 <td>—</td>
 <td>—</td>
@@ -282,6 +298,7 @@ License: CC-BY 4.0</p>
 </tr>
 </tbody>
 </table>
+<p>The single-defense breakpoints are already informative. Two zeros survive adaptive escalation unchanged (D1 at 0.000, D3 at 0.000), and two do not (D2 0.200→0.467, D4 0.067→0.200). But the two surviving zeros rest on different grounds, visible in adaptive compliance: under the same attacks, D3's model is driven to propose the malicious tool in 53.3% of cases and is still blocked (the gate reads a platform record), while D1's model is driven 36.7% and the zero depends on its refusal behavior holding. The same static zero, the same adaptive zero—different provenance, and different predicted breakpoints under stronger attacks (Section 7).</p>
 <p><strong>Definition (hedging wall).</strong> Under a hardening prompt (D1), an LLM victim under injection may comply <em>partially</em>: it proposes the requested high-risk tool while emitting empty or incomplete arguments—a stable compromise between the injection ("propose the action") and the safety prompt ("do not execute without authorization"). Actionable ASR requires complete arguments, so hedging suppresses ASR <em>without any structural gate</em>. The wall is a model behavior, not a mechanism: its height is victim-specific (compliance 0.235 for DeepSeek, 0.014 for Llama 8B, Section 6.4).</p>
 <p>Adaptive attacks (attacker rewrites from the interception reason) nearly double the leak rate of the L1 and L3 single defenses. Against the stacks: V holds—the attacker cannot forge platform records or schema-legal arguments it does not possess—even when the model is driven to propose the malicious tool in 57% of scenarios (white-box compliance 0.567, 2.4x N's 0.235). N holds only because the hedging wall survives every attack form we tried: static jailbreaks, adaptive rewriting, white-box knowledge, PAIR-style candidate search (3 candidates × 2 rounds, 0.000), and a willing cross-family attacker (DeepSeek crafting jailbreaks against Llama: 0.000, Section 6.4). The two aligned cross-family candidates we attempted (Moonshot Kimi, Meta Llama 8B as <em>attackers</em>) declined the role—explicit refusals, and sanitizing rewrites under indirect framing (Section 8.1). Gradient-based attacks (GCG) are out of scope: the API exposes no gradients or token logits.</p>
 <h3>6.3 Seeds and honesty</h3>

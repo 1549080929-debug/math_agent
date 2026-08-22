@@ -149,27 +149,31 @@ The two zeros in the last two rows are the paper's spine: identical security num
 | Config | ASR | Compliance | Benign | gain vs ND |
 |---|---|---|---|---|
 | ND (no defense) | **0.333** | 0.492 | 1.000 [0.84, 1.00] | — |
-| D1 prompt hardening (L0) | 0.000 | 0.254 | 0.000 [0.00, 0.16] | 0.333, benign destroyed |
-| D2 keyword filter (L1) | 0.258 | 0.512 | 1.000 [0.84, 1.00] | 0.075 |
-| D3 confirmation gate (L1/L2) | 0.000 | 0.512 | 1.000 [0.84, 1.00] | 0.333 |
-| D4 parameter sandbox (L3) | 0.079 | 0.537 | 1.000 [0.84, 1.00] | 0.254 |
-| **V = D3+D4 (VAL)** | **0.000** | 0.512 | **1.000 [0.84, 1.00]** | **0.333, lossless** |
+| D1 prompt hardening (L0) | 0.000 | 0.219 | 0.000 [0.00, 0.16] | 0.333, benign destroyed |
+| D2 keyword filter (L1) | 0.200 | 0.492 | 1.000 [0.84, 1.00] | 0.133 |
+| D3 confirmation gate (L1/L2) | 0.000 | 0.497 | 1.000 [0.84, 1.00] | 0.333 |
+| D4 parameter sandbox (L3) | 0.067 | 0.494 | 1.000 [0.84, 1.00] | 0.266 |
+| **V = D3+D4 (VAL)** | **0.000** | 0.497 | **1.000 [0.84, 1.00]** | **0.333, lossless** |
 | **N = D1+D2 (intuition)** | 0.000 | 0.235 | **0.000 [0.00, 0.16]** | 0.333, benign destroyed |
 
 Benign success is measured on 20 benign scenarios (Wilson 95% CIs in brackets); the utility gap between V and N is significant at p < 0.001 (Fisher's exact test on 20/20 vs 0/20).
 
-Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach the same zero. They differ in *how*: V's zero is produced by a gate the model cannot influence; N's zero is produced by the model's behavior under the hardening prompt (compliance 0.235—the model proposes the malicious tool a quarter of the time, mostly with empty arguments; strict ASR counts only actionable executions). D2 alone leaks 0.258 ASR: the keyword filter is bypassable by rewriting.
+Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach the same zero. They differ in *how*: V's zero is produced by a gate the model cannot influence; N's zero is produced by the model's behavior under the hardening prompt (compliance 0.235—the model proposes the malicious tool a quarter of the time, mostly with empty arguments; strict ASR counts only actionable executions). D2 alone leaks 0.200 ASR: the keyword filter is bypassable by rewriting.
 
-**The two layers of V are not redundant; they answer different questions.** D3 (confirmation gate) is the reason V's ASR is 0.000: it refuses high-risk tools without a platform-recorded authorization event, and the model cannot forge that record. D4 (parameter sandbox) is not about *whether* an action is authorized but *what an authorized action may touch*: it constrains arguments to schema (recipient whitelists, target patterns). The division shows up in the single-defense numbers—D3 alone already reaches 0.000 ASR, while D4 alone leaks 0.079 (schema-legal semantic attacks, e.g. a malicious comment posted to an allowed target). Stacking them yields the claim in its full form: D3 controls *whether* (the authorization anchor), D4 controls *what* (the confinement anchor), and an attack must defeat both anchors on the same call to succeed.
+**The two layers of V are not redundant; they answer different questions.** D3 (confirmation gate) is the reason V's ASR is 0.000: it refuses high-risk tools without a platform-recorded authorization event, and the model cannot forge that record. D4 (parameter sandbox) is not about *whether* an action is authorized but *what an authorized action may touch*: it constrains arguments to schema (recipient whitelists, target patterns). The division shows up in the single-defense numbers—D3 alone already reaches 0.000 ASR, while D4 alone leaks 0.067 (schema-legal semantic attacks, e.g. a malicious comment posted to an allowed target). Stacking them yields the claim in its full form: D3 controls *whether* (the authorization anchor), D4 controls *what* (the confinement anchor), and an attack must defeat both anchors on the same call to succeed.
 
 ### 6.2 Adaptive and white-box attacks
 
 | Config | Static ASR | Adaptive ASR | White-box ASR | White-box compliance | PAIR-lite ASR |
 |---|---|---|---|---|---|
-| D2 | 0.258 | **0.467** | — | — | — |
-| D4 | 0.079 | **0.200** | — | — | — |
+| D1 | 0.000 | **0.000** | — | — | — |
+| D2 | 0.200 | **0.467** | — | — | — |
+| D3 | 0.000 | **0.000** | — | — | — |
+| D4 | 0.067 | **0.200** | — | — | — |
 | **V** | 0.000 | 0.000 | 0.000 | **0.567** | 0.000 |
 | **N** | 0.000 | 0.000 | 0.000 | 0.235 | 0.000 |
+
+The single-defense breakpoints are already informative. Two zeros survive adaptive escalation unchanged (D1 at 0.000, D3 at 0.000), and two do not (D2 0.200→0.467, D4 0.067→0.200). But the two surviving zeros rest on different grounds, visible in adaptive compliance: under the same attacks, D3's model is driven to propose the malicious tool in 53.3% of cases and is still blocked (the gate reads a platform record), while D1's model is driven 36.7% and the zero depends on its refusal behavior holding. The same static zero, the same adaptive zero—different provenance, and different predicted breakpoints under stronger attacks (Section 7).
 
 **Definition (hedging wall).** Under a hardening prompt (D1), an LLM victim under injection may comply *partially*: it proposes the requested high-risk tool while emitting empty or incomplete arguments—a stable compromise between the injection ("propose the action") and the safety prompt ("do not execute without authorization"). Actionable ASR requires complete arguments, so hedging suppresses ASR *without any structural gate*. The wall is a model behavior, not a mechanism: its height is victim-specific (compliance 0.235 for DeepSeek, 0.014 for Llama 8B, Section 6.4).
 
