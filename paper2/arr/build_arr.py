@@ -44,6 +44,7 @@ __CSL_BLOCK__
 
 \begin{document}
 \maketitle
+\nolinenumbers  % xelatex lineno bug, disable
 """
 
 arr = open('paper_arr.tex', encoding='utf-8').read()

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 22:01
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 22:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -527,26 +527,26 @@ Package: xurl 2022/01/09 v 0.10 modify URL breaks
 No file acl_submit.aux.
 \openout1 = `acl_submit.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -588,18 +588,18 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 82.
+Package hyperref Info: Link coloring OFF on input line 83.
 
 
 Package hyperref Warning: Rerun to get /PageLabels entry.
 
-LaTeX Info: Redefining \microtypecontext on input line 82.
-Package microtype Info: Applying patch `item' on input line 82.
-Package microtype Info: Applying patch `toc' on input line 82.
-Package microtype Info: Applying patch `eqnum' on input line 82.
-Package microtype Info: Applying patch `footnote' on input line 82.
-Package microtype Info: Applying patch `verbatim' on input line 82.
-LaTeX Info: Redefining \microtypesetup on input line 82.
+LaTeX Info: Redefining \microtypecontext on input line 83.
+Package microtype Info: Applying patch `item' on input line 83.
+Package microtype Info: Applying patch `toc' on input line 83.
+Package microtype Info: Applying patch `eqnum' on input line 83.
+Package microtype Info: Applying patch `footnote' on input line 83.
+Package microtype Info: Applying patch `verbatim' on input line 83.
+LaTeX Info: Redefining \microtypesetup on input line 83.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: No adjustment of tracking.
@@ -608,56 +608,52 @@ Package microtype Info: No adjustment of kerning.
 (c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-
-Package lineno Warning: Line number reference failed, re-run to get it right.
-
-
-Underfull \hbox (badness 1147) in paragraph at lines 88--89
+Underfull \hbox (badness 1147) in paragraph at lines 90--91
 []\T1/ptm/m/n/10 LLM-agent se-cu-rity has pro-duced a dense
  []
 
 
-Underfull \hbox (badness 3792) in paragraph at lines 88--89
+Underfull \hbox (badness 3792) in paragraph at lines 90--91
 \T1/ptm/m/n/10 land-scape of defenses---prompt hard-en-ing,
  []
 
 
-Underfull \hbox (badness 2903) in paragraph at lines 88--89
+Underfull \hbox (badness 2903) in paragraph at lines 90--91
 \T1/ptm/m/n/10 agents ``safe.'' We ar-gue that the field
  []
 
 
-Underfull \hbox (badness 1226) in paragraph at lines 88--89
+Underfull \hbox (badness 1226) in paragraph at lines 90--91
 \T1/ptm/m/n/10 lacks a pre-purchase ques-tion: \T1/ptm/m/it/10 what does
  []
 
 
-Underfull \hbox (badness 3503) in paragraph at lines 88--89
+Underfull \hbox (badness 3503) in paragraph at lines 90--91
 \T1/ptm/m/it/10 a given de-fense ac-tu-ally guar-an-tee, and
  []
 
 
-Underfull \hbox (badness 6412) in paragraph at lines 88--89
+Underfull \hbox (badness 6412) in paragraph at lines 90--91
 \T1/ptm/m/it/10 where does that guar-an-tee come from?
  []
 
 
-Underfull \hbox (badness 6725) in paragraph at lines 88--89
+Underfull \hbox (badness 6725) in paragraph at lines 90--91
 \T1/ptm/m/n/10 We ap-ply Ver-i-fi-ca-tion Au-ton-omy Lev-els
  []
 
 
-Underfull \hbox (badness 1509) in paragraph at lines 88--89
+Underfull \hbox (badness 1509) in paragraph at lines 90--91
 \T1/ptm/m/n/10 the source of their spec (L0: LLM self-
  []
 
 
-Underfull \hbox (badness 2205) in paragraph at lines 88--89
+Underfull \hbox (badness 2205) in paragraph at lines 90--91
 \T1/ptm/m/n/10 with single-property or domain-level com-
  []
 
 
-Underfull \hbox (badness 2165) in paragraph at lines 88--89
+Underfull \hbox (badness 2165) in paragraph at lines 90--91
 \T1/ptm/m/n/10 plete-ness; L5: im-pos-si-ble), to 22 agent-
  []
 
@@ -668,7 +664,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-04.
+06.
 
 (c:/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
@@ -677,19 +673,19 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 
 
 ]
-Underfull \hbox (badness 1742) in paragraph at lines 113--114
+Underfull \hbox (badness 1742) in paragraph at lines 115--116
 []\T1/ptm/b/n/10.95 L2\T1/ptm/m/n/10.95 : ob-jec-tive ground truth (gold la-bel
 s,
  []
 
 
-Underfull \hbox (badness 3118) in paragraph at lines 113--114
+Underfull \hbox (badness 3118) in paragraph at lines 115--116
 \T1/ptm/m/n/10.95 Guar-an-tees \T1/ptm/m/it/10.95 cor-rect-ness only\T1/ptm/m/n
 /10.95 : ev-ery-thing
  []
 
 
-Underfull \hbox (badness 1418) in paragraph at lines 113--114
+Underfull \hbox (badness 1418) in paragraph at lines 115--116
 \T1/ptm/m/n/10.95 what was not checked (the com-plete-ness
  []
 
@@ -698,12 +694,12 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 13
-7.
+9.
 
 (c:/TinyTeX/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 137
+LaTeX Font Info:    Trying to load font information for U+msa on input line 139
 .
 
 (c:/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -712,7 +708,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 137
+LaTeX Font Info:    Trying to load font information for U+msb on input line 139
 .
 
 (c:/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -721,119 +717,119 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (c:/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Underfull \hbox (badness 2856) in paragraph at lines 141--142
+Underfull \hbox (badness 2856) in paragraph at lines 143--144
 []\T1/ptm/b/n/10.95 Prediction val-i-da-tion. \T1/ptm/m/n/10.95 Frozen level-to
 -
  []
 
 
-Underfull \hbox (badness 2486) in paragraph at lines 141--142
+Underfull \hbox (badness 2486) in paragraph at lines 143--144
 \T1/ptm/m/n/10.95 lished sam-ple (10/10 hits, flagged; two
  []
 
 
-Underfull \hbox (badness 1320) in paragraph at lines 145--146
+Underfull \hbox (badness 1320) in paragraph at lines 147--148
 []\T1/ptm/b/n/10.95 Deployment-value com-par-i-son and zero
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 145--146
+Underfull \hbox (badness 10000) in paragraph at lines 147--148
 \T1/ptm/m/n/10.95 guided vs. main-stream in-tu-ition), one
  []
 
 
-Underfull \hbox (badness 1248) in paragraph at lines 145--146
+Underfull \hbox (badness 1248) in paragraph at lines 147--148
 \T1/ptm/m/n/10.95 testbed---50 sce-nar-ios, 12 at-tack fam-i-lies,
  []
 
 
-Underfull \hbox (badness 4416) in paragraph at lines 145--146
+Underfull \hbox (badness 4416) in paragraph at lines 147--148
 \T1/ptm/m/n/10.95 real ef-fects, adaptive/white-box/PAIR es-
  []
 
 
-Underfull \hbox (badness 1509) in paragraph at lines 145--146
+Underfull \hbox (badness 1509) in paragraph at lines 147--148
 \T1/ptm/m/n/10.95 the of-fi-cial Agent-Dojo bench-mark. The
  []
 
 
-Underfull \hbox (badness 2856) in paragraph at lines 145--146
+Underfull \hbox (badness 2856) in paragraph at lines 147--148
 \T1/ptm/m/n/10.95 sep-a-rate de-fenses by fail-ure mor-phol-ogy
  []
 
 
-Underfull \hbox (badness 1286) in paragraph at lines 145--146
+Underfull \hbox (badness 1286) in paragraph at lines 147--148
 \T1/ptm/m/n/10.95 (abrupt col-lapse, pro-gres-sive ero-sion, flat
  []
 
 
-Underfull \hbox (badness 3323) in paragraph at lines 145--146
+Underfull \hbox (badness 3323) in paragraph at lines 147--148
 \T1/ptm/m/n/10.95 ti-cal tra-jec-to-ries still re-quire prove-nance
  []
 
 [2]
-Underfull \hbox (badness 1496) in paragraph at lines 163--164
+Underfull \hbox (badness 1496) in paragraph at lines 165--166
 \T1/ptm/m/it/10.95 Based Test Or-a-cles \T1/ptm/m/n/10.95 2026)), and shows sam
 e-
  []
 
 
-Underfull \hbox (badness 2020) in paragraph at lines 181--182
+Underfull \hbox (badness 2020) in paragraph at lines 183--184
 \T1/ptm/m/n/10.95 vari-ants (di-rect, para-phrase, fake-confirmation,
  []
 
 
-Underfull \hbox (badness 1308) in paragraph at lines 183--184
+Underfull \hbox (badness 1308) in paragraph at lines 185--186
 \T1/ptm/m/n/10.95 ory and call text (trans-fer/delete/send/payment
  []
 
 [3]
 LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 19
-5.
+7.
  (c:/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 195.
+(Font)              scaled to size 10.95pt on input line 197.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-Underfull \hbox (badness 10000) in paragraph at lines 195--196
+Underfull \hbox (badness 10000) in paragraph at lines 197--198
 []\T1/ptm/m/n/10.95 Full per-defense rat-ings with ev-i-dence:
  []
 
 
-Underfull \hbox (badness 2828) in paragraph at lines 195--196
+Underfull \hbox (badness 2828) in paragraph at lines 197--198
 \T1/zi4/m/n/10.95 reliability/corpus.json\T1/ptm/m/n/10.95 , \T1/zi4/m/n/10.95 
 ratings/\T1/ptm/m/n/10.95 ; blind-
  []
 
 
-Underfull \hbox (badness 1603) in paragraph at lines 197--198
+Underfull \hbox (badness 1603) in paragraph at lines 199--200
 \T1/ptm/m/n/10.95 agent security---but only for \T1/ptm/m/it/10.95 con-fine-men
 t and
  []
 
 
-Underfull \hbox (badness 2020) in paragraph at lines 205--206
+Underfull \hbox (badness 2020) in paragraph at lines 207--208
 \T1/ptm/b/n/10.95 ASR un-der 10% forged con-fir-ma-tions\T1/ptm/m/n/10.95 ---th
 e
  []
 
 [4]
-Underfull \hbox (badness 7397) in paragraph at lines 217--218
+Underfull \hbox (badness 7397) in paragraph at lines 219--220
 \T1/ptm/m/n/10.95 4/4 be-hav-ior pre-dic-tions hit (Llama Guard
  []
 
 
-Underfull \hbox (badness 1052) in paragraph at lines 217--218
+Underfull \hbox (badness 1052) in paragraph at lines 219--220
 \T1/ptm/m/n/10.95 ASR un-der strong at-tacks; per-plex-ity fil-ter-ing
  []
 
 
-Underfull \hbox (badness 2103) in paragraph at lines 225--226
+Underfull \hbox (badness 2103) in paragraph at lines 227--228
 \T1/ptm/b/n/10.95 Predicted: \T1/ptm/m/n/10.95 L2 (at-tri-bu-tion check-ing). \
 T1/ptm/b/n/10.95 Mis-
  []
@@ -843,7 +839,7 @@ Runaway argument?
 ! Paragraph ended before \@@array was complete.
 <to be read again> 
                    \par 
-l.240 
+l.242 
       
 I suspect you've forgotten a `}', causing me to apply this
 control sequence to too much text. How can we recover?
@@ -852,13 +848,13 @@ My plan is to forget the whole thing and hope for the best.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.247 \hline
+l.249 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.253 \end{minipage} &
+l.255 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -868,7 +864,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.257 \end{minipage} &
+l.259 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -878,7 +874,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.261 \end{minipage} &
+l.263 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -890,7 +886,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.267 \hline
+l.269 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
@@ -898,13 +894,13 @@ an alignment. Proceed, and I'll ignore this case.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.268 \hline
+l.270 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.272 ND (no defense) &
+l.274 ND (no defense) &
                         0.333 / 0.253 & 1.000 / 1.000 & no defense \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -914,7 +910,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.272 ND (no defense) & 0.333 / 0.253 &
+l.274 ND (no defense) & 0.333 / 0.253 &
                                         1.000 / 1.000 & no defense \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -924,7 +920,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.272 ...efense) & 0.333 / 0.253 & 1.000 / 1.000 &
+l.274 ...efense) & 0.333 / 0.253 & 1.000 / 1.000 &
                                                    no defense \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -934,7 +930,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.274 \textbf{V (VAL: gate + sandbox)} &
+l.276 \textbf{V (VAL: gate + sandbox)} &
                                          \textbf{0.000 / 0.000} & \textbf{1....
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -944,7 +940,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.274 ...te + sandbox)} & \textbf{0.000 / 0.000} &
+l.276 ...te + sandbox)} & \textbf{0.000 / 0.000} &
                                                    \textbf{1.000 / 1.000} & ...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -954,7 +950,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.274 ...0.000 / 0.000} & \textbf{1.000 / 1.000} &
+l.276 ...0.000 / 0.000} & \textbf{1.000 / 1.000} &
                                                    \textbf{structure - platf...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -964,7 +960,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.276 \textbf{N (intuition: hardening + filter)} &
+l.278 \textbf{N (intuition: hardening + filter)} &
                                                    0.000 / 0.000 & \textbf{0...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -974,7 +970,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.276 ...n: hardening + filter)} & 0.000 / 0.000 &
+l.278 ...n: hardening + filter)} & 0.000 / 0.000 &
                                                    \textbf{0.000 / 0.000} & ...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -984,7 +980,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.276 ... 0.000 / 0.000 & \textbf{0.000 / 0.000} &
+l.278 ... 0.000 / 0.000 & \textbf{0.000 / 0.000} &
                                                    \textbf{luck - the model'...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -996,7 +992,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \crcr.
 \tbl_crcr:n ...l_count_missing_cells:n {#1}}\crcr 
                                                   
-l.277 \end{tabular}
+l.279 \end{tabular}
                    
 I can't figure out why you would want to use a tab mark
 or \cr or \span just now. If something like a right brace
@@ -1007,7 +1003,7 @@ might try typing `S' now just to see what is salvageable.
 ! Extra }, or forgotten \endgroup.
 \endarray ...le:n {math/luamml/array/save}\egroup 
                                                   \tag_socket_use:n {tbl/fin...
-l.277 \end{tabular}
+l.279 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1018,7 +1014,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endarray ...tbl_restore_outer_cell_data: \egroup 
                                                   \tag_socket_use:n {math/lu...
-l.277 \end{tabular}
+l.279 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1029,7 +1025,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endtabular ->\endarray \egroup 
                                 \UseTaggingSocket {tbl/hmode/end}
-l.277 \end{tabular}
+l.279 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1042,7 +1038,7 @@ Runaway argument?
 ! Paragraph ended before \@@array was complete.
 <to be read again> 
                    \par 
-l.294 
+l.296 
       
 I suspect you've forgotten a `}', causing me to apply this
 control sequence to too much text. How can we recover?
@@ -1051,13 +1047,13 @@ My plan is to forget the whole thing and hope for the best.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.303 \hline
+l.305 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.309 \end{minipage} &
+l.311 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1067,7 +1063,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.313 \end{minipage} &
+l.315 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1077,7 +1073,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.317 \end{minipage} &
+l.319 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1087,7 +1083,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.321 \end{minipage} &
+l.323 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1099,7 +1095,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.327 \hline
+l.329 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
@@ -1107,13 +1103,13 @@ an alignment. Proceed, and I'll ignore this case.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.328 \hline
+l.330 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.332 ND (no defense) &
+l.334 ND (no defense) &
                         \textbf{0.333} & 0.492 & 1.000 {[}0.84, 1.00{]} & --...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1123,7 +1119,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.332 ND (no defense) & \textbf{0.333} &
+l.334 ND (no defense) & \textbf{0.333} &
                                          0.492 & 1.000 {[}0.84, 1.00{]} & --...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1133,7 +1129,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.332 ND (no defense) & \textbf{0.333} & 0.492 &
+l.334 ND (no defense) & \textbf{0.333} & 0.492 &
                                                  1.000 {[}0.84, 1.00{]} & --...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1143,7 +1139,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.332 ...0.333} & 0.492 & 1.000 {[}0.84, 1.00{]} &
+l.334 ...0.333} & 0.492 & 1.000 {[}0.84, 1.00{]} &
                                                    --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1153,7 +1149,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.334 D1 prompt hardening (L0) &
+l.336 D1 prompt hardening (L0) &
                                  0.000 & 0.219 & 0.000 {[}0.00, 0.16{]} & 0....
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1163,7 +1159,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.334 D1 prompt hardening (L0) & 0.000 &
+l.336 D1 prompt hardening (L0) & 0.000 &
                                          0.219 & 0.000 {[}0.00, 0.16{]} & 0....
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1173,7 +1169,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.334 D1 prompt hardening (L0) & 0.000 & 0.219 &
+l.336 D1 prompt hardening (L0) & 0.000 & 0.219 &
                                                  0.000 {[}0.00, 0.16{]} & 0....
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1183,7 +1179,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.334 ... 0.000 & 0.219 & 0.000 {[}0.00, 0.16{]} &
+l.336 ... 0.000 & 0.219 & 0.000 {[}0.00, 0.16{]} &
                                                    0.333, benign destroyed \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1193,7 +1189,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.336 D2 keyword filter (L1) &
+l.338 D2 keyword filter (L1) &
                                0.200 & 0.492 & 1.000 {[}0.84, 1.00{]} & 0.13...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1203,7 +1199,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.336 D2 keyword filter (L1) & 0.200 &
+l.338 D2 keyword filter (L1) & 0.200 &
                                        0.492 & 1.000 {[}0.84, 1.00{]} & 0.13...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1213,7 +1209,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.336 D2 keyword filter (L1) & 0.200 & 0.492 &
+l.338 D2 keyword filter (L1) & 0.200 & 0.492 &
                                                1.000 {[}0.84, 1.00{]} & 0.13...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1223,7 +1219,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.336 ... 0.200 & 0.492 & 1.000 {[}0.84, 1.00{]} &
+l.338 ... 0.200 & 0.492 & 1.000 {[}0.84, 1.00{]} &
                                                    0.133 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1233,7 +1229,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.338 D3 confirmation gate (L1/L2) &
+l.340 D3 confirmation gate (L1/L2) &
                                      0.000 & 0.497 & 1.000 {[}0.84, 1.00{]} ...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1243,7 +1239,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.338 D3 confirmation gate (L1/L2) & 0.000 &
+l.340 D3 confirmation gate (L1/L2) & 0.000 &
                                              0.497 & 1.000 {[}0.84, 1.00{]} ...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1253,7 +1249,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.338 ...nfirmation gate (L1/L2) & 0.000 & 0.497 &
+l.340 ...nfirmation gate (L1/L2) & 0.000 & 0.497 &
                                                    1.000 {[}0.84, 1.00{]} & ...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1263,7 +1259,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.338 ... 0.000 & 0.497 & 1.000 {[}0.84, 1.00{]} &
+l.340 ... 0.000 & 0.497 & 1.000 {[}0.84, 1.00{]} &
                                                    0.333 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1273,7 +1269,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.340 D4 parameter sandbox (L3) &
+l.342 D4 parameter sandbox (L3) &
                                   0.067 & 0.494 & 1.000 {[}0.84, 1.00{]} & 0...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1283,7 +1279,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.340 D4 parameter sandbox (L3) & 0.067 &
+l.342 D4 parameter sandbox (L3) & 0.067 &
                                           0.494 & 1.000 {[}0.84, 1.00{]} & 0...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1293,7 +1289,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.340 D4 parameter sandbox (L3) & 0.067 & 0.494 &
+l.342 D4 parameter sandbox (L3) & 0.067 & 0.494 &
                                                   1.000 {[}0.84, 1.00{]} & 0...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1303,7 +1299,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.340 ... 0.067 & 0.494 & 1.000 {[}0.84, 1.00{]} &
+l.342 ... 0.067 & 0.494 & 1.000 {[}0.84, 1.00{]} &
                                                    0.266 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1313,7 +1309,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.342 \textbf{V = D3+D4 (VAL)} &
+l.344 \textbf{V = D3+D4 (VAL)} &
                                  \textbf{0.000} & 0.497 & \textbf{1.000 {[}0...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1323,7 +1319,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.342 \textbf{V = D3+D4 (VAL)} & \textbf{0.000} &
+l.344 \textbf{V = D3+D4 (VAL)} & \textbf{0.000} &
                                                   0.497 & \textbf{1.000 {[}0...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1333,7 +1329,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.342 ...= D3+D4 (VAL)} & \textbf{0.000} & 0.497 &
+l.344 ...= D3+D4 (VAL)} & \textbf{0.000} & 0.497 &
                                                    \textbf{1.000 {[}0.84, 1....
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1343,7 +1339,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.342 ...0.497 & \textbf{1.000 {[}0.84, 1.00{]}} &
+l.344 ...0.497 & \textbf{1.000 {[}0.84, 1.00{]}} &
                                                    \textbf{0.333, lossless} \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1353,7 +1349,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.344 \textbf{N = D1+D2 (intuition)} &
+l.346 \textbf{N = D1+D2 (intuition)} &
                                        0.000 & 0.235 & \textbf{0.000 {[}0.00...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1363,7 +1359,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.344 \textbf{N = D1+D2 (intuition)} & 0.000 &
+l.346 \textbf{N = D1+D2 (intuition)} & 0.000 &
                                                0.235 & \textbf{0.000 {[}0.00...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1373,7 +1369,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.344 ...{N = D1+D2 (intuition)} & 0.000 & 0.235 &
+l.346 ...{N = D1+D2 (intuition)} & 0.000 & 0.235 &
                                                    \textbf{0.000 {[}0.00, 0....
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1383,7 +1379,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.344 ...0.235 & \textbf{0.000 {[}0.00, 0.16{]}} &
+l.346 ...0.235 & \textbf{0.000 {[}0.00, 0.16{]}} &
                                                    0.333, benign destroyed \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1395,7 +1391,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \crcr.
 \tbl_crcr:n ...l_count_missing_cells:n {#1}}\crcr 
                                                   
-l.345 \end{tabular}
+l.347 \end{tabular}
                    
 I can't figure out why you would want to use a tab mark
 or \cr or \span just now. If something like a right brace
@@ -1406,7 +1402,7 @@ might try typing `S' now just to see what is salvageable.
 ! Extra }, or forgotten \endgroup.
 \endarray ...le:n {math/luamml/array/save}\egroup 
                                                   \tag_socket_use:n {tbl/fin...
-l.345 \end{tabular}
+l.347 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1417,7 +1413,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endarray ...tbl_restore_outer_cell_data: \egroup 
                                                   \tag_socket_use:n {math/lu...
-l.345 \end{tabular}
+l.347 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1428,7 +1424,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endtabular ->\endarray \egroup 
                                 \UseTaggingSocket {tbl/hmode/end}
-l.345 \end{tabular}
+l.347 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1442,7 +1438,7 @@ Runaway argument?
 ! Paragraph ended before \@@array was complete.
 <to be read again> 
                    \par 
-l.366 
+l.368 
       
 I suspect you've forgotten a `}', causing me to apply this
 control sequence to too much text. How can we recover?
@@ -1451,13 +1447,13 @@ My plan is to forget the whole thing and hope for the best.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.377 \hline
+l.379 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.383 \end{minipage} &
+l.385 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1467,7 +1463,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.387 \end{minipage} &
+l.389 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1477,7 +1473,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.391 \end{minipage} &
+l.393 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1487,7 +1483,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.395 \end{minipage} &
+l.397 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1497,7 +1493,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.399 \end{minipage} &
+l.401 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1509,7 +1505,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.405 \hline
+l.407 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
@@ -1517,13 +1513,13 @@ an alignment. Proceed, and I'll ignore this case.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.406 \hline
+l.408 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.410 D1 &
+l.412 D1 &
            0.000 & \textbf{0.000} & \textbf{0.000} & 0.333 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1533,7 +1529,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.410 D1 & 0.000 &
+l.412 D1 & 0.000 &
                    \textbf{0.000} & \textbf{0.000} & 0.333 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1543,7 +1539,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.410 D1 & 0.000 & \textbf{0.000} &
+l.412 D1 & 0.000 & \textbf{0.000} &
                                     \textbf{0.000} & 0.333 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1553,7 +1549,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.410 ...0.000 & \textbf{0.000} & \textbf{0.000} &
+l.412 ...0.000 & \textbf{0.000} & \textbf{0.000} &
                                                    0.333 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1563,7 +1559,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.410 ...\textbf{0.000} & \textbf{0.000} & 0.333 &
+l.412 ...\textbf{0.000} & \textbf{0.000} & 0.333 &
                                                    --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1573,7 +1569,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.412 D2 &
+l.414 D2 &
            0.200 & \textbf{0.467} & --- & --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1583,7 +1579,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.412 D2 & 0.200 &
+l.414 D2 & 0.200 &
                    \textbf{0.467} & --- & --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1593,7 +1589,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.412 D2 & 0.200 & \textbf{0.467} &
+l.414 D2 & 0.200 & \textbf{0.467} &
                                     --- & --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1603,7 +1599,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.412 D2 & 0.200 & \textbf{0.467} & --- &
+l.414 D2 & 0.200 & \textbf{0.467} & --- &
                                           --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1613,7 +1609,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.412 D2 & 0.200 & \textbf{0.467} & --- & --- &
+l.414 D2 & 0.200 & \textbf{0.467} & --- & --- &
                                                 --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1623,7 +1619,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.414 D3 &
+l.416 D3 &
            0.000 & \textbf{0.000} & \textbf{0.000} & 0.567 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1633,7 +1629,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.414 D3 & 0.000 &
+l.416 D3 & 0.000 &
                    \textbf{0.000} & \textbf{0.000} & 0.567 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1643,7 +1639,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.414 D3 & 0.000 & \textbf{0.000} &
+l.416 D3 & 0.000 & \textbf{0.000} &
                                     \textbf{0.000} & 0.567 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1653,7 +1649,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.414 ...0.000 & \textbf{0.000} & \textbf{0.000} &
+l.416 ...0.000 & \textbf{0.000} & \textbf{0.000} &
                                                    0.567 & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1663,7 +1659,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.414 ...\textbf{0.000} & \textbf{0.000} & 0.567 &
+l.416 ...\textbf{0.000} & \textbf{0.000} & 0.567 &
                                                    --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1673,7 +1669,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.416 D4 &
+l.418 D4 &
            0.067 & \textbf{0.200} & --- & --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1683,7 +1679,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.416 D4 & 0.067 &
+l.418 D4 & 0.067 &
                    \textbf{0.200} & --- & --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1693,7 +1689,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.416 D4 & 0.067 & \textbf{0.200} &
+l.418 D4 & 0.067 & \textbf{0.200} &
                                     --- & --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1703,7 +1699,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.416 D4 & 0.067 & \textbf{0.200} & --- &
+l.418 D4 & 0.067 & \textbf{0.200} & --- &
                                           --- & --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1713,7 +1709,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.416 D4 & 0.067 & \textbf{0.200} & --- & --- &
+l.418 D4 & 0.067 & \textbf{0.200} & --- & --- &
                                                 --- \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1723,7 +1719,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.418 \textbf{V} &
+l.420 \textbf{V} &
                    0.000 & 0.000 & 0.000 & \textbf{0.567} & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1733,7 +1729,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.418 \textbf{V} & 0.000 &
+l.420 \textbf{V} & 0.000 &
                            0.000 & 0.000 & \textbf{0.567} & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1743,7 +1739,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.418 \textbf{V} & 0.000 & 0.000 &
+l.420 \textbf{V} & 0.000 & 0.000 &
                                    0.000 & \textbf{0.567} & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1753,7 +1749,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.418 \textbf{V} & 0.000 & 0.000 & 0.000 &
+l.420 \textbf{V} & 0.000 & 0.000 & 0.000 &
                                            \textbf{0.567} & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1763,7 +1759,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.418 ... 0.000 & 0.000 & 0.000 & \textbf{0.567} &
+l.420 ... 0.000 & 0.000 & 0.000 & \textbf{0.567} &
                                                    0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1773,7 +1769,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.420 \textbf{N} &
+l.422 \textbf{N} &
                    0.000 & 0.000 & 0.000 & 0.235 & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1783,7 +1779,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.420 \textbf{N} & 0.000 &
+l.422 \textbf{N} & 0.000 &
                            0.000 & 0.000 & 0.235 & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1793,7 +1789,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.420 \textbf{N} & 0.000 & 0.000 &
+l.422 \textbf{N} & 0.000 & 0.000 &
                                    0.000 & 0.235 & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1803,7 +1799,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.420 \textbf{N} & 0.000 & 0.000 & 0.000 &
+l.422 \textbf{N} & 0.000 & 0.000 & 0.000 &
                                            0.235 & 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1813,7 +1809,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.420 \textbf{N} & 0.000 & 0.000 & 0.000 & 0.235 &
+l.422 \textbf{N} & 0.000 & 0.000 & 0.000 & 0.235 &
                                                    0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1825,7 +1821,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \crcr.
 \tbl_crcr:n ...l_count_missing_cells:n {#1}}\crcr 
                                                   
-l.421 \end{tabular}
+l.423 \end{tabular}
                    
 I can't figure out why you would want to use a tab mark
 or \cr or \span just now. If something like a right brace
@@ -1836,7 +1832,7 @@ might try typing `S' now just to see what is salvageable.
 ! Extra }, or forgotten \endgroup.
 \endarray ...le:n {math/luamml/array/save}\egroup 
                                                   \tag_socket_use:n {tbl/fin...
-l.421 \end{tabular}
+l.423 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1847,7 +1843,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endarray ...tbl_restore_outer_cell_data: \egroup 
                                                   \tag_socket_use:n {math/lu...
-l.421 \end{tabular}
+l.423 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1858,7 +1854,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endtabular ->\endarray \egroup 
                                 \UseTaggingSocket {tbl/hmode/end}
-l.421 \end{tabular}
+l.423 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -1867,22 +1863,66 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 [6]
-Underfull \hbox (badness 1112) in paragraph at lines 433--434
+Underfull \hbox (badness 1112) in paragraph at lines 435--436
 \T1/ptm/m/n/10.95 prompt (D1), an LLM vic-tim un-der in-jec-tion
  []
 
 
-Underfull \hbox (badness 2221) in paragraph at lines 447--448
+Underfull \hbox (badness 2221) in paragraph at lines 449--450
 \T1/ptm/b/n/10.95 independent\T1/ptm/m/n/10.95 : 0.000 ASR and 1.000 be-nign
  []
 
 [7]
+Underfull \hbox (badness 2717) in paragraph at lines 469--470
+\T1/ptm/m/n/10.95 the OS level[]2014was mea-sured by LIT-MUS
+ []
+
+
+Underfull \hbox (badness 1383) in paragraph at lines 469--470
+\T1/ptm/m/n/10.95 7.98[]201317.97%), in-vis-i-ble to ev-ery semantic-
+ []
+
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 483--484
+[]\T1/ptm/b/n/10.95 Self-built testbed. \T1/ptm/m/n/10.95 Sce-nar-ios, de-
+ []
+
+
+Underfull \hbox (badness 4048) in paragraph at lines 483--484
+\T1/ptm/m/n/10.95 fenses, and the real-effect sand-box are
+ []
+
+
+Underfull \hbox (badness 1152) in paragraph at lines 483--484
+\T1/ptm/m/n/10.95 Agent-Dojo's of-fi-cial har-ness (0.0% ASR).
+ []
+
+
+Underfull \hbox (badness 3536) in paragraph at lines 483--484
+\T1/ptm/m/n/10.95 TPR 0.60 (Yin 2026)) is in-de-pen-dently
+ []
+
+
+Underfull \hbox (badness 1383) in paragraph at lines 483--484
+\T1/ptm/m/n/10.95 re-pro-duced at the OS level by LIT-MUS
+ []
+
+
+Underfull \hbox (badness 2119) in paragraph at lines 487--488
+[]\T1/ptm/b/n/10.95 Coverage. \T1/ptm/m/n/10.95 Twelve at-tack fam-i-lies plus
+ []
+
+
+Underfull \hbox (badness 2119) in paragraph at lines 491--492
+[]\T1/ptm/b/n/10.95 Raters and pre-dic-tion sam-ple. \T1/ptm/m/n/10.95 Blind-
+ []
+
 Runaway argument?
 {@{} >{\raggedright \arraybackslash }p{(\linewidth - 4\tabcolsep ) * \ETC.
 ! Paragraph ended before \@@array was complete.
 <to be read again> 
                    \par 
-l.460 
+l.516 
       
 I suspect you've forgotten a `}', causing me to apply this
 control sequence to too much text. How can we recover?
@@ -1891,13 +1931,13 @@ My plan is to forget the whole thing and hope for the best.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.465 \hline
+l.521 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.471 \end{minipage} &
+l.527 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1907,7 +1947,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.475 \end{minipage} &
+l.531 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1919,7 +1959,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.481 \hline
+l.537 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
@@ -1927,13 +1967,13 @@ an alignment. Proceed, and I'll ignore this case.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.482 \hline
+l.538 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.486 ND (no defense) &
+l.542 ND (no defense) &
                         6.2\% {[}3.3, 11.5{]} & 82.6\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1943,7 +1983,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.486 ND (no defense) & 6.2\% {[}3.3, 11.5{]} &
+l.542 ND (no defense) & 6.2\% {[}3.3, 11.5{]} &
                                                 82.6\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1953,7 +1993,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.488 N (prompt hardening + keyword filter) &
+l.544 N (prompt hardening + keyword filter) &
                                               3.5\% {[}1.5, 7.9{]} & 83.3\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1963,7 +2003,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.488 ... keyword filter) & 3.5\% {[}1.5, 7.9{]} &
+l.544 ... keyword filter) & 3.5\% {[}1.5, 7.9{]} &
                                                    83.3\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1973,7 +2013,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.490 ...confirmation gate + parameter sandbox)} &
+l.546 ...confirmation gate + parameter sandbox)} &
                                                    \textbf{0.0\% {[}0.0, 2.6...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1983,7 +2023,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.490 ...ndbox)} & \textbf{0.0\% {[}0.0, 2.6{]}} &
+l.546 ...ndbox)} & \textbf{0.0\% {[}0.0, 2.6{]}} &
                                                    \textbf{83.3\%} \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1993,7 +2033,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.492 AgentDojo tool\_filter &
+l.548 AgentDojo tool\_filter &
                                0.0\% {[}0.0, 2.6{]} & \textbf{16.7\%} \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2003,7 +2043,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.492 ...ojo tool\_filter & 0.0\% {[}0.0, 2.6{]} &
+l.548 ...ojo tool\_filter & 0.0\% {[}0.0, 2.6{]} &
                                                    \textbf{16.7\%} \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2013,7 +2053,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.494 AgentDojo repeat\_user\_prompt &
+l.550 AgentDojo repeat\_user\_prompt &
                                        8.3\% {[}4.8, 14.0{]} & 81.9\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2023,7 +2063,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.494 ...t\_user\_prompt & 8.3\% {[}4.8, 14.0{]} &
+l.550 ...t\_user\_prompt & 8.3\% {[}4.8, 14.0{]} &
                                                    81.9\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2033,7 +2073,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.496 AgentDojo spotlighting &
+l.552 AgentDojo spotlighting &
                                6.2\% {[}3.3, 11.5{]} & 81.2\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2043,7 +2083,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.496 ...jo spotlighting & 6.2\% {[}3.3, 11.5{]} &
+l.552 ...jo spotlighting & 6.2\% {[}3.3, 11.5{]} &
                                                    81.2\% \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2055,7 +2095,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \crcr.
 \tbl_crcr:n ...l_count_missing_cells:n {#1}}\crcr 
                                                   
-l.497 \end{tabular}
+l.553 \end{tabular}
                    
 I can't figure out why you would want to use a tab mark
 or \cr or \span just now. If something like a right brace
@@ -2066,7 +2106,7 @@ might try typing `S' now just to see what is salvageable.
 ! Extra }, or forgotten \endgroup.
 \endarray ...le:n {math/luamml/array/save}\egroup 
                                                   \tag_socket_use:n {tbl/fin...
-l.497 \end{tabular}
+l.553 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2077,7 +2117,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endarray ...tbl_restore_outer_cell_data: \egroup 
                                                   \tag_socket_use:n {math/lu...
-l.497 \end{tabular}
+l.553 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2088,7 +2128,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endtabular ->\endarray \egroup 
                                 \UseTaggingSocket {tbl/hmode/end}
-l.497 \end{tabular}
+l.553 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2096,63 +2136,12 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-
-Underfull \hbox (badness 1275) in paragraph at lines 515--516
-\T1/ptm/m/n/10.95 pletes at the OS level. LIT-MUS (Zhang et
- []
-
-
-Underfull \hbox (badness 1383) in paragraph at lines 515--516
-\T1/ptm/m/n/10.95 7.98[]201317.97%), in-vis-i-ble to ev-ery semantic-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 531--532
-[]\T1/ptm/b/n/10.95 Self-built testbed. \T1/ptm/m/n/10.95 Sce-nar-ios, de-
- []
-
-
-Underfull \hbox (badness 4048) in paragraph at lines 531--532
-\T1/ptm/m/n/10.95 fenses, and the real-effect sand-box are
- []
-
-
-Underfull \hbox (badness 1152) in paragraph at lines 531--532
-\T1/ptm/m/n/10.95 Agent-Dojo's of-fi-cial har-ness (0.0% ASR).
- []
-
-
-Underfull \hbox (badness 3536) in paragraph at lines 531--532
-\T1/ptm/m/n/10.95 TPR 0.60 (Yin 2026)) is in-de-pen-dently
- []
-
-
-Underfull \hbox (badness 1383) in paragraph at lines 531--532
-\T1/ptm/m/n/10.95 re-pro-duced at the OS level by LIT-MUS
- []
-
-
-Underfull \hbox (badness 1603) in paragraph at lines 535--536
-[]\T1/ptm/b/n/10.95 Attack cov-er-age. \T1/ptm/m/n/10.95 Twelve fam-i-lies plus
-
- []
-
-
-Underfull \hbox (badness 1635) in paragraph at lines 539--540
-\T1/ptm/m/n/10.95 in Sec-tion 6.1); broader util-ity cov-er-age
- []
-
-
-Underfull \hbox (badness 2435) in paragraph at lines 543--544
-\T1/ptm/m/n/10.95 2026)); human-rater agree-ment is fu-ture
- []
-
 Runaway argument?
 {@{} >{\raggedright \arraybackslash }p{(\linewidth - 6\tabcolsep ) * \ETC.
 ! Paragraph ended before \@@array was complete.
 <to be read again> 
                    \par 
-l.570 
+l.568 
       
 I suspect you've forgotten a `}', causing me to apply this
 control sequence to too much text. How can we recover?
@@ -2161,13 +2150,13 @@ My plan is to forget the whole thing and hope for the best.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.577 \hline
+l.575 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.583 \end{minipage} &
+l.581 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2177,7 +2166,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.587 \end{minipage} &
+l.585 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2187,7 +2176,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.591 \end{minipage} &
+l.589 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2199,7 +2188,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.597 \hline
+l.595 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
@@ -2207,13 +2196,13 @@ an alignment. Proceed, and I'll ignore this case.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.598 \hline
+l.596 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.602 \textbf{L0} &
+l.600 \textbf{L0} &
                     Prompt hardening (D1; RA-LLM ({Zhou et al.} 2023)), Tool...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2223,7 +2212,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.602 ...feAgent plan layer, Self-Ask provenance &
+l.600 ...feAgent plan layer, Self-Ask provenance &
                                                    none / LLM self-assessmen...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2233,7 +2222,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.602 ...provenance & none / LLM self-assessment &
+l.600 ...provenance & none / LLM self-assessment &
                                                    residual ASR under strong...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2243,7 +2232,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.604 \textbf{L1} &
+l.602 \textbf{L1} &
                     Keyword filter (D2), NeMo Guardrails, Progent gate, tool...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2253,7 +2242,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.604 ...on-marker heuristics, perplexity filter &
+l.602 ...on-marker heuristics, perplexity filter &
                                                    designer rules / intent &...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2263,7 +2252,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.604 ...lexity filter & designer rules / intent &
+l.602 ...lexity filter & designer rules / intent &
                                                    bypassed by rewriting; fa...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2273,7 +2262,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.606 \textbf{L2} &
+l.604 \textbf{L2} &
                     Llama Guard classifier, RAG citation check, effect-verif...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2283,7 +2272,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.606 ...ect-verification, statistical detectors &
+l.604 ...ect-verification, statistical detectors &
                                                    objective truth / truth·e...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2293,7 +2282,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.606 ...ectors & objective truth / truth·effect &
+l.604 ...ectors & objective truth / truth·effect &
                                                    effective in-distribution...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2303,7 +2292,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.608 \textbf{L3} &
+l.606 \textbf{L3} &
                     \textbf{IFC/Fides ({Costa et al.} 2025), CaMeL (\emph{Ca...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2313,7 +2302,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.608 ...D4), Progent SMT monotonic confinement} &
+l.606 ...D4), Progent SMT monotonic confinement} &
                                                    decidable systems / struc...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2323,7 +2312,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.608 ...ement} & decidable systems / structural &
+l.606 ...ement} & decidable systems / structural &
                                                    confinement, information-...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2333,7 +2322,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.610 \textbf{L4} &
+l.608 \textbf{L4} &
                     Smart-contract formal verification & formal kernels & do...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2343,7 +2332,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.610 ...4} & Smart-contract formal verification &
+l.608 ...4} & Smart-contract formal verification &
                                                    formal kernels & domain-c...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2353,7 +2342,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.610 ...ct formal verification & formal kernels &
+l.608 ...ct formal verification & formal kernels &
                                                    domain-complete for encod...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2363,7 +2352,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.612 \textbf{N/A} &
+l.610 \textbf{N/A} &
                      AgentDojo (Debenedetti et al. 2024), M³-SafetyBench & b...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2373,7 +2362,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.612 ...ebenedetti et al. 2024), M³-SafetyBench &
+l.610 ...ebenedetti et al. 2024), M³-SafetyBench &
                                                    benchmarks & not runtime ...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2383,7 +2372,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.612 ... al. 2024), M³-SafetyBench & benchmarks &
+l.610 ... al. 2024), M³-SafetyBench & benchmarks &
                                                    not runtime defenses (R1) \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2395,7 +2384,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \crcr.
 \tbl_crcr:n ...l_count_missing_cells:n {#1}}\crcr 
                                                   
-l.613 \end{tabular}
+l.611 \end{tabular}
                    
 I can't figure out why you would want to use a tab mark
 or \cr or \span just now. If something like a right brace
@@ -2406,7 +2395,7 @@ might try typing `S' now just to see what is salvageable.
 ! Extra }, or forgotten \endgroup.
 \endarray ...le:n {math/luamml/array/save}\egroup 
                                                   \tag_socket_use:n {tbl/fin...
-l.613 \end{tabular}
+l.611 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2417,7 +2406,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endarray ...tbl_restore_outer_cell_data: \egroup 
                                                   \tag_socket_use:n {math/lu...
-l.613 \end{tabular}
+l.611 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2428,7 +2417,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endtabular ->\endarray \egroup 
                                 \UseTaggingSocket {tbl/hmode/end}
-l.613 \end{tabular}
+l.611 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2438,22 +2427,22 @@ deleted material, e.g., by typing `I$}'.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 619.
+(hyperref)                removing `math shift' on input line 617.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\times' on input line 619.
+(hyperref)                removing `\times' on input line 617.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 619.
+(hyperref)                removing `math shift' on input line 617.
 
 Runaway argument?
 {@{} >{\raggedright \arraybackslash }p{(\linewidth - 4\tabcolsep ) * \ETC.
 ! Paragraph ended before \@@array was complete.
 <to be read again> 
                    \par 
-l.628 
+l.626 
       
 I suspect you've forgotten a `}', causing me to apply this
 control sequence to too much text. How can we recover?
@@ -2462,13 +2451,13 @@ My plan is to forget the whole thing and hope for the best.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.633 \hline
+l.631 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.639 \end{minipage} &
+l.637 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2478,7 +2467,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.643 \end{minipage} &
+l.641 \end{minipage} &
                        \begin{minipage}[b]{\linewidth}\raggedright
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2490,7 +2479,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.649 \hline
+l.647 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
@@ -2498,13 +2487,13 @@ an alignment. Proceed, and I'll ignore this case.
 ! Misplaced \noalign.
 \hline ->\noalign 
                   {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
-l.650 \hline
+l.648 \hline
             
 I expect to see \noalign only after the \cr of
 an alignment. Proceed, and I'll ignore this case.
 
 ! Misplaced alignment tab character &.
-l.654 ND (no defense) &
+l.652 ND (no defense) &
                         0.333 / 0.492 / 1.000 & 0.253 / 0.328 / 1.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2514,7 +2503,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.654 ND (no defense) & 0.333 / 0.492 / 1.000 &
+l.652 ND (no defense) & 0.333 / 0.492 / 1.000 &
                                                 0.253 / 0.328 / 1.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2524,7 +2513,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.656 N (D1+D2) &
+l.654 N (D1+D2) &
                   0.000 / 0.233 / 0.000 & 0.000 / 0.014 / 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2534,7 +2523,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.656 N (D1+D2) & 0.000 / 0.233 / 0.000 &
+l.654 N (D1+D2) & 0.000 / 0.233 / 0.000 &
                                           0.000 / 0.014 / 0.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2544,7 +2533,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.658 V (D3+D4) &
+l.656 V (D3+D4) &
                   0.000 / 0.497 / 1.000 & 0.000 / 0.317 / 1.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2554,7 +2543,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.658 V (D3+D4) & 0.000 / 0.497 / 1.000 &
+l.656 V (D3+D4) & 0.000 / 0.497 / 1.000 &
                                           0.000 / 0.317 / 1.000 \\
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -2566,7 +2555,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced \crcr.
 \tbl_crcr:n ...l_count_missing_cells:n {#1}}\crcr 
                                                   
-l.659 \end{tabular}
+l.657 \end{tabular}
                    
 I can't figure out why you would want to use a tab mark
 or \cr or \span just now. If something like a right brace
@@ -2577,7 +2566,7 @@ might try typing `S' now just to see what is salvageable.
 ! Extra }, or forgotten \endgroup.
 \endarray ...le:n {math/luamml/array/save}\egroup 
                                                   \tag_socket_use:n {tbl/fin...
-l.659 \end{tabular}
+l.657 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2588,7 +2577,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endarray ...tbl_restore_outer_cell_data: \egroup 
                                                   \tag_socket_use:n {math/lu...
-l.659 \end{tabular}
+l.657 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2599,7 +2588,7 @@ deleted material, e.g., by typing `I$}'.
 ! Extra }, or forgotten \endgroup.
 \endtabular ->\endarray \egroup 
                                 \UseTaggingSocket {tbl/hmode/end}
-l.659 \end{tabular}
+l.657 \end{tabular}
                    
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -2607,35 +2596,28 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-
-Underfull \hbox (badness 1221) in paragraph at lines 679--680
-[]\T1/ptm/m/it/10 CaMeL: Data-Control Sep-a-ra-tion for LLM Agents
- []
-
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 687--688
-[]\T1/ptm/m/n/10 Debenedetti, Edoardo, Tian-jiu Zhang, Mis-lav
+Underfull \hbox (badness 10000) in paragraph at lines 697--698
+[]\T1/ptm/m/it/10.95 LLM-Based Test Or-a-cles: Source-of-
  []
 
 
-Underfull \hbox (badness 6842) in paragraph at lines 687--688
-\T1/ptm/m/n/10 Balunovic, Lukas Beurer-Kellner, Marc Fis-cher,
+Underfull \hbox (badness 10000) in paragraph at lines 697--698
+\T1/ptm/m/it/10.95 Authority Taxonomy---a Sys-tem-atic
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 699--700
-[]\T1/ptm/m/it/10 LLM-Based Test Or-a-cles: Source-of-Authority
+Underfull \hbox (badness 7981) in paragraph at lines 697--698
+\T1/ptm/m/it/10.95 Lit-er-a-ture Re-view\T1/ptm/m/n/10.95 . 2026. []$h t t p s 
+:
  []
 
 
-Underfull \hbox (badness 3907) in paragraph at lines 699--700
-\T1/ptm/m/it/10 Taxonomy---a Sys-tem-atic Lit-er-a-ture Re-view\T1/ptm/m/n/10 .
- 2026.
+Underfull \hbox (badness 2293) in paragraph at lines 717--718
+[]\T1/ptm/m/n/10.95 Zhou, Andy et al. 2023. \T1/ptm/m/it/10.95 De-fend-ing
  []
 
-[10
-
-] (./acl_submit.aux
+[10] (./acl_submit.aux
 
 Package natbib Warning: Citation(s) may have changed.
 (natbib)                Rerun to get citations correct.
@@ -2650,7 +2632,7 @@ See the natbib package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.883 ...and\NAT@force@numbers{}\NAT@force@numbers
+l.87 ...mand\NAT@force@numbers{}\NAT@force@numbers
                                                   
 Check the bibliography entries for non-compliant syntax,
 or select author-year BibTeX style, e.g. plainnat
@@ -2666,12 +2648,12 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 15705 strings out of 469837
- 250319 string characters out of 5467244
- 712664 words of memory out of 5000000
- 44422 multiletter control sequences out of 15000+600000
- 656345 words of font info for 89 fonts, out of 8000000 for 9000
+ 15667 strings out of 469837
+ 249651 string characters out of 5467244
+ 701664 words of memory out of 5000000
+ 44388 multiletter control sequences out of 15000+600000
+ 654328 words of font info for 78 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,9n,93p,2541b,479s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,9n,93p,2541b,443s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on acl_submit.pdf (10 pages).

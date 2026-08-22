@@ -69,7 +69,7 @@ while BEG in s:
     inner = inner.strip()
     # 简化列格式：去 >{...} 前缀，p{...} 保留（minipage 内容保留）
     colspec = re.sub(r'>\{[^}]*\}', '', colspec)
-    repl = (BS + 'begin{table*}[t]\n' + BS + 'centering\n' + BS + 'small\n'
+    repl = (BS + 'begin{table*}[!t]\n' + BS + 'centering\n' + BS + 'small\n'
             + BS + 'begin{tabular}{' + colspec + '}\n' + inner + '\n'
             + BS + 'end{tabular}\n' + BS + 'end{table*}\n')
     s = s[:i] + repl + s[e + len(END):]

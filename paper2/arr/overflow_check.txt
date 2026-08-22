@@ -1,0 +1,5 @@
+=== 页8 末尾 300 ===
+on (EH) ˘2014an agent verbally refuses while the operation com- pletes at the OS level. LITMUS (Zhang et al. 2026) measured this across six agents (EHR 7.98˘201317.97%), invisible to every semantic- only framework. Under V AL this is a prediction: the anchor for a behavioral claim must live on the 8
+
+=== 页9 开头 300 ===
+physical layer; a semantic-layer anchor cannot ver- ify what the model did but did not say ˘2014as our covert-execution measurement found (TPR 0.60 (Yin 2026)). 8 Limitations 1. Single model (victim and attacker). The agent and every attack form used DeepSeek- chat; cross-family attackers (Moonshot 

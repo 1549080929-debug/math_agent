@@ -186,14 +186,7 @@ Three findings. First, **baseline injection compliance is model-specific**: Llam
 
 We integrated our stacks into AgentDojo's official harness [@debenedetti2024agentdojo]—their banking suite, their environment fixtures, four of their attack families (*direct*, *ignore_previous*, *injecagent*, *system_message*), and their evaluation—with DeepSeek-chat as the agent model. The confirmation gate whitelists the six IBANs that exist in the banking environment; transfers to any unlisted recipient are refused before execution, with a [BLOCKED] tool result fed back to the model. **For a same-setting comparison, we additionally ran AgentDojo's own defenses (tool_filter, repeat_user_prompt, spotlighting) in the identical harness, model, task subset, and attack set.**
 
-| Config | ASR (n = 144, 4 attack families) | Utility |
-|---|---|---|
-| ND (no defense) | 6.2% [3.3, 11.5] | 82.6% |
-| N (prompt hardening + keyword filter) | 3.5% [1.5, 7.9] | 83.3% |
-| **V (confirmation gate + parameter sandbox)** | **0.0% [0.0, 2.6]** | **83.3%** |
-| AgentDojo tool_filter | 0.0% [0.0, 2.6] | **16.7%** |
-| AgentDojo repeat_user_prompt | 8.3% [4.8, 14.0] | 81.9% |
-| AgentDojo spotlighting | 6.2% [3.3, 11.5] | 81.2% |
+The full benchmark table is in Appendix A.4; the key contrast: V reaches 0.0% ASR at 82.6% utility, while AgentDojo's tool_filter reaches the same 0.0% at 16.7%.
 
 (95% Wilson CIs in brackets.) Three observations. First, **V matches the strongest official defense on ASR (both 0.0% [0.0, 2.6]) while preserving five times the utility** (82.6% vs 16.7%). Second, **the tool filter's utility collapse is a VAL failure-mode prediction made visible**: its 16.7% is not "refusing most calls" but DeepSeek failing the filter's own instruction—it emits tool names not in the suite, so the filter removes every tool (126/144 traces have no tool call). The same defense on GPT-4o *increases* benign utility; on DeepSeek it collapses to 16.7% (to 0% on inspection: the 24 "successes" match a pre-existing transaction). Anchored in the model's instruction-following (L0/L1 luck), when the model does not comply the defense destroys usability rather than merely failing to protect. Third, **the cross-testbed difference in N is the strongest evidence for our core claim**: in our testbed N reached 0.000 ASR (model refusal behavior); on AgentDojo the same stack leaks 3.5%. *N's zero is context-dependent model behavior—move the stack to another benchmark and the zero moves with it.* V's zero does not move (0.0% in both).
 
@@ -209,22 +202,33 @@ The experiment's central image is two zeros. **V's 0.000 ASR is structural**: th
 
 This is the deployment answer to "which defense should I buy?": **VAL selection buys a guarantee; intuition buys the model's current mood.** Both reach zero, but N's zero costs every benign action while V's is lossless; the AgentDojo tool filter is the same story from the other side\u2014a defense anchored in the model's instruction-following *destroys usability* when the model does not comply. Under VAL's usage criteria, the deployer's question becomes precise: *is the threat inside the anchor's ODD?* If yes, L2/L3 structure is available; if no, the honest answer is L2 correctness plus labeling, not a claim of safety.
 
-**The account extends to the behavioral layer.** The most striking failure mode is physical, not semantic: **Execution Hallucination (EH)**\u2014an agent verbally refuses while the operation completes at the OS level. LITMUS [@zhang2026litmus] measured this across six agents (EHR 7.98\u201317.97%), invisible to every semantic-only framework. Under VAL this is a prediction: the anchor for a *behavioral* claim must live on the physical layer; a semantic-layer anchor cannot verify what the model did but did not say\u2014as our covert-execution measurement found (output-layer detectors cap at TPR 0.60 [@yin2026grading]). LITMUS's dual-layer verification is the L2 anchor applied to behavior; a defense whose guarantee lives in what the model *says* it will do (N's zero) cannot match one that reads the platform record (V's zero).
-
+**The account extends to the behavioral layer.** **Execution Hallucination (EH)**\u2014an agent verbally refuses while the operation completes at the OS level\u2014was measured by LITMUS [@zhang2026litmus] across six agents (EHR 7.98\u201317.97%), invisible to every semantic-only framework. Under VAL this is a prediction: the anchor for a *behavioral* claim must live on the physical layer; a semantic-layer anchor cannot verify what the model did but did not say (TPR 0.60 [@yin2026grading]).
 ## 8. Limitations
 
 1. **Single model (victim and attacker).** The agent and every attack form used DeepSeek-chat; cross-family attackers (Moonshot Kimi, Meta Llama 8B) declined the role. A less-aligned attacker (e.g., hosted Llama-3.3-70B) and GCG remain open variants.
 2. **Self-built testbed.** Scenarios, defenses, and the real-effect sandbox are ours\u2014deliberate for a controlled comparison. Section 6.5 validates the stacks on AgentDojo's official harness (0.0% ASR). Our behavioral blind spot (covert execution, TPR 0.60 [@yin2026grading]) is independently reproduced at the OS level by LITMUS [@zhang2026litmus]; we did not run its Ubuntu+OpenClaw harness.
-3. **Attack coverage.** Twelve families plus adaptive/white-box/PAIR escalation; token-level optimization and multi-turn social engineering absent.
-4. **Benign sample.** 20 benign scenarios (CIs in Section 6.1); broader utility coverage untested.
-5. **LLM-rater classifications.** Blind-validated among same-family raters (security subset 90.9% exact, overall \u03ba \u2248 0.8 [@yin2026grading]); human-rater agreement is future work. The classifier itself is an L1 tool whose reproducibility was measured\u2014the judge's judge, applied to the judge itself.
-6. **Prediction sample.** 10/10 hits on a small, partially abstract-level sample; the mechanism (anchor \u2192 failure mode) is the claim, not the hit count.
+3. **Coverage.** Twelve attack families plus adaptive/white-box/PAIR escalation; token-level optimization and multi-turn social engineering absent; 20 benign scenarios (CIs in Section 6.1).
+5. **Raters and prediction sample.** Blind-validated among same-family raters (security subset 90.9%, \u03ba \u2248 0.8 [@yin2026grading]); the classifier itself is an L1 tool whose reproducibility was measured. 10/10 prediction hits on a small sample; the mechanism is the claim, not the hit count.
 
-into decidable systems are the ones that restrict what an agent can do, not the ones that judge whether it should. Caveats: the taxonomy's categories are ours (validated by blind-rater agreement and out-of-sample predictions), and the comparison pits structural against the most common behavioral defenses, not against every defense. We offer VAL as a falsifiable framework and a research agenda, not a settled ontology.
+## 9. Conclusion
 
-> Others grade defenses by their claims. We grade them by their anchors—and, in the cases we can measure, the anchor decides.
+The agent-security field has too many defenses and no pre-purchase axis; we showed that VAL provides one. Across the 22 defenses and testbeds we studied, the anchor predicts how a defense fails\u2014and choosing by this axis beat choosing by intuition on the same budget: identical security numbers, opposite guarantees, a 100-point utility gap. We located the L3 frontier in agent security: **confinement, not semantics**\u2014the properties worth encoding into decidable systems are the ones that restrict what an agent can do, not the ones that judge whether it should. Caveats: the taxonomy's categories are ours, and the comparison pits structural against the most common behavioral defenses. We offer VAL as a falsifiable framework and a research agenda, not a settled ontology.
+
+> Others grade defenses by their claims. We grade them by their anchors\u2014and, in the cases we can measure, the anchor decides.
 
 ## Appendix
+
+### A.4 AgentDojo benchmark results
+
+| Config | ASR (n = 144, 4 attack families) | Utility |
+|---|---|---|
+| ND (no defense) | 6.2% [3.3, 11.5] | 82.6% |
+| N (prompt hardening + keyword filter) | 3.5% [1.5, 7.9] | 83.3% |
+| **V (confirmation gate + parameter sandbox)** | **0.0% [0.0, 2.6]** | **83.3%** |
+| AgentDojo tool_filter | 0.0% [0.0, 2.6] | **16.7%** |
+| AgentDojo repeat_user_prompt | 8.3% [4.8, 14.0] | 81.9% |
+| AgentDojo spotlighting | 6.2% [3.3, 11.5] | 81.2% |
+
 
 ### A.1 Defense level map
 
