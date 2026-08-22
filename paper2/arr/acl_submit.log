@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 22:30
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 22:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -246,6 +246,24 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 305.
 )
+
+! LaTeX Error: Option clash for package geometry.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 \usepackage
+               {times}
+The package geometry has already been loaded with options:
+  [a4paper,margin=2.5cm,heightrounded=true,]
+There has now been an attempt to load it with options
+  [margin=1in]
+Adding the global options:
+  a4paper,margin=2.5cm,heightrounded=true,,margin=1in
+to your \documentclass declaration may fix this.
+Try typing  <return>  to proceed.
+
 (c:/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty
 Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
 )
@@ -768,12 +786,6 @@ Underfull \hbox (badness 3323) in paragraph at lines 147--148
  []
 
 [2]
-Underfull \hbox (badness 1496) in paragraph at lines 165--166
-\T1/ptm/m/it/10.95 Based Test Or-a-cles \T1/ptm/m/n/10.95 2026)), and shows sam
-e-
- []
-
-
 Underfull \hbox (badness 2020) in paragraph at lines 183--184
 \T1/ptm/m/n/10.95 vari-ants (di-rect, para-phrase, fake-confirmation,
  []
@@ -835,6 +847,12 @@ T1/ptm/b/n/10.95 Mis-
  []
 
 
+Underfull \vbox (badness 3623) has occurred while \output is active []
+
+
+Underfull \vbox (badness 3623) has occurred while \output is active []
+
+
 Overfull \hbox (1413.73239pt too wide) in paragraph at lines 240--270
  [][] 
  []
@@ -845,8 +863,18 @@ Overfull \hbox (1880.97652pt too wide) in paragraph at lines 284--326
  []
 
 [5]
-Overfull \hbox (2348.22064pt too wide) in paragraph at lines 344--388
- [][] 
+Underfull \hbox (badness 10000) in paragraph at lines 339--340
+\T1/ptm/m/n/10.95 The full es-ca-la-tion ta-ble is in Ap-pendix
+ []
+
+
+Underfull \hbox (badness 1205) in paragraph at lines 339--340
+\T1/ptm/m/n/10.95 A.5; the key con-trast: D1/D3 hold at 0.000
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 339--340
+\T1/ptm/m/n/10.95 across static/adaptive/white-box, while D2
  []
 
 
@@ -856,111 +884,110 @@ Underfull \vbox (badness 1755) has occurred while \output is active []
 Underfull \vbox (badness 1755) has occurred while \output is active []
 
  [6]
-Underfull \hbox (badness 1112) in paragraph at lines 399--400
+Underfull \hbox (badness 1112) in paragraph at lines 347--348
 \T1/ptm/m/n/10.95 prompt (D1), an LLM vic-tim un-der in-jec-tion
  []
 
 
-Underfull \hbox (badness 2221) in paragraph at lines 413--414
+Underfull \hbox (badness 2221) in paragraph at lines 361--362
 \T1/ptm/b/n/10.95 independent\T1/ptm/m/n/10.95 : 0.000 ASR and 1.000 be-nign
  []
 
 [7]
-Underfull \hbox (badness 2717) in paragraph at lines 433--434
+Underfull \hbox (badness 1147) in paragraph at lines 377--378
+\T1/ptm/b/n/10.95 0.000 is struc-tural\T1/ptm/m/n/10.95 : the gate reads platfo
+rm-
+ []
+
+
+Underfull \hbox (badness 2717) in paragraph at lines 381--382
 \T1/ptm/m/n/10.95 the OS level[]2014was mea-sured by LIT-MUS
  []
 
 
-Underfull \hbox (badness 1383) in paragraph at lines 433--434
+Underfull \hbox (badness 1383) in paragraph at lines 381--382
 \T1/ptm/m/n/10.95 7.98[]201317.97%), in-vis-i-ble to ev-ery semantic-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--448
-[]\T1/ptm/b/n/10.95 Self-built testbed. \T1/ptm/m/n/10.95 Sce-nar-ios, de-
+Underfull \hbox (badness 1400) in paragraph at lines 391--392
+\T1/ptm/m/n/10.95 A less-aligned at-tacker and GCG re-main
  []
 
 
-Underfull \hbox (badness 4048) in paragraph at lines 447--448
-\T1/ptm/m/n/10.95 fenses, and the real-effect sand-box are
- []
-
-
-Underfull \hbox (badness 1152) in paragraph at lines 447--448
+Underfull \hbox (badness 1152) in paragraph at lines 395--396
 \T1/ptm/m/n/10.95 Agent-Dojo's of-fi-cial har-ness (0.0% ASR).
  []
 
 
-Underfull \hbox (badness 3536) in paragraph at lines 447--448
-\T1/ptm/m/n/10.95 TPR 0.60 (Yin 2026)) is in-de-pen-dently
- []
-
-
-Underfull \hbox (badness 1383) in paragraph at lines 447--448
-\T1/ptm/m/n/10.95 re-pro-duced at the OS level by LIT-MUS
- []
-
-[8]
-Underfull \hbox (badness 2119) in paragraph at lines 451--452
+Underfull \hbox (badness 2119) in paragraph at lines 399--400
 []\T1/ptm/b/n/10.95 Coverage. \T1/ptm/m/n/10.95 Twelve at-tack fam-i-lies plus
  []
 
 
-Underfull \hbox (badness 2119) in paragraph at lines 455--456
+Underfull \hbox (badness 2809) in paragraph at lines 399--400
+\T1/ptm/m/n/10.95 adaptive/white-box/PAIR; token-level op-ti-
+ []
+
+
+Underfull \hbox (badness 2119) in paragraph at lines 403--404
 []\T1/ptm/b/n/10.95 Raters and pre-dic-tion sam-ple. \T1/ptm/m/n/10.95 Blind-
  []
 
-
-Overfull \hbox (946.48827pt too wide) in paragraph at lines 478--510
+[8]
+Overfull \hbox (2348.22064pt too wide) in paragraph at lines 420--464
  [][] 
  []
 
 
-Overfull \hbox (1525.22986pt too wide) in paragraph at lines 522--558
+Overfull \hbox (946.48827pt too wide) in paragraph at lines 476--508
+ [][] 
+ []
+
+
+Overfull \hbox (1525.22986pt too wide) in paragraph at lines 520--556
  [][] 
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 563.
+(hyperref)                removing `math shift' on input line 561.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\times' on input line 563.
+(hyperref)                removing `\times' on input line 561.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 563.
+(hyperref)                removing `math shift' on input line 561.
 
 
-Overfull \hbox (946.48827pt too wide) in paragraph at lines 570--596
+Overfull \hbox (946.48827pt too wide) in paragraph at lines 568--594
  [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 635--636
+Underfull \hbox (badness 10000) in paragraph at lines 625--626
 []\T1/ptm/m/it/10.95 LLM-Based Test Or-a-cles: Source-of-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 635--636
+Underfull \hbox (badness 10000) in paragraph at lines 625--626
 \T1/ptm/m/it/10.95 Authority Taxonomy---a Sys-tem-atic
  []
 
 
-Underfull \hbox (badness 7981) in paragraph at lines 635--636
+Underfull \hbox (badness 7981) in paragraph at lines 625--626
 \T1/ptm/m/it/10.95 Lit-er-a-ture Re-view\T1/ptm/m/n/10.95 . 2026. []$h t t p s 
 :
  []
 
-[9]
-Underfull \hbox (badness 2293) in paragraph at lines 655--656
+
+Underfull \hbox (badness 2293) in paragraph at lines 645--646
 []\T1/ptm/m/n/10.95 Zhou, Andy et al. 2023. \T1/ptm/m/it/10.95 De-fend-ing
  []
 
-[10
-
-] (./acl_submit.aux)
+[9] [10] (./acl_submit.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
@@ -972,11 +999,11 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
  ) 
 Here is how much of TeX's memory you used:
  15662 strings out of 469837
- 249145 string characters out of 5467244
+ 249152 string characters out of 5467244
  703656 words of memory out of 5000000
  44375 multiletter control sequences out of 15000+600000
  656730 words of font info for 89 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,9n,93p,2541b,470s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,9n,93p,2541b,416s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on acl_submit.pdf (10 pages).

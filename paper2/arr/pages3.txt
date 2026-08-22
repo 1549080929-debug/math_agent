@@ -1,0 +1,10 @@
+页1: The Same Zero: Why Identical ASR Can Imply Di
+页2: • L1: deterministic rules (regex, keyword lis
+页3: conﬂating intent with effect is the category 
+页4: terms, Chinese equivalents). - D3 (L1/L2): co
+页5: idence: a formal model characterizing the cla
+页6: Stack ASR (both victims) Benign (both victims
+页7: Conﬁg Static ASR Adaptive ASR White-box ASR W
+页8: (95% Wilson CIs in brackets.) Three observati
+页9: Ubuntu+OpenClaw harness. 3. Coverage. Twelve 
+页10: Conﬁg ASR (n = 144, 4 attack families) Utilit

@@ -1,8 +1,0 @@
-页4 [Appendix]: ... 22 defenses) is in Appendix 324 A.1. 325 Full per-defense r
-页6 [Appendix]: ...point; full data in Appendix) 508 exposes distinct stability
-页7 [Appendix]: ...- 590 experiment in Appendix). 591 6.4 6.4 Victim generaliza
-页8 [7. Analysis]: ...t provenance. 672 7 7. Analysis: The Same Zero, Different 67
-页9 [8. Limitations]: ...’s 720 zero). 721 8 8. Limitations 722 1. Single model (vict
-页9 [Appendix]: ...68 decides. 769 8.1 Appendix 770 8.2 A.1 Defense level map 7
-页9 [A.1 Defense]: ....1 Appendix 770 8.2 A.1 Defense level map 771 8.3 A.2 Victim
-页9 [A.2 Victim]: ...e level map 771 8.3 A.2 Victim generalization (2 ×2) 772 8.4

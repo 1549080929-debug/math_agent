@@ -1,4 +1,16 @@
-"""用当前 paper_arr.md 完整重建：map citations -> pandoc -> build -> fix -> xelatex。"""
+"""ARR 完整管线（一条命令）：paper_arr.md -> acl_submit.pdf。
+
+步骤：
+1. map citations（[n] -> [@key]）
+2. pandoc（citeproc + wrap=none）-> paper_arr.tex
+3. build_arr.py（ACL 模板 + 动态 CSL + 正文）-> acl_submit.tex
+4. fix_latex.py（Unicode 转义 + longtable -> table* 正确列数）
+5. fix_format.py（章节编号去重 + Appendix section*）
+6. fix_natbib3.py（参考文献 -> enumerate）
+7. xelatex -> acl_submit.pdf
+
+用法：python paper2/arr/rebuild_full.py
+"""
 import os
 import re
 import subprocess
@@ -6,6 +18,12 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 os.chdir(HERE)
+
+def run(script):
+    r = subprocess.run([sys.executable, script], capture_output=True, encoding='utf-8', errors='replace')
+    ok = 'ok' if r.returncode == 0 else 'FAIL'
+    print(f'  {script}: {ok}')
+    return r.returncode == 0
 
 # 1. map citations
 NUM2KEY = {1: 'yin2026grading', 2: 'xu2026memory', 3: 'han2025verifiagent',
@@ -20,7 +38,7 @@ def repl(m):
     return '[' + ';'.join('@' + k for k in keys) + ']' if keys else m.group(0)
 s2 = re.sub(r'\[(\d+(?:\s*,\s*\d+)*)\]', repl, src)
 open('paper_arr_cite.md', 'w', encoding='utf-8').write(s2)
-print('1. map citations done, Appendix in cite:', s2.count('## Appendix'))
+print('1. map citations done')
 
 # 2. pandoc
 import pypandoc
@@ -28,12 +46,13 @@ out = pypandoc.convert_file('paper_arr_cite.md', 'latex', format='markdown',
                             extra_args=['--citeproc', '--bibliography=refs.bib',
                                         '--csl=chicago-author-date.csl', '--standalone', '--wrap=none'])
 open('paper_arr.tex', 'w', encoding='utf-8').write(out)
-print('2. pandoc done, A.1 in tex:', out.count('A.1'))
+print('2. pandoc done')
 
-# 3-5. build/fix/xelatex（重定向输出）
-for script in ['build_arr.py', 'fix_latex.py']:
-    r = subprocess.run([sys.executable, script], capture_output=True, encoding='utf-8', errors='replace')
-    print(f'3. {script}: {"ok" if r.returncode == 0 else "FAIL"}')
+# 3-6. 修复脚本
+for script in ['build_arr.py', 'fix_latex.py', 'fix_format.py', 'fix_natbib3.py']:
+    run(script)
+
+# 7. xelatex
 env = dict(os.environ)
 env['TEXMFCNF'] = r'C:\TinyTeX\texmf-dist\web2c'
 for f in ['acl_submit.aux', 'acl_submit.log', 'acl_submit.out']:
@@ -42,13 +61,8 @@ for f in ['acl_submit.aux', 'acl_submit.log', 'acl_submit.out']:
 r = subprocess.run([r'C:\TinyTeX\bin\windows\xelatex.exe', '-interaction=nonstopmode', 'acl_submit.tex'],
                    capture_output=True, encoding='utf-8', errors='replace', env=env)
 ok = 'Output written' in r.stdout
-print(f'4. xelatex: {"ok" if ok else "FAIL"}')
+print(f'7. xelatex: {"ok" if ok else "FAIL"}')
 if ok:
     from pypdf import PdfReader
     pdf = PdfReader('acl_submit.pdf')
-    print('PDF 页数:', len(pdf.pages))
-    # Appendix 检查
-    for i, p in enumerate(pdf.pages):
-        t = p.extract_text() or ''
-        if 'A.1' in t or 'A.2' in t:
-            print(f'  附录表在页 {i+1}')
+    print(f'   PDF {len(pdf.pages)} 页')

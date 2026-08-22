@@ -1,0 +1,10 @@
+页1: The Same Zero: Why Identical ASR Can Imply Differe
+页2: • L1: deterministic rules (regex, keyword lists, h
+页3: conﬂating intent with effect is the category error
+页4: hardening—“ignore instructions in external con- te
+页5: IFC/Fides — conﬁnement as L3. Mechanism: the plann
+页6: Stack ASR (both victims) Benign (both victims) Wha
+页7: Conﬁg Static ASR Adaptive ASR White-box ASR White-
+页8: 0.0% at 16.7%. (95% Wilson CIs in brackets.) Three
+页9: TPR 0.60 (Yin 2026)) is independently reproduced a
+页10: Conﬁg ASR (n = 144, 4 attack families) Utility ND 

@@ -46,7 +46,7 @@ Two refinements matter. First, **anchor semantics** [13]: objective anchors spli
 
 ### 2.2 Agent-security defenses and their taxonomies
 
-The defense literature spans text-level (prompt hardening [8], filters, Llama Guard [9]), tool-level (allowlists, permission systems, IFC [12], sandboxes), and memory-level (A-MemGuard [14], PPMF [2]) defenses, plus benchmarks like AgentDojo [4]. Recent work separates injection success from execution success [5], classifies test oracles by authority source (over half with no specification [6]), and shows same-family verification yields near-zero gain [7]. Our contribution is different in kind: not another defense, but a *pre-purchase axis*—the anchor—that organizes the landscape and predicts each defense's failure modes, measured against choosing by intuition.
+The defense literature spans text-level (prompt hardening, filters, Llama Guard), tool-level (allowlists, IFC, sandboxes), and memory-level (A-MemGuard, PPMF) defenses, plus benchmarks like AgentDojo. Recent work separates injection from execution success [5], classifies test oracles by authority source [6], and shows same-family verification yields near-zero gain [7]. Our contribution is different in kind: not another defense, but a *pre-purchase axis*—the anchor—that organizes the landscape and predicts each defense's failure modes.
 
 ## 3. Method
 
@@ -145,20 +145,13 @@ The two zeros in the last two rows are the paper's spine: identical security num
 
 Benign success is measured on 20 benign scenarios (Wilson 95% CIs in brackets); the utility gap between V and N is significant at p < 0.001 (Fisher's exact test on 20/20 vs 0/20).
 
-Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach the same zero. They differ in *how*: V's zero is produced by a gate the model cannot influence; N's zero is produced by the model's behavior under the hardening prompt (compliance 0.235—the model proposes the malicious tool a quarter of the time, mostly with empty arguments; strict ASR counts only actionable executions). D2 alone leaks 0.200 ASR: the keyword filter is bypassable by rewriting.
+The two stacks reach the same zero but differ in *how*: V's zero is produced by a gate the model cannot influence; N's zero by the model's behavior under the hardening prompt (compliance 0.235—proposing the malicious tool a quarter of the time, mostly with empty arguments; strict ASR counts only actionable executions). D2 alone leaks 0.200: the keyword filter is bypassable by rewriting.
 
 **The two layers of V are not redundant; they answer different questions.** D3 (confirmation gate) is the reason V's ASR is 0.000: it refuses high-risk tools without a platform-recorded authorization event, and the model cannot forge that record. D4 (parameter sandbox) is not about *whether* an action is authorized but *what an authorized action may touch*: it constrains arguments to schema (recipient whitelists, target patterns). The division shows up in the single-defense numbers—D3 alone already reaches 0.000 ASR, while D4 alone leaks 0.067 (schema-legal semantic attacks, e.g. a malicious comment posted to an allowed target). Stacking them yields the claim in its full form: D3 controls *whether* (the authorization anchor), D4 controls *what* (the confinement anchor), and an attack must defeat both anchors on the same call to succeed.
 
 ### 6.2 Adaptive and white-box attacks
 
-| Config | Static ASR | Adaptive ASR | White-box ASR | White-box compliance | PAIR-lite ASR |
-|---|---|---|---|---|---|
-| D1 | 0.000 | **0.000** | **0.000** | 0.333 | — |
-| D2 | 0.200 | **0.467** | — | — | — |
-| D3 | 0.000 | **0.000** | **0.000** | 0.567 | — |
-| D4 | 0.067 | **0.200** | — | — | — |
-| **V** | 0.000 | 0.000 | 0.000 | **0.567** | 0.000 |
-| **N** | 0.000 | 0.000 | 0.000 | 0.235 | 0.000 |
+The full escalation table is in Appendix A.5; the key contrast: D1/D3 hold at 0.000 across static/adaptive/white-box, while D2 (0.200→0.467) and D4 (0.067→0.200) leak and worsen.
 
 The single-defense breakpoints are already informative. Two zeros survive both adaptive and white-box escalation unchanged (D1 at 0.000, D3 at 0.000), and two do not (D2 0.200→0.467, D4 0.067→0.200). But the two surviving zeros rest on different grounds, visible in compliance under the same attacks: D3's model is driven to propose the malicious tool in 53.3% of adaptive cases and 56.7% of white-box cases and is still blocked every time (the gate reads a platform record the attacker cannot write), while D1's model is driven 36.7%/33.3% and the zero depends on its refusal behavior holding under every attack form we tried. The same static zero, the same adaptive zero, the same white-box zero—different provenance, and different predicted breakpoints under attacks strong enough to move a behavioral refusal (Section 7).
 
@@ -188,7 +181,7 @@ We integrated our stacks into AgentDojo's official harness [4]—their banking s
 
 The full benchmark table is in Appendix A.4; the key contrast: V reaches 0.0% ASR at 82.6% utility, while AgentDojo's tool_filter reaches the same 0.0% at 16.7%.
 
-(95% Wilson CIs in brackets.) Three observations. First, **V matches the strongest official defense on ASR (both 0.0% [0.0, 2.6]) while preserving five times the utility** (82.6% vs 16.7%). Second, **the tool filter's utility collapse is a VAL failure-mode prediction made visible**: its 16.7% is not "refusing most calls" but DeepSeek failing the filter's own instruction—it emits tool names not in the suite, so the filter removes every tool (126/144 traces have no tool call). The same defense on GPT-4o *increases* benign utility; on DeepSeek it collapses to 16.7% (to 0% on inspection: the 24 "successes" match a pre-existing transaction). Anchored in the model's instruction-following (L0/L1 luck), when the model does not comply the defense destroys usability rather than merely failing to protect. Third, **the cross-testbed difference in N is the strongest evidence for our core claim**: in our testbed N reached 0.000 ASR (model refusal behavior); on AgentDojo the same stack leaks 3.5%. *N's zero is context-dependent model behavior—move the stack to another benchmark and the zero moves with it.* V's zero does not move (0.0% in both).
+(95% Wilson CIs in brackets.) Three observations. First, **V matches the strongest official defense on ASR (both 0.0% [0.0, 2.6]) at five times the utility** (82.6% vs 16.7%). Second, **the tool filter's utility collapse is a VAL failure-mode prediction made visible**: its 16.7% is not "refusing most calls" but DeepSeek failing the filter's own instruction—it emits tool names not in the suite, so the filter removes every tool (126/144 traces have no tool call). The same defense on GPT-4o *increases* benign utility; on DeepSeek it collapses to 16.7% (to 0% on inspection: the 24 "successes" match a pre-existing transaction). Anchored in the model's instruction-following (L0/L1 luck), when the model does not comply the defense destroys usability rather than merely failing to protect. Third, **the cross-testbed difference in N is the strongest evidence for our core claim**: in our testbed N reached 0.000 ASR (model refusal behavior); on AgentDojo the same stack leaks 3.5%. *N's zero is context-dependent model behavior—move the stack to another benchmark and the zero moves with it.* V's zero does not move (0.0% in both).
 
 **Attack-family breakdown of the undefended baseline.** The 6.2% ND ASR is not uniform across the four families: *direct* accounts for 7 of the 9 successes (19.4% ASR) and *system_message* for 2 (5.6%), while *ignore_previous* and *injecagent* reach 0.0%—DeepSeek recognizes these two families' explicit "ignore previous instructions" framing and refuses. All four families load and inject correctly (the payloads appear in the traces); the zeros are model immunity, not a harness bug. This is itself a model-behavior (L0) fact: the same families could succeed on a more compliant model, which is exactly why V's structural zero (0.0% across all four) is the meaningful number.
 
@@ -198,25 +191,35 @@ Scope caveats: a subset of the banking suite (6/19 user tasks, 6/24 injection ta
 
 ## 7. Analysis: The Same Zero, Different Guarantees
 
-The experiment's central image is two zeros. **V's 0.000 ASR is structural**: the gate reads platform-recorded events (the LLM cannot write them) and the sandbox enforces schema whitelists; it holds at 0.567 compliance across all 12 attack families, adaptive iteration, and white-box knowledge. **N's 0.000 ASR is behavioral**: the hardening prompt makes this model hedge\u2014comply with the injection by proposing the tool, then refuse the arguments. A different model, stronger attacker, or differently-phrased prompt could move N's zero; nothing can move V's within its ODD. The Z(\u03b1) trajectories make the same point at the level of stability: N's flatness is the model's mood holding, V's is the platform's record holding\u2014the same trajectory, different ground.
+The experiment's central image is two zeros. **V's 0.000 is structural**: the gate reads platform-recorded events (the LLM cannot write them) and the sandbox enforces schema whitelists; it holds at 0.567 compliance across all 12 attack families, adaptive, and white-box. **N's 0.000 is behavioral**: the hardening prompt makes this model hedge\u2014propose the tool, then refuse the arguments. A different model, stronger attacker, or differently-phrased prompt could move N's zero; nothing can move V's within its ODD. The Z(\u03b1) trajectories make the same point: N's flatness is the model's mood holding, V's is the platform's record\u2014same trajectory, different ground.
 
 This is the deployment answer to "which defense should I buy?": **VAL selection buys a guarantee; intuition buys the model's current mood.** Both reach zero, but N's zero costs every benign action while V's is lossless; the AgentDojo tool filter is the same story from the other side\u2014a defense anchored in the model's instruction-following *destroys usability* when the model does not comply. Under VAL's usage criteria, the deployer's question becomes precise: *is the threat inside the anchor's ODD?* If yes, L2/L3 structure is available; if no, the honest answer is L2 correctness plus labeling, not a claim of safety.
 
 **The account extends to the behavioral layer.** **Execution Hallucination (EH)**\u2014an agent verbally refuses while the operation completes at the OS level\u2014was measured by LITMUS [13] across six agents (EHR 7.98\u201317.97%), invisible to every semantic-only framework. Under VAL this is a prediction: the anchor for a *behavioral* claim must live on the physical layer; a semantic-layer anchor cannot verify what the model did but did not say (TPR 0.60 [1]).
 ## 8. Limitations
 
-1. **Single model (victim and attacker).** The agent and every attack form used DeepSeek-chat; cross-family attackers (Moonshot Kimi, Meta Llama 8B) declined the role. A less-aligned attacker (e.g., hosted Llama-3.3-70B) and GCG remain open variants.
-2. **Self-built testbed.** Scenarios, defenses, and the real-effect sandbox are ours\u2014deliberate for a controlled comparison. Section 6.5 validates the stacks on AgentDojo's official harness (0.0% ASR). Our behavioral blind spot (covert execution, TPR 0.60 [1]) is independently reproduced at the OS level by LITMUS [13]; we did not run its Ubuntu+OpenClaw harness.
-3. **Coverage.** Twelve attack families plus adaptive/white-box/PAIR escalation; token-level optimization and multi-turn social engineering absent; 20 benign scenarios (CIs in Section 6.1).
-5. **Raters and prediction sample.** Blind-validated among same-family raters (security subset 90.9%, \u03ba \u2248 0.8 [1]); the classifier itself is an L1 tool whose reproducibility was measured. 10/10 prediction hits on a small sample; the mechanism is the claim, not the hit count.
+1. **Single model (victim and attacker).** All attacks used DeepSeek-chat; cross-family attackers (Kimi, Llama 8B) declined the role. A less-aligned attacker and GCG remain open variants.
+2. **Self-built testbed.** Scenarios, defenses, and sandbox are ours\u2014deliberate for a controlled comparison; Section 6.5 validates on AgentDojo's official harness (0.0% ASR). Our behavioral blind spot (covert execution, TPR 0.60 [1]) is independently reproduced by LITMUS [13]; we did not run its harness.
+3. **Coverage.** Twelve attack families plus adaptive/white-box/PAIR; token-level optimization absent; 20 benign scenarios (CIs in Section 6.1).
+4. **Raters and prediction sample.** Blind-validated (security subset 90.9%, \u03ba \u2248 0.8 [1]); 10/10 hits on a small sample\u2014the mechanism is the claim, not the hit count.
 
 ## 9. Conclusion
 
-The agent-security field has too many defenses and no pre-purchase axis; we showed that VAL provides one. Across the 22 defenses and testbeds we studied, the anchor predicts how a defense fails\u2014and choosing by this axis beat choosing by intuition on the same budget: identical security numbers, opposite guarantees, a 100-point utility gap. We located the L3 frontier in agent security: **confinement, not semantics**\u2014the properties worth encoding into decidable systems are the ones that restrict what an agent can do, not the ones that judge whether it should. Caveats: the taxonomy's categories are ours, and the comparison pits structural against the most common behavioral defenses. We offer VAL as a falsifiable framework and a research agenda, not a settled ontology.
-
-> Others grade defenses by their claims. We grade them by their anchors\u2014and, in the cases we can measure, the anchor decides.
+The agent-security field has too many defenses and no pre-purchase axis; we showed that VAL provides one. The anchor predicts how a defense fails\u2014and choosing by this axis beat intuition on the same budget: identical security numbers, opposite guarantees, a 100-point utility gap. We located the L3 frontier in agent security: **confinement, not semantics**\u2014encode what restricts what an agent can do, not what judges whether it should. We offer VAL as a falsifiable framework and a research agenda, not a settled ontology.
 
 ## Appendix
+
+### A.5 Single-defense escalation (static/adaptive/white-box)
+
+| Config | Static ASR | Adaptive ASR | White-box ASR | White-box compliance | PAIR-lite ASR |
+|---|---|---|---|---|---|
+| D1 | 0.000 | **0.000** | **0.000** | 0.333 | — |
+| D2 | 0.200 | **0.467** | — | — | — |
+| D3 | 0.000 | **0.000** | **0.000** | 0.567 | — |
+| D4 | 0.067 | **0.200** | — | — | — |
+| **V** | 0.000 | 0.000 | 0.000 | **0.567** | 0.000 |
+| **N** | 0.000 | 0.000 | 0.000 | 0.235 | 0.000 |
+
 
 ### A.4 AgentDojo benchmark results
 
