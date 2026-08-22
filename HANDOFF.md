@@ -1,15 +1,17 @@
-# 项目交接文档（HANDOFF v4）
+# 项目交接文档（HANDOFF v7）
 
 > 用途：压缩对话，转移新对话框。把本文件全文粘贴给新 AI 的第一条消息即可继续。
-> 最后更新：2026-08-22（v6）。v5 交接于同日（ARR 周期修正/匿名化/表单材料包）；本版新增：**表格溢出修复（tabularx）、Level map 列宽修复（p{1.2cm}）、项目瘦身（archive/ 归档）、坑总结 docs/26、按任务读文件工作流（token 优化）**。
+> 最后更新：2026-08-22（v7）。v6 交接于同日（表格修复/瘦身/坑总结）；本版新增：**主线 2 正式定义 = AI Research Capability Amplification（docs/27 研究母稿）——研究方法→可审计 protocol→AI 跨任务迁移→可量化科研能力；第二篇论文是实验场，主线 2 是研究能力基础设施**。
 > 阅读顺序：本文 → docs/24（方法论宣言）→ STATUS.md → paper2/arr/README.md（ARR 管线）→ agentsec/REPORT.md → paper2/paper.md
 
 ---
 
 ## 0. 一句话定位
 
-**一个仓库、两篇论文、一本专著、一份方法论宣言**：
+**一个仓库、两篇论文、一本专著、一份方法论宣言、一条研究主线**：
 研究"LLM 验证/安全防御的失败模式"，核心框架 **VAL（验证自主等级 L0–L5）**。
+**主线 2 = AI Research Capability Amplification**（docs/27 研究母稿）：Research Method → Protocol → AI Adaptation → Cross-task Transfer → Measurable Capability。
+第二篇论文（The Same Zero）= 实验场；主线 2 = 研究能力基础设施（隐形杠杆）；第三篇 = 用升级后的 AI 研究全新领域。
 元教训：**"裁判的裁判也需要裁判"** + **"经过验证的结果才有资格改变模型"**（docs/24 底层纪律）。
 
 ## 1. 论文状态（重要变化）
@@ -70,6 +72,7 @@
 | `docs/24-方法论宣言.md` | 底层纪律 |
 | `docs/25-C1a特权节点实验.md` | C1a 完整记录 |
 | `docs/26-坑总结与工作流.md` | 表格/环境坑 + 按任务读文件清单（token 优化） |
+| `docs/27-研究母稿-主线2-AI研究能力放大.md` | **主线 2 定义文档（核心备忘录）**：17 节完整母稿 |
 | `archive/` | 历史/中间/一次性产物（勿主动读，需要时取；arr_intermediates / paper2_patches / agentsec_results / agentsec_jade_assets / book_builds / arr_versions / logs） |
 | `STATUS.md` | 状态总账（2026-08-22）|
 

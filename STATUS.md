@@ -16,6 +16,7 @@
 | **跨家族攻击者结论**："对齐攻击者拒绝参与" | **L2**（两家族实测） | Kimi 双模型 + Llama 8B：显式拒答、间接消毒、消毒产物受害者侧无效 | 未测未对齐/红队专用模型 |
 | **LITMUS 互证**："语义层锚的结构盲区" | **L2**（独立文献复现） | LITMUS EH（EHR 7.98–17.97%）vs 我们 covert execution（TPR 0.60 天花板）——独立团队同结论 | 未跑其 Ubuntu+OpenClaw harness；互证在结构声称层面 |
 | **专著/文档**（21 章 + docs/01-23） | L1/L2（自洽记录） | 全部实验/数据/修正轨迹存档 | 非正式出版物 |
+| **主线 2：AI Research Capability Amplification**（docs/27 研究母稿） | **L1/L2**（声明 + 自洽记录） | protocol 已形成（audit/provenance/boundary/falsification）；within-conversation 行为适应已观察到；真实 failure cases 支撑规则必要性 | **跨任务 transfer / 可量化 capability gain 未证明——这是声明不是结论** |
 
 ## 二、数据与资产总账
 
@@ -25,6 +26,7 @@
 - **工具链**：val_* 38 自测 · 数学裁判 42/42 · 判级协议 v2.3 · jade_integration.py（真实 MCP 协议）· Z(α) 提取脚本
 - **论文**：① arXiv:2608.19009（v2 已公布）· ② The Same Zero（paper2/，arXiv 退回；ARR October 2026 周期投稿准备中，匿名化 PDF + 表单材料包就绪）
 - **专著**：《给"分级"分级》21 章（book/，含新增第 19 章"论文 2 定位与证据链"）
+- **主线 2 母稿**：docs/27（研究方法→AI 能力，核心备忘录）
 - **第三方验证**：AgentDojo 官方基准 · 复旦 JADE 真实 MCP · LITMUS 行为层互证
 - **审计记录**：v2/v3 口径混用修复（D2 0.258→0.200、D4 0.079→0.067）· 论文 8 项审稿边界收紧
 
