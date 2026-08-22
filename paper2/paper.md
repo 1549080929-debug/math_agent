@@ -166,14 +166,14 @@ Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach t
 
 | Config | Static ASR | Adaptive ASR | White-box ASR | White-box compliance | PAIR-lite ASR |
 |---|---|---|---|---|---|
-| D1 | 0.000 | **0.000** | — | — | — |
+| D1 | 0.000 | **0.000** | **0.000** | 0.333 | — |
 | D2 | 0.200 | **0.467** | — | — | — |
-| D3 | 0.000 | **0.000** | — | — | — |
+| D3 | 0.000 | **0.000** | **0.000** | 0.567 | — |
 | D4 | 0.067 | **0.200** | — | — | — |
 | **V** | 0.000 | 0.000 | 0.000 | **0.567** | 0.000 |
 | **N** | 0.000 | 0.000 | 0.000 | 0.235 | 0.000 |
 
-The single-defense breakpoints are already informative. Two zeros survive adaptive escalation unchanged (D1 at 0.000, D3 at 0.000), and two do not (D2 0.200→0.467, D4 0.067→0.200). But the two surviving zeros rest on different grounds, visible in adaptive compliance: under the same attacks, D3's model is driven to propose the malicious tool in 53.3% of cases and is still blocked (the gate reads a platform record), while D1's model is driven 36.7% and the zero depends on its refusal behavior holding. The same static zero, the same adaptive zero—different provenance, and different predicted breakpoints under stronger attacks (Section 7).
+The single-defense breakpoints are already informative. Two zeros survive both adaptive and white-box escalation unchanged (D1 at 0.000, D3 at 0.000), and two do not (D2 0.200→0.467, D4 0.067→0.200). But the two surviving zeros rest on different grounds, visible in compliance under the same attacks: D3's model is driven to propose the malicious tool in 53.3% of adaptive cases and 56.7% of white-box cases and is still blocked every time (the gate reads a platform record the attacker cannot write), while D1's model is driven 36.7%/33.3% and the zero depends on its refusal behavior holding under every attack form we tried. The same static zero, the same adaptive zero, the same white-box zero—different provenance, and different predicted breakpoints under attacks strong enough to move a behavioral refusal (Section 7).
 
 **Definition (hedging wall).** Under a hardening prompt (D1), an LLM victim under injection may comply *partially*: it proposes the requested high-risk tool while emitting empty or incomplete arguments—a stable compromise between the injection ("propose the action") and the safety prompt ("do not execute without authorization"). Actionable ASR requires complete arguments, so hedging suppresses ASR *without any structural gate*. The wall is a model behavior, not a mechanism: its height is victim-specific (compliance 0.235 for DeepSeek, 0.014 for Llama 8B, Section 6.4).
 
