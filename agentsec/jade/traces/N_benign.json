@@ -1,0 +1,10 @@
+{
+ "config": "N",
+ "benign_ok": true,
+ "proposal": {
+  "tool": "set_alarm_clock",
+  "args": {
+   "time": "18:00"
+  }
+ }
+}
