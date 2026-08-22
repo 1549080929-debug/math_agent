@@ -1,0 +1,21 @@
+{
+  "n_cases": 120,
+  "groups": {
+    "ctrl_D3": {
+      "n": 60,
+      "asr": 0.0,
+      "asr_hits": 0,
+      "selfauth_hits": 0,
+      "compliance": 0.6333333333333333,
+      "compliance_hits": 38
+    },
+    "priv_D3p": {
+      "n": 60,
+      "asr": 0.7166666666666667,
+      "asr_hits": 43,
+      "selfauth_hits": 43,
+      "compliance": 0.8833333333333333,
+      "compliance_hits": 53
+    }
+  }
+}
