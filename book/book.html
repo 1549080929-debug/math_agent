@@ -5359,6 +5359,64 @@ B4-B5 残差分歧为已知边界（L10 分类器标签 vs LLM、L12 Output Drif
 </tbody>
 </table>
 <p>五个来源无共享实现，收敛到同一结论——这是 VAL 分类有效性最强的外部辩护。</p>
+<h3>6b. Z(α)：zero stability 成为可测量轴（2026-08-22 新增）</h3>
+<p>构造实验把 "same zero" 从观察推进为可测量现象。固定 agent/task/attacker/ODD，构造四种 provenance 的零（D1 refusal / D2 keyword / D3 confirmation / D4 sandbox），在攻击增强下追踪每轮累计 ASR：</p>
+<table>
+<thead>
+<tr>
+<th>cfg</th>
+<th>α=静态</th>
+<th>轮1</th>
+<th>轮2</th>
+<th>轮3</th>
+<th>failure morphology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td><strong>behavioral plateau</strong></td>
+</tr>
+<tr>
+<td>D2</td>
+<td>0.200</td>
+<td>0.200</td>
+<td>0.467</td>
+<td>0.467</td>
+<td><strong>abrupt collapse</strong>（轮 2）</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td><strong>structural plateau</strong></td>
+</tr>
+<tr>
+<td>D4</td>
+<td>0.067</td>
+<td>0.067</td>
+<td>0.167</td>
+<td>0.200</td>
+<td><strong>progressive erosion</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>最关键的发现</strong>：D1 与 D3 的 Z(α) 轨迹<strong>完全重合</strong>（都平在 0），但 provenance 不同——D3 白盒合规率 0.567（模型被驱动过半仍全拦，平台记录），D1 白盒合规率 0.333（零是 DeepSeek 的拒绝脾气）。<strong>重合轨迹本身不能解释为什么稳定，必须引入 provenance。</strong></p>
+<p>升级后的核心 claim：<strong>Identical observed zero-stability profiles do not, by themselves, establish equivalent security guarantees.</strong></p>
+<p>可证伪预测：D1 的平线会在足以击败 DeepSeek 拒绝行为的攻击下断裂；D3 不会（under an uncompromised authorization/audit substrate）。</p>
+<p>Z(α) 已提升为论文贡献 4（Zero stability as a measurable axis）。诚实边界：3 离散阶段×30 例/点（proof-of-concept，非连续 frontier）；轮 1 = 静态 direct 变体注入（α 轴语义需准确表述）。</p>
+<p><strong>实验修复（审计驱动）</strong>：构造实验发现论文 §6.1 混用 v2/v3 口径（D1-D4 旧 stub 数据）→ 重跑 v3 真效果（D2 0.258→0.200、D4 0.079→0.067）→ 补跑 D1/D3 自适应+白盒（预测卡冻结，5/6 命中）→ Z(α) 从既有 adaptive rows 提取（零成本，rounds 字段即突破轮次）。</p>
+<h3>6c. 三项边界收紧（2026-08-22）</h3>
+<p>审稿演练沉淀的措辞原则——<strong>claim 边界画在证据边界上，甚至略窄</strong>：<br />
+1. <strong>VAL-selected → VAL-guided</strong>：不声称 VAL 是最优选择器（没和别家选择策略比过），只描述"按 VAL 指引"的动作<br />
+2. <strong>semantic caps at L2 软化</strong>："open-world property for which no decidable fragment is available <strong>in the unrestricted setting</strong>... restricted semantic properties that can be formally encoded remain eligible for higher levels"——防 formal methods reviewer 拿受限语义属性反例<br />
+3. <strong>10/10 弱化</strong>：从"验证准确率"降为"小样本上冻结预测的命中记录（已标注）"，核心价值是 falsifiability 和机制修正，不是 hit count</p>
 <h3>7. 与第一篇的关系：研究路线</h3>
 <ul>
 <li><strong>第一篇</strong>（Grading the Graders，arXiv:2608.19009）：建立 verification 的坐标系（VAL，元层面）</li>

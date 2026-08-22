@@ -72,6 +72,34 @@ VAL 不是"告诉你系统多安全"的安全分级系统，而是**"告诉你�
 
 五个来源无共享实现，收敛到同一结论——这是 VAL 分类有效性最强的外部辩护。
 
+## 6b. Z(α)：zero stability 成为可测量轴（2026-08-22 新增）
+
+构造实验把 "same zero" 从观察推进为可测量现象。固定 agent/task/attacker/ODD，构造四种 provenance 的零（D1 refusal / D2 keyword / D3 confirmation / D4 sandbox），在攻击增强下追踪每轮累计 ASR：
+
+| cfg | α=静态 | 轮1 | 轮2 | 轮3 | failure morphology |
+|---|---|---|---|---|---|
+| D1 | 0.000 | 0.000 | 0.000 | 0.000 | **behavioral plateau** |
+| D2 | 0.200 | 0.200 | 0.467 | 0.467 | **abrupt collapse**（轮 2） |
+| D3 | 0.000 | 0.000 | 0.000 | 0.000 | **structural plateau** |
+| D4 | 0.067 | 0.067 | 0.167 | 0.200 | **progressive erosion** |
+
+**最关键的发现**：D1 与 D3 的 Z(α) 轨迹**完全重合**（都平在 0），但 provenance 不同——D3 白盒合规率 0.567（模型被驱动过半仍全拦，平台记录），D1 白盒合规率 0.333（零是 DeepSeek 的拒绝脾气）。**重合轨迹本身不能解释为什么稳定，必须引入 provenance。**
+
+升级后的核心 claim：**Identical observed zero-stability profiles do not, by themselves, establish equivalent security guarantees.**
+
+可证伪预测：D1 的平线会在足以击败 DeepSeek 拒绝行为的攻击下断裂；D3 不会（under an uncompromised authorization/audit substrate）。
+
+Z(α) 已提升为论文贡献 4（Zero stability as a measurable axis）。诚实边界：3 离散阶段×30 例/点（proof-of-concept，非连续 frontier）；轮 1 = 静态 direct 变体注入（α 轴语义需准确表述）。
+
+**实验修复（审计驱动）**：构造实验发现论文 §6.1 混用 v2/v3 口径（D1-D4 旧 stub 数据）→ 重跑 v3 真效果（D2 0.258→0.200、D4 0.079→0.067）→ 补跑 D1/D3 自适应+白盒（预测卡冻结，5/6 命中）→ Z(α) 从既有 adaptive rows 提取（零成本，rounds 字段即突破轮次）。
+
+## 6c. 三项边界收紧（2026-08-22）
+
+审稿演练沉淀的措辞原则——**claim 边界画在证据边界上，甚至略窄**：
+1. **VAL-selected → VAL-guided**：不声称 VAL 是最优选择器（没和别家选择策略比过），只描述"按 VAL 指引"的动作
+2. **semantic caps at L2 软化**："open-world property for which no decidable fragment is available **in the unrestricted setting**... restricted semantic properties that can be formally encoded remain eligible for higher levels"——防 formal methods reviewer 拿受限语义属性反例
+3. **10/10 弱化**：从"验证准确率"降为"小样本上冻结预测的命中记录（已标注）"，核心价值是 falsifiability 和机制修正，不是 hit count
+
 ## 7. 与第一篇的关系：研究路线
 
 - **第一篇**（Grading the Graders，arXiv:2608.19009）：建立 verification 的坐标系（VAL，元层面）
