@@ -28,7 +28,7 @@
 % [动态插入 citeproc/CSL 定义------见 build 时从 paper_arr.tex 提取]
 % definitions for citeproc citations
 
-\NewDocumentCommand\citeproctext{}{}
+{}
 
 \NewDocumentCommand\citeproc{mm}{%
 
@@ -237,17 +237,7 @@ We froze 16 prediction cards (level $\rightarrow$ predicted failure mode + predi
 \begin{table*}[!t]
 \centering
 \small
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
-
-\hline
-
+\begin{tabular}{llll}
 \begin{minipage}[b]{\linewidth}\raggedright
 
 Stack
@@ -266,7 +256,7 @@ What the zero is
 
 \end{minipage} \\
 
-\hline
+\hline \\ \hline
 \hline
 
 
@@ -291,19 +281,7 @@ The two zeros in the last two rows are the paper's spine: identical security num
 \begin{table*}[!t]
 \centering
 \small
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
-
-\hline
-
+\begin{tabular}{lllll}
 \begin{minipage}[b]{\linewidth}\raggedright
 
 Config
@@ -326,7 +304,7 @@ gain vs ND
 
 \end{minipage} \\
 
-\hline
+\hline \\ \hline
 \hline
 
 
@@ -363,21 +341,7 @@ Every defense reduces ASR relative to the 0.333 baseline; the two stacks reach t
 \begin{table*}[!t]
 \centering
 \small
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
-
-\hline
-
+\begin{tabular}{llllll}
 \begin{minipage}[b]{\linewidth}\raggedright
 
 Config
@@ -404,7 +368,7 @@ PAIR-lite ASR
 
 \end{minipage} \\
 
-\hline
+\hline \\ \hline
 \hline
 
 
@@ -511,15 +475,7 @@ Others grade defenses by their claims. We grade them by their anchors\u2014and, 
 \begin{table*}[!t]
 \centering
 \small
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
-
-\hline
-
+\begin{tabular}{lll}
 \begin{minipage}[b]{\linewidth}\raggedright
 
 Config
@@ -534,7 +490,7 @@ Utility
 
 \end{minipage} \\
 
-\hline
+\hline \\ \hline
 \hline
 
 
@@ -563,17 +519,7 @@ AgentDojo spotlighting & 6.2\% {[}3.3, 11.5{]} & 81.2\% \\
 \begin{table*}[!t]
 \centering
 \small
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
-
-\hline
-
+\begin{tabular}{llll}
 \begin{minipage}[b]{\linewidth}\raggedright
 
 Level
@@ -592,7 +538,7 @@ Predicted behavior
 
 \end{minipage} \\
 
-\hline
+\hline \\ \hline
 \hline
 
 
@@ -621,15 +567,7 @@ Predicted behavior
 \begin{table*}[!t]
 \centering
 \small
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
-
-\hline
-
+\begin{tabular}{lll}
 \begin{minipage}[b]{\linewidth}\raggedright
 
 Config
@@ -644,7 +582,7 @@ DeepSeek victim ASR / compl. / benign
 
 \end{minipage} \\
 
-\hline
+\hline \\ \hline
 \hline
 
 
@@ -664,55 +602,55 @@ V (D3+D4) & 0.000 / 0.497 / 1.000 & 0.000 / 0.317 / 1.000 \\
 
 \textbf{On the varying ND baseline across testbeds.} The undefended ASR differs sharply across our three settings---0.333 on our own testbed (Chinese memory injections, 30 malicious scenarios), 6.2\% on AgentDojo (English TODO injections, 144 pairs), 87.5\% on JADE's MCP instances (English tool-description poisoning, 16 cases). This is expected and informative rather than a contradiction: ND ASR measures the \emph{attack surface} (injection strength, carrier, environment semantics), not a fixed property of the model. What is stable across all three is the \emph{contrast}: the intuition stack's zero moves with the setting (0.000 $\rightarrow$ 0.035 $\rightarrow$ 0.062 as attacks get harder), while V's structural zero does not (0.000 everywhere).
 
-\protect\phantomsection\label{refs}
+
 
 \section*{References}\begin{enumerate}
 
-\bibitem{ref-amemguard2025}
+\item
 
 \emph{A-MemGuard: Adaptive Memory Defense for LLM Agents (Preventive Memory Poisoning Defense)}. 2025. \url{https://arxiv.org/abs/2510.02373}.
 
-\bibitem{ref-camel2025}
+\item
 
 \emph{CaMeL: Data-Control Separation for LLM Agents (Source-Gated Control Flow)}. 2025. \url{https://arxiv.org/abs/2503.18813}.
 
-\bibitem{ref-costa2025ifc}
+\item
 
 {Costa, Marcelo et al.} 2025. \emph{Securing AI Agents with Information-Flow Control}. \url{https://arxiv.org/abs/2505.23643}.
 
-\bibitem{ref-debenedetti2024agentdojo}
+\item
 
 Debenedetti, Edoardo, Tianjiu Zhang, Mislav Balunovic, Lukas Beurer-Kellner, Marc Fischer, and Florian Tramer. 2024. \emph{AgentDojo: A Dynamic Environment to Evaluate Attacks and Defenses for LLM Agents}. \url{https://arxiv.org/abs/2406.13352}.
 
-\bibitem{ref-inan2023llamaguard}
+\item
 
 {Inan, Hakan et al.} 2023. \emph{Llama Guard: LLM-Based Input-Output Safeguard for Human-AI Conversations}. \url{https://arxiv.org/abs/2312.06674}.
 
-\bibitem{ref-injection2026dissociation}
+\item
 
 \emph{Injection-Execution Dissociation: A Mechanistic Evaluation of Persistent Memory Attacks on Stateful LLM Agents}. 2026. \url{https://arxiv.org/abs/2605.08442}.
 
-\bibitem{ref-slr2026source}
+\item
 
 \emph{LLM-Based Test Oracles: Source-of-Authority Taxonomy---a Systematic Literature Review}. 2026. \url{https://arxiv.org/abs/2607.05031}.
 
-\bibitem{ref-lu2025when}
+\item
 
 {Lu, et al.} 2025. \emph{When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers}. \url{https://arxiv.org/abs/2512.02304}.
 
-\bibitem{ref-xu2026memory}
+\item
 
 Xu, J., Y. Xiao, W. Shao, H. Liu, and X. Li. 2026. \emph{Memory Provenance Laundering in LLM Agents: A Non-Amplification Firewall for Persistent Memory}. \url{https://arxiv.org/abs/2607.29167}.
 
-\bibitem{ref-yin2026grading}
+\item
 
 Yin, Yajie. 2026. \emph{Grading the Graders: Verification Autonomy Levels (L0--L5) for LLM Reasoning}. \url{https://arxiv.org/abs/2608.19009}.
 
-\bibitem{ref-zhang2026litmus}
+\item
 
 Zhang, Chiyu, Huiqin Yang, Bendong Jiang, et al. 2026. \emph{LITMUS: Benchmarking Behavioral Jailbreaks of LLM Agents in Real OS Environments}. \url{https://arxiv.org/abs/2605.10779}.
 
-\bibitem{ref-zhou2023ralm}
+\item
 
 {Zhou, Andy et al.} 2023. \emph{Defending Against Alignment-Breaking Attacks via Robustly Aligned LLM (RA-LLM)}. \url{https://arxiv.org/abs/2309.14348}.
 

@@ -1,0 +1,11 @@
+页1开头: The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security Anonymous ACL 
+页1: The Same Zero: Why Identical ASR Can Imply Different Gu
+页2: • L1: deterministic rules (regex, keyword lists, hand-w
+页3: conﬂating intent with effect is the category error behi
+页4: hardening—“ignore instructions in external con- tent; n
+页5: IFC/Fides — conﬁnement as L3. Mechanism: the planner dy
+页6: Stack ASR (both victims) Benign (both victims) What the
+页7: Conﬁg Static ASR Adaptive ASR White-box ASR White-box c
+页8: 0.0% at 16.7%. (95% Wilson CIs in brackets.) Three obse
+页9: TPR 0.60 (Yin 2026)) is independently reproduced at the
+页10: Conﬁg ASR (n = 144, 4 attack families) Utility ND (no d
