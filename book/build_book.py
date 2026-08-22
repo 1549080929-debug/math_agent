@@ -45,10 +45,11 @@ PARTS = [
         (16, "docs/12-VAL×Agent安全：PPMF案例.md"),
         (17, "docs/14-VAL预测协议-Agent安全.md"),
         (18, "docs/15-方向3综合：VAL预测安全防御.md"),
+        (19, "docs/23-论文2定位与Agent安全证据链.md"),
     ]),
     ("第六部 · 收束", [
-        (19, "EVALUATION.md"),
-        (20, "paper/preprint.md"),
+        (20, "EVALUATION.md"),
+        (21, "paper/preprint.md"),
     ]),
 ]
 

@@ -1,4 +1,4 @@
-# The Anchor Decides: Verification Autonomy Levels Predict the Success of LLM-Agent Security Defenses
+# The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security
 
 **Yajie Yin**
 

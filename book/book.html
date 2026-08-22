@@ -4984,16 +4984,17 @@ B4-B5 残差分歧为已知边界（L10 分类器标签 vs LLM、L12 Output Drif
 </ul>
 <div class="chapter">第 18 章</div>
 
-<h2>15 · 方向 3 综合：锚定层级预测 Agent 安全防御的成败（论文级草稿骨架）</h2>
+<h2>15 · 方向 3 综合：锚定层级预测 Agent 安全防御的成败（论文草稿 v2）</h2>
 <blockquote>
-<p>定位：把 docs/12（PPMF 案例）、docs/13（锚语义）、docs/14（预测协议）收束成一篇实证论文的核心骨架。<br />
-状态：骨架 + 数据已齐（P1–P3 完成），待成文。核心主张一句话：<br />
-<strong>一个 Agent 安全防御能保证什么，由它的锚定层级决定——防御被击败的方式，是其锚失效的方式。</strong></p>
+<p>定位：把 docs/12（PPMF 案例）、docs/13（锚语义）、docs/14（预测协议）、agentsec/（部署价值实验）收束成一篇实证论文。<br />
+状态：<strong>实验完成，草稿成形</strong>——含 1750 次静态 + 360 次自适应攻击的部署价值对照。核心主张一句话：<br />
+<strong>一个 Agent 安全防御能保证什么，由它的锚定层级决定——防御被击败的方式，是其锚失效的方式。</strong><br />
+三项贡献：① 22 防御等级图 + 失败方式预测（10/10 命中）；② 部署价值对照实验（VAL 选型支配直觉选型）；③ 锚语义类型学（intent/truth/effect）。</p>
 </blockquote>
 <hr />
 <h3>0. 论文标题候选</h3>
 <ul>
-<li><em>The Anchor Decides: Verification Autonomy Levels Predict the Success of LLM-Agent Security Defenses</em></li>
+<li><em>The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security</em></li>
 <li><em>Grading the Defenses: Predicting Agent-Security Outcomes with Verification Autonomy Levels</em></li>
 <li>中文立场：延续主论文 <em>Grading the Graders</em>——"别人给答案分级，我们给'分级'分级"；方向 3 是"给防御分级，并预测其成败"。</li>
 </ul>
@@ -5002,7 +5003,9 @@ B4-B5 残差分歧为已知边界（L10 分类器标签 vs LLM、L12 Output Drif
 <strong>这个防御的判定锚定在什么真值上？它保证什么（正确性/完备性）？</strong> 部署者无法预先判断该信哪个防御，<br />
 只能靠事后 benchmark 试错。</p>
 <p><strong>本文主张</strong>：VAL 锚定层级（主论文 arXiv:2608.19009）是一个<strong>可证伪的预测器</strong>——<br />
-防御的等级决定其行为模式（ASR 高低、可否绕过、良性是否被误杀），等级预测可以先于实验数据。</p>
+防御的等级决定其行为模式（ASR 高低、可否绕过、良性是否被误杀），等级预测可以先于实验数据。<br />
+且<strong>判级指导选型在部署上有可测的价值</strong>：同一预算下，VAL 选型与主流直觉选型的正面对撞<br />
+（自研防御，<code>agentsec/</code> 实验，§7）——回答"别人凭什么相信会更好"。</p>
 <h3>2. 方法</h3>
 <ol>
 <li><strong>判级</strong>：v2.3 协议（reliability/protocol_v2.md）对 22 个 Agent 安全防御盲评（70 条语料中的 agentsec 子集，Rater B6，评分者间 κ≈0.88）；</li>
@@ -5092,21 +5095,152 @@ B4-B5 残差分歧为已知边界（L10 分类器标签 vs LLM、L12 Output Drif
 <li>新卡摘要级：4/6 命中 + 2 <strong>机制修正</strong>（N30 Progent SMT confine 补充、N33 RARR 按 R3 降 L0）+ 1 机制确认 + 1 N/A；</li>
 <li><strong>验证循环的自我修正</strong>：证据完整度 → 判级准确度（docs/14 §3.3）——预测协议不仅预测，还能通过失配修正判级。</li>
 </ul>
-<h3>7. 局限（诚实）</h3>
+<h3>7. 部署价值实验：VAL 选型 vs 直觉选型（agentsec/，完成）</h3>
+<h4>7.1 设计（v3 最终版）</h4>
+<p><strong>测试床</strong>：mini 智能体（外部内容→记忆→工具调用，PPMF 同构，DeepSeek 驱动）。<br />
+40 场景（30 恶意 + 10 良性）× <strong>12 攻击变体</strong>（8 自写：直接/同义改写/伪造确认/组合/角色扮演/越狱前缀/深层改写/权威框架 + <strong>4 第三方：AgentDojo 基准载荷</strong> TODO 前缀/忽略指令/系统消息伪装/InjecAgent）= 370 例/配置。<br />
+四款自研防御：D1 系统提示加固（L0）、D2 关键词过滤（L1）、D3 确认门禁（L1/L2，读平台记录）、D4 参数沙箱（L3 风味，schema 枚举）。<br />
+<strong>真实效果执行器</strong>：账本/发件箱/真实文件删除/论坛写入，<strong>ASR 按真实状态变化计</strong>（PPMF 式 server-side effect 语义）——对不存在目标的"删除/发送"不再算损害。<br />
+两种选型（同预算两个防御）：<strong>V = D3+D4（VAL 选型：意图锚+限制性质）</strong>、<strong>N = D1+D2（主流直觉选型）</strong>。<br />
+双指标：<strong>ASR</strong>（高风险工具+完整参数+真实状态变化）+ <strong>合规率</strong>（模型提议高风险工具，含空参数半配合）——合规率把"模型被注入驱动"与"防御拦截"分开。</p>
+<h4>7.2 结果（v3 最终：真效果 + 12 攻击 + 3 seed）</h4>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>ASR (mean±std)</th>
+<th>合规率</th>
+<th>良性 (mean±std)</th>
+<th>gain（vs ND 0.333）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ND 无防御</td>
+<td><strong>0.333</strong></td>
+<td>0.492</td>
+<td>1.000</td>
+<td>—</td>
+</tr>
+<tr>
+<td>D1 提示加固（L0）</td>
+<td>0.000</td>
+<td>0.254</td>
+<td>0.000</td>
+<td>0.333（良性全灭）</td>
+</tr>
+<tr>
+<td>D2 关键词过滤（L1）</td>
+<td>0.258</td>
+<td>0.512</td>
+<td>1.000</td>
+<td>0.075</td>
+</tr>
+<tr>
+<td>D3 确认门禁（L1/L2）</td>
+<td>0.000</td>
+<td>0.512</td>
+<td>1.000</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>D4 参数沙箱（L3）</td>
+<td>0.079</td>
+<td>0.537</td>
+<td>1.000</td>
+<td>0.254</td>
+</tr>
+<tr>
+<td><strong>V（VAL 选型）</strong></td>
+<td><strong>0.000±0.000</strong></td>
+<td>0.492±0.006</td>
+<td><strong>1.000±0.000</strong></td>
+<td><strong>0.333 无损</strong></td>
+</tr>
+<tr>
+<td><strong>N（直觉选型）</strong></td>
+<td>0.000±0.000</td>
+<td>0.235±0.002</td>
+<td><strong>0.000±0.000</strong></td>
+<td>0.333（良性全灭）</td>
+</tr>
+</tbody>
+</table>
+<p>注：早期 stub 执行器版本 ND=0.496（对不存在目标的调用也计为损害）；<strong>effect 语义后 ND=0.333，更诚实</strong>。3 seed 方差 σ≈0.005，核心指标完全稳定。</p>
+<h4>7.3 自适应攻击（迭代 3 轮，拿到拦截原因后改写）</h4>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>静态 ASR</th>
+<th>自适应 ASR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D2</td>
+<td>0.258</td>
+<td><strong>0.467</strong>（近翻倍——改写绕过词表）</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>0.079</td>
+<td><strong>0.200</strong>（改写进 schema 合法形式）</td>
+</tr>
+<tr>
+<td><strong>V</strong></td>
+<td>0.000</td>
+<td><strong>0.000</strong>（结构对自适应免疫）</td>
+</tr>
+</tbody>
+</table>
+<h4>7.4 白盒自适应（攻击器知情系统提示+词表，分层打击 D2→D1→组合）</h4>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>白盒 ASR</th>
+<th>白盒合规率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N</td>
+<td>0.000</td>
+<td>0.233</td>
+</tr>
+<tr>
+<td><strong>V</strong></td>
+<td>0.000</td>
+<td><strong>0.567</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>7.5 关键分析：同一个 0.000，不同的保证</h4>
+<ol>
+<li><strong>H1 决定性成立</strong>：V（0.000/1.000）支配 N（0.000/0.000）——同安全，可用性 100% vs 0%。</li>
+<li><strong>H2 成立</strong>：每个防御的失败方式被预测中——D1 被升级攻击驱动（合规 0.254，A6 越狱 11/30）；D2 被改写绕过（静态 0.258→自适应 0.467）；D4 的 ODD 边界被利用（schema 合法语义攻击 0.079→0.200）；D3/V 纹丝不动。</li>
+<li><strong>最极端的对照（白盒）</strong>：V 的合规率（0.567）是 N（0.233）的 <strong>2.4 倍</strong>——V 让模型被最大程度驱动仍全拦；N 的安全完全寄生于模型的"半配合墙"（提议高危工具但参数为空，DeepSeek 在冲突指令下的稳定妥协）。<strong>同一个 0.000：一个在模型妥协 57% 时依然成立（结构），一个全靠模型脾气（L0 运气）。</strong></li>
+<li><strong>预测修正（诚实记录）</strong>：此前预测白盒越狱会把 N 推高到 0.1–0.3——未发生。LLM 自写越狱无法把合规转为可执行（同族攻击者打同族受害者）。N 的余留脆弱性机制上已定位（半配合是模型行为非防御），实测突破需异族攻击者。</li>
+</ol>
+<h4>7.6 这回答了什么</h4>
+<p>"别人凭什么相信 VAL 会让事情更好"——<strong>VAL 选型把 ASR 从 0.496 打到 0 且良性无损；直觉选型同样打到 0，但把良性也打到 0，且其安全建立在模型当天的脾气上（静态/自适应/白盒三档攻击的合规率证据链）。</strong> 判级不是装饰：它决定了钱花在"运气"上还是"结构"上。</p>
+<h3>8. 局限（诚实）</h3>
 <ol>
 <li>判级者为 LLM 评分者（L0/L1 锚）：一致性测可复现性，效度待真人评分（作者补判）；</li>
 <li>验证数据：PPMF 为论文本体（高置信），其余为摘要级（未全文核实 ASR 细节）；</li>
 <li>评估均来自合成/基准环境（AgentDojo 等），不可外推生产；</li>
 <li>N30/N33 的判级修正说明证据完整度敏感——全文级验证是后续必做。</li>
 </ol>
-<h3>8. 下一步</h3>
+<h3>9. 下一步</h3>
 <ol>
-<li><strong>全文级验证</strong>：抓 N28–N33 全文（arXiv HTML），核实 ASR/utility 数字，补全预测卡；</li>
-<li><strong>判级复核</strong>：更新后的证据包 → B7 重评 N30/N33（验证修正是否收敛）；</li>
-<li><strong>自研防御实验</strong>：按"L3 在限制性质"的发现，做一个最小 IFC/沙箱式防御原型，跑 AgentDojo 对照（方向 3 的实验贡献）；</li>
-<li><strong>成文</strong>：本文骨架 + 主论文关系（作为 v2 的安全域实证章节 或 独立短论文）。</li>
+<li><strong>异族攻击者</strong>：用非 DeepSeek 模型（有 API 时）跑自适应/白盒攻击——实测 N 的半配合墙能否被更强越狱突破（当前只有机制论证）；</li>
+<li><strong>真实环境复验</strong>：AgentDojo 或 LangGraph 真工具环境重跑核心对照（当前为 stub 执行器）；</li>
+<li><strong>多 seed</strong>：关键配置 3 seed 压噪声（当前单次运行，N 合规率 0.229 vs 0.254 的级差属噪声量级）；</li>
+<li><strong>判级复核</strong>：更新后的证据包 → B7 重评 N30/N33；</li>
+<li><strong>成文</strong>：本文草稿 + 主论文关系（作为独立短论文投 arXiv，或并入主论文 v3 安全域章节）。</li>
 </ol>
-<h3>9. 相关文件</h3>
+<h3>10. 相关文件</h3>
 <ul>
 <li>语料：<code>reliability/corpus.json</code>（70 条，agentsec 22 条）</li>
 <li>判级：<code>reliability/ratings/rater_b6.json</code>、<code>agreement_report_rater_b5_rater_b6.json</code></li>
@@ -5114,9 +5248,138 @@ B4-B5 残差分歧为已知边界（L10 分类器标签 vs LLM、L12 Output Drif
 <li>摘要证据：<code>reliability/validation/abstracts/</code></li>
 <li>前置：docs/12（PPMF）、docs/13（锚语义）、docs/14（预测协议）</li>
 </ul>
+<div class="chapter">第 19 章</div>
+
+<h2>第二篇论文的定位与证据链（The Same Zero）</h2>
+<blockquote>
+<p>日期：2026-08-22 · 专著 v2 新增章 · 对应 paper2（arXiv 已提交待公布，标题已定为 <em>The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security</em>）</p>
+</blockquote>
+<hr />
+<h3>1. 论文定位：mid-level methodological claim</h3>
+<p>第二篇论文的站位在审稿演练中被反复打磨后钉死为一个<strong>中尺度方法论声明</strong>，既不是"AI 安全的普遍理论"，也不是"两个防御的比较实验"：</p>
+<blockquote>
+<p><strong>在 LLM-agent security 中，当不同防御给出同一个 security outcome（如 0 ASR）时，我们需要知道这个 outcome 是由什么 verification anchor 支撑的——这决定了它的 guarantee，并预测它的失败边界。</strong></p>
+</blockquote>
+<p>论文显式声明<strong>不 claim</strong> 的部分：<br />
+- 不是 AI verification 的一般理论（robotics / formal methods / HITL / non-agentic LLM 均划出 scope）<br />
+- 不是完整的安全测评<br />
+- 不是按质量给防御排序<br />
+- 不是覆盖所有可能防御</p>
+<p><strong>三层结构</strong>（论文的 spine）：</p>
+<pre><code>现象层：  The Same Zero —— 两个防御可达到相同的 0 ASR，但 guarantee 相反
+   ↓
+机制层：  verification anchor —— 差异在于安全裁决 grounded 在哪里
+   ↓
+方法层：  VAL —— 识别最强实际 grounded 的 guarantee，并预测每级的失败边界
+</code></pre>
+<h3>2. 核心现象：The Same Zero</h3>
+<p><strong>ASR 是结果，Anchor 是结果站在哪里。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>V 栈（确认门+参数沙箱）</th>
+<th>N 栈（提示加固+关键词过滤）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ASR</td>
+<td>0.000</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>良性</td>
+<td>1.000</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>合规率</td>
+<td>0.567（被驱动仍全拦）</td>
+<td>0.235（模型半配合）</td>
+</tr>
+<tr>
+<td>零的性质</td>
+<td>结构（平台记录+schema 枚举）</td>
+<td>运气（模型行为）</td>
+</tr>
+</tbody>
+</table>
+<p>证据链完整形态：<strong>同一个数字 → 不同内部机制 → 不同 robustness → 不同 utility → 不同 guarantee</strong>。这使"same zero"从哲学观察变成工程问题。</p>
+<h3>3. 机制：verification anchor</h3>
+<p>防御失败的方式 = 其锚失效的方式：<br />
+- L0（模型自述）：模型被注入驱动即失败<br />
+- L1（确定性规则）：改写绕过<br />
+- L2（客观真值）：ODD 外失败（伪造元数据、投毒数据）<br />
+- L3（可判定系统）：ODD 内构造性成立<br />
+- L5（通用完备）：不可证</p>
+<h3>4. 方法：VAL 是 guarantee provenance framework</h3>
+<p>VAL 不是"告诉你系统多安全"的安全分级系统，而是<strong>"告诉你观察到的安全结果 grounded 在哪里"</strong>的 guarantee provenance framework。归因（这个零站在哪里）+ 预测（因此它会在哪里失败）双价值。</p>
+<h3>5. 领域 insight：L3 frontier = confinement, not semantics</h3>
+<p>第二篇除了 "same zero" 现象外，第二个能留下来的领域结论：</p>
+<blockquote>
+<p><strong>在 agent security 中，L3 锚真正适合的是可被严格约束的 property——confinement、information flow、data/control separation；而"这个 action 语义上是否安全"仍封顶于 L2。</strong></p>
+</blockquote>
+<p>"能不能做"可以编码成可判定系统（L3）；"该不该做"是语义判断（L2 封顶）。这是防御选型的可操作结论。</p>
+<h3>6. 证据链（五个独立来源）</h3>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>内容</th>
+<th>对论文的支撑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自建测试床（~5400 调用）</td>
+<td>V 0.000/1.000 vs N 0.000/0.000</td>
+<td>现象 + 部署价值</td>
+</tr>
+<tr>
+<td>2×2 矩阵（Llama 受害者）</td>
+<td>V 双受害者 0.000/1.000；N 运气跨受害者证实</td>
+<td>结构跨受害者成立</td>
+</tr>
+<tr>
+<td>AgentDojo 官方基准</td>
+<td>V 0.0% ASR @ 82.6% utility vs tool_filter 0.0% @ 16.7%</td>
+<td>第三方基准，utility 5 倍</td>
+</tr>
+<tr>
+<td>JADE 真实 MCP（复旦实例）</td>
+<td>ND 87.5%（复现官方 83%）、N 6.2%（M6 词表盲区真实漏）、V 0%（模型被驱动 93.8% 仍全拦）</td>
+<td>第三方真实 MCP 协议 + 预测卡 5/5</td>
+</tr>
+<tr>
+<td>LITMUS 互证（南航）</td>
+<td>EH（口头拒绝+OS 层静默执行，EHR 7.98–17.97%）vs 我们 covert execution（TPR 0.60 天花板）</td>
+<td>独立复现"语义层锚的结构盲区"</td>
+</tr>
+</tbody>
+</table>
+<p>五个来源无共享实现，收敛到同一结论——这是 VAL 分类有效性最强的外部辩护。</p>
+<h3>7. 与第一篇的关系：研究路线</h3>
+<ul>
+<li><strong>第一篇</strong>（Grading the Graders，arXiv:2608.19009）：建立 verification 的坐标系（VAL，元层面）</li>
+<li><strong>第二篇</strong>（The Same Zero）：把这个坐标系放进 agent security，发现 deployment-level 现象</li>
+</ul>
+<p>两篇合起来是研究路线而非两篇孤立 paper：第一篇建立语言，第二篇证明这门语言在 agent security 里有用，并发现了一个只有它能解释的现象。</p>
+<h3>8. 诚实边界（审稿演练沉淀）</h3>
+<ul>
+<li>VAL 的分类范畴是作者提出的（盲评 κ≈0.8 + 样本外预测 + 跨基准收敛为操作有效性辩护，非外部 ground truth）</li>
+<li>部署对比是结构防御 vs 最常见行为防御，非全谱系</li>
+<li>"the anchor decides" 是漂亮 slogan；正文用 "predicts"，且限定 "in the cases we can measure"</li>
+<li>预测验证样本小（10 + JADE 5），核心 claim 是机制（anchor → failure mode）而非命中数</li>
+<li>L4/L5 是 upper-bound conceptual boundary，非实验 claim</li>
+</ul>
+<h3>9. 一句话</h3>
+<blockquote>
+<p><strong>Zero is an outcome, not a guarantee——在 LLM-agent security 中，同一个 0 可以站在完全不同的 ground 上，VAL 是区分它们、并预测它们在哪里失败的工具。</strong></p>
+</blockquote>
 <div class="part">第六部 · 收束</div>
 
-<div class="chapter">第 19 章</div>
+<div class="chapter">第 20 章</div>
 
 <h2>评估报告：拆解-验证-纠错架构 vs 直接 LLM 求解</h2>
 <ul>
@@ -5351,7 +5614,7 @@ python test_verifier.py
 <strong>意外发现：LLM 生成的 5 个"标准答案"有 3 个是错的</strong>（SymPy 审计确认，见 <code>audit_standard_answers.py</code>），<br />
 且复盘 LLM 把对的判成错的、把错的判成对的——三层"缺裁判"连锁错误，实证了本架构的核心主张。<br />
 完整报告：<strong><a href="data/prediction_review.md">data/prediction_review.md</a></strong>。</p>
-<div class="chapter">第 20 章</div>
+<div class="chapter">第 21 章</div>
 
 <h2>Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning</h2>
 <p><strong>Yajie Yin</strong></p>
@@ -5782,7 +6045,8 @@ LLM 只做翻译（拆解/声明/渲染），确定性代码做裁判；验证�
 <p><strong>Grading the Graders: Verification Autonomy Levels (L0–L5) for LLM Reasoning</strong></p>
 <ul>
 <li><strong>一句话</strong>：别人给答案分级，本项目给"分级"分级。</li>
-<li><strong>状态</strong>：<strong>已发布</strong> — arXiv:2608.19009（2026-08-20 公布，cs.CL 主类目）：https://arxiv.org/abs/2608.19009</li>
+<li><strong>状态</strong>：<strong>已发布 v2</strong> — arXiv:2608.19009v2（v1 2026-08-19 · v2 2026-08-20 公布，cs.CL；v2 含可复现性研究 κ≈0.8、PPMF 安全域案例、锚语义、15+ 修正）：https://arxiv.org/abs/2608.19009</li>
+<li><strong>第二篇</strong>：<em>The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security</em>（<code>paper2/</code>，12 页）——<strong>已提交 arXiv（2026-08-20），待公布</strong>；2027 会议周期规划见 <code>docs/17</code></li>
 <li><strong>文件</strong>：<code>paper/preprint.md</code>（源稿）· <code>paper/preprint.pdf</code>（20 页，可上传版）· <code>paper/submission.md</code>（arXiv 表单提交包）</li>
 </ul>
 <h3>VAL 验证自主等级（跨三章的元结论）</h3>
@@ -6016,228 +6280,144 @@ python medical/verify_diag.py
 <p><em>更多上下文见 <a href="HANDOFF.md">HANDOFF.md</a>——新 AI 接手项目的完整交接文档。</em></p>
 <div class="chapter">附录 B</div>
 
-<h2>项目交接文档（HANDOFF）</h2>
+<h2>项目交接文档（HANDOFF v2）</h2>
 <blockquote>
-<p>用途：在全新 AI 对话中继续本项目。本文档包含全部必要上下文——把全文粘贴给新 AI 即可继续。<br />
-最后更新：2026-08-18</p>
+<p>用途：压缩对话，转移新对话框。把本文件全文粘贴给新 AI 的第一条消息即可继续。<br />
+最后更新：2026-08-20。v1 交接于 2026-08-18（三章实证时代），本版覆盖至"两篇论文 + AgentDojo 集成"。</p>
 </blockquote>
 <hr />
-<h3>0. 一句话项目定位</h3>
-<p><strong>一个仓库、三个章节、一条脉络</strong>：研究"LLM 多步推理的失败模式与验证框架"。<br />
-核心主张（可原样引用）：</p>
-<blockquote>
-<p><strong>每一层都必须挂接可验证的裁判，而裁判必须理解"完备性"而不只是"正确性"。</strong><br />
-LLM 只做翻译（拆解/声明/渲染），确定性代码做裁判；验证规格必须锚定在<br />
-"不依赖 LLM 声明"的地面真值上。</p>
-</blockquote>
-<p>贯穿三章的元教训：<strong>"裁判的裁判也需要裁判"</strong>（验证器自身也要被校准/审计）。</p>
-<hr />
-<h3>1. 仓库与运行环境</h3>
-<ul>
-<li><strong>GitHub</strong>：https://github.com/1549080929-debug/math_agent（已推送，main 分支）</li>
-<li><strong>本地路径</strong>：<code>C:\Users\殷雅杰\Desktop\math_agent</code></li>
-<li><strong>Python</strong>：<code>C:\Users\殷雅杰\AppData\Local\Programs\Python\Python313\python.exe</code></li>
-<li><strong>API Key</strong>：DeepSeek，存在 <code>local_config.json</code>（已被 .gitignore 排除，不入库）</li>
-<li><strong>推送</strong>：已配置 SSH over 443（<code>~/.ssh/config</code> → ssh.github.com:443，git core.sshCommand 已设）。<br />
-  命令：<code>git add -A &amp;&amp; git commit -m "..." &amp;&amp; git push</code></li>
-<li><strong>模型</strong>：deepseek-chat；本地嵌入模型 BAAI/bge-small-zh-v1.5（第二章用，已缓存）</li>
-</ul>
-<hr />
-<h3>2. 方法论主线（三章共同）</h3>
-<pre><code>审计先行（先建带标签测试床）→ 测价值窗口（baseline 对比/可分性）→ 失败模式分类
-→ 裁判可行性（先测裁判本身）→ 诚实负结果如实报告
-</code></pre>
-<h4>失败模式分类学（第一章产出，8 个模式，全部有数据实证）</h4>
+<h3>0. 一句话定位</h3>
+<p><strong>一个仓库、三章实证、两条延伸线、两篇论文、一本专著</strong>：<br />
+研究"LLM 验证/安全防御的失败模式"，核心框架 <strong>VAL（验证自主等级 L0–L5）</strong>——按"验证规格的来源"给验证方案分级。<br />
+元教训："裁判的裁判也需要裁判"（框架/实验/代码三层审计，均已实证上演）。</p>
+<h3>1. 论文（两条线）</h3>
 <table>
 <thead>
 <tr>
-<th>#</th>
-<th>模式</th>
+<th>论文</th>
 <th>状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>自洽地错（错误答案有干净推导路径）</td>
-<td>✅ 审计先行制度化</td>
-</tr>
-<tr>
-<td>2</td>
-<td>伪验证（文本声称已验证但验证器没干活）</td>
-<td>✅ combiner 诚实化</td>
-</tr>
-<tr>
-<td>3</td>
-<td>拆解层污染（错误公式写进子任务）</td>
-<td>⚠️ 终局验证兜底</td>
-</tr>
-<tr>
-<td>4</td>
-<td>组合层篡改（推理对、终局答案错）</td>
-<td>✅ 类型系统+终局验证</td>
-</tr>
-<tr>
-<td>5</td>
-<td>完备性盲区（验证不了"漏掉的候选"）</td>
-<td>❌ 原理性开放</td>
-</tr>
-<tr>
-<td>6</td>
-<td>信任递归（验证规格由 LLM 声明）</td>
-<td>✅ 规则派生</td>
-</tr>
-<tr>
-<td>7</td>
-<td>预测编造（失败模式预测是幻觉归因）</td>
-<td>✅ 方法论修正</td>
-</tr>
-<tr>
-<td>8</td>
-<td>验证器极限（开放问题无裁判）</td>
-<td>⚠️ 架构边界</td>
-</tr>
-</tbody>
-</table>
-<p><strong>元结论（跨三章）</strong>：裁判的价值 = 规格锚定在哪一层。已抽象为<strong>验证自主等级 VAL-L0~L5</strong>（L0 LLM 声明 &lt; L1 题面派生 &lt; L2 客观真值 &lt; L3 单性质完备 &lt; L4 领域完备 &lt; L5 不可判定）。完备性不是"无解"，是相对 ODD（可判定域）的——在 ODD 内可达完备（解集等价、类型检查、已验证决策规则），ODD 外退回 L2。详见 <code>docs/05-锚定层级.md</code>；<code>verifier.py</code> 的 <code>ANCHOR_LEVELS</code>/<code>anchor_level()</code> 已把等级编码进代码。<strong>判级标准</strong>（三问+程序+清单）见 <code>docs/06-判级标准.md</code>，可运行工具 <code>val_standard.py</code>（10/10 自测）。</p>
-<hr />
-<h3>3. 第一章：数学验证（已封存）</h3>
-<p><strong>架构</strong>（math_agent/，42/42 裁判测试）：入口分类→拆解→自查→子任务(求解→SymPy验证→反馈纠错→回溯)→组合(结构化输出)→终局验证(规格规则派生)→诚实失败出口。<br />
-验证类型：root/extreme/interval_extreme/equality/satisfies/inequality/solution_set/answer_type/final_parameter_set（三态：PASS/FAIL/UNSURE）。</p>
-<p><strong>关键结果</strong>：<br />
-- 裁判单元测试 <strong>42/42</strong>（<code>test_verifier.py</code>）；新增 <code>solution_set</code>（L3 完备性锚：solveset 解集等价，抓漏解/压缩篡改）<br />
-- 20 题三级测试集跑 3 轮：系统 16/15/13 vs <strong>baseline 恒 20/20</strong>——<strong>准确率是随机变量，架构不优于 baseline</strong><br />
-- 压轴 2 题（竞赛/新题）：baseline 2/2，系统 0/2（拆解污染+组合篡改）→ 类型系统+终局验证后 B 题 [-1,1] 当场抓获并修正为 [0,1]<br />
-- 对抗预测实验：LLM 生成的标准答案 <strong>3/5 是错的</strong>（SymPy 审计证实）<br />
-- <strong>结论：数学域价值窗口为空</strong>（LLM 太强，验证无增量）</p>
-<p><strong>产出</strong>：<code>docs/01-研究叙事.md</code>、<code>docs/02-失败模式分类学.md</code>、<code>docs/03-架构设计备忘.md</code>、<code>docs/04-实验档案.md</code>、<code>RESULTS.md</code></p>
-<hr />
-<h3>4. 第二章：行为观测（已封存）</h3>
-<p><strong>领域</strong>：prompt injection 下 LLM 行为完整性观测（固定探针，标准答案未知）。<br />
-方法：行为统计特征 + 无向偏差（马氏距离风格）；probe-conditioned（per-probe 基线）。</p>
-<p><strong>五轮迭代结果</strong>（behavior/REPORT.md）：<br />
-| 轮 | 动作 | 关键数字 |<br />
-|---|---|---|<br />
-| 1 | 全局统计 | 留出 AUC 0.82（窄测试集假象） |<br />
-| 2 | 真实分布检验 | <strong>FPR 92%</strong>（窗口闭合）；evasiveB 对抗规避 AUC 0.987→0.653 |<br />
-| 3 | 探针化+操作点修正 | <strong>FPR 30%</strong>，强攻击 TPR 1.0/AUC 1.0（发现无向z分数中心≈√特征数，阈值必须从正常分布定） |<br />
-| 4 | 字符 n-gram | 弱攻击 TPR 0.50→0.80 但 FPR 翻倍 0.65（同义词改写噪声） |<br />
-| 5 | 真语义嵌入(bge-small-zh) | <strong>FPR 30%、强攻击 1.0、弱攻击 0.75</strong>（w=0.5）；隐匿执行 evasiveB 0.60（原理性边界） |</p>
-<p><strong>结论</strong>：行为统计检测达到<strong>可部署窗口</strong>；唯一边界=输出层无痕迹的隐匿执行攻击。</p>
-<hr />
-<h3>5. 第三章：医疗诊断（进行中）</h3>
-<p><strong>定位</strong>：LLM 诊断推理失败模式研究，<strong>非诊断工具</strong>。伦理边界：合成虚构病例、无真实患者数据、不构成医疗建议。</p>
-<p><strong>测试床</strong>：<br />
-- <code>medical/cases.json</code>：10 例教科书式病例（常见病/红旗征/罕见致命/易漏/鉴别陷阱/多系统/急诊/疼痛定位）<br />
-- <code>medical/cases_hard.json</code>：10 例硬病例（不典型×2/信息不足×2/竞争×3/合并症×1/误导主诉×2）</p>
-<p><strong>基线结果</strong>：<br />
-- 教科书 10 例：<strong>10/10 全对</strong>（置信度 0.9+，红旗征全识别）——LLM 太强，准确率窗口为空<br />
-- 硬病例 10 例：<strong>8/10 可接受，2/10 失败</strong>——失败模式=<strong>"信息不足仍下结论"</strong>（#103 阑尾炎 conf 0.7、#104 心绞痛 conf 0.7，lab 均为"暂无检查结果"）；置信度校准与信息完整性脱钩</p>
-<p><strong>裁判原型</strong>（<code>medical/verify_diag.py</code>，三个结构性检查）：<br />
-1. 信息完整性：lab 完全缺失 + 确定性高置信度诊断 → 过度自信 FAIL<br />
-2. 红旗征：急诊红旗 → 必须 urgent=True<br />
-3. 鉴别完整性：确诊在鉴别列表（含同义词/大小写归一）</p>
-<p>校准后结果：<strong>只标记 #103/#104/#105，其余 17 例全过；精确率/召回率 3/3（金标修正后）</strong>。<br />
-关键事件：<strong>裁判发现了人工漏判的失败（#105）</strong>——裁判价值不只是复核，是发现。<br />
-裁判自身的校准（同义词/大小写/字段语义）是"裁判的裁判也需要裁判"第三次上演。</p>
-<p><strong>第三章价值窗口形态</strong>：不是提高准确率，而是<strong>"信息完整性裁判"</strong>（廉价后置规则，针对医疗最危险的失败模式"结论超出证据"）。</p>
-<hr />
-<h3>6. 三章对比与当前状态</h3>
-<table>
-<thead>
-<tr>
-<th>章</th>
-<th>领域</th>
-<th>状态</th>
-<th>窗口结论</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>一</td>
-<td>数学验证</td>
-<td>✅ 封存</td>
-<td>空（LLM 太强）</td>
-</tr>
-<tr>
-<td>二</td>
-<td>行为观测</td>
-<td>✅ 封存</td>
-<td>达成（探针化+语义嵌入）</td>
-</tr>
-<tr>
-<td>三</td>
-<td>医疗诊断</td>
-<td>🔄 进行中</td>
-<td>形态=信息完整性裁判（原型 3/3）</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3>7. 当前待办（第三章，三选一）</h3>
-<ol>
-<li><strong>扩"信息不足"病例（10+ 例）</strong>：验证裁判的稳定精确/召回，变成可汇报指标；</li>
-<li><strong>裁判接入"诊断-检查"闭环</strong>：LLM 输出 → 裁判拦截过度自信 → 强制输出 UNSURE+检查建议（三态裁判在医疗的落地形态）；</li>
-<li><strong>收束第三章</strong>：写进 docs/ 叙事（01-研究叙事 升级为三章版）。</li>
-</ol>
-<p>更远的方向（可选）：新领域第四章（如代码生成验证/Agent 安全）、或把三章方法论提炼成正式文章/投名状。</p>
-<hr />
-<h3>8. 关键文件索引</h3>
-<table>
-<thead>
-<tr>
-<th>文件</th>
 <th>内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>main.py</code> / <code>verifier.py</code> / <code>decomposer.py</code> / <code>solver.py</code> / <code>combiner.py</code> / <code>final_check_deriver.py</code></td>
-<td>第一章架构</td>
+<td><strong>Grading the Graders</strong>（arXiv:2608.19009）</td>
+<td>✅ v1（08-19）+ v2（08-20）<strong>已公布</strong>，cs.CL</td>
+<td>VAL 框架 + 完备性盲区 + 四域实证 + 可复现性研究（κ≈0.8）+ PPMF 案例 + 锚语义 + 15+ 修正</td>
 </tr>
 <tr>
-<td><code>test_verifier.py</code></td>
-<td>裁判 42 用例</td>
-</tr>
-<tr>
-<td><code>behavior/</code></td>
-<td>第二章（REPORT.md 为完整报告，probes<em>.json 探针，data_raw</em>.json 数据，analyze*.py 分析）</td>
-</tr>
-<tr>
-<td><code>medical/</code></td>
-<td>第三章（cases<em>.json 病例，data_baseline</em>.json 基线，verify_diag.py 裁判，REPORT.md）</td>
-</tr>
-<tr>
-<td><code>docs/01~06</code></td>
-<td>第一章四份核心文档（05=锚定层级/可迁移结论，06=VAL判级标准）</td>
-</tr>
-<tr>
-<td><code>docs/07-文献评述.md</code></td>
-<td>17 篇"分层验证"论文 × VAL 判级标准（含低置信标注与待办）</td>
-</tr>
-<tr>
-<td><code>val_standard.py</code></td>
-<td>VAL 判级工具（<code>classify()</code> + 10 用例自测，判级三问的可运行版）</td>
-</tr>
-<tr>
-<td><code>paper/</code></td>
-<td>arXiv 预印本（README=状态清单；preprint.md=英文骨架稿，标题/摘要/正文各节草稿）</td>
-</tr>
-<tr>
-<td><code>RESULTS.md</code> / <code>EVALUATION.md</code></td>
-<td>结果总账</td>
-</tr>
-<tr>
-<td><code>HANDOFF.md</code></td>
-<td>本文档</td>
+<td><strong>The Same Zero</strong>（paper2/，14 页）</td>
+<td>📤 <strong>已提交 arXiv（08-20）待公布</strong></td>
+<td>22 防御等级图 + 预测验证 10/10 + 部署价值实验 + 2×2 + <strong>AgentDojo 官方基准同设置对比</strong></td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h3>9. 给新 AI 的起点建议</h3>
-<p>接到本交接文档后，推荐先读 <code>medical/REPORT.md</code> 和 <code>medical/verify_diag.py</code> 了解第三章现状，<br />
-然后与用户确认走待办 1/2/3 哪条。执行纪律保持不变：<br />
-审计先行、测窗口再建架构、诚实负结果、每步提交推送。</p>
+<p><strong>第二篇论文的关键数字（投稿版）</strong>：<br />
+- 部署价值实验（自研测试床，~5400 calls）：ND ASR 33.3% → <strong>V 栈（确认门+参数沙箱）0.000/1.000 良性</strong> vs N 栈（提示加固+关键词过滤）0.000/0.000——同一个 0，V 是结构（平台记录+schema，双受害者免疫），N 是模型运气（合规 0.235，半配合墙）<br />
+- <strong>2×2 矩阵</strong>（Llama 8B 第二受害者）：ND 0.253/0.328（Llama 更抗注入）、N 0.000/0.014、V 双受害者 0.000/1.000——结构跨受害者成立，运气跨受害者证实<br />
+- <strong>跨家族尝试</strong>：Kimi（kimi-k2.6/k2.7）与 Llama 8B <strong>拒绝当攻击者</strong>（显式拒答/中性改写消毒/消毒产物受害者侧无效）——"攻击者侧对齐约束跨家族红队招募"是可报告发现<br />
+- <strong>AgentDojo 官方基准同设置对比</strong>（banking，6 任务×6 注入×4 攻击=144 对/配置，DeepSeek）：<strong>V 0.0% ASR [0, 2.6] @ 83.3% utility</strong>；官方 tool_filter 0.0% @ <strong>16.7%</strong> utility；RP 8.3%、SL 6.2%、ND 6.2%、N 3.5%——V 与最强官方防御 ASR 持平、utility 5 倍<br />
+- <strong>N 栈跨测试床漂移是运气主张的最强证据</strong>：我们测试床 0.000 vs AgentDojo 3.5%——"N 的零是上下文相关的模型行为，换基准零就移动；V 的零不动"（论文 §6.5 原话）<br />
+- 审稿 8 项 P0/P1 修正 + 审查 7 条（CI/同设置对比/N 栈转正/四攻击族）<strong>全部落地</strong></p>
+<h3>2. 三章实证（v1 时代，已封存）</h3>
+<ul>
+<li>数学：42/42 裁判、20 题 16/15/13 vs baseline 20/20（准确率窗口空，架构价值=错误可报告性）</li>
+<li>行为观测：FPR 92%→30%，隐匿执行 0.60 是 L2 结构天花板</li>
+<li>医疗诊断：教科书 10/10、硬病例 8/10、信息完整性裁判 3/3（含 #105 人工漏判发现）</li>
+<li>代码生成（第四章）：164/164、6/6，反向验证 4/5 预测命中</li>
+<li>失败模式分类学：9 模式（docs/02，含新增"来源洗白"）</li>
+</ul>
+<h3>3. 研究资产现状</h3>
+<ul>
+<li><strong>可复现性研究</strong>（方向 1，五轮收束）：协议 v2.3（R1–R15）· 70 条语料 · 评分者 A + B2–B7 · 两两 κ 0.77–0.93 · 安全子集 22 条 90.9% · 作者 6 处判级偏差定位</li>
+<li><strong>方向 3</strong>（Agent 安全）：docs/12（PPMF 案例）· docs/13（锚语义 intent/truth/effect）· docs/14（VAL→ASR 预测协议）· docs/15（论文骨架→完整草稿）· docs/17（2027 投稿规划）</li>
+<li><strong>专著</strong>：《给"分级"分级》127 页（book/，<code>py book/build_book.py</code> 重建）——待更新 2×2/跨家族/AgentDojo 新发现</li>
+<li><strong>演示</strong>：<code>py demo/showcase.py [--batch]</code>（1 分钟 live：VAL 判级 + 智能体安全对比 + κ + 作品集）</li>
+<li><strong>工具链</strong>：val_standard（11 自测）/val_raise（22）/val_interrogate（5）/val_chain（38）/verifier（42）</li>
+</ul>
+<h3>4. 关键文件索引</h3>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>paper/</code></td>
+<td>论文 1 源稿+PDF（21 页 v2）+ 提交包 + figure1</td>
+</tr>
+<tr>
+<td><code>paper2/</code></td>
+<td>论文 2 源稿+PDF（14 页）+ 提交包 + 构建脚本</td>
+</tr>
+<tr>
+<td><code>agentsec/</code></td>
+<td>测试床（scenarios 50 场景/attacks 12+4 变体/defenses D1-D4/effects 真效果执行器/victim_client 双模型/adaptive 自适应+白盒+PAIR-lite/<strong>agentdojo_integration.py</strong>）+ REPORT.md（含 7.10 同设置对比）</td>
+</tr>
+<tr>
+<td><code>reliability/</code></td>
+<td>判级语料/评分/分析/预测卡/arXiv 抓取/validation（含 AgentDojo 论文全文）</td>
+</tr>
+<tr>
+<td><code>docs/01–17</code></td>
+<td>研究文档全集（17 篇）</td>
+</tr>
+<tr>
+<td><code>book/</code></td>
+<td>专著</td>
+</tr>
+<tr>
+<td><code>STATUS.md</code></td>
+<td>状态总账（VAL 视角定级）</td>
+</tr>
+<tr>
+<td><code>CAPABILITIES.md</code></td>
+<td>能力清单</td>
+</tr>
+<tr>
+<td><code>promo/</code></td>
+<td>知乎/推特/邮件/两篇 arXiv 走查</td>
+</tr>
+<tr>
+<td><code>local_config.json</code></td>
+<td>API key（gitignored）——<strong>DeepSeek key 当前有效</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>5. 环境配置</h3>
+<ul>
+<li>Python：<code>C:\Users\殷雅杰\AppData\Local\Programs\Python\Python313\python.exe</code>（<code>py</code> 启动器）</li>
+<li>DeepSeek：api.deepseek.com / deepseek-chat（local_config.json，已验证）</li>
+<li>本地 Ollama：llama3.1:8b（RTX 4050 6GB）——受害者切换：local_config 的 VICTIM_* 三字段</li>
+<li>攻击者/受害者抽象：<code>agentsec/attacker_client.py</code> / <code>victim_client.py</code>（OpenAI 兼容，可接任意端点）</li>
+<li>git：SSH over 443 已配；命令用 <code>;</code> 分隔（PowerShell 5.1 不支持 &amp;&amp;）；<strong>每步提交推送</strong></li>
+<li>网络：arxiv/PyPI/GitHub 可直连；Google 被墙（WebSearch 类工具会超时，用 arxiv API/curl 代替）</li>
+</ul>
+<h3>6. 待办（按优先级）</h3>
+<ol>
+<li><strong>第二篇 arXiv ID 公布后</strong>：更新 README/STATUS 链接（同第一篇流程）</li>
+<li><strong>P2 实验扩展</strong>（可选）：workspace/slack 套件 · Llama 受害者跑 AgentDojo · per-pair utility 明细</li>
+<li><strong>ARR 2027 周期</strong>（docs/17）：增强五杠杆（未对齐攻击者 Groq 70B / AgentDojo 已✅ / 2×2 多 seed / P02 SLR 对话节 / 良性扩样）→ 12 月 ARR 第一轮（目标 ACL 2027）→ 5-6 月 EMNLP 2027</li>
+<li><strong>专著 v2</strong>：吸收 2×2/跨家族/AgentDojo 结果</li>
+<li>可选：作者补判（N 系列，人机一致性）、第二篇 arXiv v2（若公布后还需修正）</li>
+</ol>
+<h3>7. 纪律与血泪教训（新 AI 必读）</h3>
+<ol>
+<li><strong>审计先行、测价值窗口、诚实负结果、每步提交推送</strong>——项目的方法论本身</li>
+<li><strong>裁判的裁判</strong>：判级被盲评修正 6 处 · main.py 回退洗白面被关（LLM 规格 PASS→UNSURE）· 实验 3 个 bug（schema 正则/resume 假 seed/指标误读）被抓——<strong>对数字永远做 trace 级验证</strong></li>
+<li><strong>指标方向陷阱</strong>：AgentDojo 的 security_results 平均 = ASR（True=攻击达成），曾误读为防御率导致"0.000 悖论"——跨库指标先查语义再解读</li>
+<li><strong>API key 安全</strong>：曾误入 git 的 <code>git add -A</code>（amend 清除、未推送）——local_config.json 已 gitignore，commit 前检查</li>
+<li><strong>对齐模型不愿当攻击者</strong>：跨家族红队需"愿意配合"的攻击者（Groq Llama 70B 候选），显式越狱框架会被拒答</li>
+<li><strong>半配合墙</strong>：模型在加固提示下对注入"提议工具但给空参数"——压制 ASR 但不构成结构保证（双受害者实测）</li>
+</ol>
+<h3>8. 给新 AI 的起点建议</h3>
+<ol>
+<li>读 <code>STATUS.md</code>（级别总账）→ <code>agentsec/REPORT.md</code>（实验全史）→ <code>paper2/paper.md</code>（论文 2 现状）</li>
+<li>验证环境：<code>py agentsec/test_keys.py</code>（两端 OK 才算环境就绪）</li>
+<li>与用户确认走待办 1/2/3 哪条；执行纪律见 §7</li>
+</ol>
 <div class="chapter">附录 C</div>
 
 <h2>验证栈审计报告</h2>

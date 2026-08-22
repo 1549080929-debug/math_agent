@@ -1,4 +1,4 @@
-# arXiv 提交包（第二篇：The Anchor Decides）
+# arXiv 提交包（第二篇：The Same Zero）
 
 > 生成：2026-08-20。主稿：`paper2/paper.md`（9 页，`py paper2/build_paper2.py` 重建 PDF）。
 > 类目建议：主 cs.CL（已有背书）+ 交叉 cs.AI、cs.CR（交叉无需背书；若想主 cs.CR 需另申请背书）。
@@ -6,7 +6,7 @@
 ## 1. Title（ASCII 安全）
 
 ```
-The Anchor Decides: Verification Autonomy Levels Predict the Success of LLM-Agent Security Defenses
+The Same Zero: Why Identical ASR Can Imply Different Guarantees in LLM-Agent Security
 ```
 
 ## 2. Authors
