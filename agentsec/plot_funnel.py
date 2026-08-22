@@ -37,7 +37,7 @@ for ax, (name, vals) in zip(axes, data.items()):
     ax.set_ylabel('fraction of malicious cases' if ax is axes[0] else '')
     ax.grid(axis='y', alpha=0.3)
 
-plt.suptitle('Same zero ASR, different break layer: execution funnel (v3 static, n=360)', fontsize=11.5)
+plt.suptitle('Execution Funnel under Static Attacks (v3, n=360): same zero ASR, different break layer', fontsize=11.5)
 plt.tight_layout()
 out = 'jade/funnel_v3.png'
 plt.savefig(out, dpi=150)
