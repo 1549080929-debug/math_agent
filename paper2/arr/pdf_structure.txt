@@ -1,0 +1,26 @@
+=== PDF 节结构（出现顺序） ===
+  [   111] Abstract: ...Abstract 001 LLM-agent security has produced a dense 002 landscape of defenses—prompt hardening, 003 content ﬁlters, per
+  [  2820] Introduction: ...Introduction 059 Large language model (LLM) agents are moving 060 from single-turn assistants to persistent systems 061 
+  [  5584] Prediction: ...Prediction validation. Frozen level-to- 118 behavior cards, validated on a small pub- 119 lished sample (10/10 hits, ﬂag
+  [  6904] Method: ...Method: V AL provides a compact language for 146 identifying the strongest guarantee a defense ac- 147 tually grounds, a
+  [  8178] Background: ...Background and Related Work 170 2.1 2.1 V eriﬁcation Autonomy Levels (V AL) 171 V AL (Yin 2026) grades veriﬁcation schem
+  [ 18623] Defense Level Map: ...Defense Level Map 376 Full per-defense ratings with evidence: 377 reliability/corpus.json, ratings/; blind- 378 rater ag
+  [ 25926] Deployment-Value: ...Deployment-Value Experiment: 501 Results 502 The dominance at a glance (full tables in 6.1- 503 6.4): 504 The two zeros 
+  [ 40412] Analysis: ...Analysis: The Same Zero, Different 759 Guarantees 760 The experiment’s central image is two zeros. V’s 761 0.000 ASR is 
+  [ 43939] Limitations: ...Limitations 821 1. Single model (victim and attacker). The 822 agent and every attack form used DeepSeek- 823 chat; cros
+  [ 45673] Conclusion: ...Conclusion 860 The agent-security ﬁeld has a deployment prob- 861 lem: too many defenses, no pre-purchase axis. We 862 s
+  [ 47220] References: ...References 892 1. Yin, Y .Grading the Graders: V eriﬁcation Au- 893 tonomy Levels (L0–L5) for LLM Reasoning. 894 arXiv:2
+
+=== 各页头尾 60 字符 ===
+页1: 头[The Same Zero: Why Identical ASR Can Imply Different Guarant] 尾[can be 083 rewritten by the very model that issues it. 084 1]
+页2: 头[• L1: deterministic rules (regex, keyword lists, 085 hand-wr] 尾[182 rectness with deterministic rule), L0 (otherwise). 183 2]
+页3: 头[The procedure is deterministic and has been mea- 184 sured f] 尾[. 282 This is an operational defense: we claim V AL is 283 3]
+页4: 头[a productive organizing principle, and we make it 284 easy t] 尾[(6/6 agentsec 380 items, κ ≈ 0.88 overall (Yin 2026)). 381 4]
+页5: 头[>p() * 0.2500 >p() * 0.2500 >p() * 0.2500@ Level Defenses An] 尾[ictions 451 hit on PPMF’s own published numbers (Xu et 452 5]
+页6: 头[al. 2026): content ﬁlters (L1) leave 0.200–0.933 453 ASR and] 尾[ 547 on different grounds, visible in compliance under 548 6]
+页7: 头[>p() * 0.2500 >p() * 0.2500 >p() * 0.2500@ Stack ASR (both v] 尾[15 ments), one at external constraint (authorization). 616 7]
+页8: 头[>p() * 0.1667 >p() * 0.1667 >p() * 0.1667 >p() * 0.1667 >p()] 尾[el. 691 For a same-setting comparison, we additionally 692 8]
+页9: 头[>p() * 0.3333 >p() * 0.3333@ Conﬁg DeepSeek victim ASR / com] 尾[78 point at the level of stability: N’s ﬂatness is the 779 9]
+页10: 头[>p() * 0.3333 >p() * 0.3333@ Conﬁg ASR (n = 144, 4 attack fa] 尾[ → failure mode) is the claim, 858 not the hit count. 859 10]
+页11: 头[9 9. Conclusion 860 The agent-security ﬁeld has a deployment] 尾[ndirect Prompt 956 Injection. arXiv:2302.12173, 2023. 957 11]
+页12: 头[References 958 A-MemGuard: Adaptive Memory Defense for LLM 9] 尾[LM (RA-LLM) . 1002 https://arxiv.org/abs/2309.14348. 1003 12]

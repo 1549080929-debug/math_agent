@@ -1,0 +1,5 @@
+页8 末尾 200 字符:
+er; a semantic-layer anchor cannot 713 verify what the model did but did not say ˘2014as 714 our covert-execution measurement found (output- 715 layer detectors cap at TPR 0.60 (Yin 2026)). LIT- 716 8
+
+页9 开头 200 字符:
+>p() * 0.3333 >p() * 0.3333@ Conﬁg ASR (n = 144, 4 attack families) Utility ND (no defense) 6.2% [3.3, 11.5] 82.6% N (prompt hardening + keyword ﬁlter) 3.5% [1.5, 7.9] 83.3% V (conﬁrmation gate + para

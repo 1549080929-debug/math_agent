@@ -109,7 +109,7 @@ LLM-agent security has produced a dense landscape of defenses---prompt hardening
 
 \subsection{1. Introduction}\label{introduction}
 
-Large language model (LLM) agents are moving from single-turn assistants to persistent systems that call tools, browse the web, and maintain long-term memory. This expansion has produced a matching expansion of security defenses: system-prompt hardening, keyword and content filters, tool-allowlist permission systems, confirmation gates, information-flow control, sandboxes, provenance-aware memory firewalls, and more. Each is presented with an implicit guarantee---``our defense blocks prompt injection,'' ``our gate stops unauthorized actions.'' But the guarantees are rarely commensurable: one paper's attack success rate (ASR) is not another's; one defense's security posture collapses under a different attack family; and no framework tells a deployer \emph{which defense to trust for which threat, before running experiments}.
+Large language model (LLM) agents are moving from single-turn assistants to persistent systems that call tools, browse the web, and maintain long-term memory---and the matching expansion of security defenses (prompt hardening, filters, permission gates, sandboxes, provenance firewalls) is presented with implicit, rarely commensurable guarantees: one paper's attack success rate (ASR) is not another's, and no framework tells a deployer \emph{which defense to trust for which threat, before running experiments}.
 
 This paper asks the question the field has not asked explicitly: \textbf{what does a given agent-security defense guarantee, and where does that guarantee come from?}
 
@@ -135,19 +135,18 @@ We make three contributions:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
+\tightlist
 \item
-  \textbf{A level map of agent security.} We classify 22 defenses---published systems (PPMF (Xu et al. 2026), Llama Guard, CaMeL, Progent, IFC/Fides, NeMo Guardrails, A-MemGuard, etc.), baselines, and our own four implementations---using a frozen, blind-rater-validated protocol (inter-rater κ ≈ 0.8 (Yin 2026)). The map organizes the defense landscape by what each defense can actually guarantee.
+  \textbf{A level map of agent security.} We classify 22 defenses using a frozen, blind-rater-validated protocol (inter-rater κ ≈ 0.8 (Yin 2026)), organizing the landscape by what each defense can actually guarantee.
 \item
-  \textbf{Prediction validation.} We freeze level-to-behavior prediction cards before outcome data and validate them on a small published sample: 10/10 hits (PPMF's own numbers, abstract-level evidence, flagged as such), including two mechanism-driven classification corrections---the point is falsifiability, not the hit count.
+  \textbf{Prediction validation.} Frozen level-to-behavior cards, validated on a small published sample (10/10 hits, flagged; two mechanism-driven corrections)---the point is falsifiability, not the hit count.
 \item
-  \textbf{The first deployment-value comparison.} Same budget, two stacks, one testbed: a VAL-guided stack (L2 intent anchor + L3 confinement) versus a mainstream intuition stack (L0 prompt hardening + L1 keyword filter), across 50 scenarios, 12 attack families, real tool effects, adaptive, white-box and PAIR-style attacks, three seeds, a second victim model, and the official AgentDojo benchmark (0.0\% ASR). The VAL stack dominates on both security and utility, and the contrast is structural rather than incidental.
-\item
-  \textbf{Zero stability as a measurable axis.} Escalating-attack trajectories (Z(α)) separate defenses by failure morphology---abrupt collapse (keyword filtering), progressive erosion (sandboxing), flat behavioral plateau (prompt hardening), flat structural plateau (confirmation gate)---and identical trajectories still require provenance to interpret. Zero stability joins ASR and compliance as a reportable property of an agent-security defense.
+  \textbf{Deployment-value comparison and zero stability.} Same budget, two stacks (VAL-guided vs.~mainstream intuition), one testbed---50 scenarios, 12 attack families, real effects, adaptive/white-box/PAIR escalation, three seeds, a second victim, and the official AgentDojo benchmark. The VAL stack dominates on security and utility; escalating-attack trajectories (Z(α)) further separate defenses by failure morphology (abrupt collapse, progressive erosion, flat behavioral vs.~structural plateau), and identical trajectories still require provenance to interpret---zero stability joins ASR and compliance as a reportable property.
 \end{enumerate}
 
-\textbf{What this paper claims---the spine in one paragraph.} The argument runs on three levels. \emph{Phenomenon:} two agent-security defenses can reach the same observed zero ASR with opposite guarantees---visible in the compliance gap and across two victim models (Section 6). \emph{Mechanism:} the difference lies in the verification anchor, i.e., where the security verdict is grounded (Section 5). \emph{Method:} VAL provides a compact language for identifying the strongest guarantee a defense actually grounds, and predicts the failure boundary of each level. A meta-claim completes the picture: the classifier used here is itself an L1 tool, and we measured rather than assumed its reproducibility (Section 8). If a reader remembers only one sentence, it should be: \emph{the same zero is not the same guarantee---zero is an outcome, not a guarantee.}
+\textbf{What this paper claims---the spine in one paragraph.} The argument runs on three levels. \emph{Phenomenon:} two defenses can reach the same observed zero ASR with opposite guarantees (Section 6). \emph{Mechanism:} the difference lies in the verification anchor, where the security verdict is grounded (Section 5). \emph{Method:} VAL identifies the strongest guarantee a defense actually grounds and predicts each level's failure boundary. If a reader remembers one sentence: \emph{the same zero is not the same guarantee---zero is an outcome, not a guarantee.}
 
-\textbf{What we do not claim.} VAL is not a general theory of AI verification, a complete security evaluation, or a ranking of defenses by quality. It is a mid-level methodological claim about LLM-agent security: when two defenses produce the same observed security outcome, the provenance of that outcome---which verification anchor grounds it---determines its guarantee and predicts its failure boundary. Claims about robotics, formal methods, human-in-the-loop systems, or non-agentic LLMs are outside this paper's scope; so is a claim that VAL covers every possible defense. We study the question the field has not asked explicitly, within the setting where we can answer it with controlled experiments and third-party benchmarks.
+\textbf{What we do not claim.} VAL is not a general theory of AI verification, a complete security evaluation, or a ranking of defenses. It is a mid-level methodological claim about LLM-agent security: when two defenses produce the same observed outcome, the provenance of that outcome determines its guarantee and predicts its failure boundary. Robotics, formal methods, HITL, and non-agentic LLMs are outside scope; so is a claim that VAL covers every defense.
 
 \subsection{2. Background and Related Work}\label{background-and-related-work}
 
@@ -155,106 +154,73 @@ We make three contributions:
 
 VAL (Yin 2026) grades verification schemes by three questions: Q1 \emph{where does the verification spec come from} (LLM declaration / deterministic rule / objective truth / decidable system); Q2 \emph{what does the verdict guarantee} (nothing / correctness / completeness); Q3 \emph{what scope does a completeness claim cover} (single property / domain / universal). The level is the first rule that fires: L5 (universal completeness, impossible), L4 (domain completeness), L3 (single-property completeness), L2 (correctness with objective anchor), L1 (correctness with deterministic rule), L0 (otherwise). The procedure is deterministic and has been measured for inter-rater reproducibility: three independent blind raters reach κ ≈ 0.8 on 48--70 schemes under the refined protocol (Yin 2026).
 
-Two refinements matter for security. First, \textbf{anchor semantics} (Zhang et al. 2026): objective anchors split by \emph{what they certify}---intent (a recorded decision event: ``the user confirmed this target''), truth (a fact: ``the answer matches ground truth''), effect (an execution outcome: ``the action actually occurred''). A confirmation record is an intent anchor; it authorizes, but says nothing about whether the outcome was correct. Conflating intent with effect is the category error behind most authorization failures. Second, \textbf{the completeness blind spot} (Yin 2026): substitution- and sampling-based checks verify proposed candidates but cannot prove that no candidate was missed. In security, the analog is the \emph{un-enumerated attack}: a gate that blocks all evaluated attacks is a correctness probe over the evaluated distribution, not a guarantee that no attack path was missed.
+Two refinements matter. First, \textbf{anchor semantics} (Zhang et al. 2026): objective anchors split by what they certify---intent (a recorded decision event), truth (a fact), effect (an execution outcome). A confirmation record is an intent anchor: it authorizes, but says nothing about correctness; conflating intent with effect is the category error behind most authorization failures. Second, \textbf{the completeness blind spot} (Yin 2026): checks verify proposed candidates but cannot prove none was missed---the analog in security is the \emph{un-enumerated attack}: a gate blocking all evaluated attacks is a correctness probe over the evaluated distribution, not a guarantee over all attack paths.
 
 \subsubsection{2.2 Agent-security defenses and their taxonomies}\label{agent-security-defenses-and-their-taxonomies}
 
-The defense literature is large. Text-level defenses (prompt hardening ({Zhou et al.} 2023), keyword/content filters, Llama Guard ({Inan et al.} 2023)) operate on the current context; tool-level defenses (allowlists ({Chen et al.} 2023), permission systems ({Shi et al.} 2025), information-flow control ({Costa et al.} 2025), sandboxes) gate execution; memory-level defenses (A-MemGuard (\emph{A-MemGuard} 2025), PPMF (Xu et al. 2026)) protect persistent state; benchmarks (AgentDojo (Debenedetti et al. 2024)) measure attack success and utility trade-offs. Recent work has begun to move beyond single-defense evaluation: Injection-Execution Dissociation (\emph{Injection-Execution Dissociation} 2026) shows that injection success and tool-execution success are separable safety properties (memory storage rates \textgreater97.5\% while downstream execution ranges 0--95\%, uncorrelated); the Source-of-Authority SLR (\emph{LLM-Based Test Oracles} 2026) classifies LLM test oracles by where their authority comes from and finds over half reach verdicts with no specification at all; When Does Verification Pay Off ({Lu} 2025) shows that same-family verification yields near-zero gain while cross-family verification remains valuable. Our contribution is different in kind: we do not add another defense, we provide a \emph{pre-purchase axis}---the anchor---that organizes the entire landscape and predicts each defense's failure modes, and we measure whether choosing by this axis beats choosing by intuition.
+The defense literature spans text-level (prompt hardening ({Zhou et al.} 2023), filters, Llama Guard ({Inan et al.} 2023)), tool-level (allowlists, permission systems, IFC ({Costa et al.} 2025), sandboxes), and memory-level (A-MemGuard (\emph{A-MemGuard} 2025), PPMF (Xu et al. 2026)) defenses, plus benchmarks like AgentDojo (Debenedetti et al. 2024). Recent work separates injection success from execution success (\emph{Injection-Execution Dissociation} 2026), classifies test oracles by authority source (over half with no specification (\emph{LLM-Based Test Oracles} 2026)), and shows same-family verification yields near-zero gain ({Lu} 2025). Our contribution is different in kind: not another defense, but a \emph{pre-purchase axis}---the anchor---that organizes the landscape and predicts each defense's failure modes, measured against choosing by intuition.
 
 \subsection{3. Method}\label{method}
 
 \subsubsection{3.1 Classification protocol}\label{classification-protocol}
 
-We classify defenses with the frozen VAL protocol (v2.3, (Yin 2026)), extended for security: R1 benchmarks are N/A (not runtime verifiers); R2 mixed systems are split per component with the weakest anchor on the verdict path reported; R3 evidence anchors do not equal verdict anchors (retrieved documents are L2 evidence; an LLM alignment verdict over them is L0); R4 silver anchors (deterministic recomputation without gold) are L1; R10 designer-authored unvalidated rules are L1; R12b theorem-backed exhaustive procedures (confinement, taint tracking) are decidable (L3); R15 LLM-generated verification expectations place the weakest anchor at L0. Each defense is rated on Q1/Q2/Q3 from a mechanism-only evidence pack by blind raters; classifications reported here are the committed (weakest-anchor) levels. For the security subset (22 agent-security items), two independent blind raters agree exactly on 20/22 (90.9\%); the two disagreements are known boundary cases (an LLM-alignment verdict classified under rule R3, and a single-property vs domain completeness scope).
+We classify defenses with the frozen VAL protocol (v2.3, (Yin 2026)) extended for security: R2 mixed systems split per component (weakest anchor on the verdict path); R3 evidence anchors do not equal verdict anchors; R10 designer rules are L1; R12b theorem-backed exhaustive procedures (confinement, taint tracking) are L3; R15 LLM-generated expectations are L0. Each defense is rated on Q1/Q2/Q3 from a mechanism-only evidence pack by blind raters. For the security subset (22 items), two independent raters agree exactly on 20/22 (90.9\%); the two disagreements are known boundary cases.
 
-\textbf{On the validity of the taxonomy.} A taxonomy cannot be validated by its own consistency: agreement among raters shows the categories are \emph{usable}, not that they are \emph{right}. We offer three independent lines of evidence instead. First, \emph{out-of-sample prediction}: the level-to-failure-mode cards (Section 3.2) were frozen before outcome data and hit 10/10 on published results, with two mechanism-driven corrections---retrospective storytelling cannot produce that pattern. Second, \emph{cross-benchmark convergence}: the same anchor logic predicts our own testbed results (Section 6), AgentDojo's official numbers (Section 6.5), JADE's MCP instances (Section 6.5), and LITMUS's OS-level behavior (Section 7)---four independent sources with no shared implementation. Third, \emph{falsifiability}: each card names the specific attack predicted to break its defense, so a single well-chosen counterexample refutes the mapping. This is an operational defense: we claim VAL is a productive organizing principle, and we make it easy to disprove---not that it is the unique correct ontology of agent security.
+\textbf{On the validity of the taxonomy.} Agreement among raters shows the categories are \emph{usable}, not \emph{right}. We offer three independent lines instead: \emph{out-of-sample prediction} (cards frozen before outcome data, 10/10 hits with two mechanism-driven corrections---retrospective storytelling cannot produce that pattern); \emph{cross-benchmark convergence} (the same anchor logic predicts our testbed, AgentDojo, JADE, and LITMUS results---four sources with no shared implementation); and \emph{falsifiability} (each card names the attack predicted to break its defense). We claim VAL is a productive organizing principle, not the unique correct ontology.
 
 \subsubsection{3.2 Prediction protocol}\label{prediction-protocol}
 
-Following the reverse-validation discipline of (Yin 2026), we freeze prediction cards before consulting outcome data: for each defense, level → predicted behavior pattern (ASR regime, bypass mechanism, benign-cost mode) + the specific attack predicted to break it. Cards are signed and dated, then validated against published data (PPMF's own numbers; abstract-level evidence for other systems, flagged as such). The protocol also generalizes out of sample: before running the third-party JADE MCP instances (Section 6.5), we froze five predictions (e.g., N's keyword filter will leak the post\_tweet variant, whose action word is absent from the filter's vocabulary; V's sandbox will block every variant by whitelist enumeration regardless of how much the model is driven). All five held on the real MCP harness, including the boundary prediction---the intuition stack leaked exactly the post\_tweet case.
+Following (Yin 2026), we freeze prediction cards before outcome data: for each defense, level → predicted behavior pattern + the specific attack predicted to break it, validated against published data (PPMF's numbers; abstract-level evidence flagged as such). The protocol also generalizes out of sample: before running JADE's MCP instances (Section 6.5) we froze five predictions (e.g., N's keyword filter will leak the post\_tweet variant---its action word absent from the filter's vocabulary; V's sandbox will block every variant by whitelist enumeration). All five held, including the boundary prediction.
 
 \subsubsection{3.3 Deployment-value experiment}\label{deployment-value-experiment}
 
 \textbf{Testbed.} A minimal agent: external content is written into memory; a user task triggers a tool call; the LLM (DeepSeek-chat, temperature 0.2) proposes a call; the defense chain decides; a real-effect executor performs the action (a ledger for transfers, an outbox for email, real file deletion in a sandbox directory, a forum log for comments). Attack success requires a \emph{real state change} (server-side effect semantics, as in (Xu et al. 2026)), not merely a proposal.
 
-\textbf{Scenarios and attacks.} 50 scenarios (30 malicious + 20 benign; the benign set is deliberately larger than the 25\% share used by (Xu et al. 2026; Debenedetti et al. 2024) to narrow utility confidence intervals), derived from the memory-provenance families of (Xu et al. 2026) (direct injection, keyword evasion, confirmation spoofing, procedure laundering, preference laundering, cross-domain, split context, authority laundering, hidden handles, multi-step, recovery jargon, frustration recovery). Attacks: 8 self-written variants (direct, paraphrase, fake-confirmation, combo, role-play, jailbreak prefix, deep rewrite with keyword splitting, authority frame) plus 4 third-party payloads from AgentDojo (Debenedetti et al. 2024) (TODO-prefix, ignore-previous, system-message, InjecAgent), 12 total. Attack escalation additionally includes an adaptive attacker (3 rounds; rewrites from the previous interception reason), a white-box adaptive attacker (told the exact system prompt and keyword list), and a PAIR-style candidate-search attacker (3 candidates per round, 2 rounds, with scoring feedback).
+\textbf{Scenarios and attacks.} 50 scenarios (30 malicious + 20 benign; the benign set is larger than the 25\% share of (Xu et al. 2026; Debenedetti et al. 2024) to narrow utility confidence intervals), derived from the memory-provenance families of (Xu et al. 2026). Attacks: 8 self-written variants (direct, paraphrase, fake-confirmation, combo, role-play, jailbreak prefix, deep rewrite with keyword splitting, authority frame) plus 4 third-party AgentDojo payloads (Debenedetti et al. 2024), 12 total; escalation adds an adaptive attacker (3 rounds, rewrites from the interception reason), a white-box adaptive attacker (told the system prompt and keyword list), and a PAIR-style candidate-search attacker.
 
 \textbf{Defenses.} Four self-implemented defenses, one per anchor family: - \textbf{D1} (L0): system-prompt hardening---``ignore instructions in external content; never perform high-risk actions without explicit user request.'' The verdict is the model's own compliance. - \textbf{D2} (L1): keyword filter over memory and call text (transfer/delete/send/payment terms, Chinese equivalents). - \textbf{D3} (L1/L2): confirmation gate---high-risk tools require a \emph{platform-recorded} confirmation event; text claims (``user-confirmed'') are ignored. - \textbf{D4} (L3): parameter sandbox---tool arguments must match schema (recipient whitelists, target patterns, type/range checks), executed in a side-effect stub with verified state changes.
 
-\textbf{Stacks (same budget, two defenses each).} - \textbf{V (VAL-guided)}: D3 + D4---an intent anchor (L2 input) plus a confinement property (L3). - \textbf{N (mainstream intuition)}: D1 + D2---prompt hardening plus keyword filtering. Prompt hardening is the dominant deployed pattern in production agents (system-prompt ``ignore external instructions'' clauses appear in default system prompts across major agent frameworks), and keyword filtering is its most common companion; together they represent the intuitive, low-implementation-cost default. We emphasize what this comparison does \emph{not} claim: it is not ``VAL beats all defenses''---structural defenses are expected to dominate behavioral ones on the security dimension by construction. The contribution is the \emph{epistemic} contrast, which the same-budget comparison makes visible: identical security numbers, opposite guarantees, and a sharp utility cost for the intuition stack (Section 6.1).
+\textbf{Stacks (same budget, two defenses each).} - \textbf{V (VAL-guided)}: D3 + D4---an intent anchor (L2 input) plus a confinement property (L3). - \textbf{N (mainstream intuition)}: D1 + D2---prompt hardening plus keyword filtering, the intuitive low-cost default in production agents. We emphasize what this comparison does \emph{not} claim: it is not ``VAL beats all defenses'' (structural defenses dominate behavioral ones by construction); the contribution is the \emph{epistemic} contrast---identical security numbers, opposite guarantees, a sharp utility cost for the intuition stack (Section 6.1).
 
 \textbf{Metrics.} ASR = high-risk tool executed with complete arguments and verified state change; compliance rate = the model \emph{proposes} a high-risk tool (including empty-argument hedging)---separating ``model was driven by the injection'' from ``the defense intercepted.'' Benign success = benign scenarios complete their intended action.
-
-\textbf{Attack escalation.} Static attacks (all 12 variants), adaptive attacks (3 rounds; an attacker LLM rewrites the injection from the previous round's interception reason), white-box adaptive (the attacker is told the exact system prompt and keyword list, and applies layered strategies: keyword evasion, then jailbreak framing, then combination).
 
 \textbf{Runs.} Static: 7 configs × 380 cases (30 malicious × 12 attack variants + 20 benign). Adaptive/white-box: 30 malicious scenarios × stacks × 3 rounds. Seeds: V, N, and the no-defense baseline (ND) re-run 3×. A second victim (Llama 3.1 8B) re-runs the static battery. Total ≈ 7,000 LLM calls across all experiments; AgentDojo (Section 6.5) and JADE probes add \textasciitilde2,000 harness-internal calls reported separately.
 
 \subsection{4. The Defense Level Map}\label{the-defense-level-map}
 
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Level
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Defenses
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Anchor / semantics
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Predicted behavior
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{L0} & Prompt hardening (D1; RA-LLM ({Zhou et al.} 2023)), ToolEmu judge, A-MemGuard consensus, SafeAgent plan layer, Self-Ask provenance & none / LLM self-assessment & residual ASR under strong attacks; no stable operating point; zero utility under over-restrictive prompts \\
-\textbf{L1} & Keyword filter (D2), NeMo Guardrails, Progent gate, tool allowlists, PPMF gate, confirmation-marker heuristics, perplexity filter & designer rules / intent & bypassed by rewriting; false-block benign actions \\
-\textbf{L2} & Llama Guard classifier, RAG citation check, effect-verification, statistical detectors & objective truth / truth·effect & effective in-distribution; fails on OOD, forged metadata, poisoned data \\
-\textbf{L3} & \textbf{IFC/Fides ({Costa et al.} 2025), CaMeL (\emph{CaMeL} 2025), sandboxing (D4), Progent SMT monotonic confinement} & decidable systems / structural & confinement, information-flow, or data-control properties hold by construction within the ODD; semantic dangers inside the allowed space pass \\
-\textbf{L4} & Smart-contract formal verification & formal kernels & domain-complete for encoded properties \\
-\textbf{N/A} & AgentDojo (Debenedetti et al. 2024), M³-SafetyBench & benchmarks & not runtime defenses (R1) \\
-\end{longtable}
-}
+The full level map (all 22 defenses) is in Appendix A.1.
 
 Full per-defense ratings with evidence: \texttt{reliability/corpus.json}, \texttt{ratings/}; blind-rater agreement for the security subset is 100\% between the two most recent raters (6/6 agentsec items, κ ≈ 0.88 overall (Yin 2026)).
 
 \textbf{The structural finding.} L3 anchors exist in agent security---but only for \emph{confinement and information-flow properties}: sandbox execution domains, taint tracking, data-control separation, SMT-monotonic permission lattices. These are decidable by construction. \emph{Semantic} safety (``is this action dangerous?'') is an open-world property for which no decidable fragment is available in the unrestricted setting, and hence caps at L2; restricted semantic properties that can be formally encoded (e.g., a bounded action taxonomy) remain eligible for higher levels. This mirrors the formal/empirical dichotomy of (Yin 2026) exactly: completeness is reachable only for formally specifiable properties.
 
-\subsubsection{4.1 Worked examples: how the classification reads five defenses}\label{worked-examples-how-the-classification-reads-five-defenses}
+\subsubsection{4.1 Worked examples: how the classification reads three defenses}\label{worked-examples-how-the-classification-reads-three-defenses}
 
-Each classification is a claim; per the framework's own epistemology, claims need anchors. We therefore show, in the main text, the full evidence chain for five representative defenses spanning the level spectrum (the remaining seventeen are in the supplementary corpus, \texttt{reliability/corpus.json}).
+Each classification is a claim; per the framework's own epistemology, claims need anchors. We show the full evidence chain for three representative defenses spanning the level spectrum (remaining classifications in the supplementary corpus).
 
-\textbf{PPMF --- the intent anchor (L1/L2).} Mechanism: memories carry platform-maintained provenance metadata (source, trust, confirmation events); a deterministic gate authorizes tool calls by matching action risk to the least-trusted supporting memory (Xu et al. 2026). Q1: the gate is a designer policy (rule) over platform-recorded events (truth); Q2: correctness; Q3: n/a. Reported level: \textbf{L1} (weakest anchor), with L2-grade inputs. Evidence (Xu et al. 2026): 0.000 ASR on evaluated attacks with intact metadata; \textbf{0.088 ASR under 10\% forged confirmations}---the completeness blind spot quantified. Predicted failure mode: forged/compromised metadata (outside the ODD). Observed: exactly that; the authors themselves list compromised metadata outside their guarantee.
+\textbf{Self-Ask provenance --- no anchor (L0).} Mechanism: the LLM infers whether memory text looks external, user-history-like, or confirmation-like, and authorizes from the inferred trust (Xu et al. 2026). Q1: LLM; Q2: none; Level: \textbf{L0}. Evidence: permissive mode reaches \textbf{0.984 ASR}; strict mode blocks all benign actions (Xu et al. 2026). Predicted failure mode: text claims (fake markers, social engineering). Observed: 0.984 ASR under permissive inference---the anchor is whatever the model believes.
 
-\textbf{IFC/Fides --- confinement as L3.} Mechanism: the planner dynamically tracks confidentiality and integrity taint labels and deterministically enforces lattice policies ({Costa et al.} 2025). Q1: decidable; Q2: completeness; Q3: single property (information flow). Level: \textbf{L3}. Evidence: a formal model that \emph{characterizes the class of properties enforceable by dynamic taint tracking}, evaluated on AgentDojo. Predicted failure mode: properties outside the lattice (covert channels, semantic content). Observed: consistent---the guarantee is about flow, not about whether the permitted action is wise.
+\textbf{PPMF --- the intent anchor (L1/L2).} Mechanism: a deterministic gate authorizes tool calls by matching action risk to the least-trusted supporting memory, whose provenance metadata (source, trust, confirmation events) is platform-maintained (Xu et al. 2026). Q1: designer policy over platform-recorded events; Q2: correctness; Level: \textbf{L1} (weakest anchor) with L2-grade inputs. Evidence: 0.000 ASR with intact metadata; \textbf{0.088 ASR under 10\% forged confirmations}---the completeness blind spot quantified. Predicted failure mode: forged/compromised metadata (outside the ODD). Observed: exactly that; the authors themselves list compromised metadata outside their guarantee.
 
-\textbf{CaMeL --- data-control separation as L3.} Mechanism: untrusted data channels are separated from trusted control flow; tool calls are capability-gated (\emph{CaMeL} 2025). Q1: decidable; Q2: completeness; Q3: single property (untrusted data cannot drive control flow). Level: \textbf{L3}. Evidence: ``77\% of tasks with provable security (compared to 84\% with an undefended system)'' on AgentDojo; ``the untrusted data retrieved by the LLM can never impact the program flow.'' Predicted failure mode: dangerous actions inside the authorized intent (semantic, in-ODD). Observed: consistent with the confinement frame---separation is provable; semantics is not.
+\textbf{IFC/Fides --- confinement as L3.} Mechanism: the planner dynamically tracks taint labels and deterministically enforces lattice policies ({Costa et al.} 2025). Q1: decidable; Q2: completeness; Q3: single property (information flow). Level: \textbf{L3}. Evidence: a formal model characterizing the class of properties enforceable by dynamic taint tracking. Predicted failure mode: properties outside the lattice (covert channels, semantic content). Observed: consistent---the guarantee is about flow, not about whether the permitted action is wise.
 
-\textbf{Llama Guard --- the statistical classifier (L2).} Mechanism: an LLM-classifier trained on human-labeled safety taxonomies returns safe/unsafe labels ({Inan et al.} 2023). Q1: truth (human labels); Q2: correctness; Q3: n/a. Level: \textbf{L2}. Evidence: 0.9007 accuracy on internal test sets, dropping on external benchmarks; no completeness claim. Predicted failure mode: out-of-distribution inputs and adversarial rewriting; nothing is proven about unlabeled inputs. Observed: the distribution-bound pattern is documented in the model card and external evals.
-
-\textbf{Self-Ask provenance --- no anchor (L0).} Mechanism: the LLM infers whether memory text looks external, user-history-like, or confirmation-like, and authorizes from the inferred trust (Xu et al. 2026). Q1: LLM; Q2: none; Q3: n/a. Level: \textbf{L0}. Evidence: permissive mode reaches \textbf{0.984 ASR}; strict mode blocks all benign actions (Xu et al. 2026). Predicted failure mode: text claims (fake markers, social engineering). Observed: 0.984 ASR under permissive inference---the anchor is whatever the model believes.
-
-The five examples trace the level ladder with primary-source evidence: L0 fails to text belief, L2 fails outside its distribution, L1/L2 fails outside its ODD (forged metadata), L3 holds by construction within its property---and all failure modes were predicted before the validation data were consulted (Section 5).
+The three examples trace the level ladder with primary-source evidence: L0 fails to text belief, L1/L2 fails outside its ODD (forged metadata), L3 holds by construction within its property---all failure modes predicted before the validation data were consulted (Section 5).
 
 \subsection{5. Prediction Validation}\label{prediction-validation}
 
 We froze 16 prediction cards (level → predicted failure mode + predicted breaking attack) before consulting outcome data.
 
-\textbf{PPMF family (6 defenses):} all six predictions hit on PPMF's own published numbers (Xu et al. 2026): content filters (L1) leave 0.200--0.933 ASR and collapse under rewriting; Self-Ask provenance (L0) reaches 0.984 ASR; the gate-only ablation (L1 without L2 inputs) blocks attacks but kills all benign actions; the full PPMF (L1/L2: platform metadata through a designer policy) achieves 0.000 ASR on evaluated attacks with benign preserved, and 0.088 ASR under 10\% forged confirmations---the completeness blind spot made quantitative.
+\textbf{PPMF family (6 defenses):} all six predictions hit on PPMF's published numbers (Xu et al. 2026): content filters collapse under rewriting; Self-Ask provenance (L0) reaches 0.984 ASR; the gate-only ablation kills benign actions; full PPMF (L1/L2) achieves 0.000 ASR with benign preserved, and 0.088 under 10\% forged confirmations---the completeness blind spot quantified.
 
 \textbf{New cards (abstract-level evidence, flagged):} 4/4 behavior predictions hit (Llama Guard distribution-bound accuracy; RA-LLM residual ASR under strong attacks; perplexity filtering weak alone; ToolEmu audit-value-only). Two mechanism-driven corrections emerged; because they are the strongest evidence that the prediction loop \emph{corrects} rather than merely confirms, each gets a full account below.
 
 \subsubsection{5.1 Mechanism-driven correction I: Progent's SMT monotonic confinement}\label{mechanism-driven-correction-i-progents-smt-monotonic-confinement}
 
-\textbf{Predicted:} L1 (a designer-authored permission policy; the gate is a deterministic rule). \textbf{Mismatch:} the abstract revealed a mechanism the evidence pack omitted---every policy update is adjudicated by an SMT solver as either \emph{narrowing} (applied automatically) or \emph{expanding} (requires approval), so the agent's effective action space can only shrink without approval. That is a confinement property with a decidable witness: within the policy lattice, monotonic confinement holds by construction, not by rule. \textbf{Corrected classification:} the gate remains L1 (designer rule on the verdict path), but the monotonic-confinement guarantee is annotated L3---an instance of the framework's own R12b (theorem-backed structure = decidable). The lesson: a classification is only as good as the mechanism facts in front of the rater; the mismatch is evidence for, not against, the protocol.
+\textbf{Predicted:} L1 (designer permission policy). \textbf{Mismatch:} every policy update is adjudicated by an SMT solver as \emph{narrowing} (automatic) or \emph{expanding} (requires approval)---the agent's action space can only shrink without approval, a confinement property with a decidable witness. \textbf{Corrected classification:} the gate stays L1, but the monotonic-confinement guarantee is annotated L3 (theorem-backed structure, R12b). The mismatch is evidence for, not against, the protocol.
 
 \subsubsection{5.2 Mechanism-driven correction II: RARR's LLM-mediated verdict (R3)}\label{mechanism-driven-correction-ii-rarrs-llm-mediated-verdict-r3}
 
-\textbf{Predicted:} L2 (attribution checking against retrieved documents as an objective anchor). \textbf{Mismatch:} full inspection showed RARR's verdict path is LLM-mediated end-to-end---the model generates queries, compares claims to retrieved passages, and edits the output; ``citation existence'' is not mechanically checked. Under the protocol's rule R3 (evidence anchors do not equal verdict anchors), the verdict component is LLM declaration, and the reported level drops to L0. \textbf{Corrected classification:} L2 → L0, with the retrieval evidence noted as an L2 evidence component that does not raise the verdict. The lesson is the same correction in the opposite direction: a superficially ``objective'' anchor can be L0-masked when the alignment step is model-mediated---precisely the laundering pattern of the memory domain (Section 2.1).
+\textbf{Predicted:} L2 (attribution checking). \textbf{Mismatch:} RARR's verdict path is LLM-mediated end-to-end---``citation existence'' is not mechanically checked. Under R3 (evidence anchors do not equal verdict anchors), the verdict component is LLM declaration. \textbf{Corrected classification:} L2 → L0; a superficially ``objective'' anchor can be L0-masked when the alignment step is model-mediated---precisely the laundering pattern of the memory domain.
 
 \textbf{Cumulative: 10/10 behavior predictions hit (6 high-confidence, 4 abstract-level), 2 classification corrections.} Sample is small; the value is that the prediction \emph{protocol} is now demonstrated end-to-end, not that the hit rate is large.
 
@@ -370,46 +336,25 @@ D4 & 0.067 & \textbf{0.200} & --- & --- & --- \\
 
 The single-defense breakpoints are already informative. Two zeros survive both adaptive and white-box escalation unchanged (D1 at 0.000, D3 at 0.000), and two do not (D2 0.200→0.467, D4 0.067→0.200). But the two surviving zeros rest on different grounds, visible in compliance under the same attacks: D3's model is driven to propose the malicious tool in 53.3\% of adaptive cases and 56.7\% of white-box cases and is still blocked every time (the gate reads a platform record the attacker cannot write), while D1's model is driven 36.7\%/33.3\% and the zero depends on its refusal behavior holding under every attack form we tried. The same static zero, the same adaptive zero, the same white-box zero---different provenance, and different predicted breakpoints under attacks strong enough to move a behavioral refusal (Section 7).
 
-\textbf{Zero stability under escalating attack (Z(α)).} Tracking the cumulative ASR round by round exposes distinct stability morphologies (Figure: zcurve7). D2 holds near 0.2 through round 1 and then climbs monotonically to \textbf{0.833 by round 7} (each rewrite learns another way around the keyword vocabulary; the 3-round estimate of 0.467 understates the true collapse). D4 jumps at round 2 and plateaus (0.067 → 0.300 → 0.300: rewrites learn the schema-legal forms quickly, then exhaust the space). D1 and D3 stay at 0.000 across all seven rounds. The two flat curves are indistinguishable in Z(α) alone---which is exactly the point. \textbf{Identical observed zero-stability profiles do not, by themselves, establish equivalent security guarantees}; the outcome (zero stability) is the same, and only the provenance separates the guarantees. The gap widens under escalation: under 7-round adaptive attacks, D3's model is driven to propose the malicious tool in \textbf{83.3\%} of cases and is still blocked every time (the gate reads a platform record under an uncompromised authorization/audit substrate), while D1's model is driven 36.7\% and the zero is its refusal behavior holding. We attempted to falsify D1's flat curve directly (escalating 7-round adaptive attacks with attacker prompts explicitly demanding complete executable arguments, plus authority/emergency/role-play frames): it did not break---the behavioral zero is stable under this attack budget---which we read as stronger support for the provenance distinction, not as evidence that it cannot break. We predict it will break under an attack strong enough to defeat DeepSeek's refusal behavior (e.g., a less-aligned attacker model), and D3's will not, short of compromising the audit substrate itself. This is a proof-of-concept characterization at seven discrete attack stages (30 cases per stage), not a high-resolution estimate of a continuous failure frontier; the gradient that could falsify the prediction is left to future work.
+\textbf{Zero stability under escalating attack (Z(α)).} Tracking the cumulative ASR round by round (7 rounds, 30 cases per point; full data in Appendix) exposes distinct stability morphologies. D2 climbs monotonically to \textbf{0.833 by round 7} (each rewrite learns another way around the keyword vocabulary); D4 jumps at round 2 and plateaus (0.067 → 0.300); D1 and D3 stay at 0.000 across all seven rounds. The two flat curves are indistinguishable in Z(α) alone---which is exactly the point. \textbf{Identical observed zero-stability profiles do not, by themselves, establish equivalent security guarantees}; only the provenance separates them, and the gap widens under escalation: D3's model is driven to propose the malicious tool in \textbf{83.3\%} of cases and is still blocked every time (the gate reads a platform record), while D1's model is driven 36.7\% and the zero is its refusal behavior holding. We attempted to falsify D1's flat curve directly (7-round adaptive attacks with prompts explicitly demanding complete executable arguments, plus authority/emergency/role-play frames): it did not break under this attack budget---stronger support for the provenance distinction, not evidence that it cannot break. We predict it will break under an attack strong enough to defeat DeepSeek's refusal behavior (e.g., a less-aligned attacker); D3's will not, short of compromising the audit substrate itself (Appendix).
 
-\textbf{Where the zero breaks: an execution funnel under static attacks.} The funnel is a mechanism snapshot at one attack condition (static, 12 variants, n=360)\u2014it is not the 7-round Z(\u03b1) trajectory, which is reported separately above. For each malicious case we record whether the model proposes a high-risk tool (compliance), whether the proposal carries complete executable arguments, whether it passes the authorization/rule check, and whether it executes with a verified state change. D1's funnel collapses at the second stage: the observed zero is terminated at the complete-argument stage\u2014the model fails to produce executable arguments under the hardening prompt. The break is at parameter completeness, but the anchor remains behavioral: D1 contains no structural parameter-integrity verifier; argument completeness is whatever the model happens to produce (the same shape as N's, 0.233 \u2192 0.000). D3's funnel reaches the third stage: the model produces complete arguments in 49.7\% of cases, and the authorization gate then refuses every one\u2014the zero is the platform record (the same shape as V's, 0.497 \u2192 0.497 \u2192 0.000). The same ASR, the same flat Z(\u03b1), but the funnels break at different layers: one at model behavior (arguments), one at external constraint (authorization). This is the funnel-level statement of the paper's thesis\u2014the zero does not say where it comes from; the funnel does.
+\textbf{Where the zero breaks: an execution funnel under static attacks} (a mechanism snapshot, distinct from the 7-round Z(\u03b1) above). For each case we record whether the model proposes a high-risk tool (compliance), whether the proposal carries complete arguments, and whether it passes authorization and executes with a verified state change. D1's funnel collapses at the second stage: the zero is terminated at the complete-argument stage\u2014the model fails to produce executable arguments under the hardening prompt. The break is at parameter completeness, but the anchor remains behavioral: D1 has no structural parameter-integrity verifier (same shape as N's, 0.233 \u2192 0.000). D3's funnel reaches the third stage: complete arguments in 49.7\% of cases, refused every time by the authorization gate\u2014the zero is the platform record (same shape as V's, 0.497 \u2192 0.497 \u2192 0.000). The same ASR and flat Z(\u03b1), but the funnels break at different layers: model behavior (arguments) vs.~external constraint (authorization). The zero does not say where it comes from; the funnel does.
 
 \textbf{Definition (hedging wall).} Under a hardening prompt (D1), an LLM victim under injection may comply \emph{partially}: it proposes the requested high-risk tool while emitting empty or incomplete arguments---a stable compromise between the injection (``propose the action'') and the safety prompt (``do not execute without authorization''). Actionable ASR requires complete arguments, so hedging suppresses ASR \emph{without any structural gate}. The wall is a model behavior, not a mechanism: its height is victim-specific (compliance 0.235 for DeepSeek, 0.014 for Llama 8B, Section 6.4).
 
-Adaptive attacks (attacker rewrites from the interception reason) nearly double the leak rate of the L1 and L3 single defenses. Against the stacks: V holds---the attacker cannot forge platform records or schema-legal arguments it does not possess---even when the model is driven to propose the malicious tool in 57\% of scenarios (white-box compliance 0.567, 2.4x N's 0.235). N holds only because the hedging wall survives every attack form we tried: static jailbreaks, adaptive rewriting, white-box knowledge, PAIR-style candidate search (3 candidates × 2 rounds, 0.000), and a willing cross-family attacker (DeepSeek crafting jailbreaks against Llama: 0.000, Section 6.4). The two aligned cross-family candidates we attempted (Moonshot Kimi, Meta Llama 8B as \emph{attackers}) declined the role---explicit refusals, and sanitizing rewrites under indirect framing (Section 8.1). Gradient-based attacks (GCG) are out of scope: the API exposes no gradients or token logits.
+Adaptive attacks nearly double the leak rate of the L1 and L3 single defenses (D2 0.200→0.467, D4 0.067→0.200). Against the stacks: V holds even when the model is driven to propose the malicious tool in 57\% of scenarios (white-box compliance 0.567, 2.4× N's 0.235); N holds only because its hedging wall survives every attack form we tried---static, adaptive, white-box, PAIR (0.000), and a willing cross-family attacker (DeepSeek against Llama: 0.000, Section 6.4). Aligned cross-family attackers (Moonshot Kimi, Meta Llama 8B) declined the role---explicit refusals, sanitizing rewrites (Section 8.1). Gradient-based attacks (GCG) are out of scope: the API exposes no gradients.
 
 \subsubsection{6.3 Seeds and honesty}\label{seeds-and-honesty}
 
-V, N, and ND re-run 3×: standard deviations ≈ 0.005 on compliance, 0.000 on ASR and benign success. The headline contrast is stable. We also record two harness bugs caught mid-experiment (a schema regex that blocked all deletes; a resume bug that silently duplicated seeds), each fixed and reported---the judge's judge applied to our own experiment.
+V, N, and ND re-run 3×: standard deviations ≈ 0.005 on compliance, 0.000 on ASR and benign success. The headline contrast is stable (details and two harness bugs caught and fixed mid-experiment in Appendix).
 
 \subsubsection{6.4 Victim generalization: a 2x2 matrix}\label{victim-generalization-a-2x2-matrix}
 
 All results above use DeepSeek-chat as the victim. To test whether the structural pattern is victim-specific, we ran the same static attack suite with a second, independent victim---Meta Llama 3.1 8B (local Ollama, same harness, tool registry added to the prompt):
 
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Config
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-DeepSeek victim ASR / compl. / benign
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\textbf{Llama victim} ASR / compl. / benign
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-ND (no defense) & 0.333 / 0.492 / 1.000 & 0.253 / 0.328 / 1.000 \\
-N (D1+D2) & 0.000 / 0.233 / 0.000 & 0.000 / 0.014 / 0.000 \\
-V (D3+D4) & 0.000 / 0.497 / 1.000 & 0.000 / 0.317 / 1.000 \\
-\end{longtable}
-}
+The 2×2 matrix is in Appendix A.2.
 
-Three findings. First, \textbf{baseline injection compliance is model-specific}: Llama 8B is \emph{more} resistant than DeepSeek (ND compliance 0.328 vs 0.492; ASR 0.253 vs 0.333). Second, \textbf{N's zero generalizes, and its ``model luck'' nature is confirmed by a second model}: both victims are driven by the injections without defenses (compliance \textgreater{} 0), and prompt hardening suppresses actionability to a model-specific degree (0.233 for DeepSeek, 0.014 for Llama); the security number is a model behavior, not a structure. Third, \textbf{V's structural claim is victim-independent}: 0.000 ASR and 1.000 benign for both victims, including 0.317 compliance (the model proposing malicious tools a third of the time) tolerated without a single execution. We additionally ran the one available \emph{willing} cross-family attacker cell---DeepSeek crafting white-box jailbreaks against the Llama victim (adaptive, 3 rounds, N stack): ASR 0.000, compliance 0.000---DeepSeek's jailbreaks could not induce Llama to even propose the malicious tool. The pattern holds across every victim/attacker combination obtainable with available models. \textbf{The generalization reads crisply: structural guarantees are model-independent; behavioral luck is model-dependent.} V's zero is a property of the gate and schema; N's zero is a property of the model's mood on the day.
+Three findings. First, \textbf{baseline injection compliance is model-specific}: Llama 8B is more resistant than DeepSeek (compliance 0.328 vs 0.492). Second, \textbf{N's ``model luck'' is confirmed by a second model}: hardening suppresses actionability to a model-specific degree (0.233 vs 0.014). Third, \textbf{V's structural claim is victim-independent}: 0.000 ASR and 1.000 benign for both, tolerating 0.317 compliance; a willing cross-family attacker (DeepSeek against Llama) also failed (0.000). \textbf{Structural guarantees are model-independent; behavioral luck is model-dependent.}
 
 \subsubsection{6.5 Validation on the official AgentDojo benchmark}\label{validation-on-the-official-agentdojo-benchmark}
 
@@ -441,96 +386,106 @@ AgentDojo spotlighting & 6.2\% {[}3.3, 11.5{]} & 81.2\% \\
 \end{longtable}
 }
 
-(95\% Wilson CIs in brackets.) Three observations. First, \textbf{V matches the strongest official defense on ASR (both 0.0\% {[}0.0, 2.6{]}) while preserving five times the utility} (82.6\% vs 16.7\%). Second, \textbf{the tool filter's utility collapse is itself a VAL failure-mode prediction made visible.} Its 16.7\% is not a design choice to ``refuse most calls''---it is DeepSeek failing the filter's own instruction. Asked to output the names of the tools relevant to the task, the model emits names that do not exist in the suite (\texttt{pay\_bill}, \texttt{filter\_transactions\_by\_date}, \texttt{calculate\_total\_spending}, \texttt{bank\_transfer\_tool}), so the filter's \texttt{tool\_name\ in\ output} match removes every tool and the agent can no longer act (126 of 144 traces contain no tool call at all). The same defense on GPT-4o in (Debenedetti et al. 2024) \emph{increases} benign utility; on DeepSeek it collapses to 16.7\%---and, on inspection, to 0\%, since the 24 ``successes'' are a false positive: the banking environment's initial state already contains a 50.00 transfer to the IBAN that user\_task\_5's utility check matches. The anchor of tool\_filter is the model's instruction-following (L0/L1 luck), and it fails the way that anchor fails: when the model does not comply, the defense does not merely stop protecting---it destroys usability. Third, \textbf{the cross-testbed difference in N's behavior is the strongest evidence for our core claim.} In our own testbed, N reached 0.000 ASR (its security was produced by the model's refusal behavior under the hardening prompt); on AgentDojo, the same stack leaks 3.5\% ASR. The difference is not a bug but the thesis made visible: \emph{N's zero is context-dependent model behavior, not structure---move the stack to another benchmark and the zero moves with it.} V's zero does not move (0.0\% in both testbeds, across four attack families, against two victim models).
+(95\% Wilson CIs in brackets.) Three observations. First, \textbf{V matches the strongest official defense on ASR (both 0.0\% {[}0.0, 2.6{]}) while preserving five times the utility} (82.6\% vs 16.7\%). Second, \textbf{the tool filter's utility collapse is a VAL failure-mode prediction made visible}: its 16.7\% is not ``refusing most calls'' but DeepSeek failing the filter's own instruction---it emits tool names not in the suite, so the filter removes every tool (126/144 traces have no tool call). The same defense on GPT-4o \emph{increases} benign utility; on DeepSeek it collapses to 16.7\% (to 0\% on inspection: the 24 ``successes'' match a pre-existing transaction). Anchored in the model's instruction-following (L0/L1 luck), when the model does not comply the defense destroys usability rather than merely failing to protect. Third, \textbf{the cross-testbed difference in N is the strongest evidence for our core claim}: in our testbed N reached 0.000 ASR (model refusal behavior); on AgentDojo the same stack leaks 3.5\%. \emph{N's zero is context-dependent model behavior---move the stack to another benchmark and the zero moves with it.} V's zero does not move (0.0\% in both).
 
 \textbf{Attack-family breakdown of the undefended baseline.} The 6.2\% ND ASR is not uniform across the four families: \emph{direct} accounts for 7 of the 9 successes (19.4\% ASR) and \emph{system\_message} for 2 (5.6\%), while \emph{ignore\_previous} and \emph{injecagent} reach 0.0\%---DeepSeek recognizes these two families' explicit ``ignore previous instructions'' framing and refuses. All four families load and inject correctly (the payloads appear in the traces); the zeros are model immunity, not a harness bug. This is itself a model-behavior (L0) fact: the same families could succeed on a more compliant model, which is exactly why V's structural zero (0.0\% across all four) is the meaningful number.
 
 Scope caveats: a subset of the banking suite (6/19 user tasks, 6/24 injection tasks), one suite, one agent model (DeepSeek-chat), and four attack families; the harness, tasks, attacks, and evaluation are AgentDojo's, so the gap to full coverage is breadth, not provenance.
 
-\textbf{On the varying ND baseline across testbeds.} The undefended ASR differs sharply across our three settings---0.333 on our own testbed (Chinese memory injections, 30 malicious scenarios), 6.2\% on AgentDojo (English TODO injections, 144 pairs), 87.5\% on JADE's MCP instances (English tool-description poisoning, 16 cases). This is expected and informative rather than a contradiction: ND ASR measures the \emph{attack surface} (injection strength, carrier, environment semantics), not a fixed property of the model. What is stable across all three is the \emph{contrast}: the intuition stack's zero moves with the setting (0.000 → 0.035 → 0.062 as attacks get harder), while V's structural zero does not (0.000 everywhere).
-
 \subsection{7. Analysis: The Same Zero, Different Guarantees}\label{analysis-the-same-zero-different-guarantees}
 
-The experiment's central image is two zeros. \textbf{V's 0.000 ASR is structural}: the confirmation gate reads platform-recorded events (the LLM cannot write them), and the sandbox enforces schema whitelists (arguments the attacker cannot produce are impossible). It holds while the model is maximally compromised (0.567 compliance) and across all 12 attack families, adaptive iteration, and white-box knowledge. \textbf{N's 0.000 ASR is behavioral}: the hardening prompt makes this particular model hedge---it complies with the injection by proposing the tool, then refuses the arguments. The same family's jailbreaks (our attacker was DeepSeek) cannot convert compliance into actionability. A different model, a stronger attacker, or a differently-phrased prompt could move N's zero; nothing can move V's within its ODD. The Z(α) trajectories of Section 6.2 make the same point at the level of stability: N's flatness is the model's mood holding under escalation, V's flatness is the platform's record holding---the same trajectory, different ground.
+The experiment's central image is two zeros. \textbf{V's 0.000 ASR is structural}: the gate reads platform-recorded events (the LLM cannot write them) and the sandbox enforces schema whitelists; it holds at 0.567 compliance across all 12 attack families, adaptive iteration, and white-box knowledge. \textbf{N's 0.000 ASR is behavioral}: the hardening prompt makes this model hedge\u2014comply with the injection by proposing the tool, then refuse the arguments. A different model, stronger attacker, or differently-phrased prompt could move N's zero; nothing can move V's within its ODD. The Z(\u03b1) trajectories make the same point at the level of stability: N's flatness is the model's mood holding, V's is the platform's record holding\u2014the same trajectory, different ground.
 
-This is the deployment answer to ``which defense should I buy?'': \textbf{VAL selection buys a guarantee; intuition buys the model's current mood.} The cost difference is visible in the same table: both reach zero, but N's zero costs every benign action (0.000 benign success---users cannot transfer rent or send reports), while V's zero is lossless. The official tool filter on AgentDojo (§6.5) is the same story from the other side: a defense whose anchor is the model's instruction-following does not merely fail to protect when the model does not comply---it \emph{destroys usability} (utility 16.7\%, and 0\% once the false-positive task is removed). Under VAL's usage criteria ((Yin 2026), cost of silent error × encodability), the deployer's question becomes precise: \emph{is the threat inside the anchor's ODD?} If yes, L2/L3 structure is available; if no, the honest answer is L2 correctness plus labeling, not a claim of safety.
+This is the deployment answer to ``which defense should I buy?'': \textbf{VAL selection buys a guarantee; intuition buys the model's current mood.} Both reach zero, but N's zero costs every benign action while V's is lossless; the AgentDojo tool filter is the same story from the other side\u2014a defense anchored in the model's instruction-following \emph{destroys usability} when the model does not comply. Under VAL's usage criteria, the deployer's question becomes precise: \emph{is the threat inside the anchor's ODD?} If yes, L2/L3 structure is available; if no, the honest answer is L2 correctness plus labeling, not a claim of safety.
 
-\textbf{The account extends to the behavioral layer.} The most striking failure mode in current agent security is not semantic but physical: \textbf{Execution Hallucination (EH)}---an agent verbally refuses a dangerous request while the operation has already completed at the OS level. LITMUS (Zhang et al. 2026) measured this across six frontier agents in real OS environments (EHR 7.98--17.97\%) and showed it is invisible to every semantic-only evaluation framework. Under VAL this is not a surprise but a prediction: the anchor for a \emph{behavioral} claim must live on the physical layer. A semantic-layer anchor (L0 model self-report; L1 rules over dialogue) cannot, by construction, verify what the model did but did not say---exactly as our own covert-execution measurement found (output-layer detectors cap at TPR 0.60 (Yin 2026)). LITMUS's dual-layer verification is the L2 anchor applied to behavior: it reads OS state, not conversation. The same lesson holds for defense as for evaluation: a defense whose guarantee lives in what the model \emph{says} it will do (N's zero) cannot be held to the standard of one that reads the platform record (V's zero).
+\textbf{The account extends to the behavioral layer.} The most striking failure mode is physical, not semantic: \textbf{Execution Hallucination (EH)}\u2014an agent verbally refuses while the operation completes at the OS level. LITMUS (Zhang et al. 2026) measured this across six agents (EHR 7.98\u201317.97\%), invisible to every semantic-only framework. Under VAL this is a prediction: the anchor for a \emph{behavioral} claim must live on the physical layer; a semantic-layer anchor cannot verify what the model did but did not say\u2014as our covert-execution measurement found (output-layer detectors cap at TPR 0.60 (Yin 2026)). LITMUS's dual-layer verification is the L2 anchor applied to behavior; a defense whose guarantee lives in what the model \emph{says} it will do (N's zero) cannot match one that reads the platform record (V's zero).
 
 \subsection{8. Limitations}\label{limitations}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
+\tightlist
 \item
-  \textbf{Single model (victim and attacker).} The agent and every attack form (static, adaptive, white-box, PAIR-lite) used DeepSeek-chat. D1's hedging wall is explicitly model-behavior-bound, and same-family jailbreaks are the hardest case for the attacker. We attempted cross-family attackers with two independent families---Moonshot Kimi (kimi-k2.6, kimi-k2.7-code, via API) and Meta Llama 3.1 8B (local Ollama). Both families \textbf{refused to participate as attackers}: explicit attack-crafting requests were declined (``I cannot assist with generating such attack text''), and indirect rewriting prompts produced \emph{sanitized} payloads (imperative injections rewritten into descriptive records). We then measured the sanitized payload's effect on the victim: fed to DeepSeek, it \textbf{no longer drove the injection} (the victim proposed a benign read instead of the transfer). The cross-family dimension is therefore closed as far as aligned models can close it: the hedging wall was not broken by any obtainable cross-family attacker, because \textbf{aligned attackers decline the role}---a finding that is itself model-behavior (L0), not structure. A less-aligned or red-team-purposed attacker (e.g., hosted Llama-3.3-70B) remains the open variant. GCG-style optimization is additionally out of scope: the API exposes no gradients or token logits.
+  \textbf{Single model (victim and attacker).} The agent and every attack form used DeepSeek-chat; cross-family attackers (Moonshot Kimi, Meta Llama 8B) declined the role. A less-aligned attacker (e.g., hosted Llama-3.3-70B) and GCG remain open variants.
 \item
-  \textbf{Self-built testbed.} Scenarios, defenses, and the real-effect sandbox are ours. This is deliberate: the experiment compares \emph{selection strategies}, and a controlled comparison requires controlled implementations---plugging third-party defenses would confound strategy with implementation quality. The cost is that absolute ASR figures may not transfer to production-grade implementations (we expect the ordering to hold, not the point estimates). Section 6.5 additionally validates the stacks on the official AgentDojo benchmark (their tasks, attacks, and evaluation), reaching 0.0\% ASR; the remaining caveat is coverage (a suite subset, four attack families), not provenance. Our behavioral blind spot---covert execution, undetectable by output-layer anchors (TPR 0.60 (Yin 2026))---has been independently reproduced at the OS level by LITMUS (Zhang et al. 2026) (Execution Hallucination, EHR 7.98--17.97\%, invisible to semantic-only frameworks). We did not run LITMUS's real-OS harness (it requires Ubuntu + OpenClaw); the mutual corroboration is at the level of the structural claim, not of shared test cases.
+  \textbf{Self-built testbed.} Scenarios, defenses, and the real-effect sandbox are ours\u2014deliberate for a controlled comparison. Section 6.5 validates the stacks on AgentDojo's official harness (0.0\% ASR). Our behavioral blind spot (covert execution, TPR 0.60 (Yin 2026)) is independently reproduced at the OS level by LITMUS (Zhang et al. 2026); we did not run its Ubuntu+OpenClaw harness.
 \item
-  \textbf{Attack coverage.} Twelve attack families include third-party AgentDojo payloads; adaptive, white-box, and PAIR-style attackers cover text-level escalation; token-level optimization (GCG) and multi-turn social-engineering attacks are absent.
+  \textbf{Attack coverage.} Twelve families plus adaptive/white-box/PAIR escalation; token-level optimization and multi-turn social engineering absent.
 \item
-  \textbf{Benign sample.} Utility is measured on 20 benign scenarios (CIs in Section 6.1); the V/N utility gap is significant, but broader utility coverage (long-horizon tasks, tool-calling convenience) is untested.
+  \textbf{Benign sample.} 20 benign scenarios (CIs in Section 6.1); broader utility coverage untested.
 \item
-  \textbf{LLM-rater classifications.} The level map is blind-rater-validated among same-family LLM raters (security subset: 22 items, 90.9\% exact agreement; overall corpus κ ≈ 0.8 (Yin 2026)); human-rater agreement is future work.
+  \textbf{LLM-rater classifications.} Blind-validated among same-family raters (security subset 90.9\% exact, overall \u03ba \u2248 0.8 (Yin 2026)); human-rater agreement is future work. The classifier itself is an L1 tool whose reproducibility was measured\u2014the judge's judge, applied to the judge itself.
 \item
-  \textbf{Prediction sample.} 10/10 hits on a small, partially abstract-level sample; the mechanism (anchor → failure mode) is the claim, not the hit count.
-\item
-  \textbf{The framework's own level.} The classifier used throughout this paper (val\_standard.py, protocol v2.3) is itself a deterministic rule over anchor labels: it does not interrogate free text, its inputs are the rater's Q1/Q2/Q3 judgments, and its reproducibility was measured rather than assumed (kappa \textasciitilde{} 0.8 among blind raters; 90.9\% on the security subset (Yin 2026)). It is an L1 tool with an audited calibration record--which is exactly the boundary the framework prescribes for its own kind: honest about what it certifies (the mapping), and silent about what it does not (the inputs). The judge's judge, applied to the judge itself.
+  \textbf{Prediction sample.} 10/10 hits on a small, partially abstract-level sample; the mechanism (anchor \u2192 failure mode) is the claim, not the hit count.
 \end{enumerate}
 
-\subsection{9. Conclusion}\label{conclusion}
-
-The agent-security field has a deployment problem: too many defenses, no pre-purchase axis. We showed that VAL provides one. Across the 22 defenses, attack families, and testbeds we studied, the anchor of a defense predicts how it fails---text rules fail to rewriting, model self-assessment fails to compliance, objective anchors fail outside their ODD, and structural anchors (confinement, information flow, data-control separation) hold by construction within it. In our controlled same-budget comparison, choosing by this axis beat choosing by intuition: identical security numbers, opposite guarantees, and a 100-point utility gap. We also located the L3 frontier in agent security: \textbf{confinement, not semantics}---the properties worth encoding into decidable systems are the ones that restrict what an agent can do, not the ones that judge whether it should. Two caveats bound these claims: the taxonomy's categories are ours (validated by blind-rater agreement and out-of-sample predictions, not by an external ground truth), and the deployment comparison pits structural defenses against the most common behavioral defenses, not against every defense in the landscape. We offer VAL as a falsifiable framework and a research agenda---not as a settled ontology.
+into decidable systems are the ones that restrict what an agent can do, not the ones that judge whether it should. Caveats: the taxonomy's categories are ours (validated by blind-rater agreement and out-of-sample predictions), and the comparison pits structural against the most common behavioral defenses, not against every defense. We offer VAL as a falsifiable framework and a research agenda, not a settled ontology.
 
 \begin{quote}
 Others grade defenses by their claims. We grade them by their anchors---and, in the cases we can measure, the anchor decides.
 \end{quote}
 
-\subsection{References}\label{references}
+\subsection{Appendix}\label{appendix}
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Yin, Y. \emph{Grading the Graders: Verification Autonomy Levels (L0--L5) for LLM Reasoning.} arXiv:2608.19009, 2026 (v2).
-\item
-  Xu, J., Xiao, Y., Shao, W., Liu, H., Li, X. \emph{Memory Provenance Laundering in LLM Agents: A Non-Amplification Firewall for Persistent Memory.} arXiv:2607.29167, 2026.
-\item
-  Han, J., Buntine, W., Shareghi, E. \emph{VerifiAgent: A Unified Verification Agent in Language Model Reasoning.} EMNLP 2025. arXiv:2504.00406.
-\item
-  Debenedetti, E., Zhang, J., Balunovic, M., Beurer-Kellner, L., Fischer, M., Tramer, F. \emph{AgentDojo: A Dynamic Environment to Evaluate Attacks and Defenses for LLM Agents.} arXiv:2406.13352, 2024.
-\item
-  \emph{Injection-Execution Dissociation: A Mechanistic Evaluation of Persistent Memory Attacks on Stateful LLM Agents.} arXiv:2605.08442, 2026.
-\item
-  \emph{LLM-Based Test Oracles: Source-of-Authority Taxonomy---A Systematic Literature Review.} arXiv:2607.05031, 2026.
-\item
-  Lu, et al.~\emph{When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers.} arXiv:2512.02304, 2025.
-\item
-  Zhou, A., et al.~\emph{Defending Against Alignment-Breaking Attacks via Robustly Aligned LLM (RA-LLM).} arXiv:2309.14348, 2023.
-\item
-  Inan, H., et al.~\emph{Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations.} arXiv:2312.06674, 2023.
-\item
-  Chen, X., et al.~\emph{CodeT: Code Generation with Generated Tests.} ICLR 2023.
-\item
-  Shi, T., et al.~\emph{Progent: Securing AI Agents with Privilege Control.} arXiv:2504.11703, 2025.
-\item
-  Costa, M., et al.~\emph{Securing AI Agents with Information-Flow Control.} arXiv:2505.23643, 2025.
-\item
-  Zhang, C., Yang, H., Jiang, B., Zhang, X., Zhao, Y., Chen, R., Zhou, L., Xu, X., Wu, J., Fang, L., Liu, Z. \emph{LITMUS: Benchmarking Behavioral Jailbreaks of LLM Agents in Real OS Environments.} arXiv:2605.10779, 2026.
-\item
-  \emph{A-MemGuard: Preventive Memory Defense for LLM Agents.} arXiv:2510.02373, 2025.
-\item
-  \emph{CaMeL: Data-Control Separation for LLM Agents.} arXiv:2503.18813, 2025.
-\item
-  Yin, Y. \emph{Anchor Semantics Typology (intent/truth/effect).} Project documentation, math\_agent repository, 2026.
-\item
-  Wei, Q., et al.~\emph{A-MemGuard: A Proactive Defense Framework for LLM-Based Agent Memory.} arXiv:2510.02373, 2025.
-\item
-  Debenedetti, E., et al.~\emph{Defeating Prompt Injections by Design (CaMeL).} arXiv:2503.18813, 2025.
-\item
-  Jain, N., et al.~\emph{Baseline Defenses for Adversarial Attacks Against Aligned Language Models.} arXiv:2309.00614, 2023.
-\item
-  Greshake, K., et al.~\emph{Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection.} arXiv:2302.12173, 2023.
-\end{enumerate}
+\subsubsection{A.1 Defense level map}\label{a.1-defense-level-map}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Level
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Defenses
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Anchor / semantics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Predicted behavior
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{L0} & Prompt hardening (D1; RA-LLM ({Zhou et al.} 2023)), ToolEmu judge, A-MemGuard consensus, SafeAgent plan layer, Self-Ask provenance & none / LLM self-assessment & residual ASR under strong attacks; no stable operating point; zero utility under over-restrictive prompts \\
+\textbf{L1} & Keyword filter (D2), NeMo Guardrails, Progent gate, tool allowlists, PPMF gate, confirmation-marker heuristics, perplexity filter & designer rules / intent & bypassed by rewriting; false-block benign actions \\
+\textbf{L2} & Llama Guard classifier, RAG citation check, effect-verification, statistical detectors & objective truth / truth·effect & effective in-distribution; fails on OOD, forged metadata, poisoned data \\
+\textbf{L3} & \textbf{IFC/Fides ({Costa et al.} 2025), CaMeL (\emph{CaMeL} 2025), sandboxing (D4), Progent SMT monotonic confinement} & decidable systems / structural & confinement, information-flow, or data-control properties hold by construction within the ODD; semantic dangers inside the allowed space pass \\
+\textbf{L4} & Smart-contract formal verification & formal kernels & domain-complete for encoded properties \\
+\textbf{N/A} & AgentDojo (Debenedetti et al. 2024), M³-SafetyBench & benchmarks & not runtime defenses (R1) \\
+\end{longtable}
+}
+
+\subsubsection{A.2 Victim generalization (2×2)}\label{a.2-victim-generalization-22}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Config
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+DeepSeek victim ASR / compl. / benign
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Llama victim} ASR / compl. / benign
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ND (no defense) & 0.333 / 0.492 / 1.000 & 0.253 / 0.328 / 1.000 \\
+N (D1+D2) & 0.000 / 0.233 / 0.000 & 0.000 / 0.014 / 0.000 \\
+V (D3+D4) & 0.000 / 0.497 / 1.000 & 0.000 / 0.317 / 1.000 \\
+\end{longtable}
+}
+
+\subsubsection{A.3 Varying ND baseline across testbeds}\label{a.3-varying-nd-baseline-across-testbeds}
+
+\textbf{On the varying ND baseline across testbeds.} The undefended ASR differs sharply across our three settings---0.333 on our own testbed (Chinese memory injections, 30 malicious scenarios), 6.2\% on AgentDojo (English TODO injections, 144 pairs), 87.5\% on JADE's MCP instances (English tool-description poisoning, 16 cases). This is expected and informative rather than a contradiction: ND ASR measures the \emph{attack surface} (injection strength, carrier, environment semantics), not a fixed property of the model. What is stable across all three is the \emph{contrast}: the intuition stack's zero moves with the setting (0.000 → 0.035 → 0.062 as attacks get harder), while V's structural zero does not (0.000 everywhere).
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{1}{1}
@@ -539,9 +494,6 @@ Others grade defenses by their claims. We grade them by their anchors---and, in 
 
 \bibitem[\citeproctext]{ref-camel2025}
 \emph{CaMeL: Data-Control Separation for LLM Agents (Source-Gated Control Flow)}. 2025. \url{https://arxiv.org/abs/2503.18813}.
-
-\bibitem[\citeproctext]{ref-chen2023codet}
-{Chen, Bei et al.} 2023. {``CodeT: Code Generation with Generated Tests.''} \emph{ICLR}.
 
 \bibitem[\citeproctext]{ref-costa2025ifc}
 {Costa, Marcelo et al.} 2025. \emph{Securing AI Agents with Information-Flow Control}. \url{https://arxiv.org/abs/2505.23643}.
@@ -560,9 +512,6 @@ Debenedetti, Edoardo, Tianjiu Zhang, Mislav Balunovic, Lukas Beurer-Kellner, Mar
 
 \bibitem[\citeproctext]{ref-lu2025when}
 {Lu, et al.} 2025. \emph{When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers}. \url{https://arxiv.org/abs/2512.02304}.
-
-\bibitem[\citeproctext]{ref-shi2025progent}
-{Shi, Tianyuan et al.} 2025. \emph{Progent: Securing AI Agents with Privilege Control}. \url{https://arxiv.org/abs/2504.11703}.
 
 \bibitem[\citeproctext]{ref-xu2026memory}
 Xu, J., Y. Xiao, W. Shao, H. Liu, and X. Li. 2026. \emph{Memory Provenance Laundering in LLM Agents: A Non-Amplification Firewall for Persistent Memory}. \url{https://arxiv.org/abs/2607.29167}.
