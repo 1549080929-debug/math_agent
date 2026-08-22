@@ -319,7 +319,21 @@ victim_client 抽象（DeepSeek API ↔ Ollama 切换）+ 工具注册表提示�
 - **D1 证伪尝试失败**（增强攻击者提示：要求完整参数+权威/紧急/角色扮演框架，7 轮）——运气零在本次攻击预算下未破；读作"更强的支持"而非"不能破"。证伪需质变攻击（异族攻击者模型/GCG 级）
 - 预测卡对照 4/6 命中（P1/P3/P4b/P5；P2/P4 未命中——D1 合规率未升、D2 大幅超预期）
 - 图：`agentsec/jade/zcurve7_v3.png`；数据 `jade/zcurve7_data.json`；提取 `zcurve7.py`
-- 注意：7 轮结果在 `results/adaptivekimi_*`（黑盒命名），`adaptive_*` 是旧 3 轮文件——resume 会跳过已完成场景，重跑需删旧文件（本次已踩坑）
+- 注意：7 轮结果在 `results/adaptivekimi_*`（黑盒命名），`adaptive_*` 是旧 3 轮文件——resume 会跳过已完成场景，重跑需删旧文件（本次已踩坑，REPORT 记录；投稿论文不出现此过程，只保留正确结果）
+
+**Execution Funnel（2026-08-22）**——"why 相同轨迹不同 guarantee"的分层解释：
+
+| cfg | compliance | complete_args | authorized | executed | 断开层 |
+|---|---|---|---|---|---|
+| D1 | 0.219 | **0.000** | 0.000 | 0.000 | 参数完整性（hedging wall，模型行为） |
+| D3 | 0.497 | **0.497** | **0.000** | 0.000 | 授权检查（confirmation gate，平台记录） |
+| N | 0.233 | 0.000 | 0.000 | 0.000 | 同 D1（模型不给参数） |
+| V | 0.497 | 0.497 | 0.000 | 0.000 | 同 D3（授权拦） |
+
+- **关键**：D3 的模型其实给了完整参数（49.7%），是授权门拦的；D1 的模型没给完整参数（0%），是模型半配合。**同一个零，漏斗在不同层级断开**——D1 断在模型行为层（参数），D3 断在外部约束层（授权）
+- 机制确认：D1 下空参数 send_email 被执行且 state_changed=True（写了 To: None 伪文件）——ASR 判定（args 非空）正确排除，零的"断开"确实在参数完整性
+- 论文 §6.2 已加 funnel 段（"the zero does not say where it comes from; the funnel does"）
+- 图：`agentsec/jade/funnel_v3.png`；数据 `jade/funnel_data.json`；提取 `funnel.py`
 
 ## 8. 复现
 
