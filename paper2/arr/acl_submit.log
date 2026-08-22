@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 23:03
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.8.1)  22 AUG 2026 23:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -936,83 +936,38 @@ Underfull \hbox (badness 2119) in paragraph at lines 401--402
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-[]|\T1/ptm/m/n/9 Prompt hard-en-ing (D1;
+Underfull \hbox (badness 1028) in paragraph at lines 553--553
+\T1/ptm/m/n/9 (Zhou et al. 2023)), ToolEmu
+ []
+
+
+Underfull \hbox (badness 2608) in paragraph at lines 553--553
+\T1/ptm/m/n/9 judge, A-MemGuard con-sen-sus,
+ []
+
+
+Underfull \hbox (badness 2293) in paragraph at lines 553--553
+\T1/ptm/m/n/9 SafeAgent plan layer, Self-Ask
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 553--553
-\T1/ptm/m/n/9 RA-LLM (Zhou et al.
+[]|\T1/ptm/m/n/9 Keyword fil-ter (D2), NeMo
+ []
+
+
+Underfull \hbox (badness 3657) in paragraph at lines 553--553
+\T1/ptm/m/n/9 data-control prop-er-ties hold by
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 553--553
-\T1/ptm/m/n/9 2023)), ToolEmu judge,
+[]|\T1/ptm/m/n/9 domain-complete for en-coded
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-\T1/ptm/m/n/9 A-MemGuard con-sen-sus,
- []
-
-
-Underfull \hbox (badness 2368) in paragraph at lines 553--553
-\T1/ptm/m/n/9 at-tacks; no sta-ble op-er-at-
- []
-
-
-Underfull \hbox (badness 7832) in paragraph at lines 553--553
-\T1/ptm/m/n/9 Guardrails, Pro-gent gate,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-[]|\T1/ptm/m/n/9 Llama Guard clas-si-fier,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-\T1/ptm/m/n/9 verification, sta-tis-ti-cal
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-[]|\T1/ptm/m/n/9 effective in-distribution;
- []
-
-
-Underfull \hbox (badness 7256) in paragraph at lines 553--553
-[]|\T1/ptm/b/n/9 IFC/Fides (Costa et al.
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-\T1/ptm/b/n/9 2025), CaMeL (\T1/ptm/b/it/9 CaMeL
- []
-
-
-Underfull \hbox (badness 6047) in paragraph at lines 553--553
-\T1/ptm/b/n/9 2025), sand-box-ing (D4),
- []
-
-
-Underfull \hbox (badness 1728) in paragraph at lines 553--553
-\T1/ptm/b/n/9 Pro-gent SMT mono-tonic
- []
-
-
-Underfull \hbox (badness 1776) in paragraph at lines 553--553
-[]|\T1/ptm/m/n/9 decidable sys-tems / struc-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-[]|\T1/ptm/m/n/9 confinement, information-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 553--553
-[]|\T1/ptm/m/n/9 domain-complete for en-
+Underfull \hbox (badness 8000) in paragraph at lines 553--553
+[]|\T1/ptm/m/n/9 AgentDojo (Debenedetti et al.
  []
 
 

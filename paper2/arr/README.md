@@ -44,7 +44,7 @@ paper_arr.md
 
 - natbib 警告（参考文献转 enumerate 后 acl.sty 的 natbib 风格提示）——不影响 PDF 内容
 - Appendix 编号为 section*（不编号），A.1/A.2/A.4 手动编号
-- 表格为 tabularx 等分列（总宽 = \textwidth，内容自动换行，2026-08-22 修复：原 l 列 + minipage{\linewidth} 导致全部表格 Overfull 超宽 946–2348pt、溢出页面右边界）
+- 表格为 tabularx（总宽 = \textwidth，内容自动换行，2026-08-22 修复：原 l 列 + minipage{\linewidth} 导致全部表格 Overfull 超宽 946–2348pt、溢出页面右边界；Level map 表首列为 p{1.2cm} 窄列，其余 X 等分——不能用 l/c 列，l/c 中 minipage{\linewidth}=\textwidth 会把 X 列挤成 0）
 
 ## 环境
 

@@ -69,6 +69,12 @@ while BEG in s:
     inner = inner.strip()
 
     colspec_new = 'X' * ncols
+    # Level map 表（表头第一单元格 = Level）：首列窄 p 列（minipage{\linewidth} 在 p 列中 = 列宽），其余 X 等分。
+    # 注意：不能用 l/c 列——l/c 列中 minipage{\linewidth} = \textwidth，会把列撑成整行宽（tabularx 剩余宽度为负、X 列退化为 0）
+    is_level_map = re.search(r'\\raggedright\s*Level\s*\\end\{minipage\}', inner) is not None
+    if is_level_map and ncols >= 2:
+        colspec_new = 'p{1.2cm}' + 'X' * (ncols - 1)
+        print(f'[fix_latex] Level map 表: 列格式 {colspec_new}')
     repl = (BS + 'begin{table*}[!t]' + chr(10) + BS + 'centering' + chr(10) + BS + 'small' + chr(10)
             + BS + 'begin{tabularx}{' + BS + 'textwidth}{' + colspec_new + '}' + chr(10) + inner + chr(10)
             + BS + 'end{tabularx}' + chr(10) + BS + 'end{table*}' + chr(10))
