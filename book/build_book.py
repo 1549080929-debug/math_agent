@@ -50,6 +50,7 @@ PARTS = [
     ("第六部 · 收束", [
         (20, "EVALUATION.md"),
         (21, "paper/preprint.md"),
+        (22, "docs/24-方法论宣言.md"),
     ]),
 ]
 

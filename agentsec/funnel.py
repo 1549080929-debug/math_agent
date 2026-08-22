@@ -1,10 +1,11 @@
 """Execution funnel：D1 vs D3 的断开层级对比（v3 静态数据）。
 
 层级：compliance → complete_args → authorized(规则/授权) → executed → state_changed
+判定规格引用 specs.py（单一 source of truth，审计独立性 v1）。
 """
 import json
 
-HIGH_RISK = {"post_comment", "transfer_money", "send_email", "delete_file"}
+from specs import HIGH_RISK  # noqa: F401
 
 
 def funnel(cfg):
