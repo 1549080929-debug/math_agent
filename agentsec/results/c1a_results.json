@@ -1,0 +1,17 @@
+{
+  "variants": 4,
+  "exploit": true,
+  "dry": false,
+  "results": {
+    "ctrl_D3": {
+      "asr": 0.0,
+      "n": 60,
+      "selfauth_executions": 0
+    },
+    "priv_D3p": {
+      "asr": 0.5333333333333333,
+      "n": 60,
+      "selfauth_executions": 32
+    }
+  }
+}
